@@ -1,0 +1,998 @@
+.postjob_body {
+    margin: 0;
+    background-color: rgb(247, 248, 251);
+}
+
+.container {
+    box-sizing: content-box;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.landing_sentence1 {
+    margin: 0;
+    font-size: 21px;
+    color: #2e3849;
+    font-weight: 600;
+    line-height: 28px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.landing_sentence2 {
+    font-size: 16px;
+    color: #2e3849;
+    font-weight: 400;
+    line-height: 24px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.landing_sentence3 {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #2e3849;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+.create_btn {
+    background: #e60278;
+    outline: none;
+    border: none;
+    padding: 13px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+}
+
+.create_btn:hover {
+    background: #fd0585;
+    cursor: pointer;
+}
+
+.create_btn:active {
+    background: #cd026b;
+    transform: scale(0.95);
+}
+
+.company_nav_active::after {
+    background: white;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 4px;
+    left: 20px;
+    position: absolute;
+    right: 20px;
+
+}
+
+.company_nav_active {
+    font-weight: 600 !important;
+}
+
+.logo {
+    padding-right: 24px;
+}
+
+.logo-nav {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-nav nav ul {
+    display: flex;
+    gap: 20px;
+}
+
+.postjob_header {
+    background-color: rgb(24, 77, 168);
+    height: 70px;
+    /* Adjust this value as needed */
+}
+
+.header-link {
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.header-link a {
+    padding: 0 20px;
+    line-height: 24px;
+    font-weight: 400;
+    color: white;
+    text-decoration: none;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.header-link a:hover,
+.header-link a:focus {
+    background: rgba(28, 28, 28, .18);
+    text-decoration: underline;
+}
+
+.rotated {
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
+    transition: transform .3s ease;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+.form-container {
+    width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-style {
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: white;
+    width: 627px;
+    /* Adjust this value as needed */
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    /* Add this line */
+}
+
+.add_button {
+    margin-left: 12px;
+    max-width: 200px;
+    align-items: center;
+    display: flex;
+}
+
+.create_job_link {
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: white;
+    border: 1px solid #fff;
+    /* Change the color as needed */
+    border-radius: 4px;
+    display: inline-block;
+    /* Add this to make the border wrap the content */
+    padding: 10px 20px;
+    /* Add some padding to give space between the border and the text */
+    text-decoration: none;
+    /* Remove the underline from the link */
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.create_job_link:hover {
+    background: hsla(0, 0%, 100%, .15);
+}
+
+.create_job_link:active {
+    transform: scale(0.95);
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    width: 200px;
+    z-index: 1;
+    text-align: left;
+    background-color: white;
+    /* Change the border color to grey */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Add this line */
+    top: 60px;
+    padding: 24px;
+}
+
+.dropdown-content a {
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #4964e9;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    height: 20px;
+    line-height: 24px;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    text-decoration: underline;
+}
+
+.companyName {
+    font-weight: 700;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: black;
+}
+
+.contactPerson {
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: black;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+
+.textarea-box {
+    padding: 10px 12px;
+    border: 0.5px solid rgb(46, 56, 73);
+    border-radius: 4px;
+    color: #1c1c1c;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    resize: none;
+
+}
+
+.textarea-box:hover {
+    border-color: blue;
+}
+
+.textarea-box:focus {
+    border-color: blue;
+    border: 0.5px solid blue;
+    outline: 3px solid #BCC8F8;
+}
+
+
+.input-box {
+    width: 578.672px;
+    height: 24px;
+    padding: 10px 12px;
+    border: 0.5px solid rgb(46, 56, 73);
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+}
+
+.input-box:hover {
+    border-color: blue;
+}
+
+.input-box:focus {
+    border-color: blue;
+    border: 0.5px solid blue;
+    outline: 3px solid #BCC8F8;
+}
+
+.input-box::placeholder {
+    color: grey;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.question {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: black;
+    padding-bottom: 8px;
+}
+
+.vertical-space {
+    height: 10px;
+}
+
+.radio-option {
+    display: inline-block;
+    margin-right: 10px;
+    padding-bottom: 20px;
+    padding-left: 3px;
+}
+
+.bold {
+    font-weight: 700 !important;
+}
+
+.option {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    padding-left: 8px;
+}
+
+input[type='radio'] {
+    transform: scale(2.0);
+}
+
+.form-dropdown {
+    width: 250px;
+    height: 44px;
+    padding: 10px 12px;
+    border: 0.5px solid rgb(46, 56, 73);
+    border-radius: 4px;
+    background-color: white;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.form-dropdown:focus {
+    border-color: blue;
+    border: 0.5px solid blue;
+    outline: 3px solid #BCC8F8;
+}
+
+.form-dropdown-option {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: grey;
+}
+
+.form-dropdown:hover {
+    border-color: blue;
+}
+
+#jobSpecialisation,
+#jobRole {
+    color: black;
+    /* Replace with the color you want */
+}
+
+#jobSpecialisation::placeholder,
+#jobRole::placeholder {
+    color: grey;
+}
+
+#jobSpecialisation option,
+#jobRole option {
+    display: block;
+    width: 100%;
+}
+
+.ui-autocomplete {
+    width: 604.67px !important;
+}
+
+.ui-autocomplete .ui-menu-item {
+    background-color: white;
+    /* Light gray background */
+    color: black;
+    /* Dark gray text */
+}
+
+.ui-menu .ui-menu-item div {
+    /* Add styles for the text inside the dropdown options here */
+    height: 24px;
+    padding: 10px 12px;
+    /* Add some padding */
+    align-items: center;
+    display: flex;
+}
+
+.ui-menu .ui-menu-item {
+    /* Add styles for the dropdown options here */
+    background-color: white;
+    /* Light gray background */
+    color: black;
+    /* Dark gray text */
+    border-radius: 5px;
+    /* Rounded corners */
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+    background-color: #F4F6FE !important;
+    /* Change to your preferred color */
+    color: black !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+.ui-widget.ui-widget-content {
+    border-radius: 5px;
+    box-shadow: 5px 4px 3px rgba(0, 0, 0, 0.1), -5px 7px 6px rgba(0, 0, 0, 0.1);
+    border: none !important;
+}
+
+.ui-autocomplete .highlight {
+    font-weight: 700 !important;
+}
+
+.ui-autocomplete {
+    max-height: 300px;
+    /* Adjust this value to display the desired number of options */
+    overflow-y: auto;
+    /* Enable vertical scrollbar */
+    overflow-x: hidden;
+    /* Disable horizontal scrollbar */
+}
+
+.cont-button {
+    background-color: rgb(73, 100, 233);
+    width: 104.609px;
+    height: 45.0156px;
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    word-spacing: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+}
+
+.cont-button:hover {
+    background-color: #5975FF;
+}
+
+.cont-button:active {
+    background-color: #3251E6;
+    transform: scale(0.95);
+}
+
+.save-button {
+    background-color: transparent;
+    width: 104.609px;
+    height: 45.0156px;
+    color: rgb(73, 100, 233);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    word-spacing: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+}
+
+.save-button:hover {
+    background-color: #E8ECFD;
+}
+
+.save-button:active {
+    background-color: #DDE3FC;
+    transform: scale(0.95);
+}
+
+.job_question {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    line-height: 24px;
+    cursor: pointer;
+    position: relative;
+}
+
+.question-group .question_checkbox {
+    visibility: hidden;
+    width: 20px;
+}
+
+.question-group .job_question {
+    position: relative;
+}
+
+.question-group .job_question::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    top: 0;
+
+}
+
+/* Hide the default checkbox */
+.question_checkbox {
+    display: none;
+    cursor: pointer;
+}
+
+/* Create a new checkbox */
+.question_checkbox+label:before {
+    content: '';
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    border-radius: 3px;
+    border: none;
+    margin-right: 10px;
+    vertical-align: middle;
+    box-shadow: rgb(131, 143, 165) 0px 0px 0px 1px inset;
+}
+
+
+/* Change the border color on hover */
+.question-group:hover .question_checkbox+label:before {
+    box-shadow: rgb(73, 100, 233) 0px 0px 0px 1px inset;
+}
+
+/* Override the box-shadow property for disabled checkboxes */
+.question-group .question_checkbox:disabled+label:before {
+    box-shadow: rgb(131, 143, 165) 0px 0px 0px 1px inset;
+    background: rgba(0, 0, 0, .08);
+}
+
+/* Override the background property for labels associated with a disabled checkbox */
+.question-group:hover .question_checkbox+label.disabled::after {
+    background: none;
+}
+
+/* Check the checkbox when the hidden checkbox is checked */
+.question_checkbox:checked+label:before {
+    background: rgb(73, 100, 233);
+    box-shadow: rgb(73, 100, 233) 0px 0px 0px 1px inset;
+}
+
+.question_checkbox:checked+label::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="white" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.question-group:hover .question_checkbox+label::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="rgb(219, 224, 251)" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.question-group:hover .question_checkbox:checked+label::after {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="white" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.question_options {
+    width: 100%;
+    /* Take up the full width of the container */
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+.question_options input {
+    padding-left: 20px;
+    /* Add left padding */
+}
+
+.option_wrapper {
+    display: flex;
+    align-items: flex-start;
+    height: 45px;
+}
+
+.option_wrapper .question_checkbox {
+    visibility: hidden;
+    width: 20px;
+}
+
+.option_wrapper .job_question {
+    position: relative;
+    padding-left: 30px;
+    /* Adjust as needed */
+    width: 90%;
+}
+
+.option_checkbox {
+    display: none;
+}
+
+.option_radio {
+    display: none;
+}
+
+/* Create a new checkbox */
+.option_checkbox+label:before {
+    content: '';
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    border-radius: 3px;
+    border: none;
+    margin-right: 10px;
+    vertical-align: middle;
+    box-shadow: rgb(131, 143, 165) 0px 0px 0px 1px inset;
+    background: rgba(0, 0, 0, .08);
+}
+
+/* Check the checkbox when the hidden checkbox is checked */
+.option_checkbox:checked+label:before {
+    box-shadow: rgb(73, 100, 233) 0px 0px 0px 1px inset;
+    background: rgb(73, 100, 233);
+
+}
+
+.option_checkbox:checked+label::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="white" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.option_radio+label:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 50%;
+    vertical-align: middle;
+    box-shadow: inset 0 0 0 1px #838fa5;
+    background: rgba(0, 0, 0, .08);
+}
+
+.option_checkbox+label,
+.option_radio+label {
+    cursor: default;
+}
+
+.option_wrapper {
+    cursor: default;
+}
+
+.question_checkbox:checked~.question_options {
+    display: block !important;
+}
+
+.question-group {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    height: auto;
+    padding: 20px 24px;
+}
+
+.question_checkbox:disabled,
+.job_question.disabled {
+    cursor: default;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.question_instruction {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgb(90, 104, 129);
+    line-height: 24px;
+    padding-bottom: 5px;
+    padding-left: 30px;
+    width: 100%;
+}
+
+.no-hover .question_checkbox+label:before {
+    background: #f7f8fb;
+}
+
+.no-hover:hover .question_checkbox+label:before {
+    box-shadow: rgb(131, 143, 165) 0px 0px 0px 1px inset;
+}
+
+.no-hover:hover .question_checkbox+label:after {
+    background: none;
+}
+
+.no-hover {
+    cursor: default;
+}
+
+.no-hover .job_question {
+    cursor: default;
+}
+
+.box-shadow {
+    box-shadow: inset 0 0 0 1px #b91e1e;
+}
+
+.limit-message {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgb(185, 30, 30);
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.question-bg {
+    background: #f4f6fe;
+    margin-bottom: 4px;
+}
+
+.add_logo_box {
+    border-color: #4964e9 !important;
+    border: 2px solid #d2d7df;
+    width: 100%;
+}
+
+.add_cover_img_box {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAB1ppVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIgogICAgICAgICAgICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIj4KICAgICAgICAgPHBob3Rvc2hvcDpJQ0NQcm9maWxlPnNSR0IgSUVDNjE5NjYtMi4xPC9waG90b3Nob3A6SUNDUHJvZmlsZT4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPHhtcDpNZXRhZGF0YURhdGU+MjAyMC0wNi0xOFQxNzoyMDowOCsxMDowMDwveG1wOk1ldGFkYXRhRGF0ZT4KICAgICAgICAgPHhtcDpDcmVhdGVEYXRlPjIwMjAtMDYtMThUMTc6MTc6MDUrMTA6MDA8L3htcDpDcmVhdGVEYXRlPgogICAgICAgICA8eG1wOk1vZGlmeURhdGU+MjAyMC0wNi0xOFQxNzoyMDowOCsxMDowMDwveG1wOk1vZGlmeURhdGU+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+QWRvYmUgUGhvdG9zaG9wIDIxLjEgKE1hY2ludG9zaCk8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9wbmc8L2RjOmZvcm1hdD4KICAgICAgICAgPHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD54bXAuZGlkOjUyYTA1MDgzLThkMDQtNGRjOS1hODE2LTExY2Q5MGJiYzdjYjwveG1wTU06T3JpZ2luYWxEb2N1bWVudElEPgogICAgICAgICA8eG1wTU06SGlzdG9yeT4KICAgICAgICAgICAgPHJkZjpTZXE+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgMjEuMSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OndoZW4+MjAyMC0wNi0xOFQxNzoxNzowNSsxMDowMDwvc3RFdnQ6d2hlbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDo1MmEwNTA4My04ZDA0LTRkYzktYTgxNi0xMWNkOTBiYmM3Y2I8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+Y3JlYXRlZDwvc3RFdnQ6YWN0aW9uPgogICAgICAgICAgICAgICA8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6U2VxPgogICAgICAgICA8L3htcE1NOkhpc3Rvcnk+CiAgICAgICAgIDx4bXBNTTpJbnN0YW5jZUlEPnhtcC5paWQ6NTJhMDUwODMtOGQwNC00ZGM5LWE4MTYtMTFjZDkwYmJjN2NiPC94bXBNTTpJbnN0YW5jZUlEPgogICAgICAgICA8eG1wTU06RG9jdW1lbnRJRD54bXAuZGlkOjUyYTA1MDgzLThkMDQtNGRjOS1hODE2LTExY2Q5MGJiYzdjYjwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CjxAldEAAABHSURBVDgRY/z58+d/BiLAp0+fiFDFwMBElCoSFI0aSEJg4VA6GoY4AoYEYRZicwAfHx9Rxo5GClHBhFfRaBjiDR6iJKkehgA1xgnqeMZv5gAAAABJRU5ErkJggg==);
+    background-position: 0 0;
+    background-repeat: repeat;
+    height: 200px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.add_logo_btn {
+    background: #4964e9;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add_logo_title {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    line-height: 24px;
+}
+
+
+.add_cover_btn {
+    background: #4964e9;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add_cover_title {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    line-height: 24px;
+}
+
+.replace_logo_btn {
+    background: white;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.replace_logo_title {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #4964e9;
+    line-height: 24px;
+}
+
+
+.remove_cover_btn {
+    background: transparent;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove_cover_title {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #4964e9;
+    line-height: 24px;
+}
+
+.validation_sentence {
+    font-size: 14px;
+    color: #b91e1e;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.hide {
+    display: none;
+}
+
+.ck.ck-content {
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: black;
+    height: 500px;
+    /* Adjust this value to your preference */
+}
+
+.ck-editor__editable h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.ck.ck-content ul {
+    list-style-type: disc;
+}
+
+.ck-editor__editable ol,
+.ck-editor__editable ul {
+    -webkit-margin-before: 12px;
+    -webkit-padding-start: 24px;
+    margin-block-start: 12px;
+    padding-inline-start: 24px;
+}
+
+.write-textarea {
+    resize: none;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: black;
+    height: 400px;
+}
+
+.th_title{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #2e3849;
+    padding: 12px 24px;
+    text-align:left;
+}
+
+.td_title{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #2e3849;
+    padding: 12px 24px;
+    text-align:left;
+}
+
+.td_status{
+    background-color: #fef8de;
+    padding: 4px 8px;
+}
+
+.td_status_text{
+    color: #723d02!important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.td_job_link{
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 700;
+    text-decoration: underline;
+    color: #2e3849;
+
+}
+
+.td_job_link:hover{
+    color: #2765cf;
+}
+
+.continuedraft_button {
+    max-width: 200px;
+    align-items: center;
+    display: flex;
+}
+
+
+.continue_job_link {
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: #4964e9;
+    border: 1px solid #4964e9;
+    /* Change the color as needed */
+    border-radius: 4px;
+    display: inline-block;
+    /* Add this to make the border wrap the content */
+    padding: 10px 20px;
+    /* Add some padding to give space between the border and the text */
+    text-decoration: none;
+    /* Remove the underline from the link */
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.continue_job_link:hover {
+    background: #e8ecfd;
+}
+
+.continue_job_link:active {
+    transform: scale(0.95);
+    transition: transform .125s ease, opacity .125s ease;
+    background-color: #dde3fc;
+}
+

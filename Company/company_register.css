@@ -1,0 +1,253 @@
+.register_content {
+    margin: 0 auto;
+    max-width: 660px;
+    width: 100%;
+}
+
+.employee_link {
+    padding: 20px;
+    text-align: right;
+}
+
+.employee_sentence {
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #4964e9;
+}
+
+.employee_sentence:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+}
+
+.register_form {
+    background: white;
+    padding: 24px;
+    border-radius: 6px;
+}
+
+.register_title {
+    margin: 0;
+    font-size: 42px;
+    color: black;
+    font-weight: 600;
+    line-height: 44px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.business_detail_title {
+    margin: 0;
+    font-size: 21px;
+    color: #2e3849;
+    font-weight: 500;
+    line-height: 28px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.register_input {
+    padding: 10px 12px;
+    line-height: 24px;
+    border-radius: 4px;
+    border: 1px solid #838fa5;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.register_input:hover {
+    border: 1px solid #4964e9;
+}
+
+.register_input:focus {
+    border: 1px solid #4964e9 !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(159, 176, 245, .7);
+}
+
+.password_btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+    outline: none;
+    width: 32px;
+    height: 32px;
+}
+
+.password_btn:hover {
+    cursor: pointer;
+    border-radius: 9999px;
+    background: rgb(239, 241, 247);
+}
+
+.password_btn:focus {
+    border-radius: 9999px;
+    background: rgb(230, 233, 243);
+}
+
+.register_pp {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: black;
+    line-height: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.form-group .form_checkbox {
+    visibility: hidden;
+    width: 20px;
+}
+
+.form-group .register_pp {
+    position: relative;
+}
+
+.form-group .register_pp::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    top: 0;
+
+}
+
+/* Hide the default checkbox */
+.form_checkbox {
+    display: none;
+    cursor: pointer;
+}
+
+/* Create a new checkbox */
+.form_checkbox+label:before {
+    content: '';
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    border-radius: 3px;
+    border: none;
+    margin-right: 10px;
+    vertical-align: middle;
+    box-shadow: rgb(131, 143, 165) 0px 0px 0px 1px inset;
+}
+
+
+/* Change the border color on hover */
+.form-group:hover .form_checkbox+label:before {
+    box-shadow: rgb(73, 100, 233) 0px 0px 0px 1px inset;
+}
+
+/* Check the checkbox when the hidden checkbox is checked */
+.form_checkbox:checked+.register_pp:before {
+    background: rgb(73, 100, 233);
+    box-shadow: rgb(73, 100, 233) 0px 0px 0px 1px inset;
+}
+
+.form_checkbox {
+    position: relative;
+    opacity: 0;
+    z-index: 1;
+}
+
+.register_pp {
+    position: absolute;
+    padding-left: 30px;
+    user-select: none;
+}
+
+.form_checkbox:checked+.register_pp::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="white" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.form-group:hover .form_checkbox+label::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="rgb(219, 224, 251)" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.form-group:hover .form_checkbox:checked+label::after {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="white" width="16" height="16" aria-hidden="true"><path d="M19.7 6.3c-.4-.4-1-.4-1.4 0L9 15.6l-3.3-3.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l4 4c.2.2.4.3.7.3s.5-.1.7-.3l10-10c.4-.4.4-1 0-1.4z"></path></svg>') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    transform: translate(-50%, -50%);
+}
+
+.register_login_btn {
+    background: #e60278;
+    outline: none;
+    border: none;
+    width: 100%;
+    padding: 13px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+}
+
+.register_login_btn:hover {
+    background: #fd0585;
+    cursor: pointer;
+}
+
+.register_login_btn:active {
+    background: #cd026b;
+    transform: scale(0.95);
+}
+
+.validation_sentence {
+    font-size: 14px;
+    color: #b91e1e;
+    font-weight: 400;
+    line-height: 20px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.hide {
+    display: none;
+}
+
+.phone_label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#contact::-webkit-inner-spin-button,
+#contact::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#contact {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}

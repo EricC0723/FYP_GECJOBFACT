@@ -1,0 +1,279 @@
+.postjob_body {
+    margin: 0;
+    background-color: rgb(247, 248, 251);
+}
+
+.container {
+    box-sizing: content-box;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.landing_sentence1 {
+    margin: 0;
+    font-size: 21px;
+    color: #2e3849;
+    font-weight: 600;
+    line-height: 28px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.landing_sentence2 {
+    font-size: 16px;
+    color: #2e3849;
+    font-weight: 400;
+    line-height: 24px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.landing_sentence3 {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #2e3849;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+.create_btn {
+    background: #e60278;
+    outline: none;
+    border: none;
+    padding: 13px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+}
+
+.create_btn:hover {
+    background: #fd0585;
+    cursor: pointer;
+}
+
+.create_btn:active {
+    background: #cd026b;
+    transform: scale(0.95);
+}
+
+.company_nav_active::after {
+    background: white;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 4px;
+    left: 20px;
+    position: absolute;
+    right: 20px;
+
+}
+
+.company_nav_active {
+    font-weight: 600 !important;
+}
+
+.logo {
+    padding-right: 24px;
+}
+
+.logo-nav {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo-nav nav ul {
+    display: flex;
+    gap: 20px;
+}
+
+.postjob_header {
+    background-color: rgb(24, 77, 168);
+    height: 70px;
+    /* Adjust this value as needed */
+}
+
+.header-link {
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.header-link a {
+    padding: 0 20px;
+    line-height: 24px;
+    font-weight: 400;
+    color: white;
+    text-decoration: none;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.header-link a:hover,
+.header-link a:focus {
+    background: rgba(28, 28, 28, .18);
+    text-decoration: underline;
+}
+
+.rotated {
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
+    transition: transform .3s ease;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.form-group label {
+    margin-right: 10px;
+}
+
+.form-container {
+    width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-style {
+
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: white;
+    width: 627px;
+    /* Adjust this value as needed */
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    /* Add this line */
+}
+
+.add_button {
+    margin-left: 12px;
+    max-width: 200px;
+    align-items: center;
+    display: flex;
+}
+
+.create_job_link {
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: white;
+    border: 1px solid #fff;
+    /* Change the color as needed */
+    border-radius: 4px;
+    display: inline-block;
+    /* Add this to make the border wrap the content */
+    padding: 10px 20px;
+    /* Add some padding to give space between the border and the text */
+    text-decoration: none;
+    /* Remove the underline from the link */
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.create_job_link:hover {
+    background: hsla(0, 0%, 100%, .15);
+}
+
+.create_job_link:active {
+    transform: scale(0.95);
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    width: 200px;
+    z-index: 1;
+    text-align: left;
+    background-color: white;
+    /* Change the border color to grey */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    /* Add this line */
+    top: 60px;
+    padding: 24px;
+}
+
+.dropdown-content a {
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #4964e9;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    height: 20px;
+    line-height: 24px;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    text-decoration: underline;
+}
+
+.companyName {
+    font-weight: 700;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: black;
+}
+
+.contactPerson {
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: black;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dropdown-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    text-decoration: none;
+    color: white;
+    line-height: 24px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+}
+
+.joblistbtn{
+    background-color: transparent;
+    border: none;
+    padding: 20px 10px;
+    border-radius: 4px;
+}
+
+.joblisttitle{
+    font-size: 16px;
+    color: #5a6881;
+    font-weight: 400;
+}
