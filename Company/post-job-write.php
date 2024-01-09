@@ -46,9 +46,9 @@ if (isset($_POST['submitbtn'])) {
             $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
         }
 
-        if (move_uploaded_file($file_tmp, "logo/" . $file_name)) {
+        if (move_uploaded_file($file_tmp, "../Company/logo/" . $file_name)) {
             // Add the Job_Logo_Url field to the SQL query
-            $sql .= ", Job_Logo_Url='logo/" . $file_name . "'";
+            $sql .= ", Job_Logo_Url='../Company/logo/" . $file_name . "'";
         }
     }
 
@@ -68,9 +68,9 @@ if (isset($_POST['submitbtn'])) {
             $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
         }
 
-        if (move_uploaded_file($file_tmp, "covers/" . $file_name)) {
+        if (move_uploaded_file($file_tmp, "../Company/covers/" . $file_name)) {
             // Add the Job_Cover_Url field to the SQL query
-            $sql .= ", Job_Cover_Url='covers/" . $file_name . "'";
+            $sql .= ", Job_Cover_Url='../Company/covers/" . $file_name . "'";
         }
     } else if ($_POST['coverRemoved'] === '1') {
         // If no new cover image is uploaded and the cover image was removed, set the Job_Cover_Url field to NULL
