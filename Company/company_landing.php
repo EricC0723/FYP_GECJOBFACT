@@ -311,7 +311,21 @@ if (!isset($_SESSION['companyData'])) {
                                 <td>
                                     <div class="td_title">
                                         <div>
-                                            <div><a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
+                                            <div>';
+                                            switch ($jobStatus) {
+                                                case 'Draft':
+                                                    echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a>';
+                                                    break;
+                                                case 'Active':
+                                                    echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a>';
+                                                    break;
+                                                case 'Closed':
+                                                    echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a>';
+                                                    break;
+                                                case 'Blocked':
+                                                    echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a>';
+                                                    break;
+                                            }echo '</div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
                                         </div>
                                     </div>
@@ -327,13 +341,13 @@ if (!isset($_SESSION['companyData'])) {
                                 echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>';
                                 break;
                             case 'Active':
-                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
                                 break;
                             case 'Closed':
-                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
                                 break;
                             case 'Blocked':
-                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                echo '<a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
                                 break;
                         }
                         echo '</div>

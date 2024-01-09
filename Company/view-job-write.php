@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<?php
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
+
+<?php
+session_start(); // Start the session if you haven't already
+
+if (isset($_SESSION['job_post_ID'])) {
+    $job_post_ID = $_SESSION['job_post_ID'];
+    $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$job_post_ID' ");
+    $row = mysqli_fetch_assoc($result);
+    echo "<script>
+        var jobPostData = " . json_encode($row) . ";
+        </script>";
+}
+
+$CompanyID = null;
+if (isset($_SESSION['companyData']['CompanyID'])) {
+    $CompanyID = $_SESSION['companyData']['CompanyID'];
+}
+
+
+if (isset($_POST['submitbtn'])) {
+    if (isset($_GET['jobPostID'])) {
+        // Update the existing job post
+        $postid = $_GET["jobPostID"];
+        if ($postid) {
+            
+            echo "<script type='text/javascript'>window.location.href = 'view-job-question.php?jobPostID=$postid';</script>";
+            exit;
+        }
+    } 
+}
+
+?>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="post-job.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+</head>
+
+<body class="postjob_body">
+    <header class="postjob_header">
+        <div class="container">
+            <div class="logo">
+                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+            </div>
+            <div class="logo-nav">
+                <nav style="display:flex">
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
+                    <span class="header-link"><a href="#products">Products</a></span>
+                </nav>
+            </div>
+            <div style="flex:1 1 auto;"></div>
+
+            <div style="padding:0 20px">
+                <div class="flex-container">
+                    <div class="dropdown">
+                        <div style="display: flex; align-items: center;">
+                            <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
+                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16"
+                                    class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
+                                    id="dropdown-icon"
+                                    style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
+                                    <path
+                                        d="M20.7 7.3c-.4-.4-1-.4-1.4 0L12 14.6 4.7 7.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l8 8c.2.2.5.3.7.3s.5-.1.7-.3l8-8c.4-.4.4-1 0-1.4z">
+                                    </path>
+                                </svg>
+                            </a>
+
+                        </div>
+                        <div class="dropdown-content" id="dropdownContent">
+                            <span class="companyName">
+                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
+                            </span>
+                            <div style="padding-top:10px;">
+                                <span class="contactPerson">
+                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                </span>
+                            </div>
+                            <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
+                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                                    details</a></div>
+                            <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
+                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
+                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
+                            </div>
+                            <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
+                            </div>
+                            <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
+                            <div style="padding-top: 12px;"><a href="#contact" class="dropdown-link">Contact us</a>
+                            </div>
+                            <div style="padding-top: 12px;"><a href="company_signout.php" class="dropdown-link">Sign
+                                    out</a></div>
+                        </div>
+                    </div>
+                    <div class="add_button">
+                        <a href="post-job-classify.php" class="create_job_link">Create a job ad</a>
+                    </div>
+                </div>
+            </div>
+
+    </header>
+    <div
+        style="width:100%;height:155px;background:white;box-shadow:rgba(28, 35, 48, 0.1) 0px 2px 4px 0px, rgba(28, 35, 48, 0.1) 0px 2px 2px -2px, rgba(28, 35, 48, 0.2) 0px 4px 4px -4px;">
+        <div class="container">
+        </div>
+    </div>
+    <div class="form-container" style="padding-top:32px">
+
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="header-title">
+                <span
+                    style="color: rgb(46, 56, 73);font-size: 36px;font-style: normal;font-weight: 600;line-height: 36px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Write
+                    about your job</span>
+            </div>
+            <div class="form-style" style="margin-top:22px;">
+                <div>
+                    <span
+                        style="color: rgb(46, 56, 73);font-size: 28px;font-style: normal;font-weight: 600;line-height: 28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Showcase
+                        your brand
+                    </span>
+                </div>
+                <div style="padding-top:20px;">
+                    <span
+                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">Create
+                        your first brand by uploading your company logo. Cover images can be added from the success
+                        page, after payment.
+                    </span>
+                </div>
+                <div style="padding-top:32px;">
+                    <div class="add_logo_box">
+                        <div class="add_cover_img_box" id="add_cover_img_box">
+                            <div>
+                                <div id="uploadCover"><span
+                                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">This
+                                        job post doesnt have a cover image</span></div>
+                            </div>
+                            <div style="display: none; flex-direction: column;" id="remove_cover">
+                                <div style="overflow: hidden;align-items: center;display: flex;">
+                                    <img id="previewcover"
+                                        src="<?php echo isset($row['Job_Cover_Url']) ? $row['Job_Cover_Url'] : ''; ?>"
+                                        alt="Image preview" style=" max-width: 100%; height: auto;" />
+                                    <input type="file" id="coverInput" name="coverInput"
+                                        accept=".gif,.jpeg,.jpg,.png,.svg,.tiff,.webp" style="display: none;">
+                                    <input type="hidden" id="coverRemoved" name="coverRemoved" value="0">
+                                </div>
+                                <div style="position: absolute;right: 15px;top:15px">
+                                    <button type="button" id="removeCover" data-testid="bx-add-asset"
+                                        style="display: flex; align-items: center;" class="remove_cover_btn">
+                                        <div style="display:flex;align-items:flex-start;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
+                                                height="16" aria-hidden="true"
+                                                style="color:black;width:25px;height:25px">
+                                                <path
+                                                    d="m13.4 12 5.3-5.3c.4-.4.4-1 0-1.4s-1-.4-1.4 0L12 10.6 6.7 5.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l5.3 5.3-5.3 5.3c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3l5.3-5.3 5.3 5.3c.2.2.5.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4L13.4 12z">
+
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:20px 24px;">
+                            <div style="display: flex; flex-direction:column">
+
+                                <div style="display: none; flex-direction: column;" id="replace_logo">
+                                    <div
+                                        style="width: 180px; height: 80px; overflow: hidden; margin-left: 10px;align-items: center;display: flex;">
+                                        <img id="previewlogo"
+                                            src="<?php echo isset($row['Job_Logo_Url']) ? $row['Job_Logo_Url'] : ''; ?>"
+                                            alt="Image preview" style=" max-width: 100%; height: auto;" />
+                                        <input type="file" id="logoInput" name="logoInput"
+                                            accept=".gif,.jpeg,.jpg,.png,.svg,.tiff,.webp" style="display: none;">
+                                        <input type="hidden" id="logoPresent" name="logoPresent"
+                                            value="<?php echo isset($row['Job_Logo_Url']) ? '1' : '0'; ?>">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="form-style" style="margin-top:22px;">
+                <div>
+                    <span
+                        style="color: rgb(46, 56, 73);font-size: 28px;font-style: normal;font-weight: 600;line-height: 28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Job
+                        description
+
+                    </span>
+                </div>
+                <div style="padding-top:20px;">
+                    <span
+                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">Enter
+                        your job details or let us guide you through what to write.
+                    </span>
+                </div>
+                <div class="form-group" id="Description">
+                    <textarea id="jobDescription" name="jobDescription" disabled
+                        class="write-textarea"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
+
+                </div>
+            </div>
+
+            <div class="form-style" style="margin-top:22px;">
+                <div>
+                    <span
+                        style="color: rgb(46, 56, 73);font-size: 28px;font-style: normal;font-weight: 600;line-height: 28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Job
+                        responsibilities
+
+                    </span>
+                </div>
+                <div style="padding-top:20px;">
+                    <span
+                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">Let
+                        candidates know what they will be doing day-to-day.
+                    </span>
+                </div>
+                <div class="form-group" id="Responsibilities">
+                    <textarea id="jobResponsibilities" name="jobResponsibilities" disabled
+                        class="write-textarea"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
+                </div>
+            </div>
+
+            <div class="form-style" style="margin-top:22px;">
+                <div>
+                    <span
+                        style="color: rgb(46, 56, 73);font-size: 28px;font-style: normal;font-weight: 600;line-height: 28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Benefits
+
+                    </span>
+                </div>
+                <div style="padding-top:20px;">
+                    <span
+                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">There's
+                        more to a job than just the pay. Attract candidates by letting them know what benefits you
+                        offer.
+                    </span>
+                </div>
+                <div class="form-group" id="Benefits">
+                    <textarea id="jobBenefits" name="jobBenefits" class="write-textarea"
+                        disabled><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
+                </div>
+            </div>
+
+            <div class="form-group" style="display: block;">
+                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
+                <input type="submit" value="Save draft" class="save-button" style="margin-left:4px">
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+    <script src="post-job.js"></script>
+
+    <script>
+
+        document.getElementById('uploadLogo').addEventListener('click', function () {
+            document.getElementById('logoInput').click();
+        });
+
+        document.getElementById('replaceLogo').addEventListener('click', function () {
+            document.getElementById('logoInput').click();
+        });
+
+        document.getElementById('logoInput').addEventListener('change', function (event) {
+            var output = document.getElementById('previewlogo');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+            output.style.display = 'block';
+            document.getElementById('replace_logo').style.display = 'flex';
+            document.getElementById('uploadLogo').style.display = 'none';
+        });
+
+        document.getElementById('uploadCover').addEventListener('click', function () {
+            document.getElementById('coverInput').click();
+        });
+
+        document.getElementById('removeCover').addEventListener('click', function () {
+            // Clear the preview image source
+            var previewCover = document.getElementById('previewcover');
+            previewCover.src = '';
+
+            // Hide the remove cover button
+            document.getElementById('remove_cover').style.display = 'none';
+            document.getElementById('uploadCover').style.display = 'flex';
+            document.getElementById('add_cover_img_box').style.height = '200px';
+
+            // Set the coverRemoved flag to '1'
+            document.getElementById('coverRemoved').value = '1';
+        });
+
+        document.getElementById('coverInput').addEventListener('change', function (event) {
+            var output = document.getElementById('previewcover');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+            output.style.display = 'block';
+            document.getElementById('remove_cover').style.display = 'flex';
+            document.getElementById('uploadCover').style.display = 'none';
+
+            // Reset the coverRemoved flag to '0'
+            document.getElementById('coverRemoved').value = '0';
+        });
+    </script>
+
+
+    <script>
+
+
+        window.onload = function () {
+            var logoInput = document.getElementById('logoInput');
+            var uploadButton = document.getElementById('uploadLogo');
+            var replaceLogo = document.getElementById('replace_logo');
+            var preview = document.getElementById('previewlogo');
+
+            logoInput.addEventListener('change', function () {
+                var file = this.files[0];
+
+                // Check if the file is an image
+                if (file && file.type.startsWith('image/')) {
+                    // Create a new FileReader object
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        // Set the src attribute of the preview image to the data URL of the uploaded image
+                        preview.src = e.target.result;
+
+                        // Show the preview image and the replace logo section, and hide the upload button
+                        preview.style.display = 'block';
+                        replaceLogo.style.display = 'flex';
+                        uploadButton.style.display = 'none';
+                    };
+
+                    // Read the uploaded file as a data URL
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        window.onload = function () {
+            var coverInput = document.getElementById('coverInput');
+            var uploadButton = document.getElementById('uploadCover');
+            var removeCover = document.getElementById('remove_cover');
+            var preview = document.getElementById('previewcover');
+            var coverimgbox = document.getElementById('add_cover_img_box');
+
+
+            coverInput.addEventListener('change', function () {
+                var file = this.files[0];
+
+                // Check if the file is an image
+                if (file && file.type.startsWith('image/')) {
+                    // Create a new FileReader object
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        // Set the src attribute of the preview image to the data URL of the uploaded image
+                        preview.src = e.target.result;
+
+                        // Show the preview image and the replace logo section, and hide the upload button
+                        removeCover.style.display = 'flex';
+                        uploadButton.style.display = 'none';
+                        coverimgbox.style.height = 'auto';
+                    };
+
+                    // Read the uploaded file as a data URL
+                    reader.readAsDataURL(file);
+                }
+
+            });
+        }
+    </script>
+
+</body>
+
+</html>

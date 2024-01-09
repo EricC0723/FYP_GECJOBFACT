@@ -89,7 +89,7 @@ if(isset($_GET["login_btn"])) {
                                         style="width: calc(100% - 54px); padding-right: 40px;" required
                                         name="companyPassword">
                                     <button id="togglePassword" style="border: none; padding: 0; outline: none;"
-                                        class="password_btn">
+                                        class="password_btn" type="button">
                                         <span id="eyeIcon">
                                             <!-- SVG for 'eye closed' here -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
