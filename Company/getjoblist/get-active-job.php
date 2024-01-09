@@ -1,9 +1,9 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-
 ?>
-<div style="width:100%;padding-top:32px;">
+
+<div style="width:100%;padding-top:32px;" id="activetable">
     <div style="flex-direction:row;display:flex;justify-content:space-between;align-items:center;">
         <?php
         $CompanyID = null;
@@ -63,47 +63,49 @@ session_start(); // Start the session at the beginning
             <a href="post-job-classify.php" class="create_btn">Create a job ad</a>
         </div>
     </div>
-</div>
 
-<div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
-    <table style="background-color: #fff;border-collapse: collapse;width: 100%;">
-        <thead>
-            <tr>
-                <th style="width:97.05px">
-                    <div class="th_title">Status</div>
-                </th>
-                <th>
-                    <div class="th_title">Job</div>
-                </th>
-                <th style="width:146px;">
-                    <div class="th_title">Candidates</div>
-                </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Draft Actions</div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $CompanyID = null;
-            if (isset($_SESSION['companyData']['CompanyID'])) {
-                $CompanyID = $_SESSION['companyData']['CompanyID'];
-            }
+    <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
 
-            $searchTerm = '';
-            if (isset($_GET['activesearch'])) {
-                $searchTerm = mysqli_real_escape_string($connect, $_GET['activesearch']);
-            }
+        <?php
+        $CompanyID = null;
+        if (isset($_SESSION['companyData']['CompanyID'])) {
+            $CompanyID = $_SESSION['companyData']['CompanyID'];
+        }
 
-            // Prepare the SQL statement
-            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+        $searchTerm = '';
+        if (isset($_GET['activesearch'])) {
+            $searchTerm = mysqli_real_escape_string($connect, $_GET['activesearch']);
+        }
 
-            // Execute the SQL statement
-            $result = mysqli_query($connect, $sql);
+        // Prepare the SQL statement
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
 
+        // Execute the SQL statement
+        $result = mysqli_query($connect, $sql);
+
+        // Check if there are any results
+        if (mysqli_num_rows($result) > 0) {
             // Fetch all the rows
             while ($row = mysqli_fetch_assoc($result)) {
-                echo '<tr style="border-top: 4px solid #f5f6f8;height: 80px">
+                echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width:97.05px">
+                                    <div class="th_title">Status</div>
+                                </th>
+                                <th>
+                                    <div class="th_title">Job</div>
+                                </th>
+                                <th style="width:146px;">
+                                    <div class="th_title">Candidates</div>
+                                </th>
+                                <th style="width:156px;">
+                                    <div class="th_title" style="text-align:right;">Draft Actions</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-top: 4px solid #f5f6f8;height: 80px">
                                 <td>
                                     <div class="td_title"><span class="active-box">
                                         <span class="active-text">' . htmlspecialchars($row['job_status']) . '</span></span>
@@ -144,13 +146,73 @@ session_start(); // Start the session at the beginning
                                         <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
                                     </div>
                                 </div>
-                            </tr>';
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>';
 
             }
-            ?>
-        </tbody>
-    </table>
+        } else {
+            // No results, check if a search term was provided
+            if ($searchTerm != '') {
+                // Display a message for no search results
+                echo '<div>No results found for "' . htmlspecialchars($searchTerm) . '"</div>';
+            } else {
+                // Display a message for no jobs
+                echo '<div>No jobs found</div>';
+            }
+        }
+
+
+        ?>
+
+    </div>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the elements
+        var clearactive = document.getElementById('clearactive');
+        var activeInput = document.getElementById('activeInput');
+
+        // Hide the clear button initially
+        clearactive.style.display = 'none';
+
+        // Show/hide the clear button when the input box content changes
+        activeInput.addEventListener('input', function () {
+            if (this.value) {
+                clearactive.style.display = 'flex';
+            } else {
+                clearactive.style.display = 'none';
+            }
+        });
+
+        // Clear the input box when the clear button is clicked
+        clearactive.addEventListener('click', function (e) {
+            e.preventDefault();
+            activeInput.value = '';
+            // Manually trigger the input event
+            var event = new Event('input', {
+                bubbles: true,
+                cancelable: true,
+            });
+            activeInput.dispatchEvent(event);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#activeForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the form from being submitted normally
+
+            var searchTerm = $('#activeInput').val();
+
+            // Pass the search term to a function
+            searchActive(searchTerm);
+        });
+    });
+
+</script>
 
 <?php
 // Free the result set and close the connection

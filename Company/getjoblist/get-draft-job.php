@@ -47,7 +47,7 @@ session_start(); // Start the session at the beginning
                         style="padding-left:44px;padding-right:44px;width:512px;"
                         placeholder="Search job title or reference number"
                         value="<?php echo htmlspecialchars($searchTerm); ?>">
-                    <button id="draftclosed" class="clear-button" type="button">
+                    <button id="cleardraft" class="clear-button" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                             focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
                             style="width:20px;height:20px;">
@@ -67,42 +67,44 @@ session_start(); // Start the session at the beginning
 </div>
 
 <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
-    <table style="background-color: #fff;border-collapse: collapse;width: 100%;">
-        <thead>
-            <tr>
-                <th style="width:97.05px">
-                    <div class="th_title">Status</div>
-                </th>
-                <th>
-                    <div class="th_title">Job</div>
-                </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Draft Actions</div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
 
-            $CompanyID = null;
-            if (isset($_SESSION['companyData']['CompanyID'])) {
-                $CompanyID = $_SESSION['companyData']['CompanyID'];
-            }
+    <?php
 
-            $searchTerm = '';
-            if (isset($_GET['draftsearch'])) {
-                $searchTerm = mysqli_real_escape_string($connect, $_GET['draftsearch']);
-            }
+    $CompanyID = null;
+    if (isset($_SESSION['companyData']['CompanyID'])) {
+        $CompanyID = $_SESSION['companyData']['CompanyID'];
+    }
 
-            // Prepare the SQL statement
-            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+    $searchTerm = '';
+    if (isset($_GET['draftsearch'])) {
+        $searchTerm = mysqli_real_escape_string($connect, $_GET['draftsearch']);
+    }
 
-            // Execute the SQL statement
-            $result = mysqli_query($connect, $sql);
+    // Prepare the SQL statement
+    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
 
-            // Fetch all the rows
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo '<tr style="border-top: 4px solid #f5f6f8;height: 80px" >
+    // Execute the SQL statement
+    $result = mysqli_query($connect, $sql);
+
+    // Check if there are any results
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch all the rows
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width:97.05px">
+                            <div class="th_title">Status</div>
+                        </th>
+                        <th>
+                            <div class="th_title">Job</div>
+                        </th>
+                        <th style="width:156px;">
+                            <div class="th_title" style="text-align:right;">Draft Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody><tr style="border-top: 4px solid #f5f6f8;height: 80px" >
                                 <td>
                                     <div class="td_title"><span class="draft-box">
                                         <span class="draft-text">' . htmlspecialchars($row['job_status']) . '</span></span>
@@ -131,16 +133,71 @@ session_start(); // Start the session at the beginning
                                             </button>
                                         </div>
                                     </div>
-                                    
                                 </div>
-                            </tr>';
+                                </td>
+                            </tr>
+                            </tbody>
+                            </table>';
 
-            }
+        }
+    } else {
+        // No results, check if a search term was provided
+        if ($searchTerm != '') {
+            // Display a message for no search results
+            echo '<div>No results found for "' . htmlspecialchars($searchTerm) . '"</div>';
+        } else {
+            // Display a message for no jobs
+            echo '<div>No jobs found</div>';
+        }
+    }
+    ?>
 
-            ?>
-        </tbody>
-    </table>
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the elements
+        var cleardraft = document.getElementById('cleardraft');
+        var draftInput = document.getElementById('draftInput');
+
+        // Hide the clear button initially
+        cleardraft.style.display = 'none';
+
+        // Show/hide the clear button when the input box content changes
+        draftInput.addEventListener('input', function () {
+            if (this.value) {
+                cleardraft.style.display = 'inline';
+            } else {
+                cleardraft.style.display = 'none';
+            }
+        });
+
+        // Clear the input box when the clear button is clicked
+        cleardraft.addEventListener('click', function (e) {
+            e.preventDefault();
+            draftInput.value = '';
+            // Manually trigger the input event
+            var event = new Event('input', {
+                bubbles: true,
+                cancelable: true,
+            });
+            draftInput.dispatchEvent(event);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#draftForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the form from being submitted normally
+
+            var searchTerm = $('#draftInput').val();
+
+            // Pass the search term to a function
+            searchDraft(searchTerm);
+        });
+    });
+
+</script>
 
 <?php
 // Free the result set and close the connection

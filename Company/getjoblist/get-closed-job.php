@@ -67,44 +67,47 @@ session_start(); // Start the session at the beginning
 </div>
 
 <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
-    <table style="background-color: #fff;border-collapse: collapse;width: 100%;">
-        <thead>
-            <tr>
-                <th style="width:97.05px">
-                    <div class="th_title">Status</div>
-                </th>
-                <th>
-                    <div class="th_title">Job</div>
-                </th>
-                <th style="width:146px;">
-                    <div class="th_title">Candidates</div>
-                </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Draft Actions</div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $CompanyID = null;
-            if (isset($_SESSION['companyData']['CompanyID'])) {
-                $CompanyID = $_SESSION['companyData']['CompanyID'];
-            }
 
-            $searchTerm = '';
-            if (isset($_GET['closedsearch'])) {
-                $searchTerm = mysqli_real_escape_string($connect, $_GET['closedsearch']);
-            }
+    <?php
+    $CompanyID = null;
+    if (isset($_SESSION['companyData']['CompanyID'])) {
+        $CompanyID = $_SESSION['companyData']['CompanyID'];
+    }
 
-            // Prepare the SQL statement
-            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+    $searchTerm = '';
+    if (isset($_GET['closedsearch'])) {
+        $searchTerm = mysqli_real_escape_string($connect, $_GET['closedsearch']);
+    }
 
-            // Execute the SQL statement
-            $result = mysqli_query($connect, $sql);
+    // Prepare the SQL statement
+    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
 
-            // Fetch all the rows
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo '<tr style="border-top: 4px solid #f5f6f8;height: 80px">
+    // Execute the SQL statement
+    $result = mysqli_query($connect, $sql);
+
+    // Check if there are any results
+    if (mysqli_num_rows($result) > 0) {
+        // Fetch all the rows
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="width:97.05px">
+                            <div class="th_title">Status</div>
+                        </th>
+                        <th>
+                            <div class="th_title">Job</div>
+                        </th>
+                        <th style="width:146px;">
+                            <div class="th_title">Candidates</div>
+                        </th>
+                        <th style="width:156px;">
+                            <div class="th_title" style="text-align:right;">Draft Actions</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-top: 4px solid #f5f6f8;height: 80px">
                                 <td>
                                     <div class="td_title"><span class="closed-box">
                                         <span class="closed-text">' . htmlspecialchars($row['job_status']) . '</span></span>
@@ -140,13 +143,72 @@ session_start(); // Start the session at the beginning
                                         <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
                                     </div>
                                 </div>
-                            </tr>';
+                                </td>
+                    </tr> 
+                </tbody>
+            </table>';
 
-            }
-            ?>
-        </tbody>
-    </table>
+        }
+    } else {
+        // No results, check if a search term was provided
+        if ($searchTerm != '') {
+            // Display a message for no search results
+            echo '<div>No results found for "' . htmlspecialchars($searchTerm) . '"</div>';
+        } else {
+            // Display a message for no jobs
+            echo '<div>No jobs found</div>';
+        }
+    }
+
+
+    ?>
+
 </div>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the elements
+        var clearclosed = document.getElementById('clearclosed');
+        var closedInput = document.getElementById('closedInput');
+
+        // Hide the clear button initially
+        clearclosed.style.display = 'none';
+
+        // Show/hide the clear button when the input box content changes
+        closedInput.addEventListener('input', function () {
+            if (this.value) {
+                clearclosed.style.display = 'inline';
+            } else {
+                clearclosed.style.display = 'none';
+            }
+        });
+
+        // Clear the input box when the clear button is clicked
+        clearclosed.addEventListener('click', function (e) {
+            e.preventDefault();
+            closedInput.value = '';
+            // Manually trigger the input event
+            var event = new Event('input', {
+                bubbles: true,
+                cancelable: true,
+            });
+            closedInput.dispatchEvent(event);
+        });
+    });
+
+    $(document).ready(function () {
+        $('#closedForm').on('submit', function (e) {
+            e.preventDefault(); // Prevent the form from being submitted normally
+
+            var searchTerm = $('#closedInput').val();
+
+            // Pass the search term to a function
+            searchClosed(searchTerm);
+        });
+    });
+
+</script>
 
 <?php
 // Free the result set and close the connection

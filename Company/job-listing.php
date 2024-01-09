@@ -100,6 +100,10 @@ if (!isset($_SESSION['companyData'])) {
                 <button type="button" class="joblistbtn" id="draftButton"><span
                         class="joblisttitle">Draft</span></button>
             </div>
+            <div>
+                <button type="button" class="joblistbtn" id="blockedButton"><span
+                        class="joblisttitle">Blocked</span></button>
+            </div>
             <div class="underline"></div>
         </div>
     </div>
@@ -116,6 +120,10 @@ if (!isset($_SESSION['companyData'])) {
 
     </div>
 
+    <div class="content-div" id="blocked">
+
+    </div>
+
 
 
     </div>
@@ -129,6 +137,7 @@ if (!isset($_SESSION['companyData'])) {
             getactivejob();
             getclosedjob();
             getdraftjob();
+            getblockedjob();
         });
 
         function confirmCloseJobPost(jobPostID) {
@@ -152,6 +161,7 @@ if (!isset($_SESSION['companyData'])) {
                                 getactivejob();
                                 getclosedjob();
                                 getdraftjob();
+                                getblockedjob();
                             } else {
                                 Swal.fire("Error!", "Error closing job post!", "error");
                             }
@@ -183,9 +193,11 @@ if (!isset($_SESSION['companyData'])) {
                                 getactivejob();
                                 getclosedjob();
                                 getdraftjob();
+                                getblockedjob();
                             } else {
                                 Swal.fire("Error!", "Error closing job post!", "error");
-                            }                        }
+                            }
+                        }
                     });
                 }
             });
@@ -220,13 +232,79 @@ if (!isset($_SESSION['companyData'])) {
                 }
             });
         }
+
+        function getblockedjob() {
+            $.ajax({
+                url: 'getjoblist/get-blocked-job.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#blocked').html(response);
+                }
+            });
+        }
+
+        function searchActive(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-active-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    activesearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#active').html(data);
+                }
+            });
+        }
+
+        function searchClosed(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-closed-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    closedsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#closed').html(data);
+                }
+            });
+        }
+
+        function searchDraft(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-draft-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    draftsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#draft').html(data);
+                }
+            });
+        }
+
+        function searchBlocked(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-blocked-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    blockedsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#blocked').html(data);
+                }
+            });
+        }
     </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var buttons = document.querySelectorAll('.joblistbtn');
             var underline = document.querySelector('.underline');
-            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft')];
+            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked')];
 
             // Function to update the visibility of the divs based on the id in the URL
             function updateDivVisibility() {
@@ -275,100 +353,5 @@ if (!isset($_SESSION['companyData'])) {
             });
         });
     </script>
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the elements
-            var clearactive = document.getElementById('clearactive');
-            var activeInput = document.getElementById('activeInput');
-
-            // Hide the clear button initially
-            clearactive.style.display = 'none';
-
-            // Show/hide the clear button when the input box content changes
-            activeInput.addEventListener('input', function () {
-                if (this.value) {
-                    clearactive.style.display = 'flex';
-                } else {
-                    clearactive.style.display = 'none';
-                }
-            });
-
-            // Clear the input box when the clear button is clicked
-            clearactive.addEventListener('click', function (e) {
-                e.preventDefault();
-                activeInput.value = '';
-                // Manually trigger the input event
-                var event = new Event('input', {
-                    bubbles: true,
-                    cancelable: true,
-                });
-                activeInput.dispatchEvent(event);
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the elements
-            var clearclosed = document.getElementById('clearclosed');
-            var closedInput = document.getElementById('closedInput');
-
-            // Hide the clear button initially
-            clearclosed.style.display = 'none';
-
-            // Show/hide the clear button when the input box content changes
-            closedInput.addEventListener('input', function () {
-                if (this.value) {
-                    clearclosed.style.display = 'inline';
-                } else {
-                    clearclosed.style.display = 'none';
-                }
-            });
-
-            // Clear the input box when the clear button is clicked
-            clearclosed.addEventListener('click', function (e) {
-                e.preventDefault();
-                closedInput.value = '';
-                // Manually trigger the input event
-                var event = new Event('input', {
-                    bubbles: true,
-                    cancelable: true,
-                });
-                closedInput.dispatchEvent(event);
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the elements
-            var clearButton = document.getElementById('draftclosed');
-            var draftInput = document.getElementById('draftInput');
-
-            // Hide the clear button initially
-            clearButton.style.display = 'none';
-
-            // Show/hide the clear button when the input box content changes
-            draftInput.addEventListener('input', function () {
-                if (this.value) {
-                    clearButton.style.display = 'inline';
-                } else {
-                    clearButton.style.display = 'none';
-                }
-            });
-
-            // Clear the input box when the clear button is clicked
-            clearButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                draftInput.value = '';
-                // Manually trigger the input event
-                var event = new Event('input', {
-                    bubbles: true,
-                    cancelable: true,
-                });
-                draftInput.dispatchEvent(event);
-            });
-        });
-    </script>
-
 </body>
-
 </html>
