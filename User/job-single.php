@@ -169,7 +169,7 @@
           <div class="col-lg-8 mb-4 mb-lg-0">
             <div class="d-flex align-items-center">
               <div class="border p-2 d-inline-block mr-3 rounded">
-                <img src="images/job_logo_5.jpg" alt="Image">
+                <img src="../Company/covers/Screenshot (1).png" alt="Image">
               </div>
               <div>
                 <h2 style="margin-bottom:30px;"><?php echo $row['Job_Post_Title']; ?></h2>

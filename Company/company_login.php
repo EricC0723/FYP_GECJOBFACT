@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 ?>
 
 <?php

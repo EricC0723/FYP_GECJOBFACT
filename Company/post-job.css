@@ -920,7 +920,7 @@ a.ui-button:active,
     line-height: 20px;
     font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
     color: #2e3849;
-    padding: 12px 24px;
+    padding: 5px 24px;
     text-align:left;
 }
 
@@ -996,3 +996,60 @@ a.ui-button:active,
     background-color: #dde3fc;
 }
 
+.viewalllink{
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    color: #4964e9;
+}
+
+.viewalllink:hover{
+    text-decoration: underline;
+}
+
+
+.draft-box{
+    background-color: #fef8de;
+    padding: 4px 8px;
+}
+
+.draft-text{
+    color: #723d02 !important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.active-box{
+    background-color: #defee0;
+    padding: 4px 8px;
+}
+
+.active-text{
+    color: #027236 !important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.blocked-box{
+    background-color: #fee0de;
+    padding: 4px 8px;
+}
+
+.blocked-text{
+    color: #720202 !important;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.closed-box{
+    background-color: #e0e0e0;
+    padding: 4px 8px;
+}
+
+.closed-text{
+    color: #262626 !important;
+    font-size: 12px;
+    font-weight: 600;
+}

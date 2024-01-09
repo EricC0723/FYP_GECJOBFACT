@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 ?>
 
 <?php
@@ -11,6 +11,10 @@ if (isset($_SESSION['job_post_ID'])) {
     $job_post_ID = $_SESSION['job_post_ID'];
     $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$job_post_ID' ");
     $row = mysqli_fetch_assoc($result);
+    echo "<script>
+        var jobPostData = " . json_encode($row) . ";
+        </script>";
+
 }
 
 $CompanyID = null;
@@ -115,8 +119,8 @@ if (isset($_POST['submitbtn'])) {
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="#home">Home</a></span>
-                    <span class="header-link"><a href="#jobs">Jobs</a></span>
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
@@ -181,7 +185,7 @@ if (isset($_POST['submitbtn'])) {
     <div class="form-container" style="padding-top:32px">
 
 
-        <form method="POST" >
+        <form method="POST" enctype="multipart/form-data">
             <div class="header-title">
                 <span
                     style="color: rgb(46, 56, 73);font-size: 36px;font-style: normal;font-weight: 600;line-height: 36px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Write
@@ -339,7 +343,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Description">
-                    <textarea id="jobDescription" name="jobDescription" class="write-textarea"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
+                    <textarea id="jobDescription" name="jobDescription"
+                        class="write-textarea"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobdescription" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -373,7 +378,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Responsibilities">
-                    <textarea id="jobResponsibilities" name="jobResponsibilities" class="write-textarea"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
+                    <textarea id="jobResponsibilities" name="jobResponsibilities"
+                        class="write-textarea"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobresponsibilities" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -407,7 +413,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Benefits">
-                    <textarea id="jobBenefits" name="jobBenefits" class="write-textarea"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
+                    <textarea id="jobBenefits" name="jobBenefits"
+                        class="write-textarea"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobbenefits" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -533,7 +540,7 @@ if (isset($_POST['submitbtn'])) {
             var preview = document.getElementById('previewcover');
             var coverimgbox = document.getElementById('add_cover_img_box');
 
-        
+
             coverInput.addEventListener('change', function () {
                 var file = this.files[0];
 
@@ -555,7 +562,7 @@ if (isset($_POST['submitbtn'])) {
                     // Read the uploaded file as a data URL
                     reader.readAsDataURL(file);
                 }
-               
+
             });
         }
     </script>

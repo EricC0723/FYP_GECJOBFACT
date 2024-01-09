@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
+unset($_SESSION['job_post_ID']);
 
 if (!isset($_SESSION['companyData'])) {
     echo '<script>alert("You haven\'t logged in"); window.location.href = "company_login.php";</script>';
     exit;
 }
 ?>
-
-
-
-
 <html lang="en">
 
 <head>
@@ -32,7 +29,7 @@ if (!isset($_SESSION['companyData'])) {
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
-                    <span class="header-link"><a href="#jobs">Jobs</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
@@ -269,18 +266,46 @@ if (!isset($_SESSION['companyData'])) {
                     }
 
 
-                    // Prepare the SQL statement
-                    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID";
+                    // Prepare the SQL statement to count the total number of jobs
+                    $sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+                    $result = mysqli_query($connect, $sql);
+                    $row = mysqli_fetch_assoc($result);
+                    $totalJobs = $row['total'];
 
-                    // Execute the SQL statement
+                    // Prepare the SQL statement to fetch the top 5 recent jobs
+                    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID ORDER BY AdStartDate DESC LIMIT 5";
                     $result = mysqli_query($connect, $sql);
 
                     // Fetch all the rows
                     while ($row = mysqli_fetch_assoc($result)) {
+                        $jobStatus = htmlspecialchars($row['job_status']);
+                        $statusbox = '';
+                        $statustext = '';
+
+                        // Determine the class based on the job status
+                        switch ($jobStatus) {
+                            case 'Draft':
+                                $statusbox = 'draft-box';
+                                $statustext = 'draft-text';
+                                break;
+                            case 'Active':
+                                $statusbox = 'active-box';
+                                $statustext = 'active-text';
+                                break;
+                            case 'Closed':
+                                $statusbox = 'closed-box';
+                                $statustext = 'closed-text';
+                                break;
+                            case 'Blocked':
+                                $statusbox = 'blocked-box';
+                                $statustext = 'blocked-text';
+                                break;
+                        }
+
                         echo '<tr style="border-top: 4px solid #f5f6f8;height: 80px">
                                 <td>
-                                    <div class="td_title"><span class="td_status">
-                                        <span class="td_status_text">' . htmlspecialchars($row['job_status']) . '</span></span>
+                                    <div class="td_title"><span class="' . $statusbox . '">
+                                        <span class="' . $statustext . '">' . $jobStatus . '</span></span>
                                     </div>
                                 </td>
                                 <td>
@@ -295,11 +320,24 @@ if (!isset($_SESSION['companyData'])) {
                                     <div class="td_title">-</div>
                                 </td>
                                 <td>
-                                <div class="td_title" style="width:160px;">
-                                    <div class="continuedraft_button">
-                                        <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
+                                    <div class="td_title" style="width:160px;">
+                                        <div class="continuedraft_button">';
+                        switch ($jobStatus) {
+                            case 'Draft':
+                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>';
+                                break;
+                            case 'Active':
+                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                break;
+                            case 'Closed':
+                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                break;
+                            case 'Blocked':
+                                echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">View post</a>';
+                                break;
+                        }
+                        echo '</div>
                                     </div>
-                                </div>
                             </tr>';
 
                     }
@@ -310,6 +348,12 @@ if (!isset($_SESSION['companyData'])) {
                     ?>
                 </tbody>
             </table>
+            <?php
+            // If the total number of jobs is more than 5, display the "View all job ads" link
+            if ($totalJobs > 5) {
+                echo '<div style="padding-top:24px;text-align:right;"><a href="job-listing.php" class="viewalllink">View all job ads</a></div>';
+            }
+            ?>
         </div>
 
     </div>

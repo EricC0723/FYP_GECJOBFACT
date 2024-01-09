@@ -25,13 +25,6 @@ window.addEventListener('load', function () {
         var event = new Event('input');
         jobTitleInput.dispatchEvent(event);
     }
-
-    // Check if the session storage has job_post_ID
-    if (sessionStorage.getItem('job_post_ID')) {
-        // Manually trigger the 'input' event
-        var event = new Event('input');
-        jobTitleInput.dispatchEvent(event);
-    }
 });
 
 // Get the input field and the validation message elements
@@ -225,6 +218,7 @@ jobSalaryMinInput.addEventListener('input', function () {
         // If the input field is not empty and the value is greater than 299
         minSalMessage.textContent = '';
         this.dataset.valid = '1';
+        jobSalaryMaxInput.dataset.valid = '1';
         validationMinSal.classList.add('hide'); // Hide the validation message
         validationMaxSal.classList.add('hide'); // Hide the validation message
     }
@@ -262,6 +256,7 @@ jobSalaryMaxInput.addEventListener('input', function () {
         // If the input field is not empty and the value is less than or equal to 300000 and greater than or equal to min salary
         maxSalMessage.textContent = '';
         this.dataset.valid = '1';
+        jobSalaryMinInput.dataset.valid = '1';
         validationMaxSal.classList.add('hide'); // Hide the validation message
         validationMinSal.classList.add('hide'); // Hide the validation message
     }

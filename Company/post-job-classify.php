@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php"); ?>
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
 
 <?php
-session_start(); // Start the session if you haven't already
-
+session_start();
 if (isset($_SESSION['job_post_ID'])) {
+    // Check if the job_post_ID is not already in the URL
     $job_post_ID = $_SESSION['job_post_ID'];
+
+    if (!isset($_GET['jobPostID'])) {
+        // Redirect to the current page with the job_post_ID in the URL
+        header("Location: post-job-classify.php?jobPostID=$job_post_ID");
+        exit;
+    }
 }
 
 $CompanyID = null;
@@ -16,9 +23,6 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
 }
 
 if (isset($_POST["submitbtn"])) {
-    // Store the form data in the session
-    $_SESSION['formData'] = $_POST;
-
     // Retrieve the form data
     $jobTitle = $_POST['jobTitle'];
     $jobLocationID = $_POST['jobLocationId'];
@@ -32,6 +36,8 @@ if (isset($_POST["submitbtn"])) {
     $jobSalaryMin = $_POST['jobSalaryMin'];
     $jobSalaryMax = $_POST['jobSalaryMax'];
 
+
+
     if (isset($_GET['jobPostID'])) {
         // Update the existing job post
         $postid = $_GET["jobPostID"];
@@ -42,16 +48,6 @@ if (isset($_POST["submitbtn"])) {
             $_SESSION['job_post_ID'] = $postid;
             // Redirect to the next page
             echo "<script type='text/javascript'>window.location.href = 'post-job-write.php?jobPostID=$postid';</script>";
-            exit;
-        }
-    } else if (isset($_SESSION['job_post_ID'])) {
-        // Update the existing job post
-        $postId = $_SESSION["job_post_ID"];
-        $sql = "UPDATE job_post SET Job_Post_Title = '$jobTitle', Job_Location_ID = '$jobLocationID', Job_Post_Location = '$jobLocation', Main_Category_ID = '$jobSpecialisationID', Main_Category_Name = '$jobSpecialisation', Sub_Category_ID = '$jobRoleID', Sub_Category_Name = '$jobRole', Job_Post_Type = '$jobType', Job_Post_Position = '$jobPosition', Job_Post_MinSalary = '$jobSalaryMin', Job_Post_MaxSalary = '$jobSalaryMax', CompanyID = '$CompanyID' WHERE Job_Post_ID = '$postId'";
-        $result = mysqli_query($connect, $sql);
-        if ($result) {
-            // Redirect to the next page
-            echo "<script type='text/javascript'>window.location.href = 'post-job-write.php;</script>";
             exit;
         }
     } else {
@@ -89,8 +85,8 @@ if (isset($_POST["submitbtn"])) {
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="#home">Home</a></span>
-                    <span class="header-link"><a href="#jobs">Jobs</a></span>
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
@@ -657,6 +653,22 @@ if (isset($_POST["submitbtn"])) {
             };
 
         });
+
+    </script>
+
+    <script>
+        window.onbeforeunload = function () {
+            // Send an AJAX request to get the jobPostID from the session
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'get_job_post_id.php', false); // Set async to false
+            xhr.send(null);
+
+            if (xhr.status === 200) {
+                var jobPostID = xhr.responseText;
+                // Modify the URL to include the jobPostID
+                history.pushState(null, null, "post-job-classify.php?jobPostID=" + jobPostID);
+            }
+        };
 
     </script>
 

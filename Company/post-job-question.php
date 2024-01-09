@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 ?>
 
 <?php
@@ -66,8 +66,8 @@ if (isset($_POST['submitbtn'])) {
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="#home">Home</a></span>
-                    <span class="header-link"><a href="#jobs">Jobs</a></span>
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
