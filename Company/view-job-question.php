@@ -26,11 +26,11 @@ if (isset($_POST['submitbtn'])) {
         // Update the existing job post
         $postid = $_GET["jobPostID"];
         if ($postid) {
-            
+
             echo "<script type='text/javascript'>window.location.href = 'company_landing.php';</script>";
             exit;
         }
-    } 
+    }
 }
 
 ?>
@@ -164,6 +164,7 @@ if (isset($_POST['submitbtn'])) {
                 //Recommended questions
                 // Execute a SELECT query to get all questions where Recommended_Question is 1
                 $result = mysqli_query($connect, "SELECT Job_Question_Name, Job_Question_ID, Job_Question_Type FROM job_question WHERE Recommended_Question = 1");
+                $selected_questions = isset($selected_questions) ? $selected_questions : array();
 
                 // Check if the query returned any results
                 if (mysqli_num_rows($result) > 0) {
@@ -446,10 +447,26 @@ if (isset($_POST['submitbtn'])) {
         });
 
     </script>
-
-
-
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+<?php
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
+?>

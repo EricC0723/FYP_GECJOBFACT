@@ -3,14 +3,7 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-
-if (!isset($_SESSION['companyData'])) {
-    echo '<script>alert("You haven\'t logged in"); window.location.href = "company_login.php";</script>';
-    exit;
-}
 ?>
-
-
 <html lang="en">
 
 <head>
@@ -353,5 +346,26 @@ if (!isset($_SESSION['companyData'])) {
             });
         });
     </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
+
 </html>
+
+<?php
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
+?>

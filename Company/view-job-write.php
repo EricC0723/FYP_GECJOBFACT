@@ -27,11 +27,11 @@ if (isset($_POST['submitbtn'])) {
         // Update the existing job post
         $postid = $_GET["jobPostID"];
         if ($postid) {
-            
+
             echo "<script type='text/javascript'>window.location.href = 'view-job-question.php?jobPostID=$postid';</script>";
             exit;
         }
-    } 
+    }
 }
 
 ?>
@@ -394,7 +394,26 @@ if (isset($_POST['submitbtn'])) {
             });
         }
     </script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+<?php
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
+?>

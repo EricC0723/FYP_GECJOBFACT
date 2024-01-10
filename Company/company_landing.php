@@ -4,22 +4,6 @@
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 unset($_SESSION['job_post_ID']);
-
-if (!isset($_SESSION['companyData'])) {
-    echo '<script>alert("You haven\'t logged in"); window.location.href = "company_login.php";</script>';
-    exit;
-}
-
-$CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
-}
-
-// Prepare the SQL statement to count the total number of jobs
-$sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
-$result = mysqli_query($connect, $sql);
-$row = mysqli_fetch_assoc($result);
-$totalJobs = $row['total'];
 ?>
 <html lang="en">
 
@@ -476,9 +460,38 @@ $totalJobs = $row['total'];
     ?>
 
     <script src="post-job.js"></script>
-    <script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    </script>
 </body>
 
 </html>
+<?php
+
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,        
+        }).then(function () {
+                window.location.href = "company_login.php";
+            });
+    </script>
+    <?php
+    exit;
+}
+
+$CompanyID = null;
+if (isset($_SESSION['companyData']['CompanyID'])) {
+    $CompanyID = $_SESSION['companyData']['CompanyID'];
+}
+
+// Prepare the SQL statement to count the total number of jobs
+$sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+$result = mysqli_query($connect, $sql);
+$row = mysqli_fetch_assoc($result);
+$totalJobs = $row['total'];
+?>

@@ -9,7 +9,6 @@ session_start(); // Start the session at the beginning
 
 ?>
 
-
 <?php
 
 if (isset($_GET["login_btn"])) {
