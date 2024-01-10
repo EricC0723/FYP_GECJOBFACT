@@ -4,6 +4,7 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 require 'vendor/autoload.php'; // Add this line to include PHPMailer
+session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -27,6 +28,7 @@ if (isset($_POST["register_btn"])) {
 
     if ($sql) {
         // After the user is registered, send the verification email
+        $_SESSION['companyEmail'] = $companyEmail;
         $mail = new PHPMailer(true);
 
         try {
@@ -63,13 +65,35 @@ if (isset($_POST["register_btn"])) {
             $mail->send();
             ?>
             <script>
-                Swal.fire({
-                    title: "Success",
-                    text: "Company Registered Successfully! Please check your email for verification.",
-                    icon: "success",
-                }).then(function () {
-                    window.location.href = "company_login.php";
-                });
+                function sendEmail() {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Company Registered Successfully! Please check your email for verification.",
+                        icon: "success",
+                        showDenyButton: true,
+                        confirmButtonText: "Send again",
+                        denyButtonText: `Ok`,
+                        backdrop: `lightgrey`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: 'send-verify-email.php',
+                                success: function (data) {
+                                    console.log(data); // Log the output of the send-verify-email.php script
+                                    sendEmail(); // Call the function again if the email was sent successfully
+                                },
+                                error: function () {
+                                    alert('An error occurred while sending the email.');
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            window.location.href = 'company_login.php';
+                        }
+                    });
+                }
+
+                sendEmail(); // Call the function for the first time
             </script>
             <?php
         } catch (Exception $e) {

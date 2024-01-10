@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -9,95 +9,6 @@ session_start(); // Start the session at the beginning
 
 ?>
 
-<?php
-
-if (isset($_GET["login_btn"])) {
-
-    // Get the values from the form fields
-    $companyEmail = $_GET['companyEmail'];
-    $companyPassword = $_GET['companyPassword'];
-
-    // Prepare an SQL statement to check if the email exists
-    $sql = "SELECT * FROM companies WHERE CompanyEmail = '$companyEmail'";
-    $result = mysqli_query($connect, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-
-        // Check if the password matches
-        if ($row['CompanyPassword'] != $companyPassword) {
-            ?>
-            <script>
-                Swal.fire({
-                    title: "Error",
-                    text: "Invalid password.",
-                    icon: "error",
-                });
-            </script>
-            <?php
-        } else {
-            // Check the CompanyStatus
-            if ($row['CompanyStatus'] == 'Verify') {
-                ?>
-                <script>
-                    Swal.fire({
-                        title: "Error",
-                        text: "Please verify your email first.",
-                        icon: "error",
-                    });
-                </script>
-                <?php
-            } else if ($row['CompanyStatus'] == 'Blocked') {
-                ?>
-                    <script>
-                        Swal.fire({
-                            title: "Error",
-                            text: "Your company account is blocked.",
-                            icon: "error",
-                        });
-                    </script>
-                <?php
-            } else if ($row['CompanyStatus'] == 'Active') {
-                $_SESSION['companyData'] = $row; // Store the entire row in a session variable
-                ?>
-                        <script>
-                            Swal.fire({
-                                title: "Success",
-                                text: "Login Successfully",
-                                icon: "success",
-                            }).then(function () {
-                                window.location.href = "company_landing.php";
-                            });
-                        </script>
-                <?php
-            } else {
-                ?>
-                        <script>
-                            Swal.fire({
-                                title: "Error",
-                                text: "Failed to login. Please try again.",
-                                icon: "error",
-                            });
-                        </script>
-                <?php
-            }
-        }
-    } else {
-        ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Invalid email address.",
-                icon: "error",
-            });
-        </script>
-        <?php
-    }
-
-    // Close the database connection
-    mysqli_close($connect);
-}
-?>
 
 <html lang="en">
 
@@ -167,7 +78,11 @@ if (isset($_GET["login_btn"])) {
                             </div>
 
                             <div class="form-group">
-                                <label class="question" style="padding-bottom: 8px;">Password</label>
+                                <div style="display:flex;flex-direction:row;align-items:baseline;">
+                                    <label class="question" style="padding-bottom: 8px;width:370px;">Password</label>
+                                    <a class="employee_sentence" href="forget-password.php" style="height:27px;">Forget
+                                        password?</a>
+                                </div>
                                 <div style="position: relative;">
                                     <input id="password" class="register_input" type="password"
                                         style="width: calc(100% - 54px); padding-right: 40px;" name="companyPassword">
@@ -324,3 +239,137 @@ if (isset($_GET["login_btn"])) {
 </body>
 
 </html>
+
+
+<?php
+
+if (isset($_GET["login_btn"])) {
+
+    // Get the values from the form fields
+    $companyEmail = $_GET['companyEmail'];
+    $companyPassword = $_GET['companyPassword'];
+
+    // Prepare an SQL statement to check if the email exists
+    $sql = "SELECT * FROM companies WHERE CompanyEmail = '$companyEmail'";
+    $result = mysqli_query($connect, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        // Check if the password matches
+        if ($row['CompanyPassword'] != $companyPassword) {
+            ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Invalid password.",
+                    icon: "error",
+                });
+            </script>
+            <?php
+        } else {
+            $_SESSION['companyEmail'] = $companyEmail;
+            // Check the CompanyStatus
+            if ($row['CompanyStatus'] == 'Verify') {
+                ?>
+                <script>
+                    Swal.fire({
+                        title: "Error",
+                        text: "Please verify your email first.",
+                        icon: "error",
+                        showCancelButton: true,
+                        confirmButtonText: "Send again",
+                        backdrop: `lightgrey`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: 'send-verify-email.php',
+                                success: function (data) {
+                                    console.log(data); // Log the output of the send-verify-email.php script
+                                    sendEmail(); // Call the function again if the email was sent successfully
+                                },
+                                error: function () {
+                                    alert('An error occurred while sending the email.');
+                                }
+                            });
+                        }
+                    });
+
+                    function sendEmail() {
+                        Swal.fire({
+                            title: "Success",
+                            text: "Email sent successfully. Please check your email.",
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonText: "Send again",
+                            backdrop: `lightgrey`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'send-verify-email.php',
+                                    success: function (data) {
+                                        console.log(data); // Log the output of the send-verify-email.php script
+                                        sendEmail(); // Call the function again if the email was sent successfully
+                                    },
+                                    error: function () {
+                                        alert('An error occurred while sending the email.');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                </script>
+                <?php
+            } else if ($row['CompanyStatus'] == 'Blocked') {
+                ?>
+                    <script>
+                        Swal.fire({
+                            title: "Error",
+                            text: "Your company account is blocked.",
+                            icon: "error",
+                        });
+                    </script>
+                <?php
+            } else if ($row['CompanyStatus'] == 'Active') {
+                $_SESSION['companyData'] = $row; // Store the entire row in a session variable
+                ?>
+                        <script>
+                            Swal.fire({
+                                title: "Success",
+                                text: "Login Successfully",
+                                icon: "success",
+                            }).then(function () {
+                                window.location.href = "company_landing.php";
+                            });
+                        </script>
+                <?php
+            } else {
+                ?>
+                        <script>
+                            Swal.fire({
+                                title: "Error",
+                                text: "Failed to login. Please try again.",
+                                icon: "error",
+                            });
+                        </script>
+                <?php
+            }
+        }
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Invalid email address.",
+                icon: "error",
+            });
+        </script>
+        <?php
+    }
+
+    // Close the database connection
+    mysqli_close($connect);
+}
+?>
