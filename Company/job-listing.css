@@ -516,3 +516,34 @@ nav ul {
     cursor: pointer;
     display: none;
 }
+
+.continue_job_link {
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    line-height: 24px;
+    font-size: 16px;
+    color: #4964e9;
+    border: 1px solid #4964e9;
+    /* Change the color as needed */
+    border-radius: 4px;
+    display: inline-block;
+    /* Add this to make the border wrap the content */
+    padding: 10px 20px;
+    /* Add some padding to give space between the border and the text */
+    text-decoration: none;
+    /* Remove the underline from the link */
+    transition: transform .125s ease, opacity .125s ease;
+}
+
+.continue_job_link:hover {
+    background: #e8ecfd;
+}
+
+.continue_job_link:active {
+    transform: scale(0.95);
+    transition: transform .125s ease, opacity .125s ease;
+    background-color: #dde3fc;
+}

@@ -314,6 +314,19 @@ if (isset($_POST["submitbtn"])) {
                         <input type="radio" id="type4" name="jobType" value="4" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 4 ? 'checked' : ''; ?>>
                         <label for="type4" class="option">Casual</label>
                     </div>
+                    <div style="padding-top:4px;width:299px;" id="validation-jobtype" class="hide"><span
+                            style="display:flex"><span
+                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
+                                    style="color:#b91e1e">
+                                    <path
+                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                    </path>
+                                    <circle cx="12" cy="17" r="1"></circle>
+                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                    </path>
+                                </svg></span><span><span id="jobtype-message" class="validation_sentence">Please select job type</span></span></span></div>
                 </div>
             </div>
 
