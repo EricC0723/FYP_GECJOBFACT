@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 require 'vendor/autoload.php'; // Add this line to include PHPMailer
@@ -35,7 +36,7 @@ if (isset($_POST["register_btn"])) {
             $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
             $mail->SMTPAuth = true;
             $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
-            $mail->Password = 'GECjobfacts1113.'; // Your Gmail password
+            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
@@ -46,24 +47,44 @@ if (isset($_POST["register_btn"])) {
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Email Verification';
-            // Generate a unique verification token
-            $token = bin2hex(random_bytes(50));
 
-            // Combine the token and the email into a single string
-            $combined = $token . ':' . $companyEmail;
+            // Generate a hash of the user's email and a secret key
+            $secretKey = "your-secret-key";
+            $hash = hash_hmac('sha256', $companyEmail, $secretKey);
+
+            // Combine the hash and the email into a single string
+            $combined = $hash . ':' . $companyEmail;
 
             // Encode the combined string
             $encoded = base64_encode($combined);
 
             // Send the verification email
-            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify.php?data=' . urlencode($encoded);
+            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded);
             $mail->send();
-            echo '<script>alert("Company Registered Successfully! Please check your email for verification."); window.location.href = "company_login.php";</script>';
+            ?>
+            <script>
+                Swal.fire({
+                    title: "Success",
+                    text: "Company Registered Successfully! Please check your email for verification.",
+                    icon: "success",
+                }).then(function () {
+                    window.location.href = "company_login.php";
+                });
+            </script>
+            <?php
         } catch (Exception $e) {
             echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
         }
     } else {
-        echo '<script>alert("Failed to register company. Please try again.");</script>';
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Failed to register company. Please try again.",
+                icon: "error",
+            })
+        </script>
+        <?php
     }
 
     // Close the database connection
