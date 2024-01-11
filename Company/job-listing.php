@@ -34,9 +34,10 @@ session_start(); // Start the session at the beginning
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16"
+                                    class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
                                     style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
                                     <path
@@ -48,11 +49,10 @@ session_start(); // Start the session at the beginning
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                            </span>
+                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -353,7 +353,7 @@ session_start(); // Start the session at the beginning
 </html>
 
 <?php
-if (!isset($_SESSION['companyData'])) {
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({

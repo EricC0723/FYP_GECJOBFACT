@@ -2,6 +2,10 @@
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 
+$CompanyID = null;
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+}
 
 ?>
 
@@ -92,7 +96,6 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-
     $(document).ready(function () {
         $('#edit-personal-button').click(function () {
             $('#personal_details').hide();
@@ -103,12 +106,10 @@ session_start(); // Start the session at the beginning
     $(document).ready(function () {
         $('#close-personal').click(function () {
             event.preventDefault();
-
             $('#personal_details').show();
             $('#personal_edit_form').hide();
         });
     });
-
 
     var submitpersonal = document.getElementById('savepersonal');
     // Get the input field and the validation message elements
@@ -134,35 +135,51 @@ session_start(); // Start the session at the beginning
     // Add an event listener to the input field
     personInput.addEventListener('input', validatePersonInput);
 
-    // Call the validation function when the page loads
-    window.onload = validatePersonInput;
-
     // Get the input field and the validation message elements
     var contactInput = document.getElementById('contact');
     var validationContact = document.getElementById('validation-contact');
+    var initialPhoneNumber = contactInput.value; // Store the initial phone number
     var contactMessage = document.getElementById('contact-message');
 
-    // Add an event listener to the phone input field
-    contactInput.addEventListener('input', function () {
-        var contactMessage = document.getElementById('contact-message');
-        if (this.value.trim() === '') {
+    // Define the validation function
+    function validatePhoneInput() {
+        if (contactInput.value.trim() === '') {
             // If the input field is empty
             contactMessage.textContent = 'Required field';
-            this.dataset.valid = '0';
+            contactInput.dataset.valid = '0';
             validationContact.classList.remove('hide'); // Show the validation message
-        } else if (!/^\d{9,10}$/.test(this.value)) {
+        } else if (!/^\d{9,10}$/.test(contactInput.value)) {
             // If the input is not a valid phone number
             contactMessage.textContent = 'The phone number should contain between 9 to 10 digits.';
-            this.dataset.valid = '0';
+            contactInput.dataset.valid = '0';
             validationContact.classList.remove('hide'); // Show the validation message
+        } else if (contactInput.value !== initialPhoneNumber) {
+            // If the phone number has been changed
+            // Check if the phone number exists in the database
+            $.ajax({
+                url: 'check_data.php',
+                type: 'post',
+                data: { phone: contactInput.value },
+                success: function (response) {
+                    if (response == 1) {
+                        contactMessage.textContent = 'Phone number already exists';
+                        contactInput.dataset.valid = '0';
+                        validationContact.classList.remove('hide'); // Show the validation message
+                    } else {
+                        contactMessage.textContent = '';
+                        contactInput.dataset.valid = '1';
+                        validationContact.classList.add('hide'); // Hide the validation message
+                    }
+                }
+            });
         } else {
-
             contactMessage.textContent = '';
             contactInput.dataset.valid = '1';
             validationContact.classList.add('hide'); // Hide the validation message
-
         }
-    });
+    }
+
+    contactInput.addEventListener('input', validatePhoneInput);
 
     // Modify the event listener for the submit button
     submitpersonal.addEventListener('click', function (event) {
@@ -191,11 +208,9 @@ session_start(); // Start the session at the beginning
     });
 </script>
 
-<?php
-
-$CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
-}
-
-?>
+<script>
+    $(document).ready(function () {
+        validatePersonInput();
+        validatePhoneInput();
+    });
+</script>

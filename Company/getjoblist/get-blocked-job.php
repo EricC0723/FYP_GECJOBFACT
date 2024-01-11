@@ -8,8 +8,8 @@ session_start(); // Start the session at the beginning
     <div style="flex-direction:row;display:flex;justify-content:space-between;align-items:center;">
         <?php
         $CompanyID = null;
-        if (isset($_SESSION['companyData']['CompanyID'])) {
-            $CompanyID = $_SESSION['companyData']['CompanyID'];
+        if (isset($_SESSION['companyID'])) {
+            $CompanyID = $_SESSION['companyID'];
         }
 
         $searchTerm = '';
@@ -70,8 +70,8 @@ session_start(); // Start the session at the beginning
 
     <?php
     $CompanyID = null;
-    if (isset($_SESSION['companyData']['CompanyID'])) {
-        $CompanyID = $_SESSION['companyData']['CompanyID'];
+    if (isset($_SESSION['companyID'])) {
+        $CompanyID = $_SESSION['companyID'];
     }
 
     $searchTerm = '';
@@ -87,7 +87,7 @@ session_start(); // Start the session at the beginning
 
     // Check if there are any results
     if (mysqli_num_rows($result) > 0) {
-        echo'<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
+        echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
                 <th style="width:97.05px">
@@ -147,7 +147,7 @@ session_start(); // Start the session at the beginning
                         </tbody>
                         ';
         }
-        echo'</table>';
+        echo '</table>';
 
     } else {
         // No results, check if a search term was provided

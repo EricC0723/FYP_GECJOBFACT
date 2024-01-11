@@ -332,7 +332,7 @@ if (isset($_GET["login_btn"])) {
                     </script>
                 <?php
             } else if ($row['CompanyStatus'] == 'Active') {
-                $_SESSION['companyData'] = $row; // Store the entire row in a session variable
+                $_SESSION['companyID'] = $row['CompanyID']; // Store the CompanyID in a session variable
                 ?>
                         <script>
                             Swal.fire({

@@ -18,8 +18,8 @@ if (isset($_SESSION['job_post_ID'])) {
 }
 
 $CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
 }
 
 if (isset($_POST["submitbtn"])) {
@@ -97,8 +97,8 @@ if (isset($_POST["submitbtn"])) {
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                                     focusable="false" fill="currentColor" width="16" height="16"
                                     class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
@@ -112,11 +112,10 @@ if (isset($_POST["submitbtn"])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                            </span>
+                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -693,7 +692,7 @@ if (isset($_POST["submitbtn"])) {
 </html>
 
 <?php
-if (!isset($_SESSION['companyData'])) {
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({

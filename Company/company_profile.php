@@ -7,8 +7,8 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 
 $CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
 }
 ?>
 <html lang="en">
@@ -42,8 +42,8 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                                     focusable="false" fill="currentColor" width="16" height="16"
                                     class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
@@ -57,11 +57,10 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                            </span>
+                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -196,6 +195,51 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                     </div>
                 </div>
             </div>
+
+            <div style="padding-top:20px;">
+                <div style="padding:24px;background:white;">
+                    <div style="padding:20px;">
+                        <div style="display:flex;flex-direction:row;justify-content:center">
+                            <div style="width:100%;">
+                                <div>
+                                    <div style="display:flex;justify-content:center;"><svg width="62" height="65"
+                                            viewBox="0 0 108 134" xmlns="http://www.w3.org/2000/svg">
+                                            <g fill="none">
+                                                <path
+                                                    d="M35.712 2v44.954H2v54.888H62.175V67.327h17.361v34.515H106V2H35.712zM24.08 71.704h-10.62V54.026h10.62v17.678zM65.209 58.74h-17.53V41.06h17.699V58.74h-.169zm0-27.78h-17.53V13.28h17.699v17.68h-.169zm28.823 27.78H76.334V41.06h17.698V58.74zm0-27.78H76.334V13.28h17.698v17.68z"
+                                                    fill="#B3B5DC"></path>
+                                                <path
+                                                    d="M35.712 2v44.954H2v54.888H62.175V67.327h17.361v34.515H106V2H35.712zM24.08 71.704h-10.62V54.026h10.62v17.678zM65.209 58.74h-17.53V41.06h17.699V58.74h-.169zm0-27.78h-17.53V13.28h17.699v17.68h-.169zm28.823 27.78H76.334V41.06h17.698V58.74zm0-27.78H76.334V13.28h17.698v17.68zM62.176 101.842h17.361"
+                                                    stroke-width="4" stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke="#4153A0"></path>
+                                                <g>
+                                                    <path d="M35.712 46.954v54.888" stroke-width="4"
+                                                        stroke-miterlimit="10" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke="#4153A0"></path>
+                                                </g>
+                                                <g>
+                                                    <path
+                                                        d="M53.242 133.999c15.825 0 28.655-2.261 28.655-5.051s-12.83-5.051-28.655-5.051c-15.826 0-28.655 2.261-28.655 5.051s12.83 5.051 28.655 5.051z"
+                                                        fill="#E1E1E1"></path>
+                                                </g>
+                                            </g>
+                                        </svg></div>
+                                </div>
+                            </div>
+                            <div style="width:100%;">
+                                <div style="padding-left:20px;">
+                                    <div>
+                                        <h2 class="landing_sentence3">Company details</h2>
+                                    </div>
+                                    <div id="edit_company">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -208,6 +252,19 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                 type: 'GET',
                 success: function (response) {
                     $('#edit_personal').html(response);
+                },
+                error: function (error) {
+                    console.log('Error: ', error);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                url: 'edit_profile/edit_company.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#edit_company').html(response);
                 },
                 error: function (error) {
                     console.log('Error: ', error);
@@ -277,7 +334,7 @@ if (isset($_GET['savepersonal'])) {
     }
 }
 
-if (!isset($_SESSION['companyData'])) {
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({

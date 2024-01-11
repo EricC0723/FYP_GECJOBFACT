@@ -7,8 +7,8 @@ session_start(); // Start the session at the beginning
     <div style="flex-direction:row;display:flex;justify-content:space-between;align-items:center;">
         <?php
         $CompanyID = null;
-        if (isset($_SESSION['companyData']['CompanyID'])) {
-            $CompanyID = $_SESSION['companyData']['CompanyID'];
+        if (isset($_SESSION['companyID'])) {
+            $CompanyID = $_SESSION['companyID'];
         }
 
         $searchTerm = '';
@@ -68,8 +68,8 @@ session_start(); // Start the session at the beginning
 
         <?php
         $CompanyID = null;
-        if (isset($_SESSION['companyData']['CompanyID'])) {
-            $CompanyID = $_SESSION['companyData']['CompanyID'];
+        if (isset($_SESSION['companyID'])) {
+            $CompanyID = $_SESSION['companyID'];
         }
 
         $searchTerm = '';

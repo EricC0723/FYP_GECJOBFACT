@@ -9,17 +9,19 @@ session_start(); // Start the session at the beginning
 unset($_SESSION['job_post_ID']);
 
 $CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
     // Prepare the SQL statement to count the total number of jobs
-    $sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $resultc = mysqli_query($connect, $sqlc);
+    $rowc = mysqli_fetch_assoc($resultc);
+    $totalJobs = $rowc['total'];
+
+    $sql = "SELECT * FROM company WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
-    $totalJobs = $row['total'];
+
 }
-
-
-
 
 ?>
 
@@ -53,8 +55,8 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                                     focusable="false" fill="currentColor" width="16" height="16"
                                     class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
@@ -68,11 +70,10 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                            </span>
+                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -118,7 +119,7 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                                 <div>
                                     <h3 class="landing_sentence1">
                                         Hi
-                                        <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                        <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : ''; ?>
                                     </h3>
                                 </div>
                                 <div style="padding-top:10px;"><span class="landing_sentence2">You're in the right place to find
@@ -144,7 +145,7 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
                                 <div>
                                     <h3 class="landing_sentence1">
                                         Hi
-                                        <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                        <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : ''; ?>
                                     </h3>
                                 </div>
                                 <div style="padding-top:10px;"><span class="landing_sentence2">You're in the right place to find
@@ -484,7 +485,7 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
 
 </html>
 <?php
-if (!isset($_SESSION['companyData'])) {
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({
@@ -501,5 +502,3 @@ if (!isset($_SESSION['companyData'])) {
 }
 
 ?>
-
-
