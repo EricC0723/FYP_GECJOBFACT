@@ -273,29 +273,6 @@ if (isset($_GET["login_btn"])) {
             if ($row['CompanyStatus'] == 'Verify') {
                 ?>
                 <script>
-                    Swal.fire({
-                        title: "Error",
-                        text: "Please verify your email first.",
-                        icon: "error",
-                        showCancelButton: true,
-                        confirmButtonText: "Send again",
-                        backdrop: `lightgrey`,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                type: 'GET',
-                                url: 'send-verify-email.php',
-                                success: function (data) {
-                                    console.log(data); // Log the output of the send-verify-email.php script
-                                    sendEmail(); // Call the function again if the email was sent successfully
-                                },
-                                error: function () {
-                                    alert('An error occurred while sending the email.');
-                                }
-                            });
-                        }
-                    });
-
                     function sendEmail() {
                         Swal.fire({
                             title: "Success",
@@ -320,6 +297,31 @@ if (isset($_GET["login_btn"])) {
                             }
                         });
                     }
+                    
+                    Swal.fire({
+                        title: "Error",
+                        text: "Please verify your email first.",
+                        icon: "error",
+                        showCancelButton: true,
+                        confirmButtonText: "Send again",
+                        backdrop: `lightgrey`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: 'send-verify-email.php',
+                                success: function (data) {
+                                    console.log(data); // Log the output of the send-verify-email.php script
+                                    sendEmail(); // Call the function again if the email was sent successfully
+                                },
+                                error: function () {
+                                    alert('An error occurred while sending the email.');
+                                }
+                            });
+                        }
+                    });
+
+                    
                 </script>
                 <?php
             } else if ($row['CompanyStatus'] == 'Blocked') {
