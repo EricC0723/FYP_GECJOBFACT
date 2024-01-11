@@ -1,5 +1,5 @@
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 
 if (isset($_POST['email'])) {
     $email = $_POST['email'];

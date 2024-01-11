@@ -25,13 +25,6 @@ window.addEventListener('load', function () {
         var event = new Event('input');
         jobTitleInput.dispatchEvent(event);
     }
-
-    // Check if the session storage has job_post_ID
-    if (sessionStorage.getItem('job_post_ID')) {
-        // Manually trigger the 'input' event
-        var event = new Event('input');
-        jobTitleInput.dispatchEvent(event);
-    }
 });
 
 // Get the input field and the validation message elements
@@ -194,6 +187,49 @@ window.addEventListener('load', function () {
     }
 });
 
+// Get the radio buttons and the validation message elements
+var jobTypeRadios = document.getElementsByName('jobType');
+var validationJobType = document.getElementById('validation-jobtype');
+var jobTypeMessage = document.getElementById('jobtype-message');
+
+// Function to check if any radio button is selected
+function isAnyRadioChecked() {
+    for (var i = 0; i < jobTypeRadios.length; i++) {
+        if (jobTypeRadios[i].checked) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Add an event listener to each radio button
+for (var i = 0; i < jobTypeRadios.length; i++) {
+    if (jobTypeRadios[i]) {
+        jobTypeRadios[i].addEventListener('change', function () {
+            if (isAnyRadioChecked()) {
+                // If a radio button is selected
+                jobTypeMessage.textContent = '';
+                validationJobType.classList.add('hide'); // Hide the validation message
+                validationJobType.dataset.valid = '1'; // Set dataset.valid to 1
+            } else {
+                // If no radio button is selected
+                jobTypeMessage.textContent = 'Please select a job type';
+                validationJobType.classList.remove('hide'); // Show the validation message
+                validationJobType.dataset.valid = '0'; // Set dataset.valid to 0
+            }
+        });
+    }
+}
+
+// Trigger the 'input' event manually after the page loads
+window.addEventListener('load', function () {
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('jobPostID')) {
+        var event = new Event('change');
+        jobTypeRadios[0].dispatchEvent(event);
+    }
+});
+
 // Get the input fields and the validation messages
 var jobSalaryMinInput = document.getElementById('jobSalaryMin');
 var jobSalaryMaxInput = document.getElementById('jobSalaryMax');
@@ -225,6 +261,7 @@ jobSalaryMinInput.addEventListener('input', function () {
         // If the input field is not empty and the value is greater than 299
         minSalMessage.textContent = '';
         this.dataset.valid = '1';
+        jobSalaryMaxInput.dataset.valid = '1';
         validationMinSal.classList.add('hide'); // Hide the validation message
         validationMaxSal.classList.add('hide'); // Hide the validation message
     }
@@ -262,6 +299,7 @@ jobSalaryMaxInput.addEventListener('input', function () {
         // If the input field is not empty and the value is less than or equal to 300000 and greater than or equal to min salary
         maxSalMessage.textContent = '';
         this.dataset.valid = '1';
+        jobSalaryMinInput.dataset.valid = '1';
         validationMaxSal.classList.add('hide'); // Hide the validation message
         validationMinSal.classList.add('hide'); // Hide the validation message
     }
@@ -329,6 +367,9 @@ function validateForm(event) {
     }
     if (jobSalaryMaxInput.dataset.valid !== '1') {
         invalidInputs.push({ input: jobSalaryMaxInput, validation: validationMaxSal });
+    }
+    if (validationJobType.dataset.valid !== '1') {
+        invalidInputs.push({ input: jobTypeRadios[0], validation: validationJobType });
     }
     // Add new condition for salary range validation
     var minSalary = parseInt(jobSalaryMinInput.value.trim());

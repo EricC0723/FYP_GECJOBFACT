@@ -25,7 +25,7 @@ var previewlogo = document.getElementById('previewlogo');
 
 window.addEventListener('load', function () {
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('jobPostID')) {
+    if (urlParams.has('jobPostID') && jobPostData.Job_Post_Description !== null && jobPostData.Job_Post_Responsibilities !== null && jobPostData.Job_Post_Benefits !== null && jobPostData.Job_Logo_Url !== null) {
         // Function to run when the image is loaded
         var event = new Event('change');
         logoInput.dispatchEvent(event);
@@ -69,7 +69,7 @@ var coverimgbox = document.getElementById('add_cover_img_box');
 
 window.addEventListener('load', function () {
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('jobPostID')) {
+    if (urlParams.has('jobPostID') && jobPostData.Job_Post_Description !== null && jobPostData.Job_Post_Responsibilities !== null && jobPostData.Job_Post_Benefits !== null && jobPostData.Job_Logo_Url !== null) {
         
         // Function to run when the image is loaded
         var imageLoaded = function () {
@@ -130,7 +130,7 @@ jobDescriptionInput.addEventListener('input', function () {
 // Trigger the 'input' event manually after the page loads
 window.addEventListener('load', function () {
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('jobPostID')) {
+    if (urlParams.has('jobPostID') && jobPostData.Job_Post_Description !== null && jobPostData.Job_Post_Responsibilities !== null && jobPostData.Job_Post_Benefits !== null && jobPostData.Job_Logo_Url !== null) {
         var event = new Event('input');
         jobDescriptionInput.dispatchEvent(event);
     }
@@ -165,7 +165,7 @@ jobResponsibilitiesInput.addEventListener('input', function () {
 // Trigger the 'input' event manually after the page loads
 window.addEventListener('load', function () {
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('jobPostID')) {
+    if (urlParams.has('jobPostID') && jobPostData.Job_Post_Description !== null && jobPostData.Job_Post_Responsibilities !== null && jobPostData.Job_Post_Benefits !== null && jobPostData.Job_Logo_Url !== null) {
         var event = new Event('input');
         jobResponsibilitiesInput.dispatchEvent(event);
     }
@@ -200,7 +200,7 @@ jobBenefitsInput.addEventListener('input', function () {
 // Trigger the 'input' event manually after the page loads
 window.addEventListener('load', function () {
     var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('jobPostID')) {
+    if (urlParams.has('jobPostID') && jobPostData.Job_Post_Description !== null && jobPostData.Job_Post_Responsibilities !== null && jobPostData.Job_Post_Benefits !== null && jobPostData.Job_Logo_Url !== null) {
         var event = new Event('input');
         jobBenefitsInput.dispatchEvent(event);
     }

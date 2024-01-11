@@ -14,7 +14,6 @@ if (isset($_SESSION['job_post_ID'])) {
     echo "<script>
         var jobPostData = " . json_encode($row) . ";
         </script>";
-
 }
 
 $CompanyID = null;
@@ -24,80 +23,16 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
 
 
 if (isset($_POST['submitbtn'])) {
-    $jobDescription = $_POST['jobDescription'];
-    $jobResponsibilities = $_POST['jobResponsibilities'];
-    $jobBenefits = $_POST['jobBenefits'];
-    // Start the SQL query
-    $sql = "UPDATE job_post SET Job_Post_Description = '$jobDescription', Job_Post_Responsibilities = '$jobResponsibilities', Job_Post_Benefits = '$jobBenefits'";
+    if (isset($_GET['jobPostID'])) {
+        // Update the existing job post
+        $postid = $_GET["jobPostID"];
+        if ($postid) {
 
-    // Check if a new logo image was uploaded
-    if (isset($_FILES['logoInput']) && $_FILES['logoInput']['size'] > 0) {
-        $errors = array();
-        $file_name = $_FILES['logoInput']['name'];
-        $file_size = $_FILES['logoInput']['size'];
-        $file_tmp = $_FILES['logoInput']['tmp_name'];
-        $file_type = $_FILES['logoInput']['type'];
-        $file_parts = explode('.', $_FILES['logoInput']['name']);
-        $file_ext = strtolower(end($file_parts));
-
-        $extensions = array("jpeg", "jpg", "png");
-
-        if (in_array($file_ext, $extensions) === false) {
-            $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
+            echo "<script type='text/javascript'>window.location.href = 'view-job-question.php?jobPostID=$postid';</script>";
+            exit;
         }
-
-        if (move_uploaded_file($file_tmp, "../Company/logo/" . $file_name)) {
-            // Add the Job_Logo_Url field to the SQL query
-            $sql .= ", Job_Logo_Url='../Company/logo/" . $file_name . "'";
-        }
-    }
-
-    // Check if a new cover image was uploaded
-    if (isset($_FILES['coverInput']) && $_FILES['coverInput']['size'] > 0) {
-        $errors = array();
-        $file_name = $_FILES['coverInput']['name'];
-        $file_size = $_FILES['coverInput']['size'];
-        $file_tmp = $_FILES['coverInput']['tmp_name'];
-        $file_type = $_FILES['coverInput']['type'];
-        $file_parts = explode('.', $_FILES['coverInput']['name']);
-        $file_ext = strtolower(end($file_parts));
-
-        $extensions = array("jpeg", "jpg", "png");
-
-        if (in_array($file_ext, $extensions) === false) {
-            $errors[] = "extension not allowed, please choose a JPEG or PNG file.";
-        }
-
-        if (move_uploaded_file($file_tmp, "../Company/covers/" . $file_name)) {
-            // Add the Job_Cover_Url field to the SQL query
-            $sql .= ", Job_Cover_Url='../Company/covers/" . $file_name . "'";
-        }
-    } else if ($_POST['coverRemoved'] === '1') {
-        // If no new cover image is uploaded and the cover image was removed, set the Job_Cover_Url field to NULL
-        $sql .= ", Job_Cover_Url=NULL";
-    }
-
-    // Add the WHERE clause to the SQL query
-    $sql .= " WHERE Job_Post_ID=" . $job_post_ID;
-
-    // Execute the SQL query
-    $result = mysqli_query($connect, $sql);
-
-    if ($result) {
-        // Check if jobPostID is set and not empty
-        if (isset($_GET['jobPostID'])) {
-            // Redirect to the next page with jobPostID
-            echo "<script type='text/javascript'>window.location.href = 'post-job-question.php?jobPostID=" . $_GET['jobPostID'] . "';</script>";
-        } else {
-            // Normal redirect
-            echo "<script type='text/javascript'>window.location.href = 'post-job-question.php';</script>";
-        }
-        exit;
     }
 }
-
-
-
 
 ?>
 
@@ -209,20 +144,9 @@ if (isset($_POST['submitbtn'])) {
                     <div class="add_logo_box">
                         <div class="add_cover_img_box" id="add_cover_img_box">
                             <div>
-                                <button type="button" id="uploadCover" data-testid="bx-add-asset"
-                                    style="display: flex; align-items: center;margin-left:10px;" class="add_cover_btn">
-                                    <div style="padding:14px 20px;display:flex;align-items:center;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                            focusable="false" fill="currentColor" width="16" height="16"
-                                            aria-hidden="true" style="color:white;width:19px;height:19px">
-                                            <path
-                                                d="M19 2H5C3.3 2 2 3.3 2 5v14c0 1.7 1.3 3 3 3h14c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3zM4 5c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v7.6L17.4 10c-.8-.8-2.1-.8-2.8 0l-9.9 9.9c-.4-.1-.7-.5-.7-.9V5zm15 15H7.4l8.6-8.6 4 4V19c0 .6-.4 1-1 1z">
-                                            </path>
-                                            <circle cx="8" cy="8" r="2"></circle>
-                                        </svg>
-                                        <span style="margin-left: 10px;" class="add_cover_title">Add cover image</span>
-                                    </div>
-                                </button>
+                                <div id="uploadCover"><span
+                                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">This
+                                        job post doesnt have a cover image</span></div>
                             </div>
                             <div style="display: none; flex-direction: column;" id="remove_cover">
                                 <div style="overflow: hidden;align-items: center;display: flex;">
@@ -253,24 +177,7 @@ if (isset($_POST['submitbtn'])) {
                         </div>
                         <div style="padding:20px 24px;">
                             <div style="display: flex; flex-direction:column">
-                                <div id="upload_logo">
-                                    <button type="button" id="uploadLogo" data-testid="bx-add-asset"
-                                        style="display: flex; align-items: center;margin-left:10px;"
-                                        class="add_logo_btn">
-                                        <div style="padding:14px 20px;display:flex;align-items:center;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
-                                                height="16" aria-hidden="true"
-                                                style="color:white;width:19px;height:19px">
-                                                <path
-                                                    d="M19 2H5C3.3 2 2 3.3 2 5v14c0 1.7 1.3 3 3 3h14c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3zM4 5c0-.6.4-1 1-1h14c.6 0 1 .4 1 1v7.6L17.4 10c-.8-.8-2.1-.8-2.8 0l-9.9 9.9c-.4-.1-.7-.5-.7-.9V5zm15 15H7.4l8.6-8.6 4 4V19c0 .6-.4 1-1 1z">
-                                                </path>
-                                                <circle cx="8" cy="8" r="2"></circle>
-                                            </svg>
-                                            <span style="margin-left: 10px;" class="add_logo_title">Add logo</span>
-                                        </div>
-                                    </button>
-                                </div>
+
                                 <div style="display: none; flex-direction: column;" id="replace_logo">
                                     <div
                                         style="width: 180px; height: 80px; overflow: hidden; margin-left: 10px;align-items: center;display: flex;">
@@ -282,43 +189,8 @@ if (isset($_POST['submitbtn'])) {
                                         <input type="hidden" id="logoPresent" name="logoPresent"
                                             value="<?php echo isset($row['Job_Logo_Url']) ? '1' : '0'; ?>">
                                     </div>
-                                    <div>
-                                        <button type="button" id="replaceLogo" data-testid="bx-add-asset"
-                                            style="display: flex; align-items: center;margin-left:10px;"
-                                            class="replace_logo_btn">
-                                            <div style="padding:14px 0px;display:flex;align-items:flex-start;">
+                                </div>
 
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                    xml:space="preserve" focusable="false" fill="currentColor"
-                                                    width="16" height="16" aria-hidden="true"
-                                                    style="color:#4964e9;width:19px;height:19px">
-                                                    <path
-                                                        d="M20.7 4.1c-1.4-1.4-4-1.4-5.4 0l-11 11c-.1.1-.2.3-.3.5l-1 5c-.1.3 0 .7.3.9.2.2.4.3.7.3h.2l5-1c.2 0 .4-.1.5-.3l11-11c1.5-1.5 1.5-3.9 0-5.4zM8.5 18.9l-3.2.6.6-3.2 8.6-8.6 2.6 2.6-8.6 8.6zM19.3 8.1l-.8.8-2.6-2.6.8-.8c.7-.7 1.9-.7 2.6 0 .7.7.7 1.9 0 2.6z">
-                                                    </path>
-                                                </svg>
-                                                <span style="margin-left: 5px;"
-                                                    class="replace_logo_title">Replace</span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div style="padding-top:4px;padding-left:10px" id="validation-joblogo" class="hide">
-                                    <span style="display:flex"><span
-                                            style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
-                                                height="16" aria-hidden="true" style="color:#b91e1e">
-                                                <path
-                                                    d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                                </path>
-                                                <circle cx="12" cy="17" r="1"></circle>
-                                                <path
-                                                    d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                                </path>
-                                            </svg></span><span><span id="joblogo-message"
-                                                class="validation_sentence">Please
-                                                add logo</span></span></span>
-                                </div>
                             </div>
 
 
@@ -343,22 +215,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Description">
-                    <textarea id="jobDescription" name="jobDescription"
+                    <textarea id="jobDescription" name="jobDescription" disabled
                         class="write-textarea"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
-                    <div style="padding-top:4px;" id="validation-jobdescription" class="hide"><span
-                            style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="jobdescription-message" class="validation_sentence">Please
-                                    add job description</span></span></span></div>
 
                 </div>
             </div>
@@ -378,23 +236,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Responsibilities">
-                    <textarea id="jobResponsibilities" name="jobResponsibilities"
+                    <textarea id="jobResponsibilities" name="jobResponsibilities" disabled
                         class="write-textarea"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
-                    <div style="padding-top:4px;" id="validation-jobresponsibilities" class="hide"><span
-                            style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="jobresponsibilities-message"
-                                    class="validation_sentence">Please add job responsibilities
-                                </span></span></span></div>
                 </div>
             </div>
 
@@ -413,22 +256,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Benefits">
-                    <textarea id="jobBenefits" name="jobBenefits"
-                        class="write-textarea"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
-                    <div style="padding-top:4px;" id="validation-jobbenefits" class="hide"><span
-                            style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="benefits-message" class="validation_sentence">Please add
-                                    job benefits</span></span></span></div>
+                    <textarea id="jobBenefits" name="jobBenefits" class="write-textarea"
+                        disabled><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
                 </div>
             </div>
 
@@ -443,7 +272,6 @@ if (isset($_POST['submitbtn'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
     <script src="post-job.js"></script>
-    <script src="post-job-write-validation.js"></script>
 
     <script>
 
@@ -568,7 +396,6 @@ if (isset($_POST['submitbtn'])) {
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 
 </html>
@@ -590,4 +417,3 @@ if (!isset($_SESSION['companyData'])) {
     exit;
 }
 ?>
-

@@ -1,34 +1,14 @@
 <!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?php
-include("dataconnection.php");
-?>
-
-<?php
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 
-if(isset($_GET["login_btn"])) {
-
-    // Get the values from the form fields
-    $companyEmail = $_GET['companyEmail'];
-    $companyPassword = $_GET['companyPassword'];
-
-    // Prepare an SQL statement
-    $sql = "SELECT * FROM companies WHERE CompanyEmail = '$companyEmail' AND CompanyPassword = '$companyPassword'";
-    $result = mysqli_query($connect, $sql);
-
-    if(mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
-        $_SESSION['companyData'] = $row; // Store the entire row in a session variable
-        echo '<script>alert("Login Successfully!"); window.location.href = "company_landing.php";</script>';
-    } else {
-        echo '<script>alert("Failed to login. Please try again.");</script>';
-    }
-
-    // Close the database connection
-    mysqli_close($connect);
-}
 ?>
+
 
 <html lang="en">
 
@@ -78,18 +58,36 @@ if(isset($_GET["login_btn"])) {
                             <div class="form-group">
                                 <label class="question" style="padding-bottom: 8px;">Email
                                     address</label>
-                                
-                                <input class="register_input" type="email" name="companyEmail" required>
+                                <input class="register_input" type="email" name="companyEmail" id="email-input">
+                                <div style="padding-top:4px;" id="validation-email" class="hide"><span
+                                        style="display:flex"><span
+                                            style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
+                                                height="16" aria-hidden="true" style="color:#b91e1e">
+                                                <path
+                                                    d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                </path>
+                                                <circle cx="12" cy="17" r="1"></circle>
+                                                <path
+                                                    d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                </path>
+                                            </svg></span><span><span id="email-message"
+                                                class="validation_sentence">Required
+                                                field</span></span></span></div>
                             </div>
 
                             <div class="form-group">
-                                <label class="question" style="padding-bottom: 8px;">Password</label>
+                                <div style="display:flex;flex-direction:row;align-items:baseline;">
+                                    <label class="question" style="padding-bottom: 8px;width:370px;">Password</label>
+                                    <a class="employee_sentence" href="forget-password.php" style="height:27px;">Forget
+                                        password?</a>
+                                </div>
                                 <div style="position: relative;">
                                     <input id="password" class="register_input" type="password"
-                                        style="width: calc(100% - 54px); padding-right: 40px;" required
-                                        name="companyPassword">
+                                        style="width: calc(100% - 54px); padding-right: 40px;" name="companyPassword">
                                     <button id="togglePassword" style="border: none; padding: 0; outline: none;"
-                                        class="password_btn">
+                                        class="password_btn" type="button">
                                         <span id="eyeIcon">
                                             <!-- SVG for 'eye closed' here -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -103,13 +101,28 @@ if(isset($_GET["login_btn"])) {
                                         </span>
                                     </button>
                                 </div>
+                                <div style="padding-top:4px;" id="validation-password" class="hide"><span
+                                        style="display:flex"><span
+                                            style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
+                                                height="16" aria-hidden="true" style="color:#b91e1e">
+                                                <path
+                                                    d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                </path>
+                                                <circle cx="12" cy="17" r="1"></circle>
+                                                <path
+                                                    d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                </path>
+                                            </svg></span><span><span id="password-message"
+                                                class="validation_sentence">Required
+                                                field</span></span></span></div>
                             </div>
 
 
                             <div class="form-group" style="padding-top:60px;">
                                 <div>
-                                    <input class="register_login_btn" type="submit" value="Sign in"
-                                        name="login_btn">
+                                    <input class="register_login_btn" type="submit" value="Sign in" name="login_btn">
                                 </div>
                             </div>
 
@@ -117,7 +130,8 @@ if(isset($_GET["login_btn"])) {
                                 <div>
                                     <label class="question"
                                         style="padding-bottom: 8px;font-weight: 400;color: rgb(90, 104, 129);">Don't
-                                        have an account? <a class="employee_sentence" href="company_register.php">Register</a>
+                                        have an account? <a class="employee_sentence"
+                                            href="company_register.php">Register</a>
                                     </label>
                                 </div>
                             </div>
@@ -127,6 +141,8 @@ if(isset($_GET["login_btn"])) {
             </form>
         </div>
     </div>
+
+
 
     <script>
         var password = document.getElementById('password');
@@ -148,6 +164,212 @@ if(isset($_GET["login_btn"])) {
 
 
     </script>
+    <script>
+
+        // Select the email input field, the submit button, and the validation message container
+        var emailInput = document.getElementById('email-input');
+        var submitButton = document.querySelector('.register_login_btn');
+        var validationEmail = document.getElementById('validation-email');
+
+        // Add an event listener to the email input field
+        emailInput.addEventListener('input', function () {
+            var emailMessage = document.getElementById('email-message');
+            if (this.value.trim() === '') {
+                // If the input field is empty
+                emailMessage.textContent = 'Required field';
+                this.dataset.valid = '0';
+                validationEmail.classList.remove('hide'); // Show the validation message
+            } else {
+                emailMessage.textContent = '';
+                this.dataset.valid = '1';
+                validationEmail.classList.add('hide'); // Hide the validation message
+            }
+        });
+
+        // Select the password input field, the confirm password input field, and the validation message containers
+        var passwordInput = document.getElementById('password');
+        var validationPassword = document.getElementById('validation-password');
+
+        // Add an event listener to the email input field
+        passwordInput.addEventListener('input', function () {
+            var passwordMessage = document.getElementById('password-message');
+            if (this.value.trim() === '') {
+                // If the input field is empty
+                passwordMessage.textContent = 'Required field';
+                this.dataset.valid = '0';
+                validationPassword.classList.remove('hide'); // Show the validation message
+            } else {
+                passwordMessage.textContent = '';
+                this.dataset.valid = '1';
+                validationPassword.classList.add('hide'); // Hide the validation message
+            }
+        });
+
+
+        // Modify the event listener for the submit button
+        submitButton.addEventListener('click', function (event) {
+            var invalidInputs = [];
+
+            // Check each input field
+            if (emailInput.dataset.valid !== '1') {
+                invalidInputs.push({ input: emailInput, validation: validationEmail });
+            }
+            if (passwordInput.dataset.valid !== '1') {
+                invalidInputs.push({ input: passwordInput, validation: validationPassword });
+            }
+
+            if (invalidInputs.length > 0) {
+                // If there are invalid inputs, prevent the form submission
+                event.preventDefault();
+
+                // Focus on the first invalid input
+                invalidInputs[0].input.focus();
+
+                // Show validation messages for all invalid inputs
+                invalidInputs.forEach(function (invalidInput) {
+                    invalidInput.validation.classList.remove('hide');
+                });
+            }
+            // If all inputs are valid, the form will submit normally
+        });
+
+
+
+    </script>
 </body>
 
 </html>
+
+
+<?php
+
+if (isset($_GET["login_btn"])) {
+
+    // Get the values from the form fields
+    $companyEmail = $_GET['companyEmail'];
+    $companyPassword = $_GET['companyPassword'];
+
+    // Prepare an SQL statement to check if the email exists
+    $sql = "SELECT * FROM companies WHERE CompanyEmail = '$companyEmail'";
+    $result = mysqli_query($connect, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        // Check if the password matches
+        if ($row['CompanyPassword'] != $companyPassword) {
+            ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Invalid password.",
+                    icon: "error",
+                });
+            </script>
+            <?php
+        } else {
+            $_SESSION['companyEmail'] = $companyEmail;
+            // Check the CompanyStatus
+            if ($row['CompanyStatus'] == 'Verify') {
+                ?>
+                <script>
+                    Swal.fire({
+                        title: "Error",
+                        text: "Please verify your email first.",
+                        icon: "error",
+                        showCancelButton: true,
+                        confirmButtonText: "Send again",
+                        backdrop: `lightgrey`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: 'send-verify-email.php',
+                                success: function (data) {
+                                    console.log(data); // Log the output of the send-verify-email.php script
+                                    sendEmail(); // Call the function again if the email was sent successfully
+                                },
+                                error: function () {
+                                    alert('An error occurred while sending the email.');
+                                }
+                            });
+                        }
+                    });
+
+                    function sendEmail() {
+                        Swal.fire({
+                            title: "Success",
+                            text: "Email sent successfully. Please check your email.",
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonText: "Send again",
+                            backdrop: `lightgrey`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'send-verify-email.php',
+                                    success: function (data) {
+                                        console.log(data); // Log the output of the send-verify-email.php script
+                                        sendEmail(); // Call the function again if the email was sent successfully
+                                    },
+                                    error: function () {
+                                        alert('An error occurred while sending the email.');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                </script>
+                <?php
+            } else if ($row['CompanyStatus'] == 'Blocked') {
+                ?>
+                    <script>
+                        Swal.fire({
+                            title: "Error",
+                            text: "Your company account is blocked.",
+                            icon: "error",
+                        });
+                    </script>
+                <?php
+            } else if ($row['CompanyStatus'] == 'Active') {
+                $_SESSION['companyData'] = $row; // Store the entire row in a session variable
+                ?>
+                        <script>
+                            Swal.fire({
+                                title: "Success",
+                                text: "Login Successfully",
+                                icon: "success",
+                            }).then(function () {
+                                window.location.href = "company_landing.php";
+                            });
+                        </script>
+                <?php
+            } else {
+                ?>
+                        <script>
+                            Swal.fire({
+                                title: "Error",
+                                text: "Failed to login. Please try again.",
+                                icon: "error",
+                            });
+                        </script>
+                <?php
+            }
+        }
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Invalid email address.",
+                icon: "error",
+            });
+        </script>
+        <?php
+    }
+
+    // Close the database connection
+    mysqli_close($connect);
+}
+?>

@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
-include("dataconnection.php");
-?>
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+require 'vendor/autoload.php'; // Add this line to include PHPMailer
+session_start();
 
-<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 if (isset($_POST["register_btn"])) {
 
     // Get the values from the form fields
@@ -16,13 +20,95 @@ if (isset($_POST["register_btn"])) {
     $companySize = $_POST['companySize'];
     $registrationNo = $_POST['companyRegistration'];
 
+    // Generate a unique verification token
+    $token = bin2hex(random_bytes(50));
+
     // Prepare an SQL statement
     $sql = mysqli_query($connect, "INSERT INTO companies (CompanyEmail, CompanyPassword, ContactPerson, CompanyPhone, CompanyName, CompanySize, RegistrationNo) VALUES ('$companyEmail', '$companyPassword', '$contactPerson', '$companyPhone', '$companyName', '$companySize', '$registrationNo')");
 
     if ($sql) {
-        echo '<script>alert("Company Registered Successfully!"); window.location.href = "company_login.php";</script>';
+        // After the user is registered, send the verification email
+        $_SESSION['companyEmail'] = $companyEmail;
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->SMTPDebug = 2;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
+            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            //Recipients
+            $mail->setFrom('jobfactsgec112@gmail.com', 'Mailer'); // Your Gmail address
+            $mail->addAddress($companyEmail, 'Joe User');
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Email Verification';
+
+            // Generate a hash of the user's email and a secret key
+            $secretKey = "your-secret-key";
+            $hash = hash_hmac('sha256', $companyEmail, $secretKey);
+
+            // Combine the hash and the email into a single string
+            $combined = $hash . ':' . $companyEmail;
+
+            // Encode the combined string
+            $encoded = base64_encode($combined);
+
+            // Send the verification email
+            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded);
+            $mail->send();
+            ?>
+            <script>
+                function sendEmail() {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Company Registered Successfully! Please check your email for verification.",
+                        icon: "success",
+                        showDenyButton: true,
+                        confirmButtonText: "Send again",
+                        denyButtonText: `Ok`,
+                        backdrop: `lightgrey`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'GET',
+                                url: 'send-verify-email.php',
+                                success: function (data) {
+                                    console.log(data); // Log the output of the send-verify-email.php script
+                                    sendEmail(); // Call the function again if the email was sent successfully
+                                },
+                                error: function () {
+                                    alert('An error occurred while sending the email.');
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            window.location.href = 'company_login.php';
+                        }
+                    });
+                }
+
+                sendEmail(); // Call the function for the first time
+            </script>
+            <?php
+        } catch (Exception $e) {
+            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+        }
     } else {
-        echo '<script>alert("Failed to register company. Please try again.");</script>';
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Failed to register company. Please try again.",
+                icon: "error",
+            })
+        </script>
+        <?php
     }
 
     // Close the database connection
@@ -139,7 +225,7 @@ if (isset($_POST["register_btn"])) {
                                                 field</span></span></span>
                                 </div>
                                 <div class="hide" id="password-requirement">
-                                    <div style="padding-top:4px;" id="validation-password2" ><span
+                                    <div style="padding-top:4px;" id="validation-password2"><span
                                             style="display:flex;color:#b91e1e"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -155,7 +241,7 @@ if (isset($_POST["register_btn"])) {
                                                 </svg></span><span><span id="password-message2"
                                                     class="validation_sentence">8 - 15 characters</span></span></span>
                                     </div>
-                                    <div style="padding-top:4px;" id="validation-password4" ><span
+                                    <div style="padding-top:4px;" id="validation-password4"><span
                                             style="display:flex;color:#b91e1e"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -171,7 +257,7 @@ if (isset($_POST["register_btn"])) {
                                                 </svg></span><span><span id="password-message4"
                                                     class="validation_sentence">A lowercase letter</span></span></span>
                                     </div>
-                                    <div style="padding-top:4px;" id="validation-password5" ><span
+                                    <div style="padding-top:4px;" id="validation-password5"><span
                                             style="display:flex;color:#b91e1e"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -185,9 +271,10 @@ if (isset($_POST["register_btn"])) {
                                                         d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                     </path>
                                                 </svg></span><span><span id="password-message5"
-                                                    class="validation_sentence">A capital (uppercase) letter</span></span></span>
+                                                    class="validation_sentence">A capital (uppercase)
+                                                    letter</span></span></span>
                                     </div>
-                                    <div style="padding-top:4px;" id="validation-password3" ><span
+                                    <div style="padding-top:4px;" id="validation-password3"><span
                                             style="display:flex;color:#b91e1e"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -203,7 +290,7 @@ if (isset($_POST["register_btn"])) {
                                                 </svg></span><span><span id="password-message3"
                                                     class="validation_sentence">A number</span></span></span>
                                     </div>
-                                    <div style="padding-top:4px;" id="validation-password6" ><span
+                                    <div style="padding-top:4px;" id="validation-password6"><span
                                             style="display:flex;color:#b91e1e"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -219,7 +306,7 @@ if (isset($_POST["register_btn"])) {
                                                 </svg></span><span><span id="password-message6"
                                                     class="validation_sentence">A symbol</span></span></span>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 

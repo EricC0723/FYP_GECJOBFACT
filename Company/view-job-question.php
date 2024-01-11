@@ -22,29 +22,16 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
 }
 
 if (isset($_POST['submitbtn'])) {
-    // Delete all the existing selected questions for the job post
-    $delete_sql = "DELETE FROM job_post_questions WHERE JobID = '$job_post_ID'";
-    $delete_result = mysqli_query($connect, $delete_sql);
-    if (!$delete_result) {
-        echo "<script type='text/javascript'>alert('Failed to update questions!');</script>";
-        return;
-    }
+    if (isset($_GET['jobPostID'])) {
+        // Update the existing job post
+        $postid = $_GET["jobPostID"];
+        if ($postid) {
 
-    // Insert the newly selected questions
-    if (!empty($_POST['questions'])) {
-        foreach ($_POST['questions'] as $questionID) {
-            $insert_sql = "INSERT INTO job_post_questions (QuestionID, JobID, CompanyID) VALUES ('$questionID', '$job_post_ID', '$CompanyID')";
-            $insert_result = mysqli_query($connect, $insert_sql);
-            if (!$insert_result) {
-                echo "<script type='text/javascript'>alert('Failed to update questions!');</script>";
-                return;
-            }
+            echo "<script type='text/javascript'>window.location.href = 'company_landing.php';</script>";
+            exit;
         }
     }
-
-    echo "<script type='text/javascript'>alert('Submission successful!'); window.location.href = 'company_landing.php';</script>";
 }
-
 
 ?>
 
@@ -152,11 +139,11 @@ if (isset($_POST['submitbtn'])) {
                 </div>
                 <div style="padding-top:20px">
                     <span style="font-size:18px;line-height:24px;font-weight: 400;color: rgb(46, 56, 73);font-family:Roboto,
-                'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">0/8
+                'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">0
                         questions selected</span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="display:none;">
                     <input id="jobQuestion" name="jobQuestion" class="form-dropdown"
                         style="height: 24px;width:578.672px;margin-bottom: 10px;" placeholder="Find a question">
                 </div>
@@ -167,7 +154,7 @@ if (isset($_POST['submitbtn'])) {
 
                 <div style="padding-top:20px;padding-bottom:5px;">
                     <span style="color: rgb(46, 56, 73);font-size: 24px;font-style: normal;font-weight: 600;line-height:
-                28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Recommended
+                28px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Selected
                         questions</span>
 
                 </div>
@@ -186,12 +173,15 @@ if (isset($_POST['submitbtn'])) {
                         // Check if the current question was selected by the user
                         $checked = in_array($row['Job_Question_ID'], $selected_questions) ? 'checked' : '';
 
-                        // Display each question as a checkbox
-                        echo '<div class="question-group" style="">';
-                        echo '<input class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" ' . $checked . '>';
-                        echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;">' . $row['Job_Question_Name'] . '</label>';
-                        echo '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>'; // New div for the limit message
-                        echo '</div>';
+                        // Only echo the question if it is selected
+                        if ($checked == 'checked') {
+                            // Display each question as a checkbox
+                            echo '<div class="question-group" style="">';
+                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" ' . $checked . '>';
+                            echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;cursor:default;">' . $row['Job_Question_Name'] . '</label>';
+                            echo '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>'; // New div for the limit message
+                            echo '</div>';
+                        }
                     }
                 }
                 ?>
@@ -209,8 +199,8 @@ if (isset($_POST['submitbtn'])) {
                         if (in_array($row['Job_Question_ID'], $selected_questions)) {
                             // Display each question as a checkbox
                             echo '<div class="question-group" style="">';
-                            echo '<input class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" checked>';
-                            echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;">' . $row['Job_Question_Name'] . '</label>';
+                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" checked>';
+                            echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;cursor:default;">' . $row['Job_Question_Name'] . '</label>';
                             echo '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>'; // New div for the limit message
                             echo '</div>';
                         }
@@ -221,7 +211,7 @@ if (isset($_POST['submitbtn'])) {
             </div>
 
             <div class="form-group" style="display: block;">
-                <input type="submit" value="Submit" class="cont-button" name="submitbtn">
+                <input type="submit" value="Home" class="cont-button" name="submitbtn">
                 <input type="submit" value="Save draft" class="save-button" style="margin-left:4px">
             </div>
         </form>
@@ -242,6 +232,13 @@ if (isset($_POST['submitbtn'])) {
                 updateCheckboxes();
                 var questionGroup = $(this).closest('.question-group');
                 var label = questionGroup.find('.job_question'); // Get the label
+            });
+
+            $(document).ready(function () {
+                // Prevent the checkbox from being checked
+                $('.question_checkbox').on('click', function (e) {
+                    e.preventDefault();
+                });
             });
 
             $("#jobQuestion").autocomplete({
@@ -397,7 +394,7 @@ if (isset($_POST['submitbtn'])) {
             var totalChecked = $('.question_checkbox:checked').length;
 
             // Update the text to show the number of selected questions out of 8
-            $('div[style="padding-top:20px"] span').text(totalChecked + '/8 questions selected');
+            $('div[style="padding-top:20px"] span').text(totalChecked + ' questions selected');
 
             // If the total number of checked checkboxes is 8, disable all unchecked checkboxes
             if (totalChecked >= 8) {
@@ -422,7 +419,7 @@ if (isset($_POST['submitbtn'])) {
                 var totalChecked = $('.question_checkbox:checked').length;
 
                 // Update the text to show the number of selected questions out of 8
-                $('div[style="padding-top:20px"] span').text(totalChecked + '/8 questions selected');
+                $('div[style="padding-top:20px"] span').text(totalChecked + ' questions selected');
 
                 if (totalChecked >= 8) {
                     var uncheckedCheckboxes = $('.question_checkbox:not(:checked)');

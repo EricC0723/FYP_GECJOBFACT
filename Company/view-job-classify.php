@@ -22,45 +22,17 @@ if (isset($_SESSION['companyData']['CompanyID'])) {
     $CompanyID = $_SESSION['companyData']['CompanyID'];
 }
 
+
 if (isset($_POST["submitbtn"])) {
-    // Retrieve the form data
-    $jobTitle = $_POST['jobTitle'];
-    $jobLocationID = $_POST['jobLocationId'];
-    $jobLocation = $_POST['jobLocation'];
-    $jobSpecialisationID = $_POST['jobSpecialisationId'];
-    $jobSpecialisation = $_POST['jobSpecialisation'];
-    $jobRoleID = $_POST['jobRoleId'];
-    $jobRole = $_POST['jobRole'];
-    $jobType = $_POST['jobType'];
-    $jobPosition = $_POST['Jobposition'];
-    $jobSalaryMin = $_POST['jobSalaryMin'];
-    $jobSalaryMax = $_POST['jobSalaryMax'];
-
-
 
     if (isset($_GET['jobPostID'])) {
         // Update the existing job post
         $postid = $_GET["jobPostID"];
-        $sql = "UPDATE job_post SET Job_Post_Title = '$jobTitle', Job_Location_ID = '$jobLocationID', Job_Post_Location = '$jobLocation', Main_Category_ID = '$jobSpecialisationID', Main_Category_Name = '$jobSpecialisation', Sub_Category_ID = '$jobRoleID', Sub_Category_Name = '$jobRole', Job_Post_Type = '$jobType', Job_Post_Position = '$jobPosition', Job_Post_MinSalary = '$jobSalaryMin', Job_Post_MaxSalary = '$jobSalaryMax', CompanyID = '$CompanyID' WHERE Job_Post_ID = '$postid'";
-        $result = mysqli_query($connect, $sql);
-        if ($result) {
+        if ($postid) {
             // Store the job_post_ID in the session
             $_SESSION['job_post_ID'] = $postid;
             // Redirect to the next page
-            echo "<script type='text/javascript'>window.location.href = 'post-job-write.php?jobPostID=$postid';</script>";
-            exit;
-        }
-    } else {
-        // Insert a new job post
-        $sql = "INSERT INTO job_post (Job_Post_Title, Job_Location_ID, Job_Post_Location, Main_Category_ID, Main_Category_Name, Sub_Category_ID, Sub_Category_Name, Job_Post_Type, Job_Post_Position, Job_Post_MinSalary, Job_Post_MaxSalary, CompanyID, job_status) VALUES ('$jobTitle', '$jobLocationID', '$jobLocation', '$jobSpecialisationID', '$jobSpecialisation', '$jobRoleID', '$jobRole', '$jobType', '$jobPosition', '$jobSalaryMin', '$jobSalaryMax', '$CompanyID', 'Draft')";
-        $result = mysqli_query($connect, $sql);
-        if ($result) {
-            // Get the ID of the new job post
-            $job_post_ID = mysqli_insert_id($connect);
-            // Store the job_post_ID in the session
-            $_SESSION['job_post_ID'] = $job_post_ID;
-            // Redirect to the next page
-            echo "<script type='text/javascript'>window.location.href = 'post-job-write.php';</script>";
+            echo "<script type='text/javascript'>window.location.href = 'view-job-write.php?jobPostID=$postid';</script>";
             exit;
         }
     }
@@ -174,75 +146,22 @@ if (isset($_POST["submitbtn"])) {
                 <div class="form-group">
                     <label for="jobTitle" class="question" style="padding-bottom: 8px;">Job Title</label>
                     <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
-                        value="<?php echo isset($row['Job_Post_Title']) ? htmlspecialchars($row['Job_Post_Title']) : ''; ?>">
-
-                    <div style="padding-top:4px;" id="validation-title" class="hide"><span style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="title-message" class="validation_sentence">Please add job
-                                    title</span></span></span></div>
+                        value="<?php echo isset($row['Job_Post_Title']) ? htmlspecialchars($row['Job_Post_Title']) : ''; ?>"
+                        disabled>
                 </div>
                 <div class="vertical-space"></div>
                 <div class="form-group">
                     <label for="jobLocation" class="question" style="padding-bottom: 8px;">Location</label>
-                    <input id="jobLocation" name="jobLocation" class="form-dropdown"
-                        style="height: 24px;width:578.672px;" placeholder="Select state"
-                        value="<?php echo isset($row['Job_Post_Location']) ? htmlspecialchars($row['Job_Post_Location']) : ''; ?>">
-                    <input type="hidden" id="jobLocationId" name="jobLocationId"
-                        value="<?php echo isset($row['Job_Location_ID']) ? htmlspecialchars($row['Job_Location_ID']) : ''; ?>">
-                    <div style="padding-top:4px;" id="validation-location" class="hide"><span style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="location-message" class="validation_sentence">Please select
-                                    a location</span></span></span></div>
+                    <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
+                        value="<?php echo isset($row['Job_Post_Location']) ? htmlspecialchars($row['Job_Post_Location']) : ''; ?>"
+                        disabled>
                 </div>
                 <div class="vertical-space"></div>
                 <div class="form-group">
                     <label class="question" style="padding-bottom: 8px;">Job Position</label>
-                    <select class="form-dropdown" name="Jobposition" id="jobposition"
-                        style="height:46px;width:604.67px;">
-                        <option value="" disabled selected>Select a position level</option>
-                        <?php
-                        $positions = ["Senior manager", "Manager", "Senior Executive", "Junior Executive", "Entry Level", "Non-Executive"];
-                        foreach ($positions as $position) {
-                            echo '<option value="' . $position . '"';
-                            if (isset($row['Job_Post_Position']) && $row['Job_Post_Position'] == $position) {
-                                echo ' selected';
-                            }
-                            echo '>' . $position . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <div style="padding-top:4px;" id="validation-jobposition" class="hide"><span
-                            style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="position-message" class="validation_sentence">Required
-                                    Please select a position</span></span></span></div>
+                    <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
+                        value="<?php echo isset($row['Job_Post_Position']) ? htmlspecialchars($row['Job_Post_Position']) : ''; ?>"
+                        disabled>
                 </div>
                 <div class="vertical-space"></div>
 
@@ -251,46 +170,14 @@ if (isset($_POST["submitbtn"])) {
                     <label for="jobSpecialisation" class="question"
                         style="padding-bottom: 8px;font-weight: 400;color: rgb(90, 104, 129);">Suggested category based
                         on your job title</label>
-                    <input id="jobSpecialisation" name="jobSpecialisation" class="form-dropdown"
-                        style="height: 24px;width:578.672px;" placeholder="Select a category"
-                        value="<?php echo isset($row['Main_Category_Name']) ? htmlspecialchars($row['Main_Category_Name']) : ''; ?>">
-                    <input type="hidden" id="jobSpecialisationId" name="jobSpecialisationId"
-                        value="<?php echo isset($row['Main_Category_ID']) ? htmlspecialchars($row['Main_Category_ID']) : ''; ?>">
-
-                    <div style="padding-top:4px;" id="validation-maincat" class="hide"><span style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="maincat-message" class="validation_sentence">Please select
-                                    the job category</span></span></span></div>
-                    <div id="JobRole">
-                        <input id="jobRole" name="jobRole" class="form-dropdown"
-                            style="height: 24px;width:578.672px;margin-top: 10px;" placeholder="Select a sub category"
-                            value="<?php echo isset($row['Sub_Category_Name']) ? htmlspecialchars($row['Sub_Category_Name']) : ''; ?>">
-                        <input type="hidden" id="jobRoleId" name="jobRoleId"
-                            value="<?php echo isset($row['Sub_Category_ID']) ? htmlspecialchars($row['Sub_Category_ID']) : ''; ?>">
-
-                        <div style="padding-top:4px;" id="validation-subcat" class="hide"><span
-                                style="display:flex"><span
-                                    style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                        focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                        style="color:#b91e1e">
-                                        <path
-                                            d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                        </path>
-                                        <circle cx="12" cy="17" r="1"></circle>
-                                        <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                        </path>
-                                    </svg></span><span><span id="subcat-message" class="validation_sentence">Please
-                                        select the job role</span></span></span></div>
+                    <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
+                        value="<?php echo isset($row['Main_Category_Name']) ? htmlspecialchars($row['Main_Category_Name']) : ''; ?>"
+                        disabled>
+                    <div style="padding-top:5px;">
+                        <input type="text" id="jobTitle" name="jobTitle" class="input-box"
+                            placeholder="Enter the job title"
+                            value="<?php echo isset($row['Sub_Category_Name']) ? htmlspecialchars($row['Sub_Category_Name']) : ''; ?>"
+                            disabled>
                     </div>
 
                 </div>
@@ -299,34 +186,21 @@ if (isset($_POST["submitbtn"])) {
                     <label for="jobType" class="question">Work type</label>
                     <div style="height: 10px;"></div>
                     <div class="radio-option">
-                        <input type="radio" id="type1" name="jobType" value="1" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 1 ? 'checked' : ''; ?>>
+                        <input type="radio" id="type1" name="jobType" value="1" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 1 ? 'checked' : ''; ?> disabled>
                         <label for="type1" class="option">Full-Time</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="type2" name="jobType" value="2" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 2 ? 'checked' : ''; ?>>
+                        <input type="radio" id="type2" name="jobType" value="2" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 2 ? 'checked' : ''; ?> disabled>
                         <label for="type2" class="option">Part-Time</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="type3" name="jobType" value="3" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 3 ? 'checked' : ''; ?>>
+                        <input type="radio" id="type3" name="jobType" value="3" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 3 ? 'checked' : ''; ?> disabled>
                         <label for="type3" class="option">Contract</label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="type4" name="jobType" value="4" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 4 ? 'checked' : ''; ?>>
+                        <input type="radio" id="type4" name="jobType" value="4" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 4 ? 'checked' : ''; ?> disabled>
                         <label for="type4" class="option">Casual</label>
                     </div>
-                    <div style="padding-top:4px;width:299px;" id="validation-jobtype" class="hide"><span
-                            style="display:flex"><span
-                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
-                                    style="color:#b91e1e">
-                                    <path
-                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
-                                    </path>
-                                    <circle cx="12" cy="17" r="1"></circle>
-                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
-                                    </path>
-                                </svg></span><span><span id="jobtype-message" class="validation_sentence">Please select job type</span></span></span></div>
                 </div>
             </div>
 
@@ -367,7 +241,7 @@ if (isset($_POST["submitbtn"])) {
                                 <label for="jobSalaryMin" class="question">From</label>
                             </div>
                             <div>
-                                <input type="text" id="jobSalaryMin" name="jobSalaryMin" class="input-box"
+                                <input type="text" id="jobSalaryMin" name="jobSalaryMin" class="input-box" disabled
                                     placeholder="Min" style="height: 22px;width:273px;"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, ''); if (this.value.length > 1 && this.value.startsWith('0')) { this.value = this.value.substring(1); }"
                                     value="<?php echo isset($row['Job_Post_MinSalary']) ? htmlspecialchars($row['Job_Post_MinSalary']) : ''; ?>">
@@ -393,7 +267,7 @@ if (isset($_POST["submitbtn"])) {
                                 <label for="jobSalaryMax" class="question">To</label>
                             </div>
                             <div>
-                                <input type="text" id="jobSalaryMax" name="jobSalaryMax" class="input-box"
+                                <input type="text" id="jobSalaryMax" name="jobSalaryMax" class="input-box" disabled
                                     placeholder="Max" style="height: 22px;width:273px;"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, ''); if (this.value.length > 1 && this.value.startsWith('0')) { this.value = this.value.substring(1); }"
                                     value="<?php echo isset($row['Job_Post_MaxSalary']) ? htmlspecialchars($row['Job_Post_MaxSalary']) : ''; ?>">
@@ -435,10 +309,11 @@ if (isset($_POST["submitbtn"])) {
 
 
             </div>
-            <div class="form-group" style="display: block;">
-
+            <div class="form-group" style="flex-direction:row">
+                <!-- <a href="view-job-write.php?jobPostID=<?php echo $postid; ?>" class="cont-button"
+                    style="justify-content: center;display: flex;align-items: center;text-decoration:none;">Continue</a> -->
                 <input type="submit" value="Continue" class="cont-button" name="submitbtn">
-                <input type="submit" value="Save draft" class="save-button" style="margin-left:4px">
+                <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>
     </div>
@@ -684,10 +559,10 @@ if (isset($_POST["submitbtn"])) {
         };
 
     </script>
-
-    <script src="post-job-classify-validation.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </body>
 
 </html>

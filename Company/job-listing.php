@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-
-if (!isset($_SESSION['companyData'])) {
-    echo '<script>alert("You haven\'t logged in"); window.location.href = "company_login.php";</script>';
-    exit;
-}
 ?>
-
-
-
-
 <html lang="en">
 
 <head>
@@ -32,7 +23,7 @@ if (!isset($_SESSION['companyData'])) {
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
-                    <span class="header-link"><a href="#jobs">Jobs</a></span>
+                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
@@ -45,8 +36,7 @@ if (!isset($_SESSION['companyData'])) {
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
                                 <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16"
-                                    class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
+                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
                                     id="dropdown-icon"
                                     style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
                                     <path
@@ -90,34 +80,292 @@ if (!isset($_SESSION['companyData'])) {
 
     </header>
     <div style="width:100%;background:white;">
-        <div style="max-width:1280px; margin:0 auto">
+        <div style="max-width:1280px; margin:0 auto;flex-direction:row;display:flex;position:relative;">
             <div>
-                <button type="button" class="joblistbtn"><span class="joblisttitle">Open</span></button>
+                <button type="button" class="joblistbtn active" id="activeButton"><span
+                        class="joblisttitle">Active</span></button>
             </div>
+            <div>
+                <button type="button" class="joblistbtn" id="closedButton"><span
+                        class="joblisttitle">Closed</span></button>
+            </div>
+            <div>
+                <button type="button" class="joblistbtn" id="draftButton"><span
+                        class="joblisttitle">Draft</span></button>
+            </div>
+            <div>
+                <button type="button" class="joblistbtn" id="blockedButton"><span
+                        class="joblisttitle">Blocked</span></button>
+            </div>
+            <div class="underline"></div>
         </div>
+    </div>
+
+    <div class="content-div" id="active">
 
     </div>
 
-    <div style="margin:0;background:white;width:100%;display:flex;justify-content:center;">
+    <div class="content-div" id="closed">
+
+    </div>
+
+    <div class="content-div" id="draft">
+
+    </div>
+
+    <div class="content-div" id="blocked">
 
     </div>
 
 
 
-    <div class="form-container" style="margin-top:10px;padding-top:32px">
-
-
     </div>
-
-
-
-
-
 
     <script src="post-job.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            getactivejob();
+            getclosedjob();
+            getdraftjob();
+            getblockedjob();
+        });
+
+        function confirmCloseJobPost(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once closed, you will not be able to reopen this job post!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, close it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/closed.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Closed!", "Job post has been closed.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                            } else {
+                                Swal.fire("Error!", "Error closing job post!", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDeleteJobPost(jobPostID) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/delete.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Closed!", "Job post has been closed.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                            } else {
+                                Swal.fire("Error!", "Error closing job post!", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function getactivejob() {
+            $.ajax({
+                url: 'getjoblist/get-active-job.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#active').html(response);
+                }
+            });
+        }
+
+        function getclosedjob() {
+            $.ajax({
+                url: 'getjoblist/get-closed-job.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#closed').html(response);
+                }
+            });
+        }
+
+        function getdraftjob() {
+            $.ajax({
+                url: 'getjoblist/get-draft-job.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#draft').html(response);
+                }
+            });
+        }
+
+        function getblockedjob() {
+            $.ajax({
+                url: 'getjoblist/get-blocked-job.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#blocked').html(response);
+                }
+            });
+        }
+
+        function searchActive(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-active-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    activesearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#active').html(data);
+                }
+            });
+        }
+
+        function searchClosed(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-closed-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    closedsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#closed').html(data);
+                }
+            });
+        }
+
+        function searchDraft(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-draft-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    draftsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#draft').html(data);
+                }
+            });
+        }
+
+        function searchBlocked(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-blocked-job.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    blockedsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#blocked').html(data);
+                }
+            });
+        }
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var buttons = document.querySelectorAll('.joblistbtn');
+            var underline = document.querySelector('.underline');
+            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked')];
+
+            // Function to update the visibility of the divs based on the id in the URL
+            function updateDivVisibility() {
+                // Hide all divs
+                divs.forEach(function (div) {
+                    div.style.display = 'none';
+                });
+
+                // Remove the 'active' class from all buttons
+                buttons.forEach(function (btn) {
+                    btn.classList.remove('active');
+                });
+
+                // Get the id from the URL
+                var id = window.location.href.split('#')[1];
+
+                // If there's no id in the URL, default to 'active'
+                if (!id) {
+                    id = 'active';
+                }
+
+                // Show the div that matches the id in the URL and add the 'active' class to the associated button
+                if (id) {
+                    document.getElementById(id).style.display = 'block';
+                    document.getElementById(id + 'Button').classList.add('active');
+
+                    // Update the underline
+                    var activeButton = document.getElementById(id + 'Button');
+                    underline.style.width = activeButton.offsetWidth + 'px';
+                    underline.style.left = activeButton.offsetLeft + 'px';
+                }
+            }
+
+            // Update the visibility of the divs when the DOM content is loaded
+            updateDivVisibility();
+
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    // Add the button id to the URL
+                    var id = this.id.replace('Button', '');
+                    window.history.pushState(null, null, '#' + id);
+
+                    // Update the visibility of the divs, the underline, and the 'active' class
+                    updateDivVisibility();
+                });
+            });
+        });
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+<?php
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
+?>

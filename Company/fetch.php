@@ -1,5 +1,5 @@
 <?php
-include("dataconnection.php");
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['fetch']) && $_GET['fetch'] === 'job_specialisations') {
