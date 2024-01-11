@@ -60,10 +60,11 @@ if (isset($_SESSION['companyID'])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
+                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -141,7 +142,8 @@ if (isset($_SESSION['companyID'])) {
                                             <div><span class="landing_sentence1">Company Email</span></div>
                                             <div>
                                                 <span class="landing_sentence2">
-                                                    <?php echo isset($_SESSION['companyData']['CompanyEmail']) ? $_SESSION['companyData']['CompanyEmail'] : 'Company Email'; ?>
+                                                    <?php echo isset($row['CompanyEmail']) ? $row['CompanyEmail'] : 'Company Email'; ?>
+
                                                 </span>
                                             </div>
                                         </div>
