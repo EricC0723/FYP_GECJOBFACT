@@ -70,10 +70,11 @@ if (isset($_SESSION['companyID'])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
+                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -499,6 +500,32 @@ if (!isset($_SESSION['companyID'])) {
     </script>
     <?php
     exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Please verify your email first.",
+                icon: "error",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_login.php";
+            });
+        </script>
+    <?php
+    // Exit or perform some other action...
+} else if ($row['CompanyStatus'] == 'Blocked') {
+    ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Your company account is blocked.",
+                    icon: "error",
+                    backdrop: `lightgrey`,
+                }).then(function () {
+                    window.location.href = "company_login.php";
+                });
+            </script>
+    <?php
 }
-
 ?>

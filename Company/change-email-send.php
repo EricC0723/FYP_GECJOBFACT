@@ -89,6 +89,9 @@ if (isset($_SESSION['companyID'])) {
         </div>
     </div>
 </form>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
 
@@ -161,3 +164,48 @@ if (isset($_SESSION['companyID'])) {
         // If all inputs are valid, the form will submit normally
     });
 </script>
+
+<?php
+if (!isset($_SESSION['companyID'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Please verify your email first.",
+                icon: "error",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_login.php";
+            });
+        </script>
+    <?php
+    // Exit or perform some other action...
+} else if ($row['CompanyStatus'] == 'Blocked') {
+    ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Your company account is blocked.",
+                    icon: "error",
+                    backdrop: `lightgrey`,
+                }).then(function () {
+                    window.location.href = "company_login.php";
+                });
+            </script>
+    <?php
+}
+?>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
@@ -100,6 +101,8 @@ if (isset($_SESSION['companyID'])) {
 
         </div>
     </div>
+
+    <script src="post-job.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -116,6 +119,7 @@ if (isset($_SESSION['companyID'])) {
             });
         });
     </script>
+
 </body>
 
 </html>
@@ -128,7 +132,7 @@ if (isset($_GET["login_btn"])) {
     $companyEmail = $_GET['companyEmail'];
 
     // Prepare an SQL statement to check if the email exists
-    $sql = "UPDATE companies SET CompanyEmail = '$companyEmail' CompanyStatus = 'Verify' WHERE CompanyID = $CompanyID";
+    $sql = "UPDATE companies SET CompanyEmail = '$companyEmail', CompanyStatus = 'Verify' WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
 
     if ($result) {
@@ -228,6 +232,32 @@ if (!isset($_SESSION['companyID'])) {
     </script>
     <?php
     exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Please verify your email first.",
+                icon: "error",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_login.php";
+            });
+        </script>
+    <?php
+    // Exit or perform some other action...
+} else if ($row['CompanyStatus'] == 'Blocked') {
+    ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Your company account is blocked.",
+                    icon: "error",
+                    backdrop: `lightgrey`,
+                }).then(function () {
+                    window.location.href = "company_login.php";
+                });
+            </script>
+    <?php
 }
-
 ?>

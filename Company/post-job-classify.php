@@ -706,5 +706,32 @@ if (!isset($_SESSION['companyID'])) {
     </script>
     <?php
     exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Please verify your email first.",
+                icon: "error",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_login.php";
+            });
+        </script>
+    <?php
+    // Exit or perform some other action...
+} else if ($row['CompanyStatus'] == 'Blocked') {
+    ?>
+            <script>
+                Swal.fire({
+                    title: "Error",
+                    text: "Your company account is blocked.",
+                    icon: "error",
+                    backdrop: `lightgrey`,
+                }).then(function () {
+                    window.location.href = "company_login.php";
+                });
+            </script>
+    <?php
 }
 ?>
