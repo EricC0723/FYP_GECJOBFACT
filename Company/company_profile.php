@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-unset($_SESSION['job_post_ID']);
+
+$CompanyID = null;
+if (isset($_SESSION['companyData']['CompanyID'])) {
+    $CompanyID = $_SESSION['companyData']['CompanyID'];
+}
 ?>
 <html lang="en">
 
@@ -12,7 +18,7 @@ unset($_SESSION['job_post_ID']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
-    <link rel="stylesheet" type="text/css" href="company_profile.css">
+    <link rel="stylesheet" type="text/css" href="company_register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
 
@@ -59,7 +65,7 @@ unset($_SESSION['job_post_ID']);
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
@@ -96,7 +102,77 @@ unset($_SESSION['job_post_ID']);
                     <div style="padding:20px;">
                         <div style="display:flex;flex-direction:row;justify-content:center">
                             <div style="width:100%;">
+                                <div>
+                                    <div style="display:flex;justify-content:center;"><svg width="62" height="65"
+                                            viewBox="0 0 128 132" xmlns="http://www.w3.org/2000/svg">
+                                            <g fill="none">
+                                                <path d="M107.836 45.147v51.926H2V21.986h79.516" stroke-width="4"
+                                                    stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke="#D8527E"></path>
+                                                <path
+                                                    d="M104.685 44.773c11.677 0 21.315-9.526 21.315-21.48A21.242 21.242 0 00104.685 2c-11.677 0-21.13 9.526-21.13 21.48 0 11.767 9.453 21.293 21.13 21.293z"
+                                                    stroke-width="4" stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke="#D8527E"></path>
+                                                <path
+                                                    d="M2 21.986l55.05 39.038 31.694-23.161s6.858 7.284 19.092 7.284v51.926H2V21.986z"
+                                                    fill="#F7DCE5"></path>
+                                                <path
+                                                    d="M2 21.986l55.05 39.038 31.694-23.161s6.858 7.284 19.092 7.284v51.926H2V21.986zM114.879 23.48H94.676M110.802 32.819L98.754 14.14M110.802 14.14L98.754 32.82"
+                                                    stroke-width="4" stroke-miterlimit="10" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke="#D8527E"></path>
+                                                <g>
+                                                    <path
+                                                        d="M55.01 132c17.403 0 31.51-2.509 31.51-5.604 0-3.094-14.107-5.603-31.51-5.603-17.402 0-31.509 2.509-31.509 5.603 0 3.095 14.107 5.604 31.51 5.604z"
+                                                        fill="#E1E1E1"></path>
+                                                </g>
+                                            </g>
+                                        </svg></div>
+                                </div>
+                            </div>
+                            <div style="width:100%;">
                                 <div style="padding-left:20px;">
+                                    <div>
+                                        <h2 class="landing_sentence3">Account Details</h2>
+                                    </div>
+                                    <div style="padding-top:20px;display:flex;flex-direction:row;align-items:flex-end;">
+                                        <div style="width:600px;">
+                                            <div><span class="landing_sentence1">Company Email</span></div>
+                                            <div>
+                                                <span class="landing_sentence2">
+                                                    <?php echo isset($_SESSION['companyData']['CompanyEmail']) ? $_SESSION['companyData']['CompanyEmail'] : 'Company Email'; ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div><a class="employee_sentence" href="change_email.php"
+                                                style="height: 28px;width:27px;display: flex;align-items: center;">Edit</a>
+                                        </div>
+                                    </div>
+                                    <div style="padding-top:20px;display:flex;flex-direction:row;align-items:flex-end;">
+                                        <div style="width:600px;">
+                                            <div><span class="landing_sentence1">Password</span></div>
+                                            <div>
+                                                <span class="landing_sentence2">
+                                                    ********
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div><a class="employee_sentence" href="change_password.php"
+                                                style="height: 28px;width:27px;display: flex;align-items: center;">Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding-top:20px;">
+                <div style="padding:24px;background:white;">
+                    <div style="padding:20px;">
+                        <div style="display:flex;flex-direction:row;justify-content:center">
+                            <div style="width:100%;">
+                                <div>
                                     <div style="display:flex;justify-content:center;"><svg
                                             xmlns="http://www.w3.org/2000/svg" width="60" height="60"
                                             viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2"
@@ -108,46 +184,114 @@ unset($_SESSION['job_post_ID']);
                             </div>
                             <div style="width:100%;">
                                 <div style="padding-left:20px;">
-                                    <div style="padding-top:20px;">
-                                        <h2 class="landing_sentence3">Account Details</h2>
+                                    <div>
+                                        <h2 class="landing_sentence3">Personal Details</h2>
+                                    </div>
+                                    <div id="edit_personal">
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
+    </div>
+
+    <script src="post-job.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: 'edit_profile/edit_personal.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#edit_personal').html(response);
+                },
+                error: function (error) {
+                    console.log('Error: ', error);
+                }
+            });
+        });
 
 
-            <script src="post-job.js"></script>
-            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    </script>
 </body>
 
 </html>
 <?php
 
-$CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
+if (isset($_GET['savepersonal'])) {
+    $companyPerson = $_GET['companyPerson'];
+    $companyContact = $_GET['companyContact'];
+
+    $sql = "UPDATE companies SET ContactPerson='$companyPerson', CompanyPhone='$companyContact' WHERE CompanyID='$CompanyID'";
+    $result = mysqli_query($connect, $sql);
+
+    if ($result) {
+        $_SESSION['companyData']['ContactPerson'] = $companyPerson;
+        $_SESSION['companyData']['CompanyPhone'] = $companyContact;
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Personal details updated successfully.",
+                icon: "success",
+            }).then(function () {
+                $.ajax({
+                    url: 'edit_profile/edit_personal.php',
+                    type: 'GET',
+                    success: function (response) {
+                        $('#edit_personal').html(response);
+                    },
+                    error: function (error) {
+                        console.log('Error: ', error);
+                    }
+                });
+            });
+        </script>
+        <?php
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Failed to update personal details. Please try again.",
+                icon: "error",
+            }).then(function () {
+                $.ajax({
+                    url: 'edit_profile/edit_personal.php',
+                    type: 'GET',
+                    success: function (response) {
+                        $('#edit_personal').html(response);
+                    },
+                    error: function (error) {
+                        console.log('Error: ', error);
+                    }
+                });
+            });
+        </script>
+        <?php
+    }
 }
 
-// if (!isset($_SESSION['companyData'])) {
-
-//         Swal.fire({
-//             title: "Error",
-//             text: "You haven\'t logged in",
-//             icon: "error",
-//             backdrop: `lightgrey`,        
-//         }).then(function () {
-//                 window.location.href = "company_login.php";
-//             });
-//     </script>
-//     <?php
-//     exit;
-// }
+if (!isset($_SESSION['companyData'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
 
 
 ?>

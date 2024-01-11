@@ -92,7 +92,7 @@ if (isset($_POST["submitbtn"])) {
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice

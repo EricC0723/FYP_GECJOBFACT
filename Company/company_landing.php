@@ -1,10 +1,28 @@
 <!DOCTYPE html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 unset($_SESSION['job_post_ID']);
+
+$CompanyID = null;
+if (isset($_SESSION['companyData']['CompanyID'])) {
+    $CompanyID = $_SESSION['companyData']['CompanyID'];
+    // Prepare the SQL statement to count the total number of jobs
+    $sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $totalJobs = $row['total'];
+}
+
+
+
+
 ?>
+
 <html lang="en">
 
 <head>
@@ -58,7 +76,7 @@ unset($_SESSION['job_post_ID']);
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
@@ -460,14 +478,12 @@ unset($_SESSION['job_post_ID']);
     ?>
 
     <script src="post-job.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </body>
 
 </html>
 <?php
-
 if (!isset($_SESSION['companyData'])) {
     ?>
     <script>
@@ -475,23 +491,15 @@ if (!isset($_SESSION['companyData'])) {
             title: "Error",
             text: "You haven\'t logged in",
             icon: "error",
-            backdrop: `lightgrey`,        
+            backdrop: `lightgrey`,
         }).then(function () {
-                window.location.href = "company_login.php";
-            });
+            window.location.href = "company_login.php";
+        });
     </script>
     <?php
     exit;
 }
 
-$CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
-}
-
-// Prepare the SQL statement to count the total number of jobs
-$sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
-$result = mysqli_query($connect, $sql);
-$row = mysqli_fetch_assoc($result);
-$totalJobs = $row['total'];
 ?>
+
+

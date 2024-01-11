@@ -6,9 +6,7 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-
 ?>
-
 
 <html lang="en">
 
@@ -240,7 +238,6 @@ session_start(); // Start the session at the beginning
 
 </html>
 
-
 <?php
 
 if (isset($_GET["login_btn"])) {
@@ -297,7 +294,7 @@ if (isset($_GET["login_btn"])) {
                             }
                         });
                     }
-                    
+
                     Swal.fire({
                         title: "Error",
                         text: "Please verify your email first.",
@@ -321,7 +318,7 @@ if (isset($_GET["login_btn"])) {
                         }
                     });
 
-                    
+
                 </script>
                 <?php
             } else if ($row['CompanyStatus'] == 'Blocked') {
