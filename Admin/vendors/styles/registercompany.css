@@ -1,0 +1,21 @@
+.col-sm-8.success input{
+    border-color: green;
+}
+.col-sm-8.error input{
+    border-color: red;
+}
+.col-sm-8 small{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+    padding-top: 2px;
+}
+.col-sm-8.success small{
+    color: green;
+    visibility: visible;
+}
+.col-sm-8.error small{
+    color: red;
+    visibility: visible;
+}

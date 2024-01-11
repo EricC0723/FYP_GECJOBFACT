@@ -168,8 +168,8 @@
         <div class="row align-items-center mb-5">
           <div class="col-lg-8 mb-4 mb-lg-0">
             <div class="d-flex align-items-center">
-              <div class="border p-2 d-inline-block mr-3 rounded">
-                <img src="images/job_logo_5.jpg" alt="Image">
+              <div class="border p-2 d-inline-block mr-3 rounded" style="margin-top:30px;">
+                <img src="<?php echo $row['Job_Logo_Url']; ?>" alt="Image" style="width:100px;height:100px;">
               </div>
               <div>
                 <h2 style="margin-bottom:30px;"><?php echo $row['Job_Post_Title']; ?></h2>
@@ -227,7 +227,14 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="mb-5">
-              <figure class="mb-5"><img src="images/job_single_img_1.jpg" alt="Image" class="img-fluid rounded"></figure>
+              <?php 
+                if(!empty($row['Job_Cover_Url']))
+                {
+                  ?>
+                  <figure class="mb-5"><img src="<?php echo $row['Job_Cover_Url']; ?>" alt="gg" class="img-fluid rounded"></figure>
+                  <?php
+                }
+              ?>
               <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span>Job Description</h3>
               <?php
                 $DescriptionText = $row['Job_Post_Description'];

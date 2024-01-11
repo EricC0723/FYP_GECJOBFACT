@@ -276,29 +276,30 @@
                 <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                   <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>"></a>
                   <div class="job-listing-logo">
-                    <img src="images/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+                  <img src="<?php echo $row['Job_Logo_Url']; ?>" alt="Image" style="width:100px;height:80px;margin-left:20px;">
                   </div>
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                     <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
                       <h2><?php echo $row["Job_Post_Title"];?></h2>
-                      <strong style="margin-top:10px;position:absolute;"><?php echo $row["Main_Category_Name"];?> ( <?php echo $row["Sub_Category_Name"];?> )</strong>
+                      <strong style="margin-top:10px;margin-bottom:100px;"><?php echo $row["Main_Category_Name"];?> ( <?php echo $row["Sub_Category_Name"];?> )</strong>
                     </div>
                     <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                      <span class="icon-room"></span> <?php echo $row["Job_Post_Location"];?>
+                      <span class="icon-room"></span> <?php echo $row["Job_Post_Location"];?><br>
+                      <span class="icon-money"></span> RM<?php echo $row["Job_Post_MinSalary"];?> - RM<?php echo $row["Job_Post_MaxSalary"];?>
                     </div>
                     <div class="job-listing-meta">
                     <?php
                         switch($row["Job_Post_Type"])
                         {
-                          case "1" :  $JobType = "Part Time";break;
-                          case "2" :  $JobType = "Full Time";break;
-                          case "3" :  $JobType = "Internship";break;
-                          case "4" :  $JobType = "Contract";break;
-                          default: $JobType = "";break;
+                          case "1" :  $badgeClass = "badge-danger";$JobType = "Part Time";break;
+                          case "2" :  $badgeClass = "badge-primary";$JobType = "Full Time";break;
+                          case "3" :  $badgeClass = "badge-info";$JobType = "Internship";break;
+                          case "4" :  $badgeClass = "badge-secondary";$JobType = "Contract";break;
+                          default: $badgeClass = "badge-secondary";$JobType = "";break;
                         }
                       ?>
-                      <span class="badge badge-danger"><?php echo $JobType;?></span>
+                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span>
                     </div>
                   </div>
                 </li>

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $resumePath = $row['Resume_Path'];
     
             // 构建目标文件夹和目标路径
-            $resumetargetFolder = 'applicant_resume/';
+            $resumetargetFolder = '../User/applicant_resume/';
             $resumetargetPath = $resumetargetFolder . basename($resumePath);
     
             // 使用 copy 函数将默认简历文件从原始路径复制到目标路径
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else if($resumeOption === 'selectResume'){
         $resume = $_FILES['resume'];
-        $resume_dir = 'applicant_resume/';
+        $resume_dir = '../User/applicant_resume/';
         $resume_name = $resume['name'];
         $file_extension = pathinfo($resume_name, PATHINFO_EXTENSION);
         $new_resume_name = pathinfo($resume_name, PATHINFO_FILENAME) . '_' . $user_id . '.' . $file_extension;
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //cover
     if($coverOption === 'selectCover'){
         $cover = $_FILES['cover'];
-        $cover_dir = 'applicant_cover_letter/';
+        $cover_dir = '../User/applicant_cover_letter/';
         $cover_name = $cover['name'];
         $file_extension = pathinfo($cover_name, PATHINFO_EXTENSION);
         $new_cover_name = pathinfo($cover_name, PATHINFO_FILENAME) . '_' . $user_id . '.' . $file_extension;
