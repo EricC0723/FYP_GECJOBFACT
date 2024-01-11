@@ -14,7 +14,6 @@ if (isset($_SESSION['companyID'])) {
 }
 ?>
 
-
 <form method="GET">
     <div>
         <div class="register_form">
@@ -94,7 +93,6 @@ if (isset($_SESSION['companyID'])) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
-
     // Select the email input field, the submit button, and the validation message container
     var emailInput = document.getElementById('email-input');
     var submitButton = document.querySelector('.register_login_btn');
@@ -165,7 +163,15 @@ if (isset($_SESSION['companyID'])) {
     });
 </script>
 
+
 <?php
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
 if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
@@ -180,32 +186,10 @@ if (!isset($_SESSION['companyID'])) {
     </script>
     <?php
     exit;
-} else if ($row['CompanyStatus'] == 'Verify') {
-    ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Please verify your email first.",
-                icon: "error",
-                backdrop: `lightgrey`,
-            }).then(function () {
-                window.location.href = "company_login.php";
-            });
-        </script>
-    <?php
-    // Exit or perform some other action...
-} else if ($row['CompanyStatus'] == 'Blocked') {
-    ?>
-            <script>
-                Swal.fire({
-                    title: "Error",
-                    text: "Your company account is blocked.",
-                    icon: "error",
-                    backdrop: `lightgrey`,
-                }).then(function () {
-                    window.location.href = "company_login.php";
-                });
-            </script>
-    <?php
-}
+} 
+?>
+
+<?php
+mysqli_free_result($result);
+mysqli_close($connect);
 ?>

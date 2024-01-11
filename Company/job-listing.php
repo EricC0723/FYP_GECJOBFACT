@@ -4,6 +4,23 @@
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 ?>
+
+<?php
+
+$CompanyID = null;
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    // Prepare the SQL statement to count the total number of jobs
+    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $resultc = mysqli_query($connect, $sqlc);
+    $rowc = mysqli_fetch_assoc($resultc);
+    $totalJobs = $rowc['total'];
+
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+?>
 <html lang="en">
 
 <head>
@@ -49,10 +66,11 @@ session_start(); // Start the session at the beginning
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
+                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
@@ -353,6 +371,13 @@ session_start(); // Start the session at the beginning
 </html>
 
 <?php
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
 if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
@@ -368,31 +393,35 @@ if (!isset($_SESSION['companyID'])) {
     <?php
     exit;
 } else if ($row['CompanyStatus'] == 'Verify') {
+    // Show swal box
     ?>
         <script>
             Swal.fire({
-                title: "Error",
-                text: "Please verify your email first.",
-                icon: "error",
-                backdrop: `lightgrey`,
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
             }).then(function () {
-                window.location.href = "company_login.php";
+                window.location = "company_signout.php";
             });
         </script>
     <?php
-    // Exit or perform some other action...
-} else if ($row['CompanyStatus'] == 'Blocked') {
+} else if ($row['CompanyStatus'] == 'Block') {
+    // Show swal box
     ?>
-            <script>
-                Swal.fire({
-                    title: "Error",
-                    text: "Your company account is blocked.",
-                    icon: "error",
-                    backdrop: `lightgrey`,
-                }).then(function () {
-                    window.location.href = "company_login.php";
-                });
-            </script>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Your account has been blocked.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
     <?php
 }
+?>
+
+<?php
+mysqli_free_result($result);
+mysqli_close($connect);
 ?>

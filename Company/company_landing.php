@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
@@ -20,7 +16,6 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
-
 }
 
 ?>
@@ -460,8 +455,7 @@ if (isset($_SESSION['companyID'])) {
                         }
 
                         // Free the result set and close the connection
-                        mysqli_free_result($result);
-                        mysqli_close($connect);
+                    
                         ?>
                     </tbody>
                 </table>
@@ -480,12 +474,20 @@ if (isset($_SESSION['companyID'])) {
     ?>
 
     <script src="post-job.js"></script>
-
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 
 </html>
 <?php
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
 if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
@@ -501,31 +503,35 @@ if (!isset($_SESSION['companyID'])) {
     <?php
     exit;
 } else if ($row['CompanyStatus'] == 'Verify') {
+    // Show swal box
     ?>
         <script>
             Swal.fire({
-                title: "Error",
-                text: "Please verify your email first.",
-                icon: "error",
-                backdrop: `lightgrey`,
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
             }).then(function () {
-                window.location.href = "company_login.php";
+                window.location = "company_signout.php";
             });
         </script>
     <?php
-    // Exit or perform some other action...
-} else if ($row['CompanyStatus'] == 'Blocked') {
+} else if ($row['CompanyStatus'] == 'Block') {
+    // Show swal box
     ?>
-            <script>
-                Swal.fire({
-                    title: "Error",
-                    text: "Your company account is blocked.",
-                    icon: "error",
-                    backdrop: `lightgrey`,
-                }).then(function () {
-                    window.location.href = "company_login.php";
-                });
-            </script>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Your account has been blocked.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
     <?php
 }
+?>
+
+<?php
+mysqli_free_result($result);
+mysqli_close($connect);
 ?>
