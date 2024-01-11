@@ -5,7 +5,11 @@
 
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
+
 session_start(); // Start the session at the beginning
+session_destroy();
+session_start(); // Start the session at the beginning
+
 ?>
 
 <html lang="en">

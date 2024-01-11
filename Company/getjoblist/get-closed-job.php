@@ -72,6 +72,9 @@ session_start(); // Start the session at the beginning
     $CompanyID = null;
     if (isset($_SESSION['companyID'])) {
         $CompanyID = $_SESSION['companyID'];
+        $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+        $result = mysqli_query($connect, $sql);
+        $rowc = mysqli_fetch_assoc($result);
     }
 
     $searchTerm = '';
@@ -87,7 +90,7 @@ session_start(); // Start the session at the beginning
 
     // Check if there are any results
     if (mysqli_num_rows($result) > 0) {
-        echo'<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
+        echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
                 <th style="width:97.05px">
@@ -119,7 +122,7 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Created ' . date('j F Y', strtotime($row['AdStartDate'])) . ' by ' . htmlspecialchars($_SESSION['companyData']['ContactPerson']) . ' .</div>
+                                            <div style="font-size:16px;line-height:24px;">Created ' . date('j F Y', strtotime($row['AdStartDate'])) . ' by ' . htmlspecialchars($rowc['ContactPerson']) . ' .</div>
                                             </div>
                                     </div>
                                 </td>
@@ -150,7 +153,7 @@ session_start(); // Start the session at the beginning
             ';
 
         }
-        echo'</table>';
+        echo '</table>';
 
     } else {
         // No results, check if a search term was provided

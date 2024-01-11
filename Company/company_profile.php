@@ -9,6 +9,9 @@ session_start(); // Start the session at the beginning
 $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
 }
 ?>
 <html lang="en">
@@ -88,7 +91,7 @@ if (isset($_SESSION['companyID'])) {
 
     </header>
 
-    <div style="padding-top:48px;">
+    <div style="padding-top:48px;padding-bottom:48px;">
 
         <div style="margin:0 auto;max-width:960px;width:100%;">
             <div style="padding-top:20px;">
@@ -288,8 +291,6 @@ if (isset($_GET['savepersonal'])) {
     $result = mysqli_query($connect, $sql);
 
     if ($result) {
-        $_SESSION['companyData']['ContactPerson'] = $companyPerson;
-        $_SESSION['companyData']['CompanyPhone'] = $companyContact;
         ?>
         <script>
             Swal.fire({
@@ -323,6 +324,57 @@ if (isset($_GET['savepersonal'])) {
                     type: 'GET',
                     success: function (response) {
                         $('#edit_personal').html(response);
+                    },
+                    error: function (error) {
+                        console.log('Error: ', error);
+                    }
+                });
+            });
+        </script>
+        <?php
+    }
+}
+
+if (isset($_GET['savecompany'])) {
+    $companySize = $_GET['companySize'];
+
+    $sql = "UPDATE companies SET CompanySize='$companySize' WHERE CompanyID='$CompanyID'";
+    $result = mysqli_query($connect, $sql);
+
+    if ($result) {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Company details updated successfully.",
+                icon: "success",
+            }).then(function () {
+                $.ajax({
+                    url: 'edit_profile/edit_company.php',
+                    type: 'GET',
+                    success: function (response) {
+                        $('#edit_company').html(response);
+                    },
+                    error: function (error) {
+                        console.log('Error: ', error);
+                    }
+                });
+            });
+        </script>
+        <?php
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Failed to update company details. Please try again.",
+                icon: "error",
+            }).then(function () {
+                $.ajax({
+                    url: 'edit_profile/edit_company.php',
+                    type: 'GET',
+                    success: function (response) {
+                        $('#edit_company').html(response);
                     },
                     error: function (error) {
                         console.log('Error: ', error);

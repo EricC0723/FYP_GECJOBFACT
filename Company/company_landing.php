@@ -17,7 +17,7 @@ if (isset($_SESSION['companyID'])) {
     $rowc = mysqli_fetch_assoc($resultc);
     $totalJobs = $rowc['total'];
 
-    $sql = "SELECT * FROM company WHERE CompanyID = $CompanyID";
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 

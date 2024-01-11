@@ -5,6 +5,10 @@ session_start(); // Start the session at the beginning
 $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
+
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
 }
 
 ?>
@@ -15,7 +19,7 @@ if (isset($_SESSION['companyID'])) {
             <div><span class="landing_sentence1">Contact Person</span></div>
             <div>
                 <span class="landing_sentence2">
-                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : 'Contact Person'; ?>
+                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                 </span>
             </div>
         </div>
@@ -29,7 +33,7 @@ if (isset($_SESSION['companyID'])) {
             <div>
                 <span class="landing_sentence2">
                     +60
-                    <?php echo isset($_SESSION['companyData']['CompanyPhone']) ? $_SESSION['companyData']['CompanyPhone'] : 'Contact Number'; ?>
+                    <?php echo isset($row['CompanyPhone']) ? $row['CompanyPhone'] : 'Contact Number'; ?>
                 </span>
             </div>
         </div>
@@ -40,7 +44,7 @@ if (isset($_SESSION['companyID'])) {
         <div class="form-group">
             <label class="landing_sentence1" style="padding-bottom: 8px;">Contact Person</label>
             <input class="register_input" type="text" name="companyPerson" id="person"
-                value="<?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>">
+                value="<?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>">
             <div style="padding-top:4px;" id="validation-person" class="hide">
                 <span style="display:flex"><span
                         style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -70,7 +74,7 @@ if (isset($_SESSION['companyID'])) {
                 <input class="register_input" type="text" name="companyContact" id="contact"
                     style="padding-left: 65px;width:439px;"
                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
-                    value="<?php echo isset($_SESSION['companyData']['CompanyPhone']) ? $_SESSION['companyData']['CompanyPhone'] : ''; ?>">
+                    value="<?php echo isset($row['CompanyPhone']) ? $row['CompanyPhone'] : 'Contact Number'; ?>">
             </div>
             <div style="padding-top:4px;" id="validation-contact" class="hide">
                 <span style="display:flex"><span
@@ -87,10 +91,10 @@ if (isset($_SESSION['companyID'])) {
                         </svg></span><span><span id="contact-message" class="validation_sentence">Required
                             field</span></span></span>
             </div>
-            <div class="form-group" style="display: block;">
-                <input type="submit" value="Save" class="cont-button" name="savepersonal" id="savepersonal">
-                <button class="save-button" id="close-personal" style="margin-left:4px">Cancel</button>
-            </div>
+        </div>
+        <div class="form-group" style="display: block;">
+            <input type="submit" value="Save" class="cont-button" name="savepersonal" id="savepersonal">
+            <button class="save-button" id="close-personal" style="margin-left:4px">Cancel</button>
         </div>
     </form>
 </div>
