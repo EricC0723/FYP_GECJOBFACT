@@ -97,7 +97,7 @@ if (isset($_SESSION['companyID'])) {
     </header>
 
     <div style="padding-top:20px;">
-        <div class="register_content" id="forget_password">
+        <div class="register_content" id="change_email">
 
         </div>
     </div>
@@ -114,7 +114,7 @@ if (isset($_SESSION['companyID'])) {
                 url: 'change-email-send.php',
                 type: 'GET',
                 success: function (response) {
-                    $('#forget_password').html(response);
+                    $('#change_email').html(response);
                 }
             });
         });

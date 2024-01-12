@@ -154,7 +154,7 @@ if (isset($_SESSION['companyID'])) {
     companySizeSelect.addEventListener('change', validateSizeInput);
 
     // Modify the event listener for the submit button
-    submitpersonal.addEventListener('click', function (event) {
+    submitcompany.addEventListener('click', function (event) {
         var invalidInputs = [];
 
         if (companySizeSelect.dataset.valid !== '1') {

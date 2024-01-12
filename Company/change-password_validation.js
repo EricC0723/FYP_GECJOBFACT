@@ -1,55 +1,9 @@
-// Add jQuery library for AJAX
-var script = document.createElement('script');
-script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js';
-document.head.appendChild(script);
-
-// Select the email input field, the submit button, and the validation message container
-var emailInput = document.getElementById('email-input');
-var submitButton = document.querySelector('.register_login_btn');
-var validationEmail = document.getElementById('validation-email');
-
-// Add an event listener to the email input field
-emailInput.addEventListener('input', function () {
-    var emailMessage = document.getElementById('email-message');
-    if (this.value.trim() === '') {
-        // If the input field is empty
-        emailMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationEmail.classList.remove('hide'); // Show the validation message
-    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.value)) {
-        // If the input is not a valid email address
-        emailMessage.textContent = 'Invalid email address, use format example@domain.com';
-        this.dataset.valid = '0';
-        validationEmail.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the input is a valid email address
-        // Check if the email exists in the database
-        $.ajax({
-            url: 'check_data.php',
-            type: 'post',
-            data: { email: this.value },
-            success: function (response) {
-                if (response == 1) {
-                    emailMessage.textContent = 'Email already exists';
-                    emailInput.dataset.valid = '0';
-                    validationEmail.classList.remove('hide'); // Show the validation message
-                } else {
-                    emailMessage.textContent = '';
-                    emailInput.dataset.valid = '1';
-                    validationEmail.classList.add('hide'); // Hide the validation message
-                }
-            }
-        });
-    }
-});
-
 // Select the password input field, the confirm password input field, and the validation message containers
 var passwordInput = document.getElementById('password');
 var confirmPasswordInput = document.getElementById('confirm_password');
 var validationPassword = document.getElementById('validation-password');
 var validationConfirm = document.getElementById('validation-confirm');
 var passwordrequirement = document.getElementById('password-requirement');
-
 
 // Add an event listener for the 'focus' event
 passwordInput.addEventListener('focus', function () {
@@ -175,6 +129,23 @@ passwordInput.addEventListener('input', function () {
     }
 });
 
+var validationSamepassword = document.getElementById('validation-samepassword');
+// Add an event listener to the confirm password input field
+passwordInput.addEventListener('input', function () {
+    var samepasswordMessage = document.getElementById('samepassword-message');
+    if (this.value === companyOldpassword) {
+        // If the confirm password input is not the same as the password input
+        samepasswordMessage.textContent = 'This is your current password';
+        this.dataset.valid = '0';
+        validationSamepassword.classList.remove('hide'); // Show the validation message
+    } else {
+        // If the confirm password input is the same as the password input
+        samepasswordMessage.textContent = '';
+        this.dataset.valid = '1';
+        validationSamepassword.classList.add('hide'); // Hide the validation message
+    }
+});
+
 
 // Add an event listener to the confirm password input field
 confirmPasswordInput.addEventListener('input', function () {
@@ -197,172 +168,38 @@ confirmPasswordInput.addEventListener('input', function () {
     }
 });
 
-// Get the input field and the validation message elements
-var personInput = document.getElementById('person');
-var validationPerson = document.getElementById('validation-person');
-var personMessage = document.getElementById('person-message');
+var oldPasswordInput = document.getElementById('oldpassword');
+var validationOldpassword = document.getElementById('validation-oldpassword');
 
-// Add an event listener to the input field
-personInput.addEventListener('input', function () {
+// Add an event listener to the confirm password input field
+oldPasswordInput.addEventListener('input', function () {
+    var oldpasswordMessage = document.getElementById('oldpassword-message');
     if (this.value.trim() === '') {
-        // If the input field is empty
-        personMessage.textContent = 'Required field';
+        // If the confirm password input field is empty
+        oldpasswordMessage.textContent = 'Required field';
         this.dataset.valid = '0';
-        validationPerson.classList.remove('hide'); // Show the validation message
+        validationOldpassword.classList.remove('hide'); // Show the validation message
+    } else if (this.value !== companyOldpassword) {
+        // If the input is the same as the CompanyEmail
+        oldpasswordMessage.textContent = 'Please enter the correct current password';
+        this.dataset.valid = '0';
+        validationOldpassword.classList.remove('hide'); // Show the validation message
     } else {
-        // If the input field is not empty
-        personMessage.textContent = '';
+        // If the confirm password input is the same as the password input
+        oldpasswordMessage.textContent = '';
         this.dataset.valid = '1';
-        validationPerson.classList.add('hide'); // Hide the validation message
+        validationOldpassword.classList.add('hide'); // Hide the validation message
     }
 });
 
-// Get the input field and the validation message elements
-var contactInput = document.getElementById('contact');
-var validationContact = document.getElementById('validation-contact');
-var contactMessage = document.getElementById('contact-message');
-
-// Add an event listener to the phone input field
-contactInput.addEventListener('input', function () {
-    var contactMessage = document.getElementById('contact-message');
-    if (this.value.trim() === '') {
-        // If the input field is empty
-        contactMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationContact.classList.remove('hide'); // Show the validation message
-    } else if (!/^\d{9,10}$/.test(this.value)) {
-        // If the input is not a valid phone number
-        contactMessage.textContent = 'The phone number should contain between 9 to 10 digits.';
-        this.dataset.valid = '0';
-        validationContact.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the input is a valid phone number
-        // Check if the phone number exists in the database
-        $.ajax({
-            url: 'check_data.php',
-            type: 'post',
-            data: { phone: this.value },
-            success: function (response) {
-                if (response == 1) {
-                    contactMessage.textContent = 'Phone number already exists';
-                    contactInput.dataset.valid = '0';
-                    validationContact.classList.remove('hide'); // Show the validation message
-                } else {
-                    contactMessage.textContent = '';
-                    contactInput.dataset.valid = '1';
-                    validationContact.classList.add('hide'); // Hide the validation message
-                }
-            }
-        });
-    }
-});
-// Get the input field and the validation message elements
-var businessNameInput = document.getElementById('businessnname');
-var validationBusinessName = document.getElementById('validation-businessname');
-var businessNameMessage = document.getElementById('business-message');
-
-// Add an event listener to the input field
-businessNameInput.addEventListener('input', function () {
-    var value = this.value.trim();
-
-    // Check if the input field is empty
-    if (value === '') {
-        businessNameMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationBusinessName.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the input field is not empty
-        businessNameMessage.textContent = '';
-        this.dataset.valid = '1';
-        validationBusinessName.classList.add('hide'); // Hide the validation message
-    }
-});
-
-// Get the select field and the validation message elements
-var companySizeSelect = document.getElementById('businesssize');
-var validationCompanySize = document.getElementById('validation-businesssize');
-var companySizeMessage = document.getElementById('size-message');
-
-// Add an event listener to the select field
-companySizeSelect.addEventListener('change', function () {
-    var value = this.value;
-
-    // Check if the select field has a valid value
-    if (value === '') {
-        companySizeMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationCompanySize.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the select field has a valid value
-        companySizeMessage.textContent = '';
-        this.dataset.valid = '1';
-        validationCompanySize.classList.add('hide'); // Hide the validation message
-    }
-});
-
-// Get the input field and the validation message elements
-var registrationNoInput = document.getElementById('registrationNo');
-var validationRegistrationNo = document.getElementById('validation-registrationNo');
-var registrationNoMessage = document.getElementById('registration-message');
-
-// Add an event listener to the input field
-registrationNoInput.addEventListener('input', function () {
-    var value = this.value;
-
-    // Check if the input field has a valid value
-    if (value.trim() === '') {
-        registrationNoMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationRegistrationNo.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the input field has a valid value
-        // Check if the registration number exists in the database
-        $.ajax({
-            url: 'check_data.php',
-            type: 'post',
-            data: { registrationNo: this.value },
-            success: function (response) {
-                if (response == 1) {
-                    registrationNoMessage.textContent = 'Registration number already exists';
-                    registrationNoInput.dataset.valid = '0';
-                    validationRegistrationNo.classList.remove('hide'); // Show the validation message
-                } else {
-                    registrationNoMessage.textContent = '';
-                    registrationNoInput.dataset.valid = '1';
-                    validationRegistrationNo.classList.add('hide'); // Hide the validation message
-                }
-            }
-        });
-    }
-});
-
-// Get the checkbox and the validation message elements
-var termsCheckbox = document.getElementById('checkbox1');
-var validationTerms = document.getElementById('validation-terms');
-var termsMessage = document.getElementById('terms-message');
-
-// Add an event listener to the checkbox
-termsCheckbox.addEventListener('click', function () {
-    // Check if the checkbox is checked
-    if (!this.checked) {
-        termsMessage.textContent = 'To create an account, you must agree to the above terms.';
-        this.dataset.valid = '0';
-        validationTerms.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the checkbox is checked
-        termsMessage.textContent = '';
-        this.dataset.valid = '1';
-        validationTerms.classList.add('hide'); // Hide the validation message
-    }
-});
+var submitButton = document.querySelector('.register_login_btn');
 
 // Modify the event listener for the submit button
 submitButton.addEventListener('click', function (event) {
     var invalidInputs = [];
 
-    // Check each input field
-    if (emailInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: emailInput, validation: validationEmail });
+    if (oldPasswordInput.dataset.valid !== '1') {
+        invalidInputs.push({ input: oldPasswordInput, validation: validationOldpassword });
     }
     if (passwordInput.dataset.valid !== '1') {
         invalidInputs.push({ input: passwordInput, validation: passwordrequirement });
@@ -370,26 +207,7 @@ submitButton.addEventListener('click', function (event) {
     if (confirmPasswordInput.dataset.valid !== '1') {
         invalidInputs.push({ input: confirmPasswordInput, validation: validationConfirm });
     }
-    if (personInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: personInput, validation: validationPerson });
-    }
-    if (contactInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: contactInput, validation: validationContact });
-    }
-    if (businessNameInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: businessNameInput, validation: validationBusinessName });
-    }
-    if (companySizeSelect.dataset.valid !== '1') {
-        invalidInputs.push({ input: companySizeSelect, validation: validationCompanySize });
-    }
-    if (registrationNoInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: registrationNoInput, validation: validationRegistrationNo });
-    }
-    if (termsCheckbox.dataset.valid !== '1') {
-        invalidInputs.push({ input: termsCheckbox, validation: validationTerms });
-    }
-
-
+    
     if (invalidInputs.length > 0) {
         // If there are invalid inputs, prevent the form submission
         event.preventDefault();
@@ -404,4 +222,3 @@ submitButton.addEventListener('click', function (event) {
     }
     // If all inputs are valid, the form will submit normally
 });
-

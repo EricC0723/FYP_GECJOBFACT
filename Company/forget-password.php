@@ -76,6 +76,7 @@ if (isset($_GET["login_btn"])) {
 
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+        $companyID = $row['CompanyID'];
 
         // After the user is registered, send the verification email
         $mail = new PHPMailer(true);
@@ -96,7 +97,7 @@ if (isset($_GET["login_btn"])) {
             $mail->addAddress($companyEmail, 'Joe User');
 
             // Send the verification email
-            $mail->Body = 'Please click on the link to reset your password: http://localhost/FYP/Company/reset-password.php?data=' . $companyEmail;
+            $mail->Body = 'Please click on the link to reset your password: http://localhost/FYP/Company/reset-password.php?data=' . $companyID;
             $mail->send();
             ?>
             <script>
