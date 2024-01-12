@@ -2,15 +2,13 @@
     session_start();
     require 'C:/xampp/htdocs/FYP/dataconnection.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if($_POST["action"] == "updateCompany")
-        {   $company_id = $_POST['company_id'];
-            $companyName = $_POST['company_name'];
-            $contactPerson = $_POST['contact_person'];
+        if($_POST["action"] == "updatejob")
+        {   $job_id = $_POST['job_id'];
             $status = $_POST['status'];
-
-            $sql = "UPDATE companies 
-                SET CompanyName = '$companyName', ContactPerson = '$contactPerson', CompanyStatus = '$status'
-                WHERE CompanyID = '$company_id'";
+            
+            $sql = "UPDATE job_post
+                SET job_status = '$status'
+                WHERE Job_Post_ID = '$job_id'";
             $result = mysqli_query($connect, $sql);
 
             if ($result) {
@@ -43,7 +41,7 @@ if(isset($_GET['job_id']))
     {
         $res = [
             'status' => 404,
-            'message' => 'company Id Not Found'
+            'message' => 'job Id Not Found'
         ];
         echo json_encode($res);
         return;

@@ -148,54 +148,7 @@
 	}
 	else if(isset($_POST["options"])) {
 	$option = $_POST["options"];
-	if($option == "company")
-	{
-		$sql = mysqli_query($connect, "SELECT * FROM companies where CompanyEmail = '$email'");
-		$count = mysqli_num_rows($sql);
-			if($count > 0)
-			{
-				$fetch = mysqli_fetch_assoc($sql);
-				$status = $fetch["CompanyStatus"];
-				$hashpassword = $fetch["CompanyPassword"];
-				if($status == 'Verify'){
-					?>
-					<script>
-						Swal.fire("Please verify your account");
-					</script>
-					<?php
-				}else if($status=="Active" && password_verify($password, $hashpassword)){
-					$_SESSION['Company_ID'] = $fetch['CompanyID'];
-					$_SESSION['Company_Email'] = $fetch['CompanyEmail'];
-					$_SESSION['CompanyName'] = $fetch['CompanyName'];
-					?>
-					<script>
-						swal({
-						title: "Company Login Successful",
-						text: "Welcome to GEC Job Fact",
-						icon: "success",
-						button: "OK!",
-						}).then((value) => {
-							window.location.href = "index.php";
-      				});
-					</script>
-					<?php
-				}
-				else{
-					?>
-					<script>
-						swal({
-						title: "Failed!",
-						text: "Incorrect password",
-						icon: "error",
-						button: "OK",
-					});
-					</script>
-					<?php
-				}
-        
-            }
-    }
-	else if($option == "user")
+	if($option == "user")
 	{
 		$sql = mysqli_query($connect, "SELECT * FROM users where Email = '$email'");
 		$count = mysqli_num_rows($sql);
@@ -210,6 +163,7 @@
 				$_SESSION['First_Name'] = $fetch['FirstName'];
 				?>
 				<script>
+					console.log("login");
 					swal({
 					title: "User Login Successful",
 					text: "Welcome to GEC Job Fact",
@@ -221,9 +175,25 @@
 				</script>
 				<?php
 			}
+			else if($status=="Blocked"){
+				?>
+				<script>
+					console.log("blocked");
+					swal({
+					title: "Failed",
+					text: "Your account has already been blocked because of unlawful activity.",
+					icon: "error",
+					button: "OK!",
+					}).then((value) => {
+						window.location.href = "login.php";
+				});
+				</script>
+				<?php
+			}
 			else if(!password_verify($password, $hashpassword)){
 				?>
 				<script>
+					console.log("fails");
 					swal({
 					title: "Failed!",
 					text: "Incorrect password",
@@ -237,6 +207,7 @@
 		else{
 			?>
 			<script>
+				console.log("email not exist");
 				swal({
 				title: "Failed!",
 				text: "Email no exsist",

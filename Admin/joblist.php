@@ -483,13 +483,13 @@ function confirmation()
 				<div class="page-header">
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
-							<div class="title">
-								<h4>DataTable</h4>
+						<div class="title">
+								<h4>Job List</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">DataTable</li>
+									<li class="breadcrumb-item active" aria-current="page">Job</li>
 								</ol>
 							</nav>
 						</div>
@@ -510,19 +510,17 @@ function confirmation()
 				<!-- Simple Datatable start -->
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h4 class="text-blue h4">Data Table Simple</h4>
-						<p class="mb-0">you can find more options <a class="text-primary" href="https://datatables.net/" target="_blank">Click Here</a></p>
-						<button onclick="window.location.href='add_admin.php'" style="margin-left:1550px;"type="button" class="btn btn-outline-primary">Add</button>
 					</div>
 					<div class="pb-20">
-						
 						<table class="data-table table stripe hover nowrap">
 							<thead>
 								<tr>
 									<th class="table-plus datatable-nosort">ID</th>
 									<th>Job Title</th>
-									<th>Advertisment start date</th>
-									<th>Advertisment end date</th>
+									<th>Main categories</th>
+									<th>Sub categories</th>	
+									<th>Start date</th>
+									<th>End date</th>
 									<th>Job Status</th>	
 									<th class="datatable-nosort">Action</th>
 								</tr>
@@ -530,7 +528,7 @@ function confirmation()
 							<tbody>
 							<?php
 									include("C:/xampp/htdocs/FYP/dataconnection.php");
-									$query = "SELECT * FROM  job_post";
+									$query = "SELECT * FROM  job_post WHERE job_status IN ('Active', 'Blocked','Closed')";
 									$result = mysqli_query($connect,$query);
 
 									if(mysqli_num_rows($result) > 0)
@@ -541,6 +539,8 @@ function confirmation()
 											<tr>
 												<td class="table-plus"><?php echo $row["Job_Post_ID"]; ?></td>
 												<td><?php echo $row["Job_Post_Title"]; ?></td>
+												<td><?php echo $row["Main_Category_Name"]; ?></td>
+												<td><?php echo $row["Sub_Category_Name"]; ?></td>
 												<td><?php echo date('d-m-Y H:m:s', strtotime($row['AdStartDate'])); ?></td>
 												<td><?php echo date('d-m-Y H:m:s', strtotime($row['AdEndDate'])); ?></td>
 												<td>
@@ -557,6 +557,7 @@ function confirmation()
 												}
 												?>
 												</td>
+												
 												<td>
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -585,118 +586,261 @@ function confirmation()
 	</div>
 	<!-- View modal -->
     <div class="col-md-4 col-sm-12 mb-30">
-            <div class="modal fade bs-example-modal-lg" id="view-job-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="">Job data</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="row" style="position:center;">
+    <div class="modal fade bs-example-modal-lg" id="view-job-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+					<h4 class="modal-title">Job ID -</h4><h4 class="modal-title" id="Job_Post_ID"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+				<div class="group-container">
+					<hr>
+					<h6 class="group-title" style="text-align:center;color:grey;">Basic Post Information</h6>
+					<hr>
+				</div>
+				<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">Company Name</h5>
-                        <div class="form-group">
-                        <p id="CompanyName" class="form-control"></p>
-                        </div>
+					  <h5 style="display: inline-block;">Job Logo</h5>
+						<div class="form-group">
+							<img id="Job_Logo_Url" class="img-fluid" alt="Job Logo" style="width:120px;height:100px;">
+						</div>
                       </div>
                       <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">Contact Person</h5>
-                        <div class="form-group">
-                        <p id="ContactPerson" class="form-control"></p>
-                        </div>
+					  <h5 style="display: inline-block;">Job Cover</h5>
+					<div class="form-group">
+						<img id="Job_Cover_Url" class="img-fluid" alt="Job Cover" style="width:120px;height:100px;">
+					</div>
                       </div>
                     </div>
-                    <h5 style="display: inline-block;">Email</h5>
-                        <div class="form-group">
-                        <p id="CompanyEmail" class="form-control"></p>
-                        </div>
-					<h5 style="display: inline-block;">Phone number</h5>
+                    <h5 style="display: inline-block;">Job Post Title</h5>
                     <div class="form-group">
-                    <p id="CompanyPhone" class="form-control"></p>
+                        <p id="Job_Post_Title" class="form-control"></p>
+                    </div>
+
+                    <h5 style="display: inline-block;">Job Post Position</h5>
+                    <div class="form-group">
+                        <p id="Job_Post_Position" class="form-control"></p>
+                    </div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Main Category Name</h5>
+						<div class="form-group">
+						<p id="Main_Category_Name" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Sub Category Name</h5>
+					<div class="form-group">
+					<p id="Sub_Category_Name" class="form-control"></p>
 					</div>
-                    <h5 style="display: inline-block;">Company size</h5>
-                    <div class="form-group">
-                    <p id="CompanySize" class="form-control"></p>
+                      </div>
+                    </div>
+					<h5 style="display: inline-block;">Job Type</h5>
+					<div class="form-group">
+						<p id="Job_Post_Type" class="form-control"></p>
 					</div>
-                    <h5 style="display: inline-block;">Registration no.</h5>
+					<h5 style="display: inline-block;">Job Location</h5>
+					<div class="form-group">
+						<p id="Job_Post_Location" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Job Status</h5>
                     <div class="form-group">
-                    <p id="RegistrationNo" class="form-control"></p>
+                        <p id="job_status" class="form-control"></p>
                     </div>
-					<h5 style="display: inline-block;">Registration date</h5>
-                    <div class="form-group">
-                    <p id="RegistrationDate" class="form-control"></p>
+				<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Salary and deadline information</h6>
+					<hr>
+				</div>
+                    <!-- Add other job-related fields here -->
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad Start Date</h5>
+						<div class="form-group">
+						<p id="AdStartDate" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad End Date</h5>
+					<div class="form-group">
+					<p id="AdEndDate" class="form-control"></p>
+					</div>
+                      </div>
                     </div>
-                    <h5 style="display: inline-block;">Company Status</h5>
-                    <div class="form-group">
-                    <p id="CompanyStatus" class="form-control"></p>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Minimum Salary</h5>
+						<div class="form-group">
+						<p id="Job_Post_MinSalary" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Maximum Salary</h5>
+					<div class="form-group">
+					<p id="Job_Post_MaxSalary" class="form-control"></p>
+					</div>
+                      </div>
                     </div>
-                    </div>
+					<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Job description and requirements</h6>
+					<hr>
+					</div>
+					<h5 style="display: inline-block;">Experience Required</h5>
+					<div class="form-group">
+						<p id="Job_Post_Exp" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Job Description</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Description" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Responsibilities</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Responsibilities" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Benefits</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Benefits" class="form-control" rows="5" disabled></textarea>
+					</div>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
+</div>
         <!-- Edit modal -->
         <div class="col-md-4 col-sm-12 mb-30">
             <div class="modal fade bs-example-modal-lg" id="edit-job-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="">Edit job data</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="row" style="position:center;">
+					<div class="modal-header">
+					<h4 class="modal-title">Edit post data</h4>
+					
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+				<div class="group-container">
+					<hr>
+					<h6 class="group-title" style="text-align:center;color:grey;">Basic Post Information</h6>
+					<hr>
+				</div>
+				<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
-					  	<input type="hidden" class="form-control" id="edit_companyid" style="margin-top:10px;border-color:#787785;">
-                        <h5 style="display: inline-block;">Company Name</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_CompanyName" style="margin-top:10px;border-color:#787785;">
-                        </div>
+					  <h5 style="display: inline-block;">Job Logo</h5>
+						<div class="form-group">
+							<img id="edit_Job_Logo_Url" class="img-fluid" alt="Job Logo" style="width:120px;height:100px;">
+						</div>
                       </div>
                       <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">Contact Person</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_ContactPerson" style="margin-top:10px;border-color:#787785;">
-                        </div>
+					  <h5 style="display: inline-block;">Job Cover</h5>
+					<div class="form-group">
+						<img id="edit_Job_Cover_Url" class="img-fluid" alt="Job Cover" style="width:120px;height:100px;">
+					</div>
                       </div>
                     </div>
-					<h5 style="display: inline-block;">Phone number</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_CompanyPhone" style="margin-top:10px;border-color:#787785;" disabled>
-                        </div>
-                    <h5 style="display: inline-block;">Email</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_CompanyEmail" style="margin-top:10px;border-color:#787785;" disabled>
-                        </div>
-                    <h5 style="display: inline-block;">Password</h5>
+                    <h5 style="display: inline-block;">Job Post Title</h5>
                     <div class="form-group">
-                    <button type="button" class="btn btn-primary"><i class="icon-copy fa fa-send" aria-hidden="true" style="margin-right:10px;"></i>Request a new password from the company</button>
+						<input type="hidden" class="form-control" id="edit_Job_Post_ID" style="margin-top:10px;border-color:#787785;">
+						<input type="text" class="form-control" id="edit_Job_Post_Title" style="margin-top:10px;border-color:#787785;" disabled>
                     </div>
-					<h5 style="display: inline-block;">Company Size</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_CompanySize" style="margin-top:10px;border-color:#787785;" disabled>
-                    </div>
-                    <h5 style="display: inline-block;">Registration Date</h5>
+
+                    <h5 style="display: inline-block;">Job Post Position</h5>
                     <div class="form-group">
-                     <input type="text" class="form-control" id="edit_RegistrationDate" style="margin-top:10px;border-color:#787785;" disabled>
+						<input type="text" class="form-control" id="edit_Job_Post_Position" style="margin-top:10px;border-color:#787785;" disabled>
                     </div>
-                    <h5 style="display: inline-block;">Company Status</h5>
-                    <div class="form-group">
-                    <select class="selectpicker form-control" name="edit_CompanyStatus" id="edit_CompanyStatus" style="width: 100%; height: 38px;">
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Main Category Name</h5>
+						<div class="form-group">
+						<input type="text" class="form-control" id="edit_Main_Category_Name" style="margin-top:10px;border-color:#787785;" disabled>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Sub Category Name</h5>
+					<div class="form-group">
+					<input type="text" class="form-control" id="edit_Sub_Category_Name" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+                      </div>
+                    </div>
+					<h5 style="display: inline-block;">Job Type</h5>
+					<div class="form-group">
+						<input type="text" class="form-control" id="edit_Job_Post_Type" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+					<h5 style="display: inline-block;">Job Location</h5>
+					<div class="form-group">
+						<input type="text" class="form-control" id="edit_Job_Post_Location" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+					
+					<h5 style="display: inline-block;">Job Status</h5>
+                    <select class="selectpicker form-control" name="edit_job_status" id="edit_job_status" style="width: 100%; height: 38px;">
 							<option value="Active">Active</option>
 							<option value="Blocked" >Blocked</option>
-							<option value="Verify" >Verify</option>
+							<option value="Closed" >Closed</option>
 					</select>
+				<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Salary and deadline information</h6>
+					<hr>
+				</div>
+                    <!-- Add other job-related fields here -->
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad Start Date</h5>
+						<div class="form-group">
+						<input type="text" class="form-control" id="edit_AdStartDate" style="margin-top:10px;border-color:#787785;" disabled>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad End Date</h5>
+					<div class="form-group">
+					<input type="text" class="form-control" id="edit_AdEndDate" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+                      </div>
                     </div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Minimum Salary</h5>
+						<div class="form-group">
+						<input type="text" class="form-control" id="edit_Job_Post_MinSalary" style="margin-top:10px;border-color:#787785;" disabled>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Maximum Salary</h5>
+					<div class="form-group">
+					<input type="text" class="form-control" id="edit_Job_Post_MaxSalary" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+                      </div>
+                    </div>
+					<!-- <div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Job description and requirements</h6>
+					<hr>
+					</div>
+					<h5 style="display: inline-block;">Experience Required</h5>
+					<div class="form-group">
+						<input type="text" class="form-control" id="edit_Job_Post_Exp" style="margin-top:10px;border-color:#787785;" disabled>
+					</div>
+					<h5 style="display: inline-block;">Job Description</h5>
+					<div class="form-group">
+						<textarea id="edit_Job_Post_Description" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Responsibilities</h5>
+					<div class="form-group">
+						<textarea id="edit_Job_Post_Responsibilities" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Benefits</h5>
+					<div class="form-group">
+						<textarea id="edit_Job_Post_Benefits" class="form-control" rows="5" disabled></textarea>
+					</div> -->
                         <div class="modal-footer">
-							<a class="updateCompanyBtn btn btn-primary" href="#" data-companyid="<?=$row['CompanyID'];?>"> Save changes</a>
+							<a class="updatejobBtn btn btn-primary" href="#" data-jobid="<?=$row['Job_Post_ID'];?>"> Save changes</a>
                         </div>
                     </div>
                 </div>
             </div>
     </div>
 	<!-- js -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
@@ -729,25 +873,31 @@ function confirmation()
                 if(res.status == 404) {
                     alert(res.message);
                 }else if(res.status == 200){
-                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
-                    $('#CompanyEmail').text(res.data.CompanyEmail);
-                    $('#CompanyName').text(res.data.CompanyName);
-					var phoneNumber = res.data.CompanyPhone;
-					if(isNaN(phoneNumber) || phoneNumber === null || phoneNumber === "")
-					{
-						phoneNumber = "-";
-					}
-					else{
-						phoneNumber = "60 - " + phoneNumber;
-					}
-                    $('#CompanyPhone').text(phoneNumber);
-                    $('#ContactPerson').text(res.data.ContactPerson);
-                    $('#CompanySize').text(res.data.CompanySize);
-                    $('#CompanyStatus').text(res.data.CompanyStatus);
-                    $('#RegistrationNo').text(res.data.RegistrationNo);
-                    $('#RegistrationDate').text(formattedDate);
+                    var startDate = moment(res.data.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
+					var endDate = moment(res.data.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#CompanyID ').text(res.data.CompanyID );
+					$('#Job_Post_ID ').text(job_id);
+                    $('#Job_Post_Title').text(res.data.Job_Post_Title);
+                    $('#Job_Post_Position').text(res.data.Job_Post_Position);
+					$('#Job_Post_Exp').text(res.data.Job_Post_Exp);
+					$('#Job_Post_MinSalary').text(res.data.Job_Post_MinSalary);
+					$('#Job_Post_MaxSalary').text(res.data.Job_Post_MaxSalary);
+					$('#Job_Post_Description').text(res.data.Job_Post_Description);
+					$('#AdStartDate').text(startDate);
+					$('#AdEndDate').text(endDate);
+					$('#Job_Post_Type').text(res.data.Job_Post_Type);
+					$('#job_status').text(res.data.job_status);
+					$('#Job_Post_Location').text(res.data.Job_Post_Location);
+					$('#Job_Post_Responsibilities').text(res.data.Job_Post_Responsibilities	);
+					$('#Job_Post_Benefits').text(res.data.Job_Post_Benefits);
+					$('#Main_Category_Name').text(res.data.Main_Category_Name);
+					$('#Sub_Category_Name').text(res.data.Sub_Category_Name);
 
-                    $('#view-company-modal').modal('show');
+					var jobLogoUrl = res.data.Job_Logo_Url;
+					var jobCoverUrl = res.data.Job_Cover_Url;
+					$('#Job_Cover_Url').attr('src', jobCoverUrl);
+					$('#Job_Logo_Url').attr('src', jobLogoUrl);
+                    $('#view-job-modal').modal('show');
                 }
             }
         });
@@ -768,37 +918,80 @@ function confirmation()
                 if(res.status == 404) {
                     alert(res.message);
                 }else if(res.status == 200){
-                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
-					$('#edit_companyid').prop('value', company_id);
-                    $('#edit_CompanyPhone').prop('value', res.data.CompanyEmail);
-                    $('#edit_CompanyName').prop('value', res.data.CompanyName);
-					var phoneNumber = res.data.CompanyPhone;
-					if(isNaN(phoneNumber) || phoneNumber === null || phoneNumber === "")
-					{
-						phoneNumber = "-";
-					}
-                    $('#edit_CompanyPhone').prop('value', phoneNumber);
-					$('#edit_ContactPerson').prop('value', res.data.ContactPerson);
-                    $('#edit_CompanySize').prop('value', res.data.CompanySize);
-                    $('#edit_RegistrationNo').prop('value', res.data.RegistrationNo);
-					$('#edit_RegistrationDate').prop('value', res.data.RegistrationDate);
-					$('#edit_RegistrationNo').prop('value', res.data.RegistrationNo);
-                    var companyStatusSelect = $('#edit_CompanyStatus');
-					companyStatusSelect.find('option').each(function() {
-						
-						if ($(this).val() === res.data.CompanyStatus) {
+                    var startDate = moment(res.data.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
+					var endDate = moment(res.data.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#edit_CompanyID ').prop('value',res.data.CompanyID );
+					$('#edit_Job_Post_ID ').prop('value',job_id);
+                    $('#edit_Job_Post_Title').prop('value',res.data.Job_Post_Title);
+                    $('#edit_Job_Post_Position').prop('value',res.data.Job_Post_Position);
+					$('#edit_Job_Post_Exp').prop('value',res.data.Job_Post_Exp);
+					$('#edit_Job_Post_MinSalary').prop('value',res.data.Job_Post_MinSalary);
+					$('#edit_Job_Post_MaxSalary').prop('value',res.data.Job_Post_MaxSalary);
+					$('#edit_Job_Post_Description').prop('value',res.data.Job_Post_Description);
+					$('#edit_AdStartDate').prop('value',startDate);
+					$('#edit_AdEndDate').prop('value',endDate);
+					$('#edit_Job_Post_Type').prop('value',res.data.Job_Post_Type);
+					// $('#edit_job_status')prop('value',res.data.job_status);
+					$('#edit_Job_Post_Location').prop('value',res.data.Job_Post_Location);
+					$('#edit_Job_Post_Responsibilities').prop('value',res.data.Job_Post_Responsibilities);
+					$('#edit_Job_Post_Benefits').prop('value',res.data.Job_Post_Benefits);
+					$('#edit_Main_Category_Name').prop('value',res.data.Main_Category_Name);
+					$('#edit_Sub_Category_Name').prop('value',res.data.Sub_Category_Name);
+
+					var jobStatusSelect = $('#edit_job_status');
+					jobStatusSelect.find('option').each(function() {
+						if ($(this).val() === res.data.job_status) {
 							$(this).prop('selected', true);
 						} else {
 							$(this).prop('selected', false);
 						}
 					});
-					$('#edit_CompanyStatus').selectpicker('refresh');
-                    $('#edit_RegistrationDate').prop('value', formattedDate);
+					$('#edit_job_status').selectpicker('refresh');
 
-                    $('#edit-company-modal').modal('show');
+					var jobLogoUrl = res.data.Job_Logo_Url;
+					var jobCoverUrl = res.data.Job_Cover_Url;
+					$('#edit_Job_Cover_Url').attr('src', jobCoverUrl);
+					$('#edit_Job_Logo_Url').attr('src', jobLogoUrl);
+
+                    $('#edit-job-modal').modal('show');
                 }
             }
         });
+        });
+    </script>
+	<!-- update -->
+	<script>
+        $(document).on('click', '.updatejobBtn', function () {
+        console.log("update click");
+        var job_id = $(this).data('jobid');
+		console.log($(this).data('jobid'));
+        var data = {
+            action: "updatejob",
+			job_id: $("#edit_Job_Post_ID").val(),
+            status: $("#edit_job_status").val(),
+        };
+		console.log(data);
+		swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
+        $.ajax({
+            type: "POST",
+            url: "view_job.php",
+          	async: true, 
+			data: data,
+            success: function (response) {
+                console.log(response);
+				swal("Success", response, "success").then(function() {
+					location.replace("joblist.php");
+				});
+            }
+        });
+	}
+    });
         });
     </script>
 </html>

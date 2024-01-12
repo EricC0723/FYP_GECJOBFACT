@@ -1,13 +1,27 @@
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
   $(document).ready(function () {
     var hasErrors = false;
+    console.log("add_admin");
     // Input event listener for first_name input
-    $('#first_name').on('input', function () {
+    $('#Fname').on('input', function () {
       validateInput($(this));
     });
 
     // Input event listener for last_name input
-    $('#last_name').on('input', function () {
+    $('#Lname').on('input', function () {
+      validateInput($(this));
+    });
+    $('#Lname').on('input', function () {
+      validateInput($(this));
+    });
+    $('#Lname').on('input', function () {
+      validateInput($(this));
+    });
+    $('#Lname').on('input', function () {
+      validateInput($(this));
+    });
+    $('#Lname').on('input', function () {
       validateInput($(this));
     });
 
@@ -50,7 +64,7 @@
         hasErrors = true;
         checkErrors();
       }
-      else if (!/^\d+$/.test(phoneNumber)) {
+      else if (!/^\d+$/.test(phoneNumber)){
         displayError(input, 'Phone number cannot contain letters.');
          hasErrors = true;
          checkErrors();
@@ -82,15 +96,15 @@
     function removeError(input) {
       input.next('.error-message').remove();
     }
-  //   function checkErrors() {
-  //   // Check if any error exists in any input
-  //   if ($('#first_name').next('.error-message').length ||
-  //       $('#last_name').next('.error-message').length ||
-  //       $('#phone').next('.error-message').length) {
-  //     $('#profile_submitbtn').prop('disabled', true);
-  //   } else {
-  //     $('#profile_submitbtn').prop('disabled', false);
-  //   }
-  // }
+    function checkErrors() {
+    // Check if any error exists in any input
+    if ($('#first_name').next('.error-message').length ||
+        $('#last_name').next('.error-message').length ||
+        $('#phone').next('.error-message').length) {
+      $('#profile_submitbtn').prop('disabled', true);
+    } else {
+      $('#profile_submitbtn').prop('disabled', false);
+    }
+  }
   });
 </script>

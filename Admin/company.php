@@ -480,26 +480,17 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
 							<div class="title">
-								<h4>User List</h4>
+								<h4>Company List</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">User</li>
+									<li class="breadcrumb-item active" aria-current="page">Company</li>
 								</ol>
 							</nav>
 						</div>
 						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
-							</div>
+							<button onclick="window.location.href='add_admin.php'"type="button" class="btn btn-primary">Add company</button>
 						</div>
 					</div>
 				</div>
@@ -644,13 +635,13 @@
 					  	<input type="hidden" class="form-control" id="edit_companyid" style="margin-top:10px;border-color:#787785;">
                         <h5 style="display: inline-block;">Company Name</h5>
                         <div class="form-group">
-                        <input type="text" class="form-control" id="edit_CompanyName" style="margin-top:10px;border-color:#787785;">
+                        <input type="text" class="form-control" id="edit_CompanyName" style="margin-top:10px;border-color:#787785;"disabled>
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-12">
                         <h5 style="display: inline-block;">Contact Person</h5>
                         <div class="form-group">
-                        <input type="text" class="form-control" id="edit_ContactPerson" style="margin-top:10px;border-color:#787785;">
+                        <input type="text" class="form-control" id="edit_ContactPerson" style="margin-top:10px;border-color:#787785;"disabled>
                         </div>
                       </div>
                     </div>
@@ -808,6 +799,13 @@
             status: $("#edit_CompanyStatus").val(),
         };
 		console.log(data);
+		swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
         $.ajax({
             type: "POST",
             url: "view_company.php",
@@ -817,9 +815,11 @@
                 console.log(response);
 				swal("Success", response, "success").then(function() {
 					location.replace("company.php");
-          });
+				});
             }
         });
+	}
+    });
         });
     </script>
 </html>

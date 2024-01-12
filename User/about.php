@@ -1,4 +1,7 @@
-
+<?php
+  session_start();
+  include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -13,10 +16,8 @@
     <link rel="stylesheet" href="fonts/line-icons/style.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/animate.min.css">
-    <link rel="stylesheet" href="css/quill.snow.css">
-    
+    <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
 
-    <!-- MAIN CSS -->
     <link rel="stylesheet" href="css/style.css">    
   </head>
   <body id="top">
@@ -50,7 +51,7 @@
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link">Home</a></li>
-              <li><a href="about.html" class="active">About</a></li>
+              <li><a href="about.php" class="active">About</a></li>
               <li class="has-children">
                 <a href="job-listings.php">Job Listings</a>
                 <ul class="dropdown">
@@ -80,18 +81,18 @@
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
           <div class="ml-auto">
-           <?php 
+          <?php 
               if (isset($_SESSION['User_ID'])) {
                 ?>
-                <!-- <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span><?php echo $_SESSION['Company_ID'];?></a> -->
+                <!-- <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span><?php echo $_SESSION['First_Name'];?></a> -->
                 <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
                   <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
-                    <span class="user-name"><?php echo $_SESSION['User_name'];?></span>
+                    <span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
+                  <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
                     <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>

@@ -490,16 +490,7 @@
 							</nav>
 						</div>
 						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
-							</div>
+							<button onclick="window.location.href='add_admin.php'"type="button" class="btn btn-primary">Add user</button>
 						</div>
 					</div>
 				</div>
@@ -647,13 +638,13 @@
 					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
                         <h5 style="display: inline-block;">First Name</h5>
                         <div class="form-group">
-                        <input type="text" class="form-control" id="edit_FirstName" style="margin-top:10px;border-color:#787785;">
+                        <input type="text" class="form-control" id="edit_FirstName" style="margin-top:10px;border-color:#787785;"disabled>
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-12">
                         <h5 style="display: inline-block;">Last Name</h5>
                         <div class="form-group">
-                        <input type="text" class="form-control" id="edit_LastName" style="margin-top:10px;border-color:#787785;">
+                        <input type="text" class="form-control" id="edit_LastName" style="margin-top:10px;border-color:#787785;"disabled>
                         </div>
                       </div>
                     </div>
@@ -667,10 +658,10 @@
                     </div>
 					<h5 style="display: inline-block;">Phone number</h5>
                         <div class="form-group">
-                        <input type="text" class="form-control" id="edit_Phone" style="margin-top:10px;border-color:#787785;">
+                        <input type="text" class="form-control" id="edit_Phone" style="margin-top:10px;border-color:#787785;"disabled>
                     </div>
 					<h5 style="display: inline-block;">Location</h5>
-					<select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_Location" id="edit_Location"style="max-height:100px;">
+					<select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_Location" id="edit_Location"style="max-height:100px;"disabled>
                     <?php
                     if(mysqli_num_rows($location_result) > 0)
                     {
@@ -828,6 +819,13 @@
             status: $("#edit_UserStatus").val(),
         };
 		console.log(data);
+		swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
         $.ajax({
             type: "POST",
             url: "view_user.php",
@@ -840,9 +838,11 @@
           });
             }
         });
+	}
+    });
         });
     </script>
-	<script>
+	<!-- <script>
         $(document).on('click', '.updateUserBtn', function () {
         console.log("update click");
         // var user_id = $(this).data('userid');
@@ -869,5 +869,5 @@
             }
         });
         });
-    </script>
+    </script> -->
 </html>

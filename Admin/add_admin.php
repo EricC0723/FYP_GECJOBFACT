@@ -1,7 +1,11 @@
+<?php
+	session_start();
+	include("C:/xampp/htdocs/FYP/dataconnection.php");
+	require 'VeridationAdminPage/add_admin_veridate.php';
+?>
 <!DOCTYPE html>
 <html>
 <head>
-	<?php include("C:/xampp/htdocs/FYP/dataconnection.php"); ?>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
 	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
@@ -481,14 +485,15 @@
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">DataTable</li>
+									<li class="breadcrumb-item"><a href="admin.php">Admin</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Add admin</li>
 								</ol>
 							</nav>
 						</div>
 						<div class="col-md-6 col-sm-12 text-right">
 							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
+								<a class="btn btn-primary" href="admin.php" role="button" data-toggle="dropdown">
+									Back to Admin
 								</a>
 								<div class="dropdown-menu dropdown-menu-right">
 									<a class="dropdown-item" href="#">Export List</a>
@@ -499,55 +504,91 @@
 						</div>
 					</div>
 				</div>
-				<!-- Simple Datatable start -->
+				<?php 
+					$query = "SELECT * FROM admins";//WHERE UserStatus IN ('Active', 'Blocked')
+					$result = mysqli_query($connect,$query);
+					$location_query = "SELECT * FROM job_location";
+					$location_result = mysqli_query($connect,$location_query);
+				?>
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h4 class="text-blue h4">Data Table Simple</h4>
-						<p class="mb-0">you can find more options <a class="text-primary" href="https://datatables.net/" target="_blank">Click Here</a></p>
-						<button style="margin-left:1550px;"type="button" class="btn btn-outline-primary">Add</button>
-						<h1 style="margin: 100px 100px 0px 100px;">Add Admin </h1>
+						<h1 style="">Add Admin </h1>
    					 	<div style="margin: 0px 100px 0px 100px;" class="content">
-							<form action="" class="form" method="post">
-							<div class="col-md-12">
-								<label>First Name</label>
-								<input type="text" placeholder="Enter first name" required name="Fname" class="form-control" value=""/>
+							<form action="" class="form" method="post" style="margin-top:100px;">
+					<div class="group-container">
+						<hr>
+						<h6 class="group-title" style="text-align:center;color:grey;">Admin information</h6>
+						<hr>
+					</div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
+                        	<h5 style="display: inline-block;">First Name</h5>
+                        	<div class="form-group">
+                        		<input type="text" placeholder="Enter first name" name="Fname" id="Fname"class="form-control" value=""/>
+                        	</div>
+                      </div>
+						<div class="col-md-6 col-sm-12">
+							<h5 style="display: inline-block;">Last Name</h5>
+							<div class="form-group">
+								<input type="text" placeholder="Enter last name" name="Lname" id="Lname"class="form-control" value=""/>
 							</div>
-
-							<div class="col-md-12">
-								<label>Last Name</label>
-								<input type="text" placeholder="Enter last name" required name="Lname" class="form-control" value=""/>
+						</div>
+                    </div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-2 col-sm-12">
+					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
+                        	<h5 style="display: inline-block;">Phone</h5>
+                        	<div class="form-group">
+                        		<input type="text" placeholder=""class="form-control" value="60"disabled/>
+                        	</div>
+                      </div>
+						<div class="col-md-10 col-sm-12">
+							<h5 style="display: inline-block;color:white;">1</h5>
+							<div class="form-group">
+								<input type="text" placeholder="Enter phone number" name="phone" id="phone"class="form-control" value=""/>
 							</div>
-
-							<div class="col-md-12">
-								<label>Email</label>
-								<input type="text" placeholder="Enter email" name="email" class="form-control" value=""/>
-							</div>              
-
-							<div class="col-md-12">
-								<label>Password</label>
-								<input type="text" placeholder="Enter password"  name="password" class="form-control" value=""/>
-							</div>  
-
-							<div class="col-md-12">
-								<label>Your Street Address</label>
-								<input type="text" placeholder="Enter address"  name="address" class="form-control" value=""/>
-							</div> 
-
-							<div class="col-md-12">
-								<label>Your City</label>
-								<input type="text" placeholder="Enter city"  name="city" class="form-control" value=""/>
-							</div> 
-
-							<div class="col-md-12">
-								<label>Your Postcode</label>
-								<input type="text" placeholder="Enter postcode"  name="postcode" class="form-control" value=""/>
-							</div> 
-
-							<div class="col-md-12">
-								<label>Your State</label>
-								<input type="text" placeholder="Enter state"  name="state" class="form-control" value=""/>
-							</div> 
-
+						</div>
+                    </div>
+						<h5 style="display: inline-block;">Street Address</h5>
+						<div class="form-group">
+						<input type="text" placeholder="Enter address"  name="address" id="address"class="form-control" value=""/>
+						</div>
+					<h5 style="display: inline-block;">Postcode</h5>
+						<div class="form-group">
+							<input type="text" placeholder="Enter postcode"  name="postcode" id="postcode"class="form-control" value=""/>
+						</div>
+					<h5 style="display: inline-block;">State and City</h5>
+					<select class="selectpicker form-group" data-size="5" data-width="100%" name="state" id="state"style="max-height:100px;">
+                    <?php
+                    if(mysqli_num_rows($location_result) > 0)
+                    {
+                      while($row = mysqli_fetch_assoc($location_result))
+                      {
+                    ?>
+                     <option value="<?php echo $row["Job_Location_Name"];?>"><?php echo $row["Job_Location_Name"]; ?></option>
+                    <?php 
+                      }
+                    }
+                    ?>
+                  </select>
+				  <div class="group-container" style="margin-top:50px;">
+						<hr>
+						<h6 class="group-title" style="text-align:center;color:grey;">Admin setting</h6>
+						<hr>
+					</div>
+					<h5 style="display: inline-block;">Email</h5>
+						<div class="form-group">
+							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value=""/>
+						</div>
+					<h5 style="display: inline-block;">Password</h5>
+						<div class="form-group">
+							<input type="text" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
+						</div>         
+					<h5 style="display: inline-block;">Comfirm password</h5>
+						<div class="form-group">
+							<input type="text" placeholder="Enter password"  name="c_password" id="c_password"class="form-control" value=""/>
+						</div>  
 							<div class="mt-5 text-center"><button class="btn btn-primary profile-button" name="addbtn" type="submit">Add admin</button></div>
 							</form>
 							</div>
@@ -556,6 +597,26 @@
 					</div>
 					</div>
 </body>
+<!-- js -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="vendors/scripts/core.js"></script>
+	<script src="vendors/scripts/script.min.js"></script>
+	<script src="vendors/scripts/process.js"></script>
+	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+	<!-- Datatable Setting js -->
+	<script src="vendors/scripts/datatable-setting.js"></script></body>
 </html>
 
 <?php
