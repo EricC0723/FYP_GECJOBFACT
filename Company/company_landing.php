@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 unset($_SESSION['job_post_ID']);
+
+$CompanyID = null;
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    // Prepare the SQL statement to count the total number of jobs
+    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $resultc = mysqli_query($connect, $sqlc);
+    $rowc = mysqli_fetch_assoc($resultc);
+    $totalJobs = $rowc['total'];
+
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
 ?>
+
 <html lang="en">
 
 <head>
@@ -35,8 +50,8 @@ unset($_SESSION['job_post_ID']);
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                                     focusable="false" fill="currentColor" width="16" height="16"
                                     class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
@@ -50,15 +65,15 @@ unset($_SESSION['job_post_ID']);
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
                             </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
@@ -100,7 +115,7 @@ unset($_SESSION['job_post_ID']);
                                 <div>
                                     <h3 class="landing_sentence1">
                                         Hi
-                                        <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                        <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : ''; ?>
                                     </h3>
                                 </div>
                                 <div style="padding-top:10px;"><span class="landing_sentence2">You're in the right place to find
@@ -126,7 +141,7 @@ unset($_SESSION['job_post_ID']);
                                 <div>
                                     <h3 class="landing_sentence1">
                                         Hi
-                                        <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                        <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : ''; ?>
                                     </h3>
                                 </div>
                                 <div style="padding-top:10px;"><span class="landing_sentence2">You're in the right place to find
@@ -440,8 +455,7 @@ unset($_SESSION['job_post_ID']);
                         }
 
                         // Free the result set and close the connection
-                        mysqli_free_result($result);
-                        mysqli_close($connect);
+                    
                         ?>
                     </tbody>
                 </table>
@@ -462,36 +476,62 @@ unset($_SESSION['job_post_ID']);
     <script src="post-job.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 
 </html>
 <?php
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
 
-if (!isset($_SESSION['companyData'])) {
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({
             title: "Error",
             text: "You haven\'t logged in",
             icon: "error",
-            backdrop: `lightgrey`,        
+            backdrop: `lightgrey`,
         }).then(function () {
-                window.location.href = "company_login.php";
-            });
+            window.location.href = "company_login.php";
+        });
     </script>
     <?php
     exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    // Show swal box
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
+    <?php
+} else if ($row['CompanyStatus'] == 'Block') {
+    // Show swal box
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Your account has been blocked.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
+    <?php
 }
+?>
 
-$CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
-}
-
-// Prepare the SQL statement to count the total number of jobs
-$sql = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
-$result = mysqli_query($connect, $sql);
-$row = mysqli_fetch_assoc($result);
-$totalJobs = $row['total'];
+<?php
+mysqli_free_result($result);
+mysqli_close($connect);
 ?>

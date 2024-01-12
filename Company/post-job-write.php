@@ -14,12 +14,14 @@ if (isset($_SESSION['job_post_ID'])) {
     echo "<script>
         var jobPostData = " . json_encode($row) . ";
         </script>";
-
 }
 
 $CompanyID = null;
-if (isset($_SESSION['companyData']['CompanyID'])) {
-    $CompanyID = $_SESSION['companyData']['CompanyID'];
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
 }
 
 
@@ -131,8 +133,8 @@ if (isset($_POST['submitbtn'])) {
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                                     focusable="false" fill="currentColor" width="16" height="16"
                                     class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
                                     id="dropdown-icon"
@@ -146,15 +148,15 @@ if (isset($_POST['submitbtn'])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                                <?php echo isset($_SESSION['companyData']['CompanyName']) ? $_SESSION['companyData']['CompanyName'] : 'User Profile'; ?>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
                             </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                    <?php echo isset($_SESSION['companyData']['ContactPerson']) ? $_SESSION['companyData']['ContactPerson'] : ''; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#accounts" class="dropdown-link">Accounts
+                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
@@ -574,7 +576,14 @@ if (isset($_POST['submitbtn'])) {
 </html>
 
 <?php
-if (!isset($_SESSION['companyData'])) {
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
+if (!isset($_SESSION['companyID'])) {
     ?>
     <script>
         Swal.fire({
@@ -588,6 +597,36 @@ if (!isset($_SESSION['companyData'])) {
     </script>
     <?php
     exit;
+} else if ($row['CompanyStatus'] == 'Verify') {
+    // Show swal box
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
+    <?php
+} else if ($row['CompanyStatus'] == 'Block') {
+    // Show swal box
+    ?>
+            <script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Your account has been blocked.',
+                    icon: 'error',
+                }).then(function () {
+                    window.location = "company_signout.php";
+                });
+            </script>
+    <?php
 }
 ?>
 
+<?php
+mysqli_free_result($result);
+mysqli_close($connect);
+?>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 require 'vendor/autoload.php'; // Add this line to include PHPMailer

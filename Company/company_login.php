@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
+
+session_start(); // Start the session at the beginning
+session_destroy();
 session_start(); // Start the session at the beginning
 
 ?>
-
 
 <html lang="en">
 
@@ -141,7 +141,9 @@ session_start(); // Start the session at the beginning
             </form>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <script>
@@ -240,7 +242,6 @@ session_start(); // Start the session at the beginning
 
 </html>
 
-
 <?php
 
 if (isset($_GET["login_btn"])) {
@@ -297,7 +298,7 @@ if (isset($_GET["login_btn"])) {
                             }
                         });
                     }
-                    
+
                     Swal.fire({
                         title: "Error",
                         text: "Please verify your email first.",
@@ -321,7 +322,7 @@ if (isset($_GET["login_btn"])) {
                         }
                     });
 
-                    
+
                 </script>
                 <?php
             } else if ($row['CompanyStatus'] == 'Blocked') {
@@ -335,7 +336,7 @@ if (isset($_GET["login_btn"])) {
                     </script>
                 <?php
             } else if ($row['CompanyStatus'] == 'Active') {
-                $_SESSION['companyData'] = $row; // Store the entire row in a session variable
+                $_SESSION['companyID'] = $row['CompanyID']; // Store the CompanyID in a session variable
                 ?>
                         <script>
                             Swal.fire({
