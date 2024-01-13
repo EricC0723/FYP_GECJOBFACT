@@ -1,3 +1,11 @@
+<?php	
+require 'VeridationAdminPage/edit_admin_veridate.php';
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+$query = "SELECT * FROM  admins";
+$result = mysqli_query($connect,$query);
+$location_query = "SELECT * FROM job_location";
+$location_result = mysqli_query($connect,$location_query);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -164,7 +172,7 @@ function confirmation()
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo $row["AdminPicture"]; ?>" alt="">
 						</span>
 						<span class="user-name">Ross C. Lopez</span>
 					</a>
@@ -509,7 +517,7 @@ function confirmation()
 								<tr>
 									<th class="table-plus datatable-nosort">ID</th>
 									<th>First Name</th>
-									<th>Last Name</th>
+									<th>Phone</th>
 									<th>Email</th>
 									<th>Admin Type</th>
 									<th>Admin Status</th>	
@@ -518,9 +526,9 @@ function confirmation()
 							</thead>
 							<tbody>
 							<?php	
-									include("C:/xampp/htdocs/FYP/dataconnection.php");
-									$query = "SELECT * FROM  admins";
-									$result = mysqli_query($connect,$query);
+									// include("C:/xampp/htdocs/FYP/dataconnection.php");
+									// $query = "SELECT * FROM  admins";
+									// $result = mysqli_query($connect,$query);
 
 									if(mysqli_num_rows($result) > 0)
 									{
@@ -530,7 +538,7 @@ function confirmation()
 											<tr>
 												<td class="table-plus"><?php echo $row["AdminID"]; ?></td>
 												<td><?php echo $row["FirstName"]; ?></td>
-												<td><?php echo $row["LastName"]; ?></td>
+												<td><a href="https://api.whatsapp.com/send?phone=60<?php echo $row["AdminPhone"]; ?>"><?php echo $row["AdminPhone"]; ?></a></td>
 												<td><?php echo $row["Email"]; ?></td>
 												<td><?php echo $row["AdminType"]?></td>
 												<td>
@@ -550,9 +558,8 @@ function confirmation()
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="dropdown-item" href="adminProfileEdit.php?edit&adminID=<?php echo $row['AdminID'];?>"><i class="dw dw-edit2"></i> Edit</a>
-															<a class="dropdown-item" href="admin.php?delete&adminID=<?php echo $row['AdminID'];?>"><i class="dw dw-delete-3"></i> Delete</a>
-														</div>
+															<a class="viewAdminBtn dropdown-item" href="#" data-adminid="<?=$row['AdminID'];?>"><i class="dw dw-eye"></i> View</a>
+															<a class="editAdminBtn dropdown-item" href="#" data-adminid="<?=$row['AdminID'];?>"><i class="dw dw-edit2"></i> Edit</a>														</div>
 													</div>
 												</td>
 											</tr>
@@ -564,7 +571,196 @@ function confirmation()
 						</table>
 					</div>
 				</div>
-				<!-- Simple Datatable End --> 	
+				<!-- Simple Datatable End -->
+				<!-- View modal -->
+				<div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="view-admin-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="">View admin data</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+						<div class="group-container">
+							<hr>
+							<h6 class="group-title" style="text-align:center;color:grey;">Basic admin Information</h6>
+							<hr>
+						</div>
+						<h5 style="display: inline-block;">Profile picture</h5>
+                        <div class="form-group">
+                        	<img id="ProfilePicture"src="" alt="" style="width:200px;height:230px;border-radius:20px;">
+                        </div>
+                        <div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+                        <h5 style="display: inline-block;">First Name</h5>
+                        <div class="form-group">
+                        <p id="FirstName" class="form-control"></p>
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+                        <h5 style="display: inline-block;">Last Name</h5>
+                        <div class="form-group">
+                        <p id="LastName" class="form-control"></p>
+                        </div>
+                      </div>
+                    </div>
+					<h5 style="display: inline-block;">Phone number</h5>
+                    <div class="form-group">
+                    <p id="Phone" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Date of Birth</h5>
+                        <div class="form-group">
+                        <p id="DateOfBirth" class="form-control"></p>
+                        </div>
+					<h5 style="display: inline-block;">State and City</h5>
+                    <div class="form-group">
+                    <p id="StateAndCity" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Street Address</h5>
+                    <div class="form-group">
+                    <p id="StreetAddress" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Postal Code</h5>
+                    <div class="form-group">
+                    <p id="PostalCode" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Registration Date</h5>
+                    <div class="form-group">
+                    <p id="RegistrationDate" class="form-control"></p>
+                    </div>
+					<div class="group-container">
+						<hr>
+						<h6 class="group-title" style="text-align:center;color:grey;">Setting Information</h6>
+						<hr>
+					</div>
+                    <h5 style="display: inline-block;">Email</h5>
+                        <div class="form-group">
+                        <p id="Email" class="form-control"></p>
+                        </div>
+                    <h5 style="display: inline-block;">Password</h5>
+                    <div class="form-group">
+                    	<p id="Password" class="form-control"></p>
+                    </div>
+					
+                    <h5 style="display: inline-block;">Admin Status</h5>
+                    <div class="form-group">
+                    <p id="AdminStatus" class="form-control"></p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+	<!-- Edit modal -->
+	<div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="edit-admin-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="">View admin data</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+						<div class="group-container">
+							<hr>
+						<form id="edit_admin_form" enctype="multipart/form-data">
+							<h6 class="group-title" style="text-align:center;color:grey;">Basic admin Information</h6>
+							<hr>
+						</div>
+						<h5 style="display: inline-block;">Profile picture</h5>
+						<div class="form-group">
+						<label for="profile_pictur" id="profile_picture_label">
+							<img id="profile_picture_preview" src="adminPicture/default.jpeg"style="width: 200px; height: 230px; border-radius: 20px; cursor: pointer;">
+						</label>
+						<input type="file" id="edit_profile_picture" class="form-control-file form-control height-auto" accept="image/*" style="display: none;">
+					</div>
+                        <div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+                        <h5 style="display: inline-block;">First Name</h5>
+                        <div class="form-group">
+							<input type="hidden" class="form-control" id="AdminID" style="margin-top:10px;border-color:#787785;">
+							<input type="text" class="form-control" id="edit_FirstName" style="margin-top:10px;border-color:#787785;">
+                        </div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+                        <h5 style="display: inline-block;">Last Name</h5>
+                        <div class="form-group">
+                        	<input type="text" class="form-control" id="edit_LastName" style="margin-top:10px;border-color:#787785;">
+                        </div>
+                      </div>
+                    </div>
+					<h5 style="display: inline-block;">Phone number</h5>
+                    <div class="form-group">
+						<input type="text" class="form-control" id="edit_Phone" style="margin-top:10px;border-color:#787785;">
+					</div>
+					<h5 style="display: inline-block;">Date of Birth</h5>
+                        <div class="form-group">
+						<input type="text" class="form-control" id="edit_DateOfBirth" style="margin-top:10px;border-color:#787785;">
+                        </div>
+					<h5 style="display: inline-block;">State and City</h5>
+                    <select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_StateAndCity" id="edit_StateAndCity"style="max-height:100px;">
+                    <?php
+                    if(mysqli_num_rows($location_result) > 0)
+                    {
+                      while($location_row = mysqli_fetch_assoc($location_result))
+                      {
+                    ?>
+                     <option value="<?php echo $location_row["Job_Location_Name"];?>"><?php echo $location_row["Job_Location_Name"]; ?></option>
+                    <?php 
+                      }
+                    }
+                    ?>
+                  </select>
+					<h5 style="display: inline-block;">Street Address</h5>
+                    <div class="form-group">
+						<input type="text" class="form-control" id="edit_StreetAddress" style="margin-top:10px;border-color:#787785;">
+					</div>
+					<h5 style="display: inline-block;">Postal Code</h5>
+                    <div class="form-group">
+						<input type="text" class="form-control" id="edit_PostalCode" style="margin-top:10px;border-color:#787785;">
+					</div>
+					<h5 style="display: inline-block;">Registration Date</h5>
+                    <div class="form-group">
+						<input type="text" class="form-control" id="edit_RegistrationDate" style="margin-top:10px;border-color:#787785;"disabled>
+                    </div>
+					<div class="group-container">
+						<hr>
+						<h6 class="group-title" style="text-align:center;color:grey;">Setting Information</h6>
+						<hr>
+					</div>
+                    <h5 style="display: inline-block;">Email</h5>
+                        <div class="form-group">
+							<input type="text" class="form-control" id="edit_Email" style="margin-top:10px;border-color:#787785;" disabled>
+                        </div>
+                    <h5 style="display: inline-block;">Password</h5>
+                    <div class="form-group">
+						<input type="text" class="form-control" id="edit_Password" style="margin-top:10px;border-color:#787785;">
+                    </div>
+                    <h5 style="display: inline-block;">Admin Status</h5>
+                    <div class="form-group">
+                    <select class="selectpicker form-control" name="edit_AdminStatus" id="edit_AdminStatus" style="width: 100%; height: 38px;">
+							<option value="Active">Active</option>
+							<option value="Blocked" >Blocked</option>
+							<option value="Closed" >Closed</option>
+					</select>
+                    </div>
+					<h5 style="display: inline-block;">Admin Type</h5>
+                    <div class="form-group">
+                    <select class="selectpicker form-control" name="edit_AdminType" id="edit_AdminType" style="width: 100%; height: 38px;">
+							<option value="normal admin">normal admin</option>
+							<option value="super admin" >super admin</option>
+					</select>
+                    </div>
+					<div class="modal-footer">
+							<a class="updateAdminBtn btn btn-primary" id="editbtn"style="color:white;"> Save changes</a>
+                        </div>
+                    </div>
+                </div>
+			</form>
+            </div>
+            </div>
+    </div>
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
 			</div>
@@ -589,5 +785,126 @@ function confirmation()
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<!-- View User -->
+    <script>
+        $(document).on('click', '.viewAdminBtn', function () {
+        console.log("view click");
+        var admin_id = $(this).data('adminid');
+        console.log("Admin ID : "+admin_id);
+        $.ajax({
+            type: "GET",
+            url: "view_admin.php?admin_id=" + admin_id,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
+                    $('#FirstName').text(res.data.FirstName);
+                    $('#LastName').text(res.data.LastName);
+					var phoneNumber = res.data.AdminPhone;
+                    $('#Phone').text(phoneNumber);
+                    $('#Email').text(res.data.Email);
+                    $('#Password').text(res.data.Password);
+                    $('#AdminStatus').text(res.data.AdminStatus);
+                    $('#StreetAddress').text(res.data.StreetAddress);
+					$('#StateAndCity').text(res.data.StateAndCity);
+					$('#PostalCode').text(res.data.PostalCode);
+					$('#AdminType').text(res.data.AdminType);
+					$('#DateOfBirth').text(res.data.DateOfBirth);
+                    $('#RegistrationDate').text(formattedDate);
+					var profilePictureUrl = res.data.AdminPicture;
+        			$('#ProfilePicture').attr('src', profilePictureUrl);
+                    $('#view-admin-modal').modal('show');
+                }
+            }
+        });
+        });
+    </script>
+	<!-- Edit -->
+    <script>
+        $(document).on('click', '.editAdminBtn', function () {
+        console.log("view click");
+        var admin_id = $(this).data('adminid');
+        console.log("Admin ID : "+admin_id);
+        $.ajax({
+            type: "GET",
+            url: "view_admin.php?admin_id=" + admin_id,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#AdminID').prop('value',res.data.AdminID);
+                    $('#edit_FirstName').prop('value',res.data.FirstName);
+                    $('#edit_LastName').prop('value',res.data.LastName);
+					var phoneNumber = res.data.AdminPhone;
+                    $('#edit_Phone').prop('value',phoneNumber);
+                    $('#edit_Email').prop('value',res.data.Email);
+                    $('#edit_Password').prop('value',res.data.Password);             
+                    $('#edit_StreetAddress').prop('value',res.data.StreetAddress);
+					var locationSelect = $('#edit_StateAndCity');
+					locationSelect.find('option').each(function() {
+						if ($(this).val() === res.data.StateAndCity) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_StateAndCity').selectpicker('refresh');
+					$('#edit_PostalCode').prop('value',res.data.PostalCode);
+					$('#edit_AdminType').prop('value',res.data.AdminType);
+					$('#edit_DateOfBirth').prop('value',res.data.DateOfBirth);
+                    $('#edit_RegistrationDate').prop('value',formattedDate);
+					var profilePictureUrl = res.data.AdminPicture;
+					$('#profile_picture_preview').attr('src', profilePictureUrl);
+
+					// var profilePictureUrl = res.data.AdminPicture;
+					// var img = $('<img>').attr('src', profilePictureUrl).css('width', '200px').css('height', '200px').css('border-radius', '20px');
+					
+					// $('.form-group').append(img);
+					var adminTypeSelect = $('#edit_AdminType');
+					adminTypeSelect.find('option').each(function() {
+						if ($(this).val() === res.data.AdminStatus) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_AdminType').selectpicker('refresh');
+
+					var adminStatusSelect = $('#edit_AdminStatus');
+					adminStatusSelect.find('option').each(function() {
+						if ($(this).val() === res.data.AdminStatus) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_AdminStatus').selectpicker('refresh');
+
+                    $('#edit-admin-modal').modal('show');
+                }
+            }
+        });
+        });
+    </script>
+	<script>
+    $(document).ready(function () {
+    // 确保只绑定一次
+    $('#edit_profile_picture').off('change').on('change', function () {
+        var input = this;
+        var url = URL.createObjectURL(input.files[0]);
+        $('#profile_picture_preview').attr('src', url);
+    });
+
+    $('#profile_picture_label').off('click').on('click', function () {
+        $('#edit_profile_picture').click();
+    });
+});
+</script>
 </html>
 

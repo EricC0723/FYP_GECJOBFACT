@@ -527,7 +527,7 @@
 												<td class="table-plus"><?php echo $row["CompanyID"]; ?></td>
 												<td><?php echo $row["CompanyName"]; ?></td>
 												<td><?php echo $row["ContactPerson"]; ?></td>
-												<td><a href="https://api.whatsapp.com/send?phone=60<?php echo $row["CompanyPhone"]; ?>"><?php echo $row["CompanyPhone"]; ?></a></td>
+												<td><a target="_blank" href="https://api.whatsapp.com/send?phone=60<?php echo $row["CompanyPhone"]; ?>"><?php echo $row["CompanyPhone"]; ?></a></td>
 												<td>
 												<?php
                                                 if($row["CompanyStatus"] == 'Blocked'){

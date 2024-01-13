@@ -492,7 +492,7 @@
 					</div>
 				</div>
 				<?php 
-					$query = "SELECT * FROM admins";//WHERE UserStatus IN ('Active', 'Blocked')
+					$query = "SELECT * FROM admins";
 					$result = mysqli_query($connect,$query);
 					$location_query = "SELECT * FROM job_location";
 					$location_result = mysqli_query($connect,$location_query);
@@ -508,9 +508,12 @@
 						<hr>
 					</div>
 					<h5 style="display: inline-block;">Admin profile picture</h5>
-						<div class="form-group">
-							<input type="file" id="profile_picture" id="profile_picture" class="form-control-file form-control height-auto" accept="image/*">
-						</div>
+					<div class="form-group">
+						<label for="profile_pictur" id="profile_picture_label">
+							<img id="profile_picture_preview" src="adminPicture/default.jpeg"style="width: 200px; height: 230px; border-radius: 20px; cursor: pointer;">
+						</label>
+						<input type="file" id="profile_picture" class="form-control-file form-control height-auto" accept="image/*" style="display: none;">
+					</div>
 					<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
 					  
@@ -620,6 +623,20 @@
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<script>
+    $(document).ready(function () {
+    // 确保只绑定一次
+    $('#profile_picture').off('change').on('change', function () {
+        var input = this;
+        var url = URL.createObjectURL(input.files[0]);
+        $('#profile_picture_preview').attr('src', url);
+    });
+
+    $('#profile_picture_label').off('click').on('click', function () {
+        $('#profile_picture').click();
+    });
+});
+</script>
 </html>
 
 

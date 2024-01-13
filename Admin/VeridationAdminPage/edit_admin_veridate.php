@@ -6,45 +6,49 @@
     var hasErrors = false;
     console.log("add_admin");
     // Input event listener for first_name input
-    $('#Fname').on('input', function () {
+    $('#edit_FirstName').on('input', function () {
       validateInput($(this));
     });
     // Input event listener for last_name input
-    $('#Lname').on('input', function () {
+    $('#edit_LastName').on('input', function () {
       validateInput($(this));
     });
-    $('#date_of_birth').on('input', function () {
+    $('#edit_DateOfBirth').on('input', function () {
       validateDateOfBirth($(this));
     });
-    $('#address').on('input', function () {
+    $('#edit_StateAndCity').on('input', function () {
+      validateInput($(this));
+    });
+    $('#edit_StreetAddress').on('input', function () {
       validateAddress($(this));
     });
-    $('#postcode').on('input', function () {
-      validatePostCode($(this));
+    $('#edit_PostalCode').on('input', function () {
+        validatePostCode($(this));
     });
-    $('#email').on('input', function () {
-        validateEmail($(this));
-    });
-    $('#password').on('input', function () {
+    // $('#edit_Email').on('input', function () {
+    //     validateEmail($(this));
+    // });
+    $('#edit_Password').on('input', function () {
         validatePassword($(this));
     });
     $('#c_password').on('input', function () {
         validateConfirmPassword($(this), $('#password').val());
     });
-    $('#phone').on('input', function () {
+    $('#edit_Phone').on('input', function () {
       validatePhoneNumber($(this));
     });
-    $('#addbtn').on('click', function (event) {
+    $('#editbtn').on('click', function (event) {
     var hasErrors = false;
-    validateInput($('#Fname'));
-    validateInput($('#Lname'));
-    validateDateOfBirth($('#date_of_birth'));
-    validateAddress($('#address'));
-    validatePostCode($('#postcode'));
-    validateEmail($('#email'));
-    validatePhoneNumber($('#phone'));
-    validatePassword($('#password'));
-    validateConfirmPassword($('#c_password'), $('#password').val());
+    validateInput($('#edit_FirstName'));
+    validateInput($('#edit_LastName'));
+    validateDateOfBirth($('#edit_DateOfBirth'));
+    validateAddress($('#edit_StreetAddress'));
+    validateInput($('#edit_StateAndCity'));
+    validatePostCode($('#edit_PostalCode'));
+    // validateEmail($('#edit_Email'));
+    validatePhoneNumber($('#edit_Phone'));
+    validatePassword($('#edit_Password'));
+    // validateConfirmPassword($('#c_password'), $('#password').val());
 
     if ($('.error-message').length > 0) {
         hasErrors = true;
@@ -57,11 +61,10 @@
         console.log('Insert action');
         insertData();
       }
-    });
-    function validateDateOfBirth(input) {
+  });
+  function validateDateOfBirth(input) {
             var value = input.val();
             var validMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
             if (value === "") {
                 displayError(input, 'Required field');
             }
@@ -76,28 +79,6 @@
             removeError(input);
         }
     }
-    }
-    function validateAddress(input) {
-      var value = input.val();
-      if(value ==="")
-      {
-        displayError(input, 'Required field');
-      }
-      else {
-        removeError(input);
-      }
-    }
-    function validatePostCode(input) {
-      var value = input.val();
-      if(value ==="")
-      {
-        displayError(input, 'Required field');
-      }
-      else if (/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
-        displayError(input, 'Only number are allowed.');
-      } else {
-        removeError(input);
-      }
     }
     // Function to validate general input (first_name, last_name)
     function validateEmail(input) {
@@ -168,7 +149,28 @@
               });
           });
       }
-
+      function validatePostCode(input) {
+      var value = input.val();
+      if(value ==="")
+      {
+        displayError(input, 'Required field');
+      }
+      else if (/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
+        displayError(input, 'Only number are allowed.');
+      } else {
+        removeError(input);
+      }
+    }
+    function validateAddress(input) {
+      var value = input.val();
+      if(value ==="")
+      {
+        displayError(input, 'Required field');
+      }
+      else {
+        removeError(input);
+      }
+    }
     function validateInput(input) {
       var value = input.val();
       if(value ==="")
@@ -201,11 +203,24 @@
       }
     }
     function insertData() {
-      var formData = new FormData($('#add_admin_form')[0]);
-      var admin_picture = document.getElementById('profile_picture');
-      var picture = admin_picture.files[0];
-      formData.append('action', "insert_admin");
-      formData.append('picture', picture);
+      var formData = new FormData(); // Serialize form data
+      var profilePictureFile = $('#edit_profile_picture')[0].files[0];
+      if (profilePictureFile) {
+          formData.append('profile_picture', profilePictureFile);
+      }AdminID
+      formData.append('AdminID', $('#AdminID').val());
+      formData.append('edit_FirstName', $('#edit_FirstName').val());
+      formData.append('edit_LastName', $('#edit_LastName').val());
+      formData.append('edit_Phone', $('#edit_Phone').val());
+      formData.append('edit_DateOfBirth', $('#edit_DateOfBirth').val());
+      formData.append('edit_StateAndCity', $('#edit_StateAndCity').val());
+      formData.append('edit_StreetAddress', $('#edit_StreetAddress').val());
+      formData.append('edit_PostalCode', $('#edit_PostalCode').val());
+      formData.append('edit_Password', $('#edit_Password').val());
+      formData.append('edit_AdminStatus', $('#edit_AdminStatus').val());
+      formData.append('edit_AdminType', $('#edit_AdminType').val());
+      formData.append('action', "edit_admin");
+      // formData.append('picture', picture);
         for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
         }
