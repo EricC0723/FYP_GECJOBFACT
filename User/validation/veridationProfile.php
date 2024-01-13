@@ -45,7 +45,8 @@
       var phoneNumber = input.val();
 
       // Display error message if phone number contains letters
-      if (phoneNumber === "") {
+      if(phoneNumber ==="")
+      {
         displayError(input, 'Required field');
         hasErrors = true;
         checkErrors();
@@ -82,15 +83,15 @@
     function removeError(input) {
       input.next('.error-message').remove();
     }
-  //   function checkErrors() {
-  //   // Check if any error exists in any input
-  //   if ($('#first_name').next('.error-message').length ||
-  //       $('#last_name').next('.error-message').length ||
-  //       $('#phone').next('.error-message').length) {
-  //     $('#profile_submitbtn').prop('disabled', true);
-  //   } else {
-  //     $('#profile_submitbtn').prop('disabled', false);
-  //   }
-  // }
+    function checkErrors() {
+    // Check if any error exists in any input
+    if ($('#first_name').next('.error-message').length ||
+        $('#last_name').next('.error-message').length ||
+        $('#phone').next('.error-message').length) {
+      $('#profile_submitbtn').prop('disabled', true);
+    } else {
+      $('#profile_submitbtn').prop('disabled', false);
+    }
+  }
   });
 </script>

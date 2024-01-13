@@ -470,7 +470,6 @@
                                 ?>
                             </select>                 
                   <h5 style="margin-top:30px;display: inline-block;">Phone number</h5>
-                  <p style="display: inline-block;margin-left:5px;color:grey;">(recommended)</p>
                   <div class="row">
                   <div class="col-md-4 col-sm-12">
                         <div class="form-group">

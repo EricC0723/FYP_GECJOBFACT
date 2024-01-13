@@ -58,12 +58,7 @@
 			<div class="header-search">
 				<form>
 					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
 						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
 							<div class="dropdown-menu dropdown-menu-right">
 								<div class="form-group row">
 									<label class="col-sm-12 col-md-2 col-form-label">From</label>
@@ -171,9 +166,6 @@
 						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -491,15 +483,10 @@
 							</nav>
 						</div>
 						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary" href="admin.php" role="button" data-toggle="dropdown">
+							<div class="">
+								<a class="btn btn-primary" href="admin.php">
 									Back to Admin
 								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -514,14 +501,19 @@
 					<div class="pd-20">
 						<h1 style="">Add Admin </h1>
    					 	<div style="margin: 0px 100px 0px 100px;" class="content">
-							<form action="" class="form" method="post" style="margin-top:100px;">
+				<form style="margin-top:100px;" id="add_admin_form" enctype="multipart/form-data">
 					<div class="group-container">
-						<hr>
+						<hr style="margin-top:-50px;">
 						<h6 class="group-title" style="text-align:center;color:grey;">Admin information</h6>
 						<hr>
 					</div>
+					<h5 style="display: inline-block;">Admin profile picture</h5>
+						<div class="form-group">
+							<input type="file" id="profile_picture" id="profile_picture" class="form-control-file form-control height-auto" accept="image/*">
+						</div>
 					<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
+					  
 					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
                         	<h5 style="display: inline-block;">First Name</h5>
                         	<div class="form-group">
@@ -550,7 +542,11 @@
 							</div>
 						</div>
                     </div>
-						<h5 style="display: inline-block;">Street Address</h5>
+					<h5 style="display: inline-block;">Date of birth</h5>
+						<div class="form-group">
+							<input class="form-control date-picker"name="date_of_birth" id="date_of_birth" placeholder="Select Date" type="text">
+						</div>
+					<h5 style="display: inline-block;">Street Address</h5>
 						<div class="form-group">
 						<input type="text" placeholder="Enter address"  name="address" id="address"class="form-control" value=""/>
 						</div>
@@ -577,6 +573,11 @@
 						<h6 class="group-title" style="text-align:center;color:grey;">Admin setting</h6>
 						<hr>
 					</div>
+					<h5 style="display: inline-block;">Admin type</h5>
+					<select class="selectpicker form-group" data-size="5" data-width="100%" name="type" id="type"style="max-height:100px;">
+                     <option value="normal admin">Normal admin</option>
+					 <option value="super admin">Super admin</option>
+                  </select>
 					<h5 style="display: inline-block;">Email</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value=""/>
@@ -589,7 +590,9 @@
 						<div class="form-group">
 							<input type="text" placeholder="Enter password"  name="c_password" id="c_password"class="form-control" value=""/>
 						</div>  
-							<div class="mt-5 text-center"><button class="btn btn-primary profile-button" name="addbtn" type="submit">Add admin</button></div>
+							<div class="mt-5 text-center">
+								<button class="btn btn-primary" name="addbtn" id="addbtn">Add admin</button>
+							</div>
 							</form>
 							</div>
 						<?php
@@ -619,43 +622,6 @@
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
 </html>
 
-<?php
-if (isset($_POST["addbtn"]))
-{
-	$fname = $_POST["Fname"];
-	$lname = $_POST["Lname"];  	
-	$email = $_POST["email"];
-    $password = $_POST["password"];
-	$adaddress = $_POST["address"];
-	$adcity = $_POST["city"];
-	$adpostcode = $_POST["postcode"];
-	$adstate = $_POST["state"];
-        
-	$checkemail = mysqli_query($connect, "SELECT * FROM admins WHERE Email = '$email'");
-
-	if(mysqli_num_rows($checkemail)>0) {
-		?>
-
-		<script>
-			alert('Email has already been taken.');
-			window.location.href = "add_admin.php";
-		</script>
-		<?php
-
-	}
-	 else {
-		$sql = mysqli_query($connect,"INSERT INTO admins (FirstName,LastName,Email,Password,StreetAddress,City,Postalcode,State,AdminType) VALUES ('$fname','$lname','$email','$password','$adaddress','$adcity','$adpostcode','$adstate','normal admin')");
-?>
-	<script>
-		alert("Admin Added!");
-	</script>
-<?php
-echo "<script>window.location.href = 'admin.php';</script>";
-}
-
-}
-
-?>
 
 
 

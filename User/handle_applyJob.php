@@ -32,7 +32,6 @@ function submitApplication(questionIDs){
             var questionID = "q" + questionIDs[i];
             var selectedQuestionOption = $("input[name='"+questionID+ "']:checked").val();
             
-            // 创建一个包含 questionID 和 option 的对象
             var questionAnswerObject = {
                 "questionID": questionIDs[i],
                 "option": selectedQuestionOption
@@ -48,8 +47,7 @@ function submitApplication(questionIDs){
         data.append('questionAnswers', QuestionAnswersJSON);
         for (let pair of data.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
-
-        // 如果键是 'resume' 或 'cover'，并且值是一个文件对象，您可以输出文件的详细信息
+        
         if (pair[0] === 'resume' || pair[0] === 'cover') {
           console.log(pair[0] + ' File Name: ' + pair[1].name);
           console.log(pair[0] + ' File Size: ' + pair[1].size);

@@ -1,4 +1,6 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
   $(document).ready(function () {
     var hasErrors = false;
@@ -7,81 +9,199 @@
     $('#Fname').on('input', function () {
       validateInput($(this));
     });
-
     // Input event listener for last_name input
     $('#Lname').on('input', function () {
       validateInput($(this));
     });
-    $('#Lname').on('input', function () {
+    $('#date_of_birth').on('input', function () {
+      validateDateOfBirth($(this));
+    });
+    $('#address').on('input', function () {
       validateInput($(this));
     });
-    $('#Lname').on('input', function () {
+    $('#postcode').on('input', function () {
       validateInput($(this));
     });
-    $('#Lname').on('input', function () {
-      validateInput($(this));
+    $('#email').on('input', function () {
+        validateEmail($(this));
     });
-    $('#Lname').on('input', function () {
-      validateInput($(this));
+    $('#password').on('input', function () {
+        validatePassword($(this));
     });
-
-    // Input event listener for phone input
+    $('#c_password').on('input', function () {
+        validateConfirmPassword($(this), $('#password').val());
+    });
     $('#phone').on('input', function () {
       validatePhoneNumber($(this));
     });
+    $('#addbtn').on('click', function (event) {
+    var hasErrors = false;
+    validateInput($('#Fname'));
+    validateInput($('#Lname'));
+    validateDateOfBirth($('#date_of_birth'));
+    validateInput($('#address'));
+    validateInput($('#postcode'));
+    validateEmail($('#email'));
+    validatePhoneNumber($('#phone'));
+    validatePassword($('#password'));
+    validateConfirmPassword($('#c_password'), $('#password').val());
 
+    if ($('.error-message').length > 0) {
+        hasErrors = true;
+        event.preventDefault();
+        console.log('got error');
+        swal("Oops...", "Please ensure that all information is entered accurately.", "error");
+      }
+      if (!hasErrors) {
+        event.preventDefault();
+        console.log('Insert action');
+        insertData();
+      }
+  });
+  function validateDateOfBirth(input) {
+            var value = input.val();
+            if (value === "") {
+                displayError(input, 'Required field');
+            }
+            else {
+                removeError(input);
+            }
+        }
     // Function to validate general input (first_name, last_name)
-    function validateInput(input) {
-      // Get the entered value
-      var value = input.val();
+    function validateEmail(input) {
+        var email = input.val(); // Get the entered email value
 
-      // Display error message if value contains non-alphabetic characters
+    // Use a regular expression for email validation
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === "") {
+        // If the email is empty, show an error
+        displayError(input, 'Email is required.');
+    } else if (!emailRegex.test(email)) {
+        // If the email does not match the regex pattern, show an error
+        displayError(input, 'Invalid email format.');
+    } else {
+        validateEmailExistence(email).then(function (response) {
+            if (response === 'exists') {
+                displayError(input, 'Email already exists.');
+            } else {
+                removeError(input);
+            }
+        }).catch(function (error) {
+            console.error('Error checking email existence:', error);
+        });
+    }
+    }
+    function validatePassword(input) {
+            var value = input.val();
+            if (value === "") {
+                displayError(input, 'Required field');
+            }
+            else if (value.length < 8 || value.length > 16) {
+                displayError(input, 'Password must be between 8 and 16 characters long');
+            }
+            else if (!/^(?=.*\d)(?=.*[a-zA-Z])/.test(value)) {
+                displayError(input, 'Password must contain at least one number and one letter');
+            }
+            else {
+                removeError(input);
+            }
+        }
+        // Function to validate confirm password input
+        function validateConfirmPassword(input, password) {
+            var value = input.val();
+            if (value === "") {
+                displayError(input, 'Required field');
+            } else if (value !== password) {
+                displayError(input, 'Passwords do not match');
+            } else {
+                removeError(input);
+            }
+        }
+      function validateEmailExistence(email) {
+          return new Promise(function (resolve, reject) {
+              $.ajax({
+                  type: "POST",
+                  url: "check_email.php",
+                  data: {
+                      action: "check_email",
+                      email: email
+                  },
+                  success: function (response) {
+                      resolve(response);
+                  },
+                  error: function (error) {
+                      reject(error);
+                  }
+              });
+          });
+      }
+
+    function validateInput(input) {
+      var value = input.val();
       if(value ==="")
       {
         displayError(input, 'Required field');
-        hasErrors = true;
-        checkErrors();
       }
       else if (!/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
         displayError(input, 'Only alphabetic characters are allowed.');
-        hasErrors = true;
-        checkErrors();
       } else {
         removeError(input);
-        hasErrors = false;
-        checkErrors();
       }
     }
 
     // Function to validate phone number input
     function validatePhoneNumber(input) {
-      // Get the entered phone number
       var phoneNumber = input.val();
 
-      // Display error message if phone number contains letters
       if (phoneNumber === "") {
         displayError(input, 'Required field');
-        hasErrors = true;
-        checkErrors();
       }
       else if (!/^\d+$/.test(phoneNumber)){
         displayError(input, 'Phone number cannot contain letters.');
-         hasErrors = true;
-         checkErrors();
       }
       else if(phoneNumber.length >10 || phoneNumber.length < 9)
       {
         displayError(input, 'Phone number does not match the length');
-        hasErrors = true;
-        checkErrors();
       } 
       else {
         removeError(input);
-        hasErrors = false;
-        checkErrors();
       }
     }
-
+    function insertData() {
+      var formData = new FormData($('#add_admin_form')[0]);
+      var admin_picture = document.getElementById('profile_picture');
+      var picture = admin_picture.files[0];
+      formData.append('action', "insert_admin");
+      formData.append('picture', picture);
+        for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+        }
+        swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
+        $.ajax({
+            type: "POST",
+            url: "insert_admin.php", // Change this to the actual script handling the insertion
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              swal("Success", response, "success").then(function() {
+					    location.replace("admin.php");
+				});
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            }
+        });
+      }
+      });
+    }
     // Function to display error message
     function displayError(input, message) {
       // Remove existing error message
@@ -96,15 +216,5 @@
     function removeError(input) {
       input.next('.error-message').remove();
     }
-    function checkErrors() {
-    // Check if any error exists in any input
-    if ($('#first_name').next('.error-message').length ||
-        $('#last_name').next('.error-message').length ||
-        $('#phone').next('.error-message').length) {
-      $('#profile_submitbtn').prop('disabled', true);
-    } else {
-      $('#profile_submitbtn').prop('disabled', false);
-    }
-  }
   });
 </script>

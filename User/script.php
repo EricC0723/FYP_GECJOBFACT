@@ -122,11 +122,6 @@
                 $('#modal-resume [data-dismiss="modal"]').click();
                 
                 console.log("After hiding modal");
-                
-              // 在这里添加跳转到 profile.php 的代码
-              // window.location.replace("userProfile.php");
-              // 或者使用 window.location.href
-              // window.location.href = "profile.php";
           });
             }
             
