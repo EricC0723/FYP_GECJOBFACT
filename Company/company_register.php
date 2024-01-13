@@ -349,8 +349,6 @@ if (isset($_POST["register_btn"])) {
                                                 class="validation_sentence">Required
                                                 field</span></span></span>
                                 </div>
-
-
                             </div>
 
 
