@@ -115,6 +115,10 @@ if (isset($_SESSION['companyID'])) {
                 <button type="button" class="joblistbtn" id="blockedButton"><span
                         class="joblisttitle">Blocked</span></button>
             </div>
+            <div>
+                <button type="button" class="joblistbtn" id="applicantsButton"><span
+                        class="joblisttitle">Applicants</span></button>
+            </div>
             <div class="underline"></div>
         </div>
     </div>
@@ -135,6 +139,10 @@ if (isset($_SESSION['companyID'])) {
 
     </div>
 
+    <div class="content-div" id="applicants">
+
+    </div>
+
 
 
     </div>
@@ -149,6 +157,7 @@ if (isset($_SESSION['companyID'])) {
             getclosedjob();
             getdraftjob();
             getblockedjob();
+            getapplicants();
         });
 
         function confirmCloseJobPost(jobPostID) {
@@ -173,6 +182,7 @@ if (isset($_SESSION['companyID'])) {
                                 getclosedjob();
                                 getdraftjob();
                                 getblockedjob();
+                                getapplicants();
                             } else {
                                 Swal.fire("Error!", "Error closing job post!", "error");
                             }
@@ -205,6 +215,7 @@ if (isset($_SESSION['companyID'])) {
                                 getclosedjob();
                                 getdraftjob();
                                 getblockedjob();
+                                getapplicants();
                             } else {
                                 Swal.fire("Error!", "Error closing job post!", "error");
                             }
@@ -250,6 +261,16 @@ if (isset($_SESSION['companyID'])) {
                 type: 'GET',
                 success: function (response) {
                     $('#blocked').html(response);
+                }
+            });
+        }
+
+        function getapplicants() {
+            $.ajax({
+                url: 'getjoblist/get-applicants.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#applicants').html(response);
                 }
             });
         }
@@ -309,13 +330,27 @@ if (isset($_SESSION['companyID'])) {
                 }
             });
         }
+
+        function searchApplicant(searchTerm) {
+            $.ajax({
+                url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    applicantsearch: searchTerm
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#applicants').html(data);
+                }
+            });
+        }
     </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var buttons = document.querySelectorAll('.joblistbtn');
             var underline = document.querySelector('.underline');
-            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked')];
+            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
 
             // Function to update the visibility of the divs based on the id in the URL
             function updateDivVisibility() {
@@ -408,15 +443,15 @@ if (!isset($_SESSION['companyID'])) {
 } else if ($row['CompanyStatus'] == 'Block') {
     // Show swal box
     ?>
-        <script>
-            Swal.fire({
-                title: 'Error',
-                text: 'Your account has been blocked.',
-                icon: 'error',
-            }).then(function () {
-                window.location = "company_signout.php";
-            });
-        </script>
+            <script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Your account has been blocked.',
+                    icon: 'error',
+                }).then(function () {
+                    window.location = "company_signout.php";
+                });
+            </script>
     <?php
 }
 ?>
