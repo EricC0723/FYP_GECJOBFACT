@@ -45,7 +45,7 @@ session_start(); // Start the session at the beginning
                     ?>
                     <input id="blockedInput" type="text" class="input-box" name="blockedsearch"
                         style="padding-left:44px;padding-right:44px;width:512px;"
-                        placeholder="Search job title or reference number"
+                        placeholder="Search job title"
                         value="<?php echo htmlspecialchars($searchTerm); ?>">
                     <button id="clearblocked" class="clear-button" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
@@ -93,7 +93,7 @@ session_start(); // Start the session at the beginning
         echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
-                <th style="width:97.05px">
+                <th style="width:100px">
                     <div class="th_title">Status</div>
                 </th>
                 <th>
@@ -103,7 +103,7 @@ session_start(); // Start the session at the beginning
                     <div class="th_title">Candidates</div>
                 </th>
                 <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Draft Actions</div>
+                    <div class="th_title" style="text-align:right;">Job Actions</div>
                 </th>
             </tr>
         </thead>';
