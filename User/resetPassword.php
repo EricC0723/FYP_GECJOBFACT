@@ -1,4 +1,5 @@
-<?php session_start() ;
+<?php 
+	session_start();
 	include("C:/xampp/htdocs/FYP/dataconnection.php");
 ?>
 <!DOCTYPE html>
@@ -91,56 +92,38 @@
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </body>
 </html>
 <?php
     if(isset($_POST["reset"])){
-        include("C:/xampp/htdocs/FYP/dataconnection.php");
         $psw = $_POST["newpw"];
         $c_psw = $_POST["comfirmpw"];
-
+		
         if($psw != $c_psw)
         {   ?>
             <script>
-                alert("Password not same");
+               swal("Oops...", "Password not match", "error");
             </script>
             <?php
         }
         else{
-            ?>
-            <script>
-                alert("Reset");
-            </script>
-            <?php
-        $token = $_SESSION['token'];
+        // $token = $_SESSION['token'];
         $Email = $_SESSION['email'];
-		?>
-            <script>
-                alert"(<?php echo $Email;?>)";
-            </script>
-            <?php
+
         $hash = password_hash( $psw , PASSWORD_DEFAULT );
-
-        $sql = mysqli_query($connect, "SELECT * FROM companies WHERE CompanyEmail='$Email'");
-        $query = mysqli_num_rows($sql);
-  	    $fetch = mysqli_fetch_assoc($sql);
-
-        if($Email){
-            $new_pass = $hash;
-            mysqli_query($connect, "UPDATE companies SET CompanyPassword='$new_pass' WHERE CompanyEmail='$Email'");
-            ?>
-            <script>
-                window.location.replace("login.php");
-                alert("<?php echo "your password has been succesful reset"?>");
-            </script>
-            <?php
-        }else{
-            ?>
-            <script>
-                alert("<?php echo "Please try again"?>");
-            </script>
-            <?php
-        }
+		$new_pass = $hash;
+        $result = mysqli_query($connect, "UPDATE users SET Password='$new_pass' WHERE Email='$Email'");
+		
+        if($result){
+			?>
+			<script>
+				location.replace("success_page.html");
+			</script>
+			<?php
+        }else {
+			echo "error : " . mysqli_error($connect);
+		}
     }
     }
 

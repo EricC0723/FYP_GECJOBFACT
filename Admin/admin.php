@@ -538,7 +538,7 @@ function confirmation()
 											<tr>
 												<td class="table-plus"><?php echo $row["AdminID"]; ?></td>
 												<td><?php echo $row["FirstName"]; ?></td>
-												<td><a href="https://api.whatsapp.com/send?phone=60<?php echo $row["AdminPhone"]; ?>"><?php echo $row["AdminPhone"]; ?></a></td>
+												<td><a target="_blank" href="https://api.whatsapp.com/send?phone=60<?php echo $row["AdminPhone"]; ?>"><?php echo $row["AdminPhone"]; ?></a></td>
 												<td><?php echo $row["Email"]; ?></td>
 												<td><?php echo $row["AdminType"]?></td>
 												<td>
@@ -696,7 +696,7 @@ function confirmation()
 					</div>
 					<h5 style="display: inline-block;">Date of Birth</h5>
                         <div class="form-group">
-						<input type="text" class="form-control" id="edit_DateOfBirth" style="margin-top:10px;border-color:#787785;">
+						<input class="form-control date-picker"name="edit_DateOfBirth" id="edit_DateOfBirth" placeholder="Select Date" type="text">
                         </div>
 					<h5 style="display: inline-block;">State and City</h5>
                     <select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_StateAndCity" id="edit_StateAndCity"style="max-height:100px;">

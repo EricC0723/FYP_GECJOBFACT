@@ -105,45 +105,28 @@ if(isset($_POST["recover"])){
 	include("C:/xampp/htdocs/FYP/dataconnection.php");
 	$email = $_POST["email"];
 
-	$sql = mysqli_query($connect, "SELECT * FROM companies WHERE CompanyEmail='$email'");
+	$sql = mysqli_query($connect, "SELECT * FROM users WHERE Email='$email'");
 	$query = mysqli_num_rows($sql);
 	$fetch = mysqli_fetch_assoc($sql);
 	if($query <= 0){
 		?>
-		<!-- <script>
+		<!-- 
 			swal({
             title: "Oops..",
             text: "Sorry, no emails exists",
             icon: "error",
             button: "OK",
           }); -->
+		  <script>
 			alert("<?php  echo "Sorry, no emails exists "?>");
 		</script>
 		<?php
-	}else if($fetch["CompanyStatus"] == 'Verify'){
-		?>
-		   <script>
-		// 		swal({
-		// 		title: "Oops..",
-		// 		text: "Sorry, no emails exists",
-		// 		icon: "error",
-		// 		button: "OK",
-        //   });then((value) => {
-				//if (value) {
-				alert("Verify First");
-				//window.location.replace("verification.php");
-			// 	//}
-			// });
-		   </script>
-	   <?php
 	}else{
 		// generate token by binaryhexa 
 		$token = bin2hex(random_bytes(50));
 
-		session_start ();
 		$_SESSION['token'] = $token;
 		$_SESSION['email'] = $email;
-
 		require "phpmailer/PHPMailerAutoload.php";
 		$mail = new PHPMailer;
 
@@ -169,7 +152,7 @@ if(isset($_POST["recover"])){
 		$mail->Body="<b>Dear User</b>
 		<h3>We received a request to reset your password.</h3>
 		<p>Kindly click the below link to reset your password</p>
-		http://localhost/FYP/JOBBOARD-MASTER/jobboard-master/resetPassword.php
+		http://localhost/final_fyp/FYP/User/resetPassword.php
 		<br><br>
 		<p>With regrads,</p>
 		<b>GEC Job Facts</b>";

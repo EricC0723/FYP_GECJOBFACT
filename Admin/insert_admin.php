@@ -15,7 +15,7 @@
             $password= $_POST['password'];
             $type= $_POST['type'];
 
-                        $picture = $_FILES['picture'];
+            $picture = $_FILES['picture'];
             $picture_dir = '../Admin/adminPicture/';
             $picture_name = $picture['name'];
             $file_extension = pathinfo($picture_name, PATHINFO_EXTENSION);
@@ -47,6 +47,7 @@
             $state = $_POST['edit_StateAndCity'];
             $password = $_POST['edit_Password'];
             $type = $_POST['edit_AdminType'];
+            $status = $_POST['edit_AdminStatus'];
             if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == UPLOAD_ERR_OK) {
             // Process the profile picture
             $profilePictureTmpName = $_FILES['profile_picture']['tmp_name'];
@@ -67,6 +68,7 @@
                 DateOfBirth='$date_of_birth', 
                 Password='$password', 
                 AdminType='$type' ,
+                AdminStatus='$status' ,
                 AdminPicture='$targetPath'
             WHERE AdminID = $AdminID";
 
@@ -88,7 +90,8 @@
                 PostalCode='$postcode', 
                 DateOfBirth='$date_of_birth', 
                 Password='$password', 
-                AdminType='$type'
+                AdminType='$type',
+                AdminStatus='$status'
             WHERE AdminID = $AdminID";
 
             $result = mysqli_query($connect, $sql);
