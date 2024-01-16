@@ -71,8 +71,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
-                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
@@ -102,189 +102,9 @@ if (isset($_SESSION['companyID'])) {
             </div>
 
             <div style="padding-top:20px;">
-                <form action="" method="GET">
-                    <div class="wrapper" id="app">
-                        <div class="card-form">
-                            <div class="card-list">
-                                <div class="card-item" v-bind:class="{ '-active' : isCardFlipped }">
-                                    <div class="card-item__side -front">
-                                        <div class="card-item__focus" v-bind:class="{'-active' : focusElementStyle }"
-                                            v-bind:style="focusElementStyle" ref="focusElement"></div>
-                                        <div class="card-item__cover">
-                                            <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'"
-                                                class="card-item__bg">
-                                        </div>
+                <div style="background:white;" id="creditcard">
 
-                                        <div class="card-item__wrapper">
-                                            <div class="card-item__top">
-                                                <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png"
-                                                    class="card-item__chip">
-                                                <div class="card-item__type">
-                                                    <transition name="slide-fade-up">
-                                                        <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'"
-                                                            v-if="getCardType" v-bind:key="getCardType" alt=""
-                                                            class="card-item__typeImg">
-                                                    </transition>
-                                                </div>
-                                            </div>
-                                            <label for="cardNumber" class="card-item__number" ref="cardNumber"
-                                                style="box-sizing: border-box;">
-                                                <template v-if="getCardType === 'amex'">
-                                                    <span v-for="(n, $index) in amexCardMask" :key="$index">
-                                                        <transition name="slide-fade-up">
-                                                            <div class="card-item__numberItem"
-                                                                v-if="$index > 4 && $index < 14 && cardNumber.length > $index && n.trim() !== ''">
-                                                                *</div>
-                                                            <div class="card-item__numberItem"
-                                                                :class="{ '-active' : n.trim() === '' }" :key="$index"
-                                                                v-else-if="cardNumber.length > $index">
-                                                                {{cardNumber[$index]}}
-                                                            </div>
-                                                            <div class="card-item__numberItem"
-                                                                :class="{ '-active' : n.trim() === '' }" v-else
-                                                                :key="$index + 1">{{n}}</div>
-                                                        </transition>
-                                                    </span>
-                                                </template>
-
-                                                <template v-else>
-                                                    <span v-for="(n, $index) in otherCardMask" :key="$index">
-                                                        <transition name="slide-fade-up">
-                                                            <div class="card-item__numberItem"
-                                                                v-if="$index > 4 && $index < 15 && cardNumber.length > $index && n.trim() !== ''">
-                                                                *</div>
-                                                            <div class="card-item__numberItem"
-                                                                :class="{ '-active' : n.trim() === '' }" :key="$index"
-                                                                v-else-if="cardNumber.length > $index">
-                                                                {{cardNumber[$index]}}
-                                                            </div>
-                                                            <div class="card-item__numberItem"
-                                                                :class="{ '-active' : n.trim() === '' }" v-else
-                                                                :key="$index + 1">{{n}}</div>
-                                                        </transition>
-                                                    </span>
-                                                </template>
-                                            </label>
-                                            <div class="card-item__content">
-                                                <label for="cardName" class="card-item__info" ref="cardName"
-                                                    style="box-sizing: border-box;">
-                                                    <div class="card-item__holder">Card Holder</div>
-                                                    <transition name="slide-fade-up">
-                                                        <div class="card-item__name" v-if="cardName.length" key="1">
-                                                            <transition-group name="slide-fade-right">
-                                                                <span class="card-item__nameItem"
-                                                                    v-for="(n, $index) in cardName.replace(/\s\s+/g, ' ')"
-                                                                    v-if="$index === $index"
-                                                                    v-bind:key="$index + 1">{{n}}</span>
-                                                            </transition-group>
-                                                        </div>
-                                                        <div class="card-item__name" v-else key="2">Full Name</div>
-                                                    </transition>
-                                                </label>
-                                                <div class="card-item__date" ref="cardDate"
-                                                    style="box-sizing: border-box;">
-                                                    <label for="cardMonth" class="card-item__dateTitle">Expires</label>
-                                                    <label for="cardMonth" class="card-item__dateItem">
-                                                        <transition name="slide-fade-up">
-                                                            <span v-if="cardMonth"
-                                                                v-bind:key="cardMonth">{{cardMonth}}</span>
-                                                            <span v-else key="2">MM</span>
-                                                        </transition>
-                                                    </label>
-                                                    /
-                                                    <label for="cardYear" class="card-item__dateItem">
-                                                        <transition name="slide-fade-up">
-                                                            <span v-if="cardYear"
-                                                                v-bind:key="cardYear">{{String(cardYear).slice(2,4)}}</span>
-                                                            <span v-else key="2">YY</span>
-                                                        </transition>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-item__side -back">
-                                        <div class="card-item__cover">
-                                            <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'"
-                                                class="card-item__bg">
-                                        </div>
-                                        <div class="card-item__band"></div>
-                                        <div class="card-item__cvv">
-                                            <div class="card-item__cvvTitle">CVV</div>
-                                            <div class="card-item__cvvBand">
-                                                <span v-for="(n, $index) in cardCvv" :key="$index">
-                                                    *
-                                                </span>
-
-                                            </div>
-                                            <div class="card-item__type">
-                                                <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'"
-                                                    v-if="getCardType" class="card-item__typeImg">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-form__inner">
-                                <div class="card-input">
-                                    <label for="cardNumber" class="card-input__label">Card Number</label>
-                                    <input type="text" id="cardNumber" class="card-input__input"
-                                        v-mask="generateCardNumberMask" v-model="cardNumber" v-on:focus="focusInput"
-                                        v-on:blur="blurInput" data-ref="cardNumber" autocomplete="off"
-                                        style="box-sizing: border-box;" name="cardNumber">
-                                </div>
-                                <div class="card-input">
-                                    <label for="cardName" class="card-input__label">Card Holders</label>
-                                    <input type="text" id="cardName" class="card-input__input" v-model="cardName"
-                                        v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardName"
-                                        autocomplete="off" style="box-sizing: border-box;" name="cardName">
-                                </div>
-                                <div class="card-form__row">
-                                    <div class="card-form__col">
-                                        <div class="card-form__group">
-                                            <label for="cardMonth" class="card-input__label">Expiration Date</label>
-                                            <select class="card-input__input -select" id="cardMonth" name="cardMonth"
-                                                v-model="cardMonth" v-on:focus="focusInput" v-on:blur="blurInput"
-                                                data-ref="cardDate">
-                                                <option value="" disabled selected>Month</option>
-                                                <option v-bind:value="n < 10 ? '0' + n : n" v-for="n in 12"
-                                                    v-bind:disabled="n < minCardMonth" v-bind:key="n">
-                                                    {{n < 10 ? '0' + n : n}} </option>
-                                            </select>
-                                            <select class="card-input__input -select" id="cardYear" name="cardYear"
-                                                v-model="cardYear" v-on:focus="focusInput" v-on:blur="blurInput"
-                                                data-ref="cardDate">
-                                                <option value="" disabled selected>Year</option>
-                                                <option v-bind:value="$index + minCardYear" v-for="(n, $index) in 12"
-                                                    v-bind:key="n">
-                                                    {{$index + minCardYear}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="card-form__col -cvv">
-                                        <div class="card-input">
-                                            <label for="cardCvv" class="card-input__label">CVV</label>
-                                            <input type="text" class="card-input__input" id="cardCvv" v-mask="'###'"
-                                                maxlength="3" v-model="cardCvv" v-on:focus="flipCard(true)"
-                                                v-on:blur="flipCard(false)" autocomplete="off"
-                                                style="box-sizing: border-box;" name="cardCvv">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <input type="hidden" id="cardType" name="cardType" v-model="cardType">
-                                <input type="submit" value="Add Card" class="cont-button" name="submitbtn"
-                                    style="width:100%;">
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <!-- partial -->
-
-                </form>
+                </div>
 
             </div>
 
@@ -298,19 +118,39 @@ if (isset($_SESSION['companyID'])) {
     <script src="post-job.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
     <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
-    <script src="company_creditcard.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        let cardType = getCardType();
-        document.getElementById('cardType').value = cardType;
+
+
+        $(document).ready(function () {
+            $.ajax({
+                url: 'creditcard/creditcardlist.php',
+                type: 'GET',
+                success: function (response) {
+                    $('#creditcard').html(response);
+                },
+                error: function (error) {
+                    console.log('Error: ', error);
+                }
+            });
+        });
+
+        
+
+        
+
     </script>
 
 </body>
 
 </html>
+<?php
 
+
+
+?>
 
 
 
@@ -323,14 +163,14 @@ if (isset($_SESSION['companyID'])) {
 }
 
 if (isset($_GET['submitbtn'])) {
-    $cardNumber = $_GET['cardNumber'];
-    $cardName = $_GET['cardName'];
-    $cardType = $_GET['cardType'];
-    $cardMonth = $_GET['cardMonth'];
-    $cardYear = $_GET['cardYear'];
-    $cardCvv = $_GET['cardCvv'];
+    $cardNumber = $_GET['cardNumberInput'];
+    $cardName = $_GET['cardNameInput'];
+    $cardType = $_GET['cardTypeInput'];
+    $cardMonth = $_GET['cardMonthInput'];
+    $cardYear = $_GET['cardYearInput'];
+    $cardCvv = $_GET['cardCvvInput'];
 
-    $sql = "INSERT INTO credit_card (CompanyID, CreditCard_Type, CreditCard_Number, CreditCard_Holder, CreditCard_ExpMonth, CreditCard_ExpDate, CreditCard_CVV) VALUES ('$CompanyID', '$cardType', '$cardNumber', '$cardName', '$cardMonth', '$cardYear', '$cardCvv')";
+    $sql = "INSERT INTO credit_card (CompanyID, CreditCard_Type, CreditCard_Number, CreditCard_Holder, CreditCard_ExpMonth, CreditCard_ExpYear, CreditCard_CVV) VALUES ('$CompanyID', '$cardType', '$cardNumber', '$cardName', '$cardMonth', '$cardYear', '$cardCvv')";
     $result = mysqli_query($connect, $sql);
 
     if ($result) {
@@ -352,6 +192,48 @@ if (isset($_GET['submitbtn'])) {
             Swal.fire({
                 title: "Error",
                 text: "Credit card added failed",
+                icon: "error",
+                backdrop: `lightgrey`,
+            });
+        </script>
+        <?php
+    }
+}
+
+
+if (isset($_GET['savebtn'])) {
+    $cardNumber = $_GET['cardNumberInput'];
+    $cardName = $_GET['cardNameInput'];
+    $cardType = $_GET['cardTypeInput'];
+    $cardMonth = $_GET['cardMonthInput'];
+    $cardYear = $_GET['cardYearInput'];
+    $cardCvv = $_GET['cardCvvInput'];
+
+    $id = $_GET['id'];
+
+    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id'";
+
+    $result = mysqli_query($connect, $sql);
+
+    if ($result) {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Credit card updated successfully",
+                icon: "success",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_creditcard.php";
+            });
+        </script>
+        <?php
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Credit card updated failed",
                 icon: "error",
                 backdrop: `lightgrey`,
             });
@@ -404,6 +286,5 @@ if (!isset($_SESSION['companyID'])) {
 ?>
 
 <?php
-mysqli_free_result($result);
 mysqli_close($connect);
 ?>

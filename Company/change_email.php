@@ -75,8 +75,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
-                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>

@@ -68,8 +68,9 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
-                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
+
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
@@ -251,6 +252,8 @@ if (isset($_SESSION['companyID'])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
+
+        
         $(document).ready(function () {
             $.ajax({
                 url: 'edit_profile/edit_personal.php',
@@ -276,8 +279,6 @@ if (isset($_SESSION['companyID'])) {
                 }
             });
         });
-
-
 
     </script>
 </body>
@@ -439,6 +440,12 @@ if (!isset($_SESSION['companyID'])) {
     <?php
 }
 ?>
+
+<script>
+
+    let cardType = getCardType();
+    document.getElementById('cardType').value = cardType;
+</script>
 
 <?php
 mysqli_free_result($result);
