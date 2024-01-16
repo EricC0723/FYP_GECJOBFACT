@@ -121,6 +121,23 @@ if (isset($_POST['submitbtn'])) {
         </div>
     </div>
     <div class="form-container" style="padding-top:32px">
+        <?php
+        if (isset($_SESSION['job_post_ID'])) {
+            $job_post_ID = $_SESSION['job_post_ID'];
+            $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$job_post_ID' ");
+            $row = mysqli_fetch_assoc($result);
+            echo "<script>
+        var jobPostData = " . json_encode($row) . ";
+        </script>";
+        }
+
+        if (isset($_GET['jobPostID'])) {
+            $postid = $_GET["jobPostID"];
+            $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$postid' ");
+            $row = mysqli_fetch_assoc($result);
+        }
+        ?>
+
 
 
         <form method="POST" enctype="multipart/form-data">
@@ -145,55 +162,40 @@ if (isset($_POST['submitbtn'])) {
                 </div>
                 <div style="padding-top:32px;">
                     <div class="add_logo_box">
-                        <div class="add_cover_img_box" id="add_cover_img_box">
-                            <div>
-                                <div id="uploadCover"><span
-                                        style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">This
-                                        job post doesnt have a cover image</span></div>
-                            </div>
-                            <div style="display: none; flex-direction: column;" id="remove_cover">
-                                <div style="overflow: hidden;align-items: center;display: flex;">
-                                    <img id="previewcover"
-                                        src="<?php echo isset($row['Job_Cover_Url']) ? $row['Job_Cover_Url'] : ''; ?>"
-                                        alt="Image preview" style=" max-width: 100%; height: auto;" />
-                                    <input type="file" id="coverInput" name="coverInput"
-                                        accept=".gif,.jpeg,.jpg,.png,.svg,.tiff,.webp" style="display: none;">
-                                    <input type="hidden" id="coverRemoved" name="coverRemoved" value="0">
-                                </div>
-                                <div style="position: absolute;right: 15px;top:15px">
-                                    <button type="button" id="removeCover" data-testid="bx-add-asset"
-                                        style="display: flex; align-items: center;" class="remove_cover_btn">
-                                        <div style="display:flex;align-items:flex-start;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                xml:space="preserve" focusable="false" fill="currentColor" width="16"
-                                                height="16" aria-hidden="true"
-                                                style="color:black;width:25px;height:25px">
-                                                <path
-                                                    d="m13.4 12 5.3-5.3c.4-.4.4-1 0-1.4s-1-.4-1.4 0L12 10.6 6.7 5.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l5.3 5.3-5.3 5.3c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3l5.3-5.3 5.3 5.3c.2.2.5.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4L13.4 12z">
-
-                                                </path>
-                                            </svg>
+                        <?php if (isset($row['Job_Cover_Url']) && $row['Job_Cover_Url'] != ''): ?>
+                            <div class="add_cover_img_box" id="add_cover_img_box" style="height:auto;">
+                                <div>
+                                    <div style="flex-direction: column;" id="remove_cover">
+                                        <div style="overflow: hidden;align-items: center;display: flex;">
+                                            <img id="previewcover" src="<?php echo $row['Job_Cover_Url']; ?>"
+                                                alt="Image preview" style=" max-width: 100%; height: auto;" />
                                         </div>
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php else: ?>
+                            <div class="add_cover_img_box" id="add_cover_img_box" style="height:200px;">
+                                <div>
+                                    <div>
+                                        <div id="uploadCover"><span
+                                                style="font-size:16px;line-height:24px;font-weight: 400;color:#5a6881;font-family:Roboto, 'Helvetica Neue', HelveticaNeue, Helvetica, Arial, sans-serif;">This
+                                                job post doesnt have a cover image</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         <div style="padding:20px 24px;">
                             <div style="display: flex; flex-direction:column">
-
-                                <div style="display: none; flex-direction: column;" id="replace_logo">
+                                <div style="flex-direction: column;" id="replace_logo">
                                     <div
-                                        style="width: 180px; height: 80px; overflow: hidden; margin-left: 10px;align-items: center;display: flex;">
+                                        style="width: 180px; height: 80px; overflow: hidden; margin-left: 10px;align-items: center;display: flex;border:0.5px solid #4964e9 ;">
                                         <img id="previewlogo"
                                             src="<?php echo isset($row['Job_Logo_Url']) ? $row['Job_Logo_Url'] : ''; ?>"
                                             alt="Image preview" style=" max-width: 100%; height: auto;" />
-                                        <input type="file" id="logoInput" name="logoInput"
-                                            accept=".gif,.jpeg,.jpg,.png,.svg,.tiff,.webp" style="display: none;">
-                                        <input type="hidden" id="logoPresent" name="logoPresent"
-                                            value="<?php echo isset($row['Job_Logo_Url']) ? '1' : '0'; ?>">
                                     </div>
-                                </div>
 
+                                </div>
+                                
                             </div>
 
 
@@ -276,127 +278,8 @@ if (isset($_POST['submitbtn'])) {
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
     <script src="post-job.js"></script>
 
-    <script>
-
-        document.getElementById('uploadLogo').addEventListener('click', function () {
-            document.getElementById('logoInput').click();
-        });
-
-        document.getElementById('replaceLogo').addEventListener('click', function () {
-            document.getElementById('logoInput').click();
-        });
-
-        document.getElementById('logoInput').addEventListener('change', function (event) {
-            var output = document.getElementById('previewlogo');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
-            }
-            output.style.display = 'block';
-            document.getElementById('replace_logo').style.display = 'flex';
-            document.getElementById('uploadLogo').style.display = 'none';
-        });
-
-        document.getElementById('uploadCover').addEventListener('click', function () {
-            document.getElementById('coverInput').click();
-        });
-
-        document.getElementById('removeCover').addEventListener('click', function () {
-            // Clear the preview image source
-            var previewCover = document.getElementById('previewcover');
-            previewCover.src = '';
-
-            // Hide the remove cover button
-            document.getElementById('remove_cover').style.display = 'none';
-            document.getElementById('uploadCover').style.display = 'flex';
-            document.getElementById('add_cover_img_box').style.height = '200px';
-
-            // Set the coverRemoved flag to '1'
-            document.getElementById('coverRemoved').value = '1';
-        });
-
-        document.getElementById('coverInput').addEventListener('change', function (event) {
-            var output = document.getElementById('previewcover');
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function () {
-                URL.revokeObjectURL(output.src) // free memory
-            }
-            output.style.display = 'block';
-            document.getElementById('remove_cover').style.display = 'flex';
-            document.getElementById('uploadCover').style.display = 'none';
-
-            // Reset the coverRemoved flag to '0'
-            document.getElementById('coverRemoved').value = '0';
-        });
-    </script>
 
 
-    <script>
-
-
-        window.onload = function () {
-            var logoInput = document.getElementById('logoInput');
-            var uploadButton = document.getElementById('uploadLogo');
-            var replaceLogo = document.getElementById('replace_logo');
-            var preview = document.getElementById('previewlogo');
-
-            logoInput.addEventListener('change', function () {
-                var file = this.files[0];
-
-                // Check if the file is an image
-                if (file && file.type.startsWith('image/')) {
-                    // Create a new FileReader object
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        // Set the src attribute of the preview image to the data URL of the uploaded image
-                        preview.src = e.target.result;
-
-                        // Show the preview image and the replace logo section, and hide the upload button
-                        preview.style.display = 'block';
-                        replaceLogo.style.display = 'flex';
-                        uploadButton.style.display = 'none';
-                    };
-
-                    // Read the uploaded file as a data URL
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        window.onload = function () {
-            var coverInput = document.getElementById('coverInput');
-            var uploadButton = document.getElementById('uploadCover');
-            var removeCover = document.getElementById('remove_cover');
-            var preview = document.getElementById('previewcover');
-            var coverimgbox = document.getElementById('add_cover_img_box');
-
-
-            coverInput.addEventListener('change', function () {
-                var file = this.files[0];
-
-                // Check if the file is an image
-                if (file && file.type.startsWith('image/')) {
-                    // Create a new FileReader object
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        // Set the src attribute of the preview image to the data URL of the uploaded image
-                        preview.src = e.target.result;
-
-                        // Show the preview image and the replace logo section, and hide the upload button
-                        removeCover.style.display = 'flex';
-                        uploadButton.style.display = 'none';
-                        coverimgbox.style.height = 'auto';
-                    };
-
-                    // Read the uploaded file as a data URL
-                    reader.readAsDataURL(file);
-                }
-
-            });
-        }
-    </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
