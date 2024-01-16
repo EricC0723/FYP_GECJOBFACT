@@ -265,9 +265,9 @@
               }  
 
               $page_first_result = ($page-1) * $results_per_page;
-              $result = mysqli_query($connect,"SELECT * FROM job_post LIMIT " . $page_first_result . ',' . $results_per_page);
+              $result = mysqli_query($connect, "SELECT * FROM job_post WHERE job_status='Active' LIMIT " . $page_first_result . ',' . $results_per_page);
               $count = 0;
-              $all_result = mysqli_query($connect,"SELECT * FROM job_post");
+              $all_result = mysqli_query($connect,"SELECT * FROM job_post WHERE job_status IN ('Active')");
               $total_records = mysqli_num_rows($all_result);
 
               $JobType = "";
@@ -275,18 +275,19 @@
               {
               ?>	
                 <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-                  <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>"></a>
+                <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>" class="job-link"></a>
                   <div class="job-listing-logo">
-                    <img src="images/job_logo_1.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
+                    <img src="<?php echo $row["Job_Logo_Url"];?>" alt="compny logo" class="img-fluid" style="width:100px;height:100px;margin-left:25px;border-radius:15px;">
                   </div>
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
                     <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
                       <h2><?php echo $row["Job_Post_Title"];?></h2>
-                      <strong style="margin-top:10px;position:absolute;"><?php echo $row["Main_Category_Name"];?> ( <?php echo $row["Sub_Category_Name"];?> )</strong>
+                      <strong style="margin-top:10px;"><?php echo $row["Main_Category_Name"];?> ( <?php echo $row["Sub_Category_Name"];?> )</strong>
                     </div>
                     <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                      <span class="icon-room"></span> <?php echo $row["Job_Post_Location"];?>
+                      <span class="icon-room"></span> <?php echo $row["Job_Post_Location"];?><br>
+                      <span class="icon-money"></span> RM<?php echo $row["Job_Post_MinSalary"];?> - RM<?php echo $row["Job_Post_MaxSalary"];?>
                     </div>
                     <div class="job-listing-meta">
                       <?php
@@ -530,6 +531,7 @@
   
   </div>
     <!-- SCRIPTS -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/isotope.pkgd.min.js"></script>
@@ -545,74 +547,57 @@
     
     <script src="js/custom.js"></script>
     <script>
+  function checkLoginAndRedirect() {
+    // 发送异步请求检查用户登录状态
+    // 这里使用简化的示例，实际上你可能需要使用AJAX或其他方法检查登录状态
+
+    var isLoggedIn = <?php echo isset($_SESSION['User_ID']) ? 'true' : 'false'; ?>;
+
+    if (!isLoggedIn) {
+      // 用户未登录，显示警告并阻止链接跳转
+      swal({
+        title: "Access Restricted",
+        text: "You need to login to view this content. Do you want to login now?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I want to login"],
+        dangerMode: true,
+    	}).then((result) => {
+          if (!result) {
+            return false;
+          } else {
+            location.replace("login.php");
+          }
+      });
+    }
+    else{
+       return true;
+    }
+   
+  }
+
+  // 获取所有带有 class="job-link" 的链接元素
+  var jobLinks = document.querySelectorAll('.job-link');
+
+  // 为每个链接添加点击事件监听器
+  jobLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      // 在链接点击时执行检查登录函数
+      if (!checkLoginAndRedirect()) {
+        // 阻止默认的链接跳转行为
+        event.preventDefault();
+      }
+    });
+  });
+</script>
+    <script>
   // 在页面加载后初始化 Bootstrap Select 插件
+  
   $(document).ready(function () {
     $('.selectpicker').selectpicker({
       maxOptions: 5
     });
   });
 </script>
-    <!-- <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/stickyfill.min.js"></script>
-    <script src="js/jquery.fancybox.min.js"></script>
-    <script src="js/jquery.easing.1.3.js"></script>
-    <script src="vendors/scripts/core.js"></script>
-    <script src="vendors/scripts/script.min.js"></script>
-    <script src="vendors/scripts/process.js"></script>
-    <script src="vendors/scripts/layout-settings.js"></script>
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.animateNumber.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    
-    <script src="js/bootstrap-select.min.js"></script>
-    
-    <script src="js/custom.js"></script> -->
-       <script>
-//         $(document).ready(function() {
-//     $('.custom-pagination a').on('click', function(e) {
-//         e.preventDefault();
-//         var page = $(this).attr('data-page');
-//         if (page !== undefined) {
-//             loadJobs(page); // 处理分页点击
-
-//             // 滚动到 job-list 元素
-//             $('html, body').animate({
-//                 scrollTop: $('#job-list').offset().top
-//             }, 'slow');
-//         }
-//     });
-// });
-// $(document).ready(function() {
-//     var currentPage = 1; // Set the initial page
-
-//     function loadJobs(page) {
-//         $.ajax({
-//             url: 'load_jobs.php',
-//             type: 'GET',
-//             data: { page: page },
-//             success: function(response) {
-//                 $('.job-listings').html(response); // Update job listings
-//                 currentPage = page; // Update current page
-//             },
-//             error: function(xhr, status, error) {
-//                 console.error('AJAX Error: ' + status + error);
-//             }
-//         });
-//     }
-
-//     loadJobs(currentPage); // Load initial jobs
-
-//       $('.custom-pagination a').on('click', function(e) {
-//           e.preventDefault();
-//           var page = $(this).attr('data-page');
-//           if (page !== undefined) {
-//               loadJobs(page); // Handle pagination clicks
-//           }
-//       });
-//   });
-//   </script>
 
   </body>
 </html>

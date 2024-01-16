@@ -591,7 +591,7 @@
 						</div>         
 					<h5 style="display: inline-block;">Comfirm password</h5>
 						<div class="form-group">
-							<input type="text" placeholder="Enter password"  name="c_password" id="c_password"class="form-control" value=""/>
+							<input type="text" placeholder="Comfirm password"  name="c_password" id="c_password"class="form-control" value=""/>
 						</div>  
 							<div class="mt-5 text-center">
 								<button class="btn btn-primary" name="addbtn" id="addbtn">Add admin</button>

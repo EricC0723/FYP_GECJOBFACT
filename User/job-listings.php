@@ -238,7 +238,7 @@
             // $_SESSION["searchlocation"] = $_GET["searchlocation"];
             // $_SESSION["searchtype"] = $_GET["searchtype"];
             }
-            $query = "SELECT * FROM job_post WHERE job_status = 'Active'";
+            $query = "SELECT * FROM job_post WHERE job_status IN ('Active')";
             // 如果搜索条件不为空，添加相应的条件到查询语句中
             if (!empty($searchJob)) {
               $query .= " AND Job_Post_Title LIKE '%$searchJob%'";
@@ -274,7 +274,7 @@
               {
               ?>	
                 <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-                  <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>"></a>
+                <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>" class="job-link"></a>
                   <div class="job-listing-logo">
                   <img src="<?php echo $row['Job_Logo_Url']; ?>" alt="Image" style="width:100px;height:80px;margin-left:20px;">
                   </div>
@@ -444,6 +444,7 @@
   </div>
 
     <!-- SCRIPTS -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/isotope.pkgd.min.js"></script>
@@ -460,7 +461,47 @@
     <script src="js/bootstrap-select.min.js"></script>
     
     <script src="js/custom.js"></script>
-   
+    <script>
+  function checkLoginAndRedirect() {
+    // 发送异步请求检查用户登录状态
+    // 这里使用简化的示例，实际上你可能需要使用AJAX或其他方法检查登录状态
+
+    var isLoggedIn = <?php echo isset($_SESSION['User_ID']) ? 'true' : 'false'; ?>;
+
+    if (!isLoggedIn) {
+      // 用户未登录，显示警告并阻止链接跳转
+      swal({
+        title: "Access Restricted",
+        text: "You need to login to view this content. Do you want to login now?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I want to login"],
+        dangerMode: true,
+    	}).then((result) => {
+          if (!result) {
+            return false;
+          } else {
+            location.replace("login.php");
+          }
+      });
+    }
+    else{
+       return true;
+    }
+  }
+  // 获取所有带有 class="job-link" 的链接元素
+  var jobLinks = document.querySelectorAll('.job-link');
+
+  // 为每个链接添加点击事件监听器
+  jobLinks.forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      // 在链接点击时执行检查登录函数
+      if (!checkLoginAndRedirect()) {
+        // 阻止默认的链接跳转行为
+        event.preventDefault();
+      }
+    });
+  });
+</script>
    
      
   </body>

@@ -528,7 +528,7 @@
 												<td class="table-plus"><?php echo $row["UserID"]; ?></td>
 												<td><?php echo $row["FirstName"]; ?></td>
 												<td><?php echo $row["Email"]; ?></td>
-												<td><a href="https://api.whatsapp.com/send?phone=60<?php echo $row["Phone"]; ?>"><?php echo $row["Phone"]; ?></a></td>
+												<td><a target="_blank" href="https://api.whatsapp.com/send?phone=60<?php echo $row["Phone"]; ?>"><?php echo $row["Phone"]; ?></a></td>
 												<td><?php echo date('d-m-Y', strtotime($row['RegistrationDate'])); ?></td>
 												<td>
 												<?php

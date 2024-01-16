@@ -25,7 +25,26 @@
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+	<style>
+        #loading{
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+            z-index: 1000; /* 遮罩层在最上层 */
+        }
 
+        #loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+</style>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
 	<script>
@@ -37,6 +56,11 @@
 	</script>
 </head>
 <body class="login-page">
+<div id="loading">
+        <div id="loading-spinner">
+            <img src="images/loading.gif" alt="Loading Spinner">
+        </div>
+    </div>
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
@@ -126,6 +150,15 @@
 	<script src="vendors/scripts/layout-settings.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script>
+		function showLoading() {
+    $('#loading').show();
+}
+
+function hideLoading() {
+    $('#loading').hide();
+}
+	</script>
 </body>
 </html>
 <?php
@@ -186,6 +219,48 @@
 					button: "OK!",
 					}).then((value) => {
 						window.location.href = "login.php";
+				});
+				</script>
+				<?php
+			}
+			else if($status=="Verify"){
+				$otp = rand(100000, 999999);
+				$_SESSION['otp'] = $otp;
+				$_SESSION['email'] = $email;
+				?>
+				<script>
+					console.log("verify");
+					swal({
+					title: "Your account havent verify, please verify first",
+					icon: "warning",
+					buttons: ["cancel", "Verify"],
+					dangerMode: true,
+					}).then((result) => {
+					if (result) {
+						$.ajax({
+							type: "POST",
+							url: "send_otp.php",
+							data: {
+								email: "<?php echo $email; ?>",
+								otp: "<?php echo $otp; ?>"
+							},
+							beforeSend: function () {
+							showLoading();
+							},
+							success: function (response) {
+								hideLoading();
+								swal("Success", "Register Successfully, OTP sent to your email", "success").then(function () {
+								location.replace("verificationUser.php");
+							});
+							},
+							error: function (error) {
+								console.error("Error:", error);
+							}
+						});
+					} else {
+						// 用户点击 "Cancel" 后执行的操作
+					}
+					
 				});
 				</script>
 				<?php

@@ -4,23 +4,14 @@
 <script>
   $(document).ready(function () { 
     var hasErrors = false;
-    console.log("add_admin");
+    console.log("add_user");
     // Input event listener for first_name input
-    $('#Fname').on('input', function () {
+    $('#FirstName').on('input', function () {
       validateInput($(this));
     });
     // Input event listener for last_name input
-    $('#Lname').on('input', function () {
+    $('#LastName').on('input', function () {
       validateInput($(this));
-    });
-    $('#date_of_birth').on('input', function () {
-      validateDateOfBirth($(this));
-    });
-    $('#address').on('input', function () {
-      validateAddress($(this));
-    });
-    $('#postcode').on('input', function () {
-      validatePostCode($(this));
     });
     $('#email').on('input', function () {
         validateEmail($(this));
@@ -34,13 +25,10 @@
     $('#phone').on('input', function () {
       validatePhoneNumber($(this));
     });
-    $('#addbtn').on('click', function (event) {
+    $('#submitbtn').on('click', function (event) {
     var hasErrors = false;
-    validateInput($('#Fname'));
-    validateInput($('#Lname'));
-    validateDateOfBirth($('#date_of_birth'));
-    validateAddress($('#address'));
-    validatePostCode($('#postcode'));
+    validateInput($('#FirstName'));
+    validateInput($('#LastName'));
     validateEmail($('#email'));
     validatePhoneNumber($('#phone'));
     validatePassword($('#password'));
@@ -58,35 +46,6 @@
         insertData();
       }
     });
-    function validateDateOfBirth(input) {
-            var value = input.val();
-            var validMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-            if (value === "") {
-                displayError(input, 'Required field');
-            }
-            else {
-        // 从字符串中提取月份
-        var month = value.split(" ")[1];
-        
-        // 检查提取的月份是否在有效的月份列表中
-        if (!validMonthNames.includes(month)) {
-            displayError(input, 'Invalid month');
-        } else {
-            removeError(input);
-        }
-    }
-    }
-    function validateAddress(input) {
-      var value = input.val();
-      if(value ==="")
-      {
-        displayError(input, 'Required field');
-      }
-      else {
-        removeError(input);
-      }
-    }
     function validatePostCode(input) {
       var value = input.val();
       if(value ==="")
@@ -154,7 +113,7 @@
           return new Promise(function (resolve, reject) {
               $.ajax({
                   type: "POST",
-                  url: "check_email.php",
+                  url: "check_emailUser.php",
                   data: {
                       action: "check_email",
                       email: email
@@ -201,50 +160,47 @@
       }
     }
     function insertData() {
-      var formData = new FormData($('#add_admin_form')[0]);
-      var admin_picture = document.getElementById('profile_picture');
-      var picture = admin_picture.files[0];
-      if (!picture) {
-        swal("Oops...", "Profile picture is required.", "error");
-        return;
-      }
-      formData.append('action', "insert_admin");
-      formData.append('picture', picture);
-        for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-        }
-        swal({
-        title: "Are you sure?",
-        icon: "warning",
-        buttons: ["No, cancel it!", "Yes, I am sure!"],
-        dangerMode: true,
-    	}).then((result) => {
-        if (result) {
+        var data = {
+            action: "insert_user",
+            FirstName: $("#FirstName").val(),
+            LastName: $("#LastName").val(),
+            email: $("#email").val(),
+            password: $("#password").val(),
+            phone: $("#phone").val(),
+            location: $("#location").val(),
+        };
+        console.log(data);
         $.ajax({
             type: "POST",
-            url: "insert_admin.php", // Change this to the actual script handling the insertion
-            data: formData,
-            contentType: false,
-            processData: false,
+            url: "insert_user.php", // Change this to the actual script handling the insertion
+            data: data,
+            beforeSend: function () {
+            showLoading();
+            },
             success: function (response) {
-              swal("Success", response, "success").then(function() {
-					    location.replace("admin.php");
-				});
+                hideLoading();
+                if(response === "fail")
+                {
+                    swal("Oops...", "Register Failed, Invalid Email ", "error");
+                }
+                else{
+                    swal("Success", "Register Successfully, OTP sent to your email", "success").then(function () {
+                        location.replace("verificationUser.php");
+                    });
+                }
             },
             error: function (error) {
                 console.error("Error:", error);
             }
         });
-      }
-      });
     }
     // Function to display error message
     function displayError(input, message) {
       // Remove existing error message
       removeError(input);
-      
+      console.log("error");
       // Add new error message
-      var errorMessageDiv = $('<div class="error-message" style="color: red;position:absolute;font-size: 12px;"></div>').text(message);
+      var errorMessageDiv = $('<div class="error-message" style="color: red;position:relative;font-size: 12px;"></div>').text(message);
       input.closest('.form-group').append(errorMessageDiv);
     }
 
@@ -252,5 +208,12 @@
     function removeError(input) {
       input.next('.error-message').remove();
     }
+    function showLoading() {
+    $('#loading').show();
+}
+
+function hideLoading() {
+    $('#loading').hide();
+}
   });
 </script>
