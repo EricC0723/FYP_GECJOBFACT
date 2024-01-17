@@ -197,39 +197,6 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
-        function confirmDeleteJobPost(jobPostID) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'change_status/delete.php',
-                        type: 'GET',
-                        data: { jobPostID: jobPostID },
-                        success: function (response) {
-                            if (response == 'success') {
-                                Swal.fire("Closed!", "Job post has been closed.", "success");
-                                // Update the status in the table
-                                getactivejob();
-                                getclosedjob();
-                                getdraftjob();
-                                getblockedjob();
-                                getapplicants();
-                            } else {
-                                Swal.fire("Error!", "Error closing job post!", "error");
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
         function changeAcceptstatus(applicantId) {
             Swal.fire({
                 title: "Are you sure?",

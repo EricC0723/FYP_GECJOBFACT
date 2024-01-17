@@ -137,23 +137,51 @@ if (isset($_SESSION['companyID'])) {
             });
         });
 
-        
+        function deleteCreditCard(button) {
+            var id = button.getAttribute('data-id'); // make sure your button has a 'data-id' attribute
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'creditcard/deletecreditcard.php',
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Closed!", "Payment card has been deleted.", "success");
+                                $.ajax({
+                                    url: 'creditcard/creditcardlist.php',
+                                    type: 'GET',
+                                    success: function (response) {
+                                        $('#creditcard').html(response);
+                                    },
+                                    error: function (error) {
+                                        console.log('Error: ', error);
+                                    }
+                                });
+                            } else {
+                                Swal.fire("Error!", "Error delete payment card!", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
 
-        
+
 
     </script>
 
 </body>
 
 </html>
-<?php
-
-
-
-?>
-
-
-
 <?php
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
@@ -178,7 +206,7 @@ if (isset($_GET['submitbtn'])) {
         <script>
             Swal.fire({
                 title: "Success",
-                text: "Credit card added successfully",
+                text: "Payment card added successfully",
                 icon: "success",
                 backdrop: `lightgrey`,
             }).then(function () {
@@ -191,7 +219,7 @@ if (isset($_GET['submitbtn'])) {
         <script>
             Swal.fire({
                 title: "Error",
-                text: "Credit card added failed",
+                text: "Payment card added failed",
                 icon: "error",
                 backdrop: `lightgrey`,
             });
@@ -211,7 +239,7 @@ if (isset($_GET['savebtn'])) {
 
     $id = $_GET['id'];
 
-    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id'";
+    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id' AND CompanyID = '$CompanyID' AND Card_isDeleted = 0";
 
     $result = mysqli_query($connect, $sql);
 
@@ -220,7 +248,7 @@ if (isset($_GET['savebtn'])) {
         <script>
             Swal.fire({
                 title: "Success",
-                text: "Credit card updated successfully",
+                text: "Payment card updated successfully",
                 icon: "success",
                 backdrop: `lightgrey`,
             }).then(function () {
@@ -233,7 +261,7 @@ if (isset($_GET['savebtn'])) {
         <script>
             Swal.fire({
                 title: "Error",
-                text: "Credit card updated failed",
+                text: "Payment card updated failed",
                 icon: "error",
                 backdrop: `lightgrey`,
             });
