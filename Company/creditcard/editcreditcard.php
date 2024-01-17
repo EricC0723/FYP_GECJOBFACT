@@ -17,7 +17,7 @@ if (isset($_SESSION['companyID'])) {
 $id = $_GET['id'];
 
 // Fetch the credit card details from the database
-$query = "SELECT * FROM credit_card WHERE CreditCardID = $id";
+$query = "SELECT * FROM credit_card WHERE CreditCardID = $id AND Card_isDeleted = 0";
 $result = mysqli_query($connect, $query);
 $row = mysqli_fetch_assoc($result);
 ?>
@@ -151,9 +151,10 @@ $row = mysqli_fetch_assoc($result);
                 <div class="card-form__inner">
                     <div class="card-input">
                         <label for="cardNumber" class="card-input__label">Card Number</label>
-                        <input type="text" id="cardNumberInput" class="card-input__input" v-mask="generateCardNumberMask"
-                            v-model="cardNumber" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardNumber"
-                            autocomplete="off" style="box-sizing: border-box;" name="cardNumberInput">
+                        <input type="text" id="cardNumberInput" class="card-input__input"
+                            v-mask="generateCardNumberMask" v-model="cardNumber" v-on:focus="focusInput"
+                            v-on:blur="blurInput" data-ref="cardNumber" autocomplete="off"
+                            style="box-sizing: border-box;" name="cardNumberInput">
                         <input type="hidden" id="hiddenCardNumber"
                             value="<?php echo htmlspecialchars($row['CreditCard_Number']); ?>">
                         <div style="padding-top:4px;" id="validation-cardNumber" class="hide"><span
@@ -267,9 +268,10 @@ $row = mysqli_fetch_assoc($result);
                                 <label for="cardCvv" class="card-input__label">CVV</label>
                                 <input type="hidden" id="hiddenCardCvv"
                                     value="<?php echo htmlspecialchars($row['CreditCard_CVV']); ?>">
-                                <input type="text" class="card-input__input" id="cardCvvInput" v-mask="'###'" maxlength="3"
-                                    v-model="cardCvv" v-on:focus="flipCard(true)" v-on:blur="flipCard(false)"
-                                    autocomplete="off" style="box-sizing: border-box;" name="cardCvvInput">
+                                <input type="text" class="card-input__input" id="cardCvvInput" v-mask="'###'"
+                                    maxlength="3" v-model="cardCvv" v-on:focus="flipCard(true)"
+                                    v-on:blur="flipCard(false)" autocomplete="off" style="box-sizing: border-box;"
+                                    name="cardCvvInput">
                                 <div style="padding-top:4px;" id="validation-cardCvv" class="hide">
                                     <span style="display:flex"><span
                                             style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -332,25 +334,30 @@ $row = mysqli_fetch_assoc($result);
         $('#creditcard').load('creditcard/creditcardlist.php');
     });
 
-    // Get the input field and the validation message elements
+    // Get the input field, card type and the validation message elements
     var cardNumberInput = document.getElementById('cardNumberInput');
+    var cardTypeInput = document.getElementById('cardType');
     var validationcardNumber = document.getElementById('validation-cardNumber');
 
     // Add an event listener to the input field
     cardNumberInput.addEventListener('input', function () {
         var cardNumberMessage = document.getElementById('cardNumber-message');
+        var cardType = cardTypeInput.value; // Get the card type from the hidden input field
+
         if (this.value.trim() === '') {
             // If the input field is empty
             cardNumberMessage.textContent = 'Required field';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
-        } else if (this.value.trim().length !== 19) {
-            // If the input field does not contain 16 characters
+        } else if ((cardType === 'amex' && this.value.trim().length !== 17) ||
+            (cardType !== 'amex' && this.value.trim().length !== 19)) {
+            // If the card type is 'amex' and the input field does not contain 17 characters
+            // or if the card type is not 'amex' and the input field does not contain 19 characters
             cardNumberMessage.textContent = 'Invalid card number';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
         } else {
-            // If the input field is not empty and contains 16 characters
+            // If the input field is not empty and contains the correct number of characters
             cardNumberMessage.textContent = '';
             this.dataset.valid = '1';
             validationcardNumber.classList.add('hide'); // Hide the validation message
@@ -496,7 +503,7 @@ $row = mysqli_fetch_assoc($result);
     // Add event listeners to the submit buttons
     continueButton.addEventListener('click', validateForm);
 
-    
+
 </script>
 
 <?php
