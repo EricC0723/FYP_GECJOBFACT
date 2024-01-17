@@ -163,7 +163,7 @@
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -528,7 +528,6 @@
                     </div>
 					<div class="row" style="position:center;">
                       <div class="col-md-2 col-sm-12">
-					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
                         	<h5 style="display: inline-block;">Phone</h5>
                         	<div class="form-group">
                         		<input type="text" placeholder=""class="form-control" value="60"disabled/>
@@ -577,18 +576,32 @@
                      <option value="normal admin">Normal admin</option>
 					 <option value="super admin">Super admin</option>
                   </select>
+				  
+				  
 					<h5 style="display: inline-block;">Email</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value=""/>
 						</div>
-					<h5 style="display: inline-block;">Password</h5>
+						<div class="input-group custom">
+						<input type="password" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
+								<div class="input-group-append custom">
+									<span class="input-group-text"><i class="dw dw-eye"></i></span>
+								</div>
+							</div>
+							<div class="input-group custom">
+							<input type="password" placeholder="Comfirm password"  name="c_password" id="c_password"class="form-control" value=""/>
+								<div class="input-group-append custom">
+									<span class="input-group-text"><i class="dw dw-eye"></i></span>
+								</div>
+							</div>
+					<!-- <h5 style="display: inline-block;">Password</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
 						</div>         
 					<h5 style="display: inline-block;">Comfirm password</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Comfirm password"  name="c_password" id="c_password"class="form-control" value=""/>
-						</div>  
+						</div>   -->
 							<div class="mt-5 text-center">
 								<button class="btn btn-primary" name="addbtn" id="addbtn">Add admin</button>
 							</div>
@@ -619,6 +632,21 @@
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatable Setting js -->
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<script>
+    $(document).ready(function () {
+        // 监听眼睛图标的点击事件
+        $('.input-group-append i').on('click', function () {
+            var passwordInput = $(this).closest('.input-group').find('input');
+            
+            // 切换密码输入框的type属性
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+            } else {
+                passwordInput.attr('type', 'password');
+            }
+        });
+    });
+</script>
 	<script>
     $(document).ready(function () {
     // 确保只绑定一次
