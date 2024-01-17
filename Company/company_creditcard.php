@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-require 'vendor/autoload.php'; // Add this line to include PHPMailer
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
-
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 }
 
 ?>
-
 <html lang="en">
 
 <head>
@@ -27,6 +20,9 @@ if (isset($_SESSION['companyID'])) {
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="company_register.css">
+    <link rel="stylesheet" type="text/css" href="company_creditcard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
 
 <body class="postjob_body">
@@ -75,8 +71,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
-
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
@@ -96,123 +92,67 @@ if (isset($_SESSION['companyID'])) {
 
     </header>
 
-    <div style="padding-top:20px;">
-        <div class="register_content" id="change_email">
+    <div style="padding-top:48px;padding-bottom:48px;">
+
+        <div style="margin:0 auto;max-width:960px;width:100%;">
+            <div style="padding-top:20px;">
+                <div style="display:flex;flex-direction:row;align-items:center">
+                    <h2 class="landing_sentence3">Company Payment</h2>
+                </div>
+            </div>
+
+            <div style="padding-top:20px;">
+                <div style="background:white;" id="creditcard">
+
+                </div>
+
+            </div>
+
+
+
+
 
         </div>
     </div>
 
     <script src="post-job.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+    <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
     <script>
+
+
         $(document).ready(function () {
             $.ajax({
-                url: 'change-email-send.php',
+                url: 'creditcard/creditcardlist.php',
                 type: 'GET',
                 success: function (response) {
-                    $('#change_email').html(response);
+                    $('#creditcard').html(response);
+                },
+                error: function (error) {
+                    console.log('Error: ', error);
                 }
             });
         });
+
+        
+
+        
+
     </script>
 
 </body>
 
 </html>
-
-
 <?php
-if (isset($_GET["login_btn"])) {
 
-    // Get the values from the form fields
-    $companyEmail = $_GET['companyEmail'];
 
-    // Prepare an SQL statement to check if the email exists
-    $sql = "UPDATE companies SET CompanyEmail = '$companyEmail', CompanyStatus = 'Verify' WHERE CompanyID = $CompanyID";
-    $result = mysqli_query($connect, $sql);
 
-    if ($result) {
-
-        // After the user is registered, send the verification email
-        $mail = new PHPMailer(true);
-
-        try {
-            //Server settings
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
-            $mail->SMTPAuth = true;
-            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
-            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-
-            //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'Mailer'); // Your Gmail address
-            $mail->addAddress($companyEmail, 'Joe User');
-
-            // Generate a hash of the user's email and a secret key
-            $secretKey = "your-secret-key";
-            $hash = hash_hmac('sha256', $companyEmail, $secretKey);
-
-            // Combine the hash and the email into a single string
-            $combined = $hash . ':' . $companyEmail;
-
-            // Encode the combined string
-            $encoded = base64_encode($combined);
-
-            // Send the verification email
-            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded);
-            $mail->send();
-            ?>
-            <script>
-                var companyEmail = '<?php echo $companyEmail; ?>';
-
-                Swal.fire({
-                    title: "Success",
-                    text: "Please check your email for verification.",
-                    icon: "success",
-                }).then(function () {
-                    $.ajax({
-                        type: 'GET',
-                        url: 'change-email-send.php', // The URL of the PHP file that sends the email
-                        data: {
-                            companyEmail: companyEmail, // Use the JavaScript variable here
-                            emailSent: true // Add this line to send a value indicating that the email was sent
-                        },
-                        success: function (data) {
-                            // This function will be called when the AJAX request is successful
-                            // Replace the content of the div with the new HTML
-                            $('#forget_password').html(data);
-                        },
-                        error: function () {
-                            // This function will be called if the AJAX request fails
-                            alert('An error occurred while sending the email.');
-                        }
-                    });
-                });
-            </script>
-            <?php
-        } catch (Exception $e) {
-            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
-        }
-    } else {
-        ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Invalid email address.",
-                icon: "error",
-            });
-        </script>
-        <?php
-    }
-}
 ?>
+
+
 
 <?php
 if (isset($_SESSION['companyID'])) {
@@ -220,6 +160,86 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
+}
+
+if (isset($_GET['submitbtn'])) {
+    $cardNumber = $_GET['cardNumberInput'];
+    $cardName = $_GET['cardNameInput'];
+    $cardType = $_GET['cardTypeInput'];
+    $cardMonth = $_GET['cardMonthInput'];
+    $cardYear = $_GET['cardYearInput'];
+    $cardCvv = $_GET['cardCvvInput'];
+
+    $sql = "INSERT INTO credit_card (CompanyID, CreditCard_Type, CreditCard_Number, CreditCard_Holder, CreditCard_ExpMonth, CreditCard_ExpYear, CreditCard_CVV) VALUES ('$CompanyID', '$cardType', '$cardNumber', '$cardName', '$cardMonth', '$cardYear', '$cardCvv')";
+    $result = mysqli_query($connect, $sql);
+
+    if ($result) {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Credit card added successfully",
+                icon: "success",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_creditcard.php";
+            });
+        </script>
+        <?php
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Credit card added failed",
+                icon: "error",
+                backdrop: `lightgrey`,
+            });
+        </script>
+        <?php
+    }
+}
+
+
+if (isset($_GET['savebtn'])) {
+    $cardNumber = $_GET['cardNumberInput'];
+    $cardName = $_GET['cardNameInput'];
+    $cardType = $_GET['cardTypeInput'];
+    $cardMonth = $_GET['cardMonthInput'];
+    $cardYear = $_GET['cardYearInput'];
+    $cardCvv = $_GET['cardCvvInput'];
+
+    $id = $_GET['id'];
+
+    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id'";
+
+    $result = mysqli_query($connect, $sql);
+
+    if ($result) {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Credit card updated successfully",
+                icon: "success",
+                backdrop: `lightgrey`,
+            }).then(function () {
+                window.location.href = "company_creditcard.php";
+            });
+        </script>
+        <?php
+    } else {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Credit card updated failed",
+                icon: "error",
+                backdrop: `lightgrey`,
+            });
+        </script>
+        <?php
+    }
 }
 
 if (!isset($_SESSION['companyID'])) {
@@ -236,10 +256,35 @@ if (!isset($_SESSION['companyID'])) {
     </script>
     <?php
     exit;
-} 
+} else if ($row['CompanyStatus'] == 'Verify') {
+    // Show swal box
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
+    <?php
+} else if ($row['CompanyStatus'] == 'Block') {
+    // Show swal box
+    ?>
+            <script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Your account has been blocked.',
+                    icon: 'error',
+                }).then(function () {
+                    window.location = "company_signout.php";
+                });
+            </script>
+    <?php
+}
 ?>
 
 <?php
-mysqli_free_result($result);
 mysqli_close($connect);
 ?>

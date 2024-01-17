@@ -20,6 +20,8 @@ if (isset($_SESSION['companyID'])) {
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 }
+
+
 ?>
 <html lang="en">
 
@@ -77,8 +79,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
-                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
@@ -123,35 +125,38 @@ if (isset($_SESSION['companyID'])) {
         </div>
     </div>
 
-    <div class="content-div" id="active">
+    <div class="content-div" id="active" style="padding-bottom:100px;">
 
     </div>
 
-    <div class="content-div" id="closed">
+    <div class="content-div" id="closed" style="padding-bottom:100px;">
 
     </div>
 
-    <div class="content-div" id="draft">
+    <div class="content-div" id="draft" style="padding-bottom:100px;">
 
     </div>
 
-    <div class="content-div" id="blocked">
+    <div class="content-div" id="blocked" style="padding-bottom:100px;">
 
     </div>
 
-    <div class="content-div" id="applicants">
+    <div class="content-div" id="applicants" style="padding-bottom:100px;">
 
     </div>
 
 
 
-    </div>
+
+    <div id="overlay" class="overlay"></div>
+
 
     <script src="post-job.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
+
         $(document).ready(function () {
             getactivejob();
             getclosedjob();
@@ -220,6 +225,83 @@ if (isset($_SESSION['companyID'])) {
                                 Swal.fire("Error!", "Error closing job post!", "error");
                             }
                         }
+                    });
+                }
+            });
+        }
+
+        function changeAcceptstatus(applicantId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once accepted, you will not be able to change the status!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, accept it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/accept.php',
+                        type: 'GET',
+                        data: { applicantId: applicantId },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Accepted!", "Application has been accepted.", "success");
+                                // Update the status in the table
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error!", "Error accepting application!", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function changeRejectstatus(applicantId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once rejected, you will not be able to change the status!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/reject.php',
+                        type: 'GET',
+                        data: { applicantId: applicantId },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Rejected!", "Application has been rejected.", "success");
+                                // Update the status in the table
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error!", "Error rejecting application!", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function fetchAndOpenNav(button) {
+            var applicantId = $(button).data('applicant-id');
+
+            // First AJAX call to get the applicant details
+            $.ajax({
+                url: 'getjoblist/get-applicant-details.php',
+                method: 'GET',
+                data: { applicantId: applicantId },
+                success: function (data) {
+                    // Update the sidebar content with the applicant details
+                    $('#mySidebar').html(data);
+                    openNav();
+                    $.ajax({
+                        url: 'change_status/process.php',
+                        method: 'GET',
+                        data: { applicant_id: applicantId }
                     });
                 }
             });
@@ -344,6 +426,8 @@ if (isset($_SESSION['companyID'])) {
                 }
             });
         }
+
+
     </script>
 
     <script>
@@ -398,7 +482,10 @@ if (isset($_SESSION['companyID'])) {
                 });
             });
         });
+
+
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>

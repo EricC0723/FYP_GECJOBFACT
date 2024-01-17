@@ -159,8 +159,8 @@ if (isset($_POST['submitbtn'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="#invoicehistory" class="dropdown-link">Invoice
-                                    history</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
                             <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
@@ -185,7 +185,22 @@ if (isset($_POST['submitbtn'])) {
         </div>
     </div>
     <div class="form-container" style="padding-top:32px">
+        <?php
+        if (isset($_SESSION['job_post_ID'])) {
+            $job_post_ID = $_SESSION['job_post_ID'];
+            $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$job_post_ID' ");
+            $row = mysqli_fetch_assoc($result);
+            echo "<script>
+        var jobPostData = " . json_encode($row) . ";
+        </script>";
+        }
 
+        if (isset($_GET['jobPostID'])) {
+            $postid = $_GET["jobPostID"];
+            $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$postid' ");
+            $row = mysqli_fetch_assoc($result);
+        }
+        ?>
 
         <form method="POST" enctype="multipart/form-data">
             <div class="header-title">

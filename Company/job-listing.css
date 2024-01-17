@@ -559,12 +559,166 @@ nav ul {
     background-color: #dde3fc;
 }
 
-.applicant_email{
+.applicant_email {
     text-decoration: none;
     color: #2e3849;
 }
 
-.applicant_email:hover{
+.applicant_email:hover {
     text-decoration: none;
     color: black;
+}
+
+/* CSS */
+.sidebar {
+    height: 100%;
+    width: 1000px;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    background-color: rgb(247, 248, 251);
+    overflow-x: hidden;
+    transition: 0.5s;
+    transform: translateX(1000px); /* Initially move the sidebar off-screen */
+
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Move the sidebar back to its original position when it's open */
+}
+
+.no-scroll {
+    overflow-y: hidden;
+}
+
+.overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s;
+    z-index:1;
+}
+
+.overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  } */
+
+/* .sidebar a:hover {
+    color: #f1f1f1;
+} */
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.a-link {
+    text-decoration: none;
+}
+
+.a-link:hover {
+    color: black;
+}
+
+
+.cont-button {
+    background-color: rgb(73, 100, 233);
+    width: 104.609px;
+    height: 45.0156px;
+    color: rgb(255, 255, 255);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    word-spacing: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+}
+
+.cont-button:hover {
+    background-color: #5975FF;
+}
+
+.cont-button:active {
+    background-color: #3251E6;
+    transform: scale(0.95);
+}
+
+.save-button {
+    background-color: transparent;
+    width: 104.609px;
+    height: 45.0156px;
+    color: rgb(73, 100, 233);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    word-spacing: 0px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+}
+
+.save-button:hover {
+    background-color: #E8ECFD;
+}
+
+.save-button:active {
+    background-color: #DDE3FC;
+    transform: scale(0.95);
+}
+
+.question_options {
+    width: 100%;
+    /* Take up the full width of the container */
+    padding-top: 15px;
+}
+
+.question_options input {
+    padding-left: 20px;
+    /* Add left padding */
+}
+
+.option {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    padding-left: 8px;
+    padding-top: 10px;
+}
+
+.job_question {
+    font-family: "Roboto", "Helvetica Neue", HelveticaNeue, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: black;
+    line-height: 24px;
+    cursor: pointer;
+    position: relative;
+    padding-left: 10px;
+}
+
+input[type='radio'] {
+    transform: scale(2.0);
 }
