@@ -125,31 +125,28 @@
     }
     }
     function validatePassword(input) {
-            var value = input.val();
-            if (value === "") {
-                displayError(input, 'Required field');
-            }
-            else if (value.length < 8 || value.length > 16) {
-                displayError(input, 'Password must be between 8 and 16 characters long');
-            }
-            else if (!/^(?=.*\d)(?=.*[a-zA-Z])/.test(value)) {
-                displayError(input, 'Password must contain at least one number and one letter');
-            }
-            else {
-                removeError(input);
-            }
-        }
-        // Function to validate confirm password input
-      function validateConfirmPassword(input, password) {
-            var value = input.val();
-            if (value === "") {
-                displayError(input, 'Required field');
-            } else if (value !== password) {
-                displayError(input, 'Passwords do not match');
-            } else {
-                removeError(input);
-            }
-      }
+    var value = input.val();
+    if (value === "") {
+        displayPasswordError(input, 'Required field');
+    } else if (value.length < 8 || value.length > 16) {
+        displayPasswordError(input, 'Password must be between 8 and 16 characters long');
+    } else if (!/^(?=.*\d)(?=.*[a-zA-Z])/.test(value)) {
+        displayPasswordError(input, 'Password must contain at least one number and one letter');
+    } else {
+        removePasswordError(input);
+    }
+}
+
+function validateConfirmPassword(input, password) {
+    var value = input.val();
+    if (value === "") {
+        displayPasswordError(input, 'Required field');
+    } else if (value !== password) {
+        displayPasswordError(input, 'Passwords do not match');
+    } else {
+        removePasswordError(input);
+    }
+}
       function validateEmailExistence(email) {
           return new Promise(function (resolve, reject) {
               $.ajax({
@@ -251,6 +248,19 @@
     // Function to remove error message
     function removeError(input) {
       input.next('.error-message').remove();
+    }
+    function displayPasswordError(input, message) {
+      // Remove existing error message
+      removePasswordError(input);
+      
+      // Add new error message
+      var errorMessageDiv = $('<div class="error-message" style="color: red;position:absolute;font-size: 12px;margin-top:45px;"></div>').text(message);
+      input.closest('.input-group').append(errorMessageDiv);
+    }
+
+    // Function to remove error message
+    function removePasswordError(input) {
+      input.closest('.input-group').find('.error-message').remove();
     }
   });
 </script>
