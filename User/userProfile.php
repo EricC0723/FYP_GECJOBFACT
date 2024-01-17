@@ -136,18 +136,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li class="has-children">
+              <li>
                 <a href="job-listings.php">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -163,13 +159,15 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
               <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          
+    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white; margin-top: 5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -183,7 +181,7 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -823,8 +821,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>

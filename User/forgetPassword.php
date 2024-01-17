@@ -21,7 +21,26 @@
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
+	<style>
+        #loading{
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7); /* 半透明白色背景 */
+            z-index: 1000; /* 遮罩层在最上层 */
+        }
 
+        #loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+</style>
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
@@ -35,16 +54,21 @@
 </head>
 
 <body>
+<div id="loading">
+        <div id="loading-spinner">
+            <img src="images/loading.gif" alt="Loading Spinner">
+        </div>
+    </div>
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
-				<a href="login.html">
-					<img src="vendors/images/logo.png" alt="">
+			<a href="index.php"  style="color:black;font-weight: bold;">
+					Home
 				</a>
 			</div>
 			<div class="login-menu">
 				<ul>
-					<li><a href="#">Login</a></li>
+					<li><a href="login.php" style="color:green;">Login</a></li>
 				</ul>
 			</div>
 		</div>
@@ -53,12 +77,12 @@
 		<div class="container">
 			<div class="row align-items-center">
 				<div class="col-md-6">
-					<img src="vendors/images/forgot-password.png" alt="">
+					<img src="images/forget3.webp" alt=""style="margin-left:100px;">
 				</div>
 				<div class="col-md-6">
 					<div class="login-box bg-white box-shadow border-radius-10">
 						<div class="login-title">
-							<h2 class="text-center text-primary">Forgot Password</h2>
+							<h2 class="text-center text-success">Forgot Password</h2>
 						</div>
 						<h6 class="mb-20">Enter your email address to reset your password</h6>
 						<form method="post">
@@ -71,7 +95,7 @@
 							<div class="row align-items-center">
 								<div class="col-5">
 									<div class="input-group mb-0">
-										<input class="btn btn-primary btn-lg btn-block" type="submit" value="Recover" name="recover">
+										<input class="btn btn-success btn-lg btn-block" type="submit" value="Recover" name="recover">
 										<!-- <a class="btn btn-primary btn-lg btn-block" href="index.php">Submit</a> -->
 									</div>
 								</div>
@@ -80,7 +104,7 @@
 								</div>
 								<div class="col-5">
 									<div class="input-group mb-0">
-										<a class="btn btn-outline-primary btn-lg btn-block" href="login.php">Login</a>
+										<a class="btn btn-outline-success btn-lg btn-block" href="login.php">Login</a>
 									</div>
 								</div>
 							</div>
@@ -91,11 +115,22 @@
 		</div>
 	</div>
 	<!-- js -->
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script>
+function showLoading() {
+    $('#loading').show();
+}
+
+function hideLoading() {
+    $('#loading').hide();
+}
+	</script>
 </body>
 
 </html>
@@ -104,71 +139,49 @@
 if(isset($_POST["recover"])){
 	include("C:/xampp/htdocs/FYP/dataconnection.php");
 	$email = $_POST["email"];
-
-	$sql = mysqli_query($connect, "SELECT * FROM users WHERE Email='$email'");
-	$query = mysqli_num_rows($sql);
-	$fetch = mysqli_fetch_assoc($sql);
-	if($query <= 0){
-		?>
-		<!-- 
-			swal({
-            title: "Oops..",
-            text: "Sorry, no emails exists",
-            icon: "error",
-            button: "OK",
-          }); -->
-		  <script>
-			alert("<?php  echo "Sorry, no emails exists "?>");
-		</script>
-		<?php
-	}else{
-		// generate token by binaryhexa 
-		$token = bin2hex(random_bytes(50));
-
-		$_SESSION['token'] = $token;
-		$_SESSION['email'] = $email;
-		require "phpmailer/PHPMailerAutoload.php";
-		$mail = new PHPMailer;
-
-		$mail->isSMTP();
-		$mail->Host='smtp.gmail.com';
-		$mail->Port=587;
-		$mail->SMTPAuth=true;
-		$mail->SMTPSecure='tls';
-
-		// h-hotel account
-		$mail->Username='gecjobfacts888@gmail.com';
-		$mail->Password='atteeyliyxloitmo';
-
-		// send by h-hotel email
-		$mail->setFrom('gecjobfacts888@gmail.com', 'Password Reset');
-		// get email from input
-		$mail->addAddress($_POST["email"]);
-		$mail->addReplyTo('gecjobfacts888@gmail.com');
-
-		// HTML body
-		$mail->isHTML(true);
-		$mail->Subject="Recover your password";
-		$mail->Body="<b>Dear User</b>
-		<h3>We received a request to reset your password.</h3>
-		<p>Kindly click the below link to reset your password</p>
-		http://localhost/final_fyp/FYP/User/resetPassword.php
-		<br><br>
-		<p>With regrads,</p>
-		<b>GEC Job Facts</b>";
-		if(!$mail->send()){
-			?>
-				<script>
-					alert("<?php echo " Invalid Email "?>");
-				</script>
-			<?php
-		}else{
-			?>
-				<script>
-					window.location.replace("login.php");
-				</script>
-			<?php
-		}
-	}
+	$_SESSION['email'] = $email;
+	?>
+	<script>
+		var data = {
+            email: "<?php echo $email; ?>"
+        };
+			$.ajax({
+				type: "POST",
+				url: "send_user_pw.php",
+				data: {
+					email: "<?php echo $_SESSION['email'] ?>",
+				},
+				beforeSend: function () {
+				showLoading();
+				},
+				success: function (response) {
+					console.log(response);
+					hideLoading();
+					if(response === "no_exist")
+					{
+						swal({
+						title: "Failed!",
+						text: "Email not exist",
+						icon: "error",
+						button: "OK",
+				});
+					}
+					else{
+						swal({
+					title: "Success",
+					text: "Reset password link send to your email",
+					icon: "success",
+					button: "OK!",
+					}).then((value) => {
+						window.location.href = "login.php";
+				});
+					}
+				},
+				error: function (error) {
+					console.error("Error:", error);
+				}
+			});
+	</script>
+	<?php
 }
 ?>

@@ -70,7 +70,7 @@
 			</div>
 			<div class="login-menu">
 				<ul>
-					<li><a href="RegisterUser.php">Register</a></li>
+					<li><a href="RegisterUser.php" style="color:green;">Register</a></li>
 				</ul>
 			</div>
 		</div>
@@ -79,30 +79,14 @@
 		<div class="container">
 			<div class="row align-items-center">
 				<div class="col-md-6 col-lg-7">
-					<img src="vendors/images/login-page-img.png" alt="">
+					<img src="images/login-img.png" alt="" style="width:600px;margin-left:100px;">
 				</div>
 				<div class="col-md-6 col-lg-5">
 					<div class="login-box bg-white box-shadow border-radius-10">
 						<div class="login-title">
-							<h2 class="text-center text-primary">Login To GEC JobFact</h2>
+							<h2 class="text-center text-success">Login To GEC JobFact</h2>
 						</div>
 						<form method="post">
-							<div class="select-role">
-								<div class="btn-group btn-group-toggle" data-toggle="buttons">
-									<label class="btn active">
-										<input type="radio" name="options" id="company" value="company">
-										<div class="icon"><img src="vendors/images/briefcase.svg" class="svg" alt=""></div>
-										<span>I'm</span>
-										Employer
-									</label>
-									<label class="btn">
-										<input type="radio" name="options" id="user" value="user">
-										<div class="icon"><img src="vendors/images/person.svg" class="svg" alt=""></div>
-										<span>I'm</span>
-										Employee
-									</label>
-								</div>
-							</div>
 							<div class="input-group custom">
 								<input type="text" class="form-control form-control-lg" placeholder="Email" name="email">
 								<div class="input-group-append custom">
@@ -117,10 +101,6 @@
 							</div>
 							<div class="row pb-30">
 								<div class="col-6">
-									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="customCheck1">
-										<label class="custom-control-label" for="customCheck1">Remember</label>
-									</div>
 								</div>
 								<div class="col-6">
 									<div class="forgot-password"><a href="forgetPassword.php">Forgot Password</a></div>
@@ -129,11 +109,11 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="input-group mb-0">
-										<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In" name="login">
+										<input class="btn btn-success btn-lg btn-block" type="submit" value="Sign In" name="login">
 									</div>
 									<div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
 									<div class="input-group mb-0">
-										<a class="btn btn-outline-primary btn-lg btn-block" href="RegisterUser.php">Register To Create Account</a>
+										<a class="btn btn-outline-success btn-lg btn-block" href="RegisterUser.php">Register To Create Account</a>
 									</div>
 								</div>
 							</div>
@@ -151,7 +131,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script>
-		function showLoading() {
+function showLoading() {
     $('#loading').show();
 }
 
@@ -178,11 +158,9 @@ function hideLoading() {
 		});
 		</script>
 		<?php
-	}
-	else if(isset($_POST["options"])) {
-	$option = $_POST["options"];
-	if($option == "user")
-	{
+	}	else{
+
+	
 		$sql = mysqli_query($connect, "SELECT * FROM users where Email = '$email'");
 		$count = mysqli_num_rows($sql);
 		if($count > 0)
@@ -294,17 +272,4 @@ function hideLoading() {
 		}
 	}
 }
-	else{
-		?>
-		<script>
-			swal({
-			title: "Failed!",
-			text: "Kindly choose the login option.",
-			icon: "error",
-			button: "OK",
-		});
-		</script>
-		<?php
-	}
-    }
 ?>

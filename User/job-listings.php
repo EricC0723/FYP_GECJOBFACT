@@ -1,17 +1,18 @@
 <?php
   session_start();
   include("C:/xampp/htdocs/FYP/dataconnection.php");
-  if (isset($_POST["searchbtn"])) {
+  if (isset($_GET["searchbtn"])) {
     // 从表单中获取搜索条件，并保存到会话变量中
-    $_SESSION["searchjob"] = $_POST["searchjob"];
-    $_SESSION["searchlocation"] = $_POST["searchlocation"];
-    $_SESSION["searchtype"] = $_POST["searchtype"];
+    $_SESSION["searchjob"] = $_GET["searchjob"];
+    $_SESSION["searchlocation"] = $_GET["searchlocation"];
+    $_SESSION["searchtype"] = $_GET["searchtype"];
+    $_SESSION["searchcategory"] = $_GET["searchcategory"];
+    $_SESSION["searchminimum"] = $_GET["searchminimum"];
     $searchJob = $_SESSION["searchjob"];
     $searchLocation = $_SESSION["searchlocation"];
     $searchType = $_SESSION["searchtype"] ;
-    // echo($_SESSION["searchjob"]);
-    // echo($_SESSION["searchlocation"]);
-    // echo($_SESSION["searchtype"]);
+    $searchcategory = $_SESSION["searchcategory"];
+    $searchminimum = $_SESSION["searchminimum"] ;
   }
 ?>
 <!doctype html>
@@ -20,7 +21,6 @@
     <title>JobBoard &mdash; Website Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
     
     <link rel="stylesheet" href="css/custom-bs.css">
     <link rel="stylesheet" href="css/jquery.fancybox.min.css">
@@ -37,12 +37,12 @@
   </head>
   <body id="top">
 
-  <!-- <div id="overlayer"></div>
+  <div id="overlayer"></div>
   <div class="loader">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
-  </div> -->
+  </div>
     
 
 <div class="site-wrap">
@@ -61,18 +61,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li class="has-children">
+              <li>
                 <a href="job-listings.php" class="active">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -88,13 +84,15 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
               <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          
+    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 600px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -103,12 +101,12 @@
                 <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
+                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;margin-left:30px;">
                     <span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -119,7 +117,7 @@
                 <?php
               } else {
                 ?>
-                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block" style="margin-left: 30px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;"><span class="mr-2 icon-lock_outline" ></span>Log In</a>
                 <?php
               }
               ?>
@@ -135,6 +133,8 @@
     <?php 
       $query = "SELECT * FROM job_location";
       $result = mysqli_query($connect,$query);
+      $category_query = "SELECT * FROM main_category";
+      $category_result = mysqli_query($connect,$category_query);
     ?>
   <section class="section-hero home-section overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
       <div class="container">
@@ -143,7 +143,7 @@
             <div class="mb-5 text-center">
               <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
             </div>
-            <form method="post" class="search-jobs-form">
+            <form method="get" class="search-jobs-form" action="job-listings.php">
               <div class="row mb-5">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                   <input type="text" class="form-control form-control-lg" placeholder="Job title, Company..." name="searchjob" value="<?php echo isset($_SESSION['searchjob']) ? $_SESSION['searchjob'] : ''; ?>">
@@ -163,12 +163,11 @@
                   </select>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <!-- <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type" name="searchtype"> -->
                   <?php 
-                    $selectedType = isset($_SESSION['searchtype']) ? $_SESSION['searchtype'] : ''; // 获取保存的工作类型
+                    $selectedType = isset($_SESSION['searchtype']) ? $_SESSION['searchtype'] : '';
                     $jobTypes = array("Part Time", "Full Time", "Internship", "Contract");
 
-                    echo '<select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type" name="searchtype">';
+                    echo '<select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type" name="searchtype">';
 
                     foreach($jobTypes as $value => $type) {
                       $selected = ($value + 1 == $selectedType) ? 'selected' : '';
@@ -183,24 +182,43 @@
                   <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search" name="searchbtn"><span class="icon-search icon mr-2"></span>Search Job</button>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-12 popular-keywords">
-                  <h3>Trending Keywords:</h3>
-                  <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a href="#" class="">UI Designer</a></li>
-                    <li><a href="#" class="">Python</a></li>
-                    <li><a href="#" class="">Developer</a></li>
-                  </ul>
-                </div>
-              </div>
+              <div class="row mb-5">
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+              <select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" title="Minimum salary" name="searchminimum">
+                <?php
+                $selectedMinimum = isset($_SESSION['searchminimum']) ? $_SESSION['searchminimum'] : '';
+                $salaryOptions = array(1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000);
+
+                foreach ($salaryOptions as $salary) {
+                  $selected = ($salary == $selectedMinimum) ? 'selected' : '';
+                  echo "<option value='$salary' $selected>$salary</option>";
+                }
+                ?>
+              </select>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+              <select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Category" name="searchcategory">
+                <?php
+                $selectedcategory = isset($_SESSION['searchcategory']) ? $_SESSION['searchcategory'] : '';
+                if (mysqli_num_rows($category_result) > 0) {
+                  while ($category_row = mysqli_fetch_assoc($category_result)) {
+                    $categoryValue = $category_row["Main_Category_Name"];
+                    $selected = ($categoryValue == $selectedcategory) ? 'selected' : '';
+                    echo "<option value='$categoryValue' $selected>{$category_row["Main_Category_Name"]}</option>";
+                  }
+                }
+                ?>
+              </select>
+            </div>
+          </div>
             </form>
           </div>
         </div>
       </div>
 
-      <a href="#next" class="scroll-button smoothscroll">
+      <!-- <a href="#next" class="scroll-button smoothscroll">
         <span class=" icon-keyboard_arrow_down"></span>
-      </a>
+      </a> -->
     </section>
     <?php 
       if (!isset($_SESSION['User_ID'])) {
@@ -228,12 +246,34 @@
           <?php
           include("C:/xampp/htdocs/FYP/dataconnection.php");
           
-
           if (isset($_GET["page"])) {
-            // 从URL中获取搜索条件，并保存到会话变量中
-            $searchJob = $_SESSION["searchjob"];
-            $searchLocation = $_SESSION["searchlocation"];
-            $searchType = $_SESSION["searchtype"] ;
+            if (isset($_SESSION["searchjob"])) {
+              // 如果存在，可以使用 $_SESSION["searchjob"] 获取值
+              $searchJob = $_SESSION["searchjob"];
+          } else {
+              $searchJob = ""; // 如果不存在，可以设置默认值
+          }
+          
+          if (isset($_SESSION["searchlocation"])) {
+              $searchLocation = $_SESSION["searchlocation"];
+          } else {
+              $searchLocation = "";
+          }
+          if (isset($_SESSION["searchtype"])) {
+              $searchType = $_SESSION["searchtype"];
+          } else {
+              $searchType = "";
+          }
+          if (isset($_SESSION["searchcategory"])) {
+            $searchcategory = $_SESSION["searchcategory"];
+        } else {
+            $searchcategory = "";
+        }
+        if (isset($_SESSION["searchminimum"])) {
+            $searchminimum = $_SESSION["searchminimum"];
+        } else {
+            $searchminimum = "";
+        }
             // $_SESSION["searchjob"] = $_GET["searchjob"];
             // $_SESSION["searchlocation"] = $_GET["searchlocation"];
             // $_SESSION["searchtype"] = $_GET["searchtype"];
@@ -248,6 +288,12 @@
             }
             if (!empty($searchType)) {
               $query .= " AND Job_Post_Type LIKE '%$searchType%'";
+            }
+            if (!empty($searchcategory)) {
+              $query .= " AND Main_Category_Name = '$searchcategory'";
+            }
+            if (!empty($searchminimum)) {
+              $query .= "AND Job_Post_MinSalary >= $searchminimum";
             }
             
             if (!isset ($_GET['page']) ) {
@@ -405,8 +451,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>

@@ -53,18 +53,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link ">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li class="has-children">
-                <a href="job-listings.php" class="active">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php" class="active">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
+              <li>
+                <a href="job-listings.php">Job Listings</a>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -80,27 +76,24 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
-              <!-- <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
-              <li class="d-lg-none"><a href="login.php">Log In</a></li> -->
+              <li><a href="contact.php">Contact</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 600px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
           <div class="ml-auto">
            <?php 
               if (isset($_SESSION['User_ID'])) {
                 ?>
-                <!-- <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span><?php echo $_SESSION['First_Name'];?></a> -->
-                <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
+                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;margin-left:30px;">
                     <span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                   <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -143,9 +136,13 @@
             INNER JOIN companies ON job_post.CompanyID = companies.CompanyID
             WHERE job_post.Job_Post_ID = '$jobID'");
             $row = mysqli_fetch_assoc($result);
-          $question_query = "SELECT * FROM job_post_questions WHERE JobID='$jobID'";
+          
+            
+            $question_query = "SELECT jpq.*, jq.Job_Question_Name 
+            FROM job_post_questions jpq
+            INNER JOIN job_question jq ON jpq.QuestionID = jq.Job_Question_ID
+            WHERE jpq.JobID='$jobID'";
           $question_result = mysqli_query($connect, $question_query);
-          $question_row = mysqli_fetch_assoc($question_result);
 				}
 			?>
       
@@ -198,7 +195,10 @@
           <div class="col-lg-4">
             <div class="row">
               <div class="col-6">
+
               <?php 
+               if($row['job_status']=='Active')
+               {
               if (isset($_SESSION['User_ID'])) {
                 ?>
               <div id="saveButton" class="btn btn-block btn-light btn-md" style="cursor: pointer;" onclick="save_job('<?php echo mysqli_num_rows($save_job_result) > 0 ? 'delete_job' : 'add_job'; ?>', <?php echo $jobID; ?>)">
@@ -214,12 +214,27 @@
               <span class="icon-heart-o mr-2 text-danger"></span>Save
             <?php
               }
+            
                 ?>
         </div>
+        <?php
+      }?>
                 <!-- <a href="#" class="btn btn-block btn-light btn-md"><span class="icon-heart-o mr-2 text-danger"></span></i>Save</a> -->
               </div>
               <div class="col-6">
-                <a href="apply_job.php?jobid=<?php echo $jobID; ?>" class="btn btn-block btn-primary btn-md">Quick apply</a>
+                <?php 
+                  if($row['job_status']=='Active')
+                  {
+                    ?>
+                    <a href="apply_job.php?jobid=<?php echo $jobID; ?>" class="btn btn-block btn-primary btn-md">Quick apply</a>
+                    <?php
+                  }
+                  else{
+                    ?>
+                    <span class="text-grey" style="margin-top:30px;"><strong>Expired</strong></span>
+                    <?php
+                  }
+                ?>
               </div>
             </div>
           </div>
@@ -260,7 +275,7 @@
                 ?>
             </ul>
             </div>
-            <div class="mb-5">
+            <!-- <div class="mb-5">
               <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-book mr-3"></span>Education + Experience</h3>
               <ul class="list-unstyled m-0 p-0">
                 <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Necessitatibus quibusdam facilis</span></li>
@@ -269,17 +284,14 @@
                 <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit</span></li>
                 <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Deleniti asperiores blanditiis nihil quia officiis dolor</span></li>
               </ul>
-            </div>
+            </div> -->
             <div class="mb-5">
               <h3 class="h5 d-flex align-items-center mb-4 text-primary"><i class="icon-copy fa fa-question-circle" aria-hidden="true" style="margin-right:10px;"></i>Question</h3>
               <ul class="list-unstyled m-0 p-0">
               <?php
-                $CompanyBenefitsText = $question_row['CompanyBenefits'];
-                $CompanyBenefitsArray = explode("\n", $CompanyBenefitsText);
-                foreach ($CompanyBenefitsArray as $CompanyBenefits) {
-                    if (!empty(trim($CompanyBenefits))) {
-                      echo '<li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>' . trim($CompanyBenefits) . '</span></li>';
-                    }
+                while ($question_row = mysqli_fetch_assoc($question_result))
+                {
+                  echo '<li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>' . $question_row['Job_Question_Name'] . '</span></li>';
                 }
                 ?>
               </ul>
@@ -289,11 +301,11 @@
               <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-turned_in mr-3"></span>Other Benifits</h3>
               <ul class="list-unstyled m-0 p-0">
               <?php
-                $CompanyBenefitsText = $row['CompanyBenefits'];
-                $CompanyBenefitsArray = explode("\n", $CompanyBenefitsText);
-                foreach ($CompanyBenefitsArray as $CompanyBenefits) {
-                    if (!empty(trim($CompanyBenefits))) {
-                      echo '<li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>' . trim($CompanyBenefits) . '</span></li>';
+                $BenefitsText = $row['Job_Post_Benefits'];
+                $BenefitsArray = explode("\n", $BenefitsText);
+                foreach ($BenefitsArray as $Benefits) {
+                    if (!empty(trim($Benefits))) {
+                      echo '<li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>' . trim($Benefits) . '</span></li>';
                     }
                 }
                 ?>
@@ -320,198 +332,20 @@
                 <li class="mb-2"><strong class="text-black">Experience:</strong>&nbsp<?php echo $row["Job_Post_Exp"];?> above</li>
                 <li class="mb-2"><strong class="text-black">Job Location:</strong> <?php echo $row["Job_Post_Location"];?></li>
                 <li class="mb-2"><strong class="text-black">Salary:</strong> RM<?php echo $row['Job_Post_MinSalary']; ?> - RM<?php echo $row['Job_Post_MaxSalary']; ?></li>
-                <li class="mb-2"><strong class="text-black">Gender:</strong> Any</li>
+                <!-- <li class="mb-2"><strong class="text-black">Gender:</strong> Any</li> -->
                 <li class="mb-2"><strong class="text-black">Application Deadline:</strong> <?php echo date('d-m-Y', strtotime($row['AdEndDate'])); ?></li>
               </ul>
             </div>
 
             <div class="bg-light p-3 border rounded">
-              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Share</h3>
-              <div class="px-3">
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-facebook"></span></a>
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-linkedin"></span></a>
-                <a href="#" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-pinterest"></span></a>
-              </div>
+              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Registrition No : </h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2"><strong class="text-black"></strong> <?php echo $row["RegistrationNo"];?></li>
+              </ul>
             </div>
 
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="site-section" id="next">
-      <div class="container">
-
-        <div class="row mb-5 justify-content-center">
-          <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2">22,392 Related Jobs</h2>
-          </div>
-        </div>
-        
-        <ul class="job-listings mb-5">
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_1.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Product Designer</h2>
-                <strong>Adidas</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> New York, New York
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-danger">Part Time</span>
-              </div>
-            </div>
-            
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_2.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Digital Marketing Director</h2>
-                <strong>Sprint</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_3.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Back-end Engineer (Python)</h2>
-                <strong>Amazon</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_4.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Senior Art Director</h2>
-                <strong>Microsoft</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Anywhere 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_5.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Product Designer</h2>
-                <strong>Puma</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> San Mateo, CA 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_1.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Product Designer</h2>
-                <strong>Adidas</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> New York, New York
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-danger">Part Time</span>
-              </div>
-            </div>
-            
-          </li>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_2.jpg" alt="Image" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Digital Marketing Director</h2>
-                <strong>Sprint</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>
-
-          
-
-          
-        </ul>
-
-        <div class="row pagination-wrap">
-          <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            <span>Showing 1-7 Of 22,392 Jobs</span>
-          </div>
-          <div class="col-md-6 text-center text-md-right">
-            <div class="custom-pagination ml-auto">
-              <a href="#" class="prev">Prev</a>
-              <div class="d-inline-block">
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              </div>
-              <a href="#" class="next">Next</a>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
     
@@ -553,7 +387,7 @@
 
     </section>
 
-    <section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
+    <!-- <section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
       <div class="container">
         <div class="row">
           <div class="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
@@ -569,7 +403,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     
     <footer class="site-footer">
 
@@ -593,8 +427,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>
@@ -647,25 +482,6 @@
     <script src="js/bootstrap-select.min.js"></script>
     
     <script src="js/custom.js"></script>
-    <!-- <script>
-    // 获取 PHP 中的文本内容
-    var responsibilitiesText = document.getElementById('responsibilities').textContent.trim();
-
-    // 按照 \r\n 或 \n 分割文本成数组
-    var itemsArray = responsibilitiesText.split(/\r?\n/);
-
-    // 创建 ul 元素
-    var ulElement = document.getElementById('responsibilitiesList');
-
-    // 将每个数组项添加到 ul 元素中作为 li 元素
-    itemsArray.forEach(function(item) {
-        if (item.trim() !== '') { // 忽略空项
-            var liElement = document.createElement('li');
-            liElement.textContent = item.trim();
-            ulElement.appendChild(liElement);
-        }
-    });
-</script> -->
     <script>
     function save_job(action,job_id){
     event.preventDefault();
