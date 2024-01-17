@@ -187,6 +187,36 @@ window.addEventListener('load', function () {
     }
 });
 
+// Get the select field and the validation message elements
+var requiredExperienceInput = document.getElementById('requiredexperience');
+var validationrequiredExperience = document.getElementById('validation-requiredexperience');
+
+// Add an event listener to the select field
+requiredExperienceInput.addEventListener('change', function () {
+    var requiredExperienceMessage = document.getElementById('requiredexperience-message');
+    var value = this.value;
+    // Check if the select field has a valid value
+    if (value === '') {
+        requiredExperienceMessage.textContent = 'Please select the required years of experience';
+        this.dataset.valid = '0';
+        validationrequiredExperience.classList.remove('hide'); // Show the validation message
+    } else {
+        // If the select field has a valid value
+        requiredExperienceMessage.textContent = '';
+        this.dataset.valid = '1';
+        validationrequiredExperience.classList.add('hide'); // Hide the validation message
+    }
+});
+
+// Trigger the 'input' event manually after the page loads
+window.addEventListener('load', function () {
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('jobPostID')) {
+        var event = new Event('change');
+        requiredExperienceInput.dispatchEvent(event);
+    }
+});
+
 // Get the radio buttons and the validation message elements
 var jobTypeRadios = document.getElementsByName('jobType');
 var validationJobType = document.getElementById('validation-jobtype');
@@ -371,6 +401,10 @@ function validateForm(event) {
     if (validationJobType.dataset.valid !== '1') {
         invalidInputs.push({ input: jobTypeRadios[0], validation: validationJobType });
     }
+    if (requiredExperienceInput.dataset.valid !== '1') {
+        invalidInputs.push({ input: requiredExperienceInput, validation: validationrequiredExperience });
+    }
+
     // Add new condition for salary range validation
     var minSalary = parseInt(jobSalaryMinInput.value.trim());
     var maxSalary = parseInt(jobSalaryMaxInput.value.trim());
