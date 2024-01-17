@@ -46,18 +46,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php" class="active">About</a></li>
-              <li class="has-children">
+              <li>
                 <a href="job-listings.php">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -73,13 +69,15 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
               <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          
+    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 600px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -93,7 +91,7 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                   <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -104,7 +102,7 @@
                 <?php
               } else {
                 ?>
-                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block" style="margin-left: 30px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;"><span class="mr-2 icon-lock_outline" ></span>Log In</a>
                 <?php
               }
               ?>
@@ -144,7 +142,7 @@
 
           <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
             <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="1930">0</strong>
+              <strong class="number" data-number="1930">+</strong>
             </div>
             <span class="caption">Candidates</span>
           </div>
@@ -180,15 +178,13 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-6 mb-5 mb-lg-0">
-            <a data-fancybox data-ratio="2" href="https://vimeo.com/317571768" class="block__96788">
-              <span class="play-icon"><span class="icon-play"></span></span>
               <img src="images/sq_img_6.jpg" alt="Image" class="img-fluid img-shadow">
-            </a>
           </div>
           <div class="col-lg-5 ml-auto">
-            <h2 class="section-title mb-3">JobBoard For Freelancers, Web Developers</h2>
-            <p class="lead">Eveniet voluptatibus voluptates suscipit minima, cum voluptatum ut dolor, sed facere corporis qui, ea quisquam quis odit minus nulla vitae. Sit, voluptatem.</p>
-            <p>Ipsum harum assumenda in eum vel eveniet numquam, cumque vero vitae enim cupiditate deserunt eligendi officia modi consectetur. Expedita tempora quos nobis earum hic ex asperiores quisquam optio nostrum sit!</p>
+            <h2 class="section-title mb-3">Career Site</h2>
+            <p class="lead">Helping job seekers to build a successful and happy career.   We believe everyone deserves an opportunity to find a happy career.</p>
+            <h2 class="section-title mb-3">Our Achievements</h2>
+            <p class="lead">In 2023, the Company has focused on building its talent pool to cater for its further growth in 2024.   Currently, our platform has recruited more than 10,000 potential candidates to fulfil the job demands from our 30 business partners.</p>
           </div>
         </div>
       </div>
@@ -198,66 +194,60 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-6 mb-5 mb-lg-0 order-md-2">
-            <a data-fancybox data-ratio="2" href="https://vimeo.com/317571768" class="block__96788">
-              <span class="play-icon"><span class="icon-play"></span></span>
               <img src="images/sq_img_8.jpg" alt="Image" class="img-fluid img-shadow">
-            </a>
           </div>
           <div class="col-lg-5 mr-auto order-md-1  mb-5 mb-lg-0">
-            <h2 class="section-title mb-3">JobBoard For Workers</h2>
-            <p class="lead">Eveniet voluptatibus voluptates suscipit minima, cum voluptatum ut dolor, sed facere corporis qui, ea quisquam quis odit minus nulla vitae. Sit, voluptatem.</p>
-            <p>Ipsum harum assumenda in eum vel eveniet numquam, cumque vero vitae enim cupiditate deserunt eligendi officia modi consectetur. Expedita tempora quos nobis earum hic ex asperiores quisquam optio nostrum sit!</p>
+            <h2 class="section-title mb-3">For Job Seekers</h2>
+            <p class="lead">Build their successful career by providing career guidance, expert advice, interviews, videos, and a job board with wide selection of job opportunities.</p>
+            <h2 class="section-title mb-3">For Organisations</h2>
+            <p class="lead">We help them to filter, engage and retain the talents by helping them to build an-depth company profiles or more.   GEC JobFact is a bridge between job seekers and employers.</p>
           </div>
         </div>
       </div>
     </section>
-
-   
-    <section class="site-section">
+    <h2 class="section-title mb-2 text-black" style="text-align:center;text-decoration:underline;">About our team</h2>
+    <section class="site-section pb-0">
       <div class="container">
-        <div class="row mb-5">
-          <div class="col-12 text-center" data-aos="fade">
-            <h2 class="section-title mb-3">Our Team</h2>
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+              <img src="images/gy.jpg" alt="Image" class="img-fluid img-shadow"style="width:400px;height:500px;margin-left:100px;">
+          </div>
+          <div class="col-lg-5 ml-auto">
+            <h2 class="section-title mb-3">Looi Guang Yong</h2>
+            <p class="text-muted">Team leader</p>
           </div>
         </div>
-
-        <div class="row align-items-center block__69944">
-
-          <div class="col-md-6">
-            <img src="images/person_6.jpg" alt="Image" class="img-fluid mb-4 rounded">
-          </div>
-
-          <div class="col-md-6">
-            <h3>Elisabeth Smith</h3>
-            <p class="text-muted">Creative Director</p>
-            <p>Soluta quasi cum delectus eum facilis recusandae nesciunt molestias accusantium libero dolores repellat id in dolorem laborum ad modi qui at quas dolorum voluptatem voluptatum repudiandae voluptatibus ut? Ex vel  ad explicabo iure ipsa possimus consectetur neque rem molestiae eligendi velit?.</p>
-            <div class="social mt-4">
-              <a href="#"><span class="icon-facebook"></span></a>
-              <a href="#"><span class="icon-twitter"></span></a>
-              <a href="#"><span class="icon-instagram"></span></a>
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </div>
-          </div>
-
-          <div class="col-md-6 order-md-2 ml-md-auto">
-            <img src="images/person_5.jpg" alt="Image" class="img-fluid mb-4 rounded">
-          </div>
-
-          <div class="col-md-6">
-            <h3>Chintan Patel</h3>
-            <p class="text-muted">Creative Director</p>
-            <p>Soluta quasi cum delectus eum facilis recusandae nesciunt molestias accusantium libero dolores repellat id in dolorem laborum ad modi qui at quas dolorum voluptatem voluptatum repudiandae voluptatibus ut? Ex vel  ad explicabo iure ipsa possimus consectetur neque rem molestiae eligendi velit?.</p>
-            <div class="social mt-4">
-              <a href="#"><span class="icon-facebook"></span></a>
-              <a href="#"><span class="icon-twitter"></span></a>
-              <a href="#"><span class="icon-instagram"></span></a>
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </div>
-          </div>
       </div>
     </section>
 
-    <footer class="site-footer">
+    <section class="site-section pt-0" style="margin-top:50px;">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0 order-md-2">
+              <img src="images/eric.jpeg" alt="Image" class="img-fluid img-shadow"style="width:400px;height:500px;margin-right:100px;">
+          </div>
+          <div class="col-lg-5 mr-auto order-md-1  mb-5 mb-lg-0">
+          <h2 class="section-title mb-3">Eric Ching Khai Jie</h2>
+            <p class="text-muted">Team member</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="site-section pb-0" style="margin-top:-170px;">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-5 mb-lg-0">
+              <img src="images/jielun.jpg" alt="Image" class="img-fluid img-shadow"style="width:400px;height:500px;margin-left:100px;">
+          </div>
+          <div class="col-lg-5 ml-auto">
+          <h2 class="section-title mb-3">Chong Jie Lun</h2>
+            <p class="text-muted">Team member</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" style="margin-top:200px;">
 
       <a href="#top" class="smoothscroll scroll-top">
         <span class="icon-keyboard_arrow_up"></span>
@@ -279,8 +269,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>

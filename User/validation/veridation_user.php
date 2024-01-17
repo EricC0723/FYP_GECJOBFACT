@@ -25,6 +25,9 @@
     $('#phone').on('input', function () {
       validatePhoneNumber($(this));
     });
+    $('#agree-term').on('click', function () {
+      validateCheckbox();
+});
     $('#submitbtn').on('click', function (event) {
     var hasErrors = false;
     validateInput($('#FirstName'));
@@ -33,6 +36,7 @@
     validatePhoneNumber($('#phone'));
     validatePassword($('#password'));
     validateConfirmPassword($('#c_password'), $('#password').val());
+    validateCheckbox(); // 新的验证函数
 
     if ($('.error-message').length > 0) {
         hasErrors = true;
@@ -58,6 +62,15 @@
         removeError(input);
       }
     }
+    function validateCheckbox() {
+    var checkbox = $('#agree-term');
+    if (!checkbox.is(':checked')) {
+        displayError(checkbox, 'You must agree to the Terms of Service.');
+    } else {
+        removeError(checkbox);
+    }
+}
+
     // Function to validate general input (first_name, last_name)
     function validateEmail(input) {
         var email = input.val(); // Get the entered email value
@@ -85,6 +98,8 @@
     }
     function validatePassword(input) {
             var value = input.val();
+            removeError(input);
+
             if (value === "") {
                 displayError(input, 'Required field');
             }
@@ -101,6 +116,8 @@
         // Function to validate confirm password input
       function validateConfirmPassword(input, password) {
             var value = input.val();
+            removeError(input);
+
             if (value === "") {
                 displayError(input, 'Required field');
             } else if (value !== password) {
@@ -206,7 +223,7 @@
 
     // Function to remove error message
     function removeError(input) {
-      input.next('.error-message').remove();
+      input.closest('.form-group').find('.error-message').remove();
     }
     function showLoading() {
     $('#loading').show();

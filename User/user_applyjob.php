@@ -136,18 +136,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li class="has-children">
+              <li>
                 <a href="job-listings.php">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -163,11 +159,13 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          
+          <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white;max-width: 150px; white-space: nowrap;margin-top:7px;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -176,12 +174,12 @@
                 <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
+                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;margin-left:30px;">
                     <span class="user-name" style="color:white;"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -209,7 +207,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Activity</h1>
+            <h1 class="text-white font-weight-bold">Application record</h1>
           </div>
         </div>
       </div>
@@ -249,7 +247,6 @@
                 <p><?php echo $job_row['Main_Category_Name'];?>(<?php echo $job_row['Sub_Category_Name'];?>)</p>
                 <p>Job posted at <?php echo date('d-m-Y', strtotime($job_row['AdStartDate']));?></p>
                 <p><span class="text-black"><span class="icon-room" style="margin-right:10px;"></span></span><?php echo $job_row['Job_Post_Location'];?></p>
-                
                 <p style="margin-top:40px;margin-bottom:-2px;color:green;"><i class="icon-copy fa fa-check-circle-o" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Applied</p>
                 <small style="margin-left:26px;color:grey;font-size:15px;"><?php echo date('d-m-Y', strtotime($row['ApplyDate']));?></small>
               </blockquote>
@@ -264,7 +261,7 @@
         <div class="row mb-5 justify-content-center">
         <div class="col-md-7 text-center">
               <img src="images/search_not_found.jpg" alt="No Result" class="img-fluid" style="height: 160px;width: 180px;">
-              <h3 class="section-title mb-3">Your Saved Jobs List is Empty</h3>
+              <h3 class="section-title mb-3">No application records yet</h3>
               <?php
           }
         ?>
@@ -293,8 +290,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>

@@ -49,18 +49,14 @@
     <header class="site-navbar mt-3">
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.php">DEC JobFact</a></div>
+          <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
               <li><a href="index.php" class="nav-link active">Home</a></li>
               <li><a href="about.php">About</a></li>
-              <li class="has-children">
+              <li>
                 <a href="job-listings.php">Job Listings</a>
-                <ul class="dropdown">
-                  <li><a href="job-single.php">Job Single</a></li>
-                  <li><a href="post-job.html">Post a Job</a></li>
-                </ul>
               </li>
               <li class="has-children">
                 <a href="services.html">Pages</a>
@@ -76,28 +72,27 @@
                 </ul>
               </li>
               <li><a href="blog.html">Blog</a></li>
-              <li><a href="contact.html">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
               <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+          <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 600px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
             <div class="ml-auto">
               <!-- <a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a> -->
               <?php 
               if (isset($_SESSION['User_ID'])) {
                 ?>
-                <!-- <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span><?php echo $_SESSION['First_Name'];?></a> -->
-                <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
+                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;margin-left:30px;">
                     <span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="userProfile.php"><i class="dw dw-user1" style="margin-right: 10px;"></i> Profile</a>
-                    <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
+                    <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
                     <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
@@ -108,7 +103,7 @@
                 <?php
               } else {
                 ?>
-                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Log In</a>
+                <a href="login.php" class="btn btn-primary border-width-2 d-none d-lg-inline-block" style="margin-left: 30px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;"><span class="mr-2 icon-lock_outline" ></span>Log In</a>
                 <?php
               }
               ?>
@@ -125,6 +120,8 @@
     <?php 
       $query = "SELECT * FROM job_location";
       $result = mysqli_query($connect,$query);
+      $category_query = "SELECT * FROM main_category";
+      $category_result = mysqli_query($connect,$category_query);
     ?>
     <section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');overflow:hidden;" id="home-section">
       <div class="container">
@@ -133,7 +130,7 @@
             <div class="mb-5 text-center">
               <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
             </div>
-            <form method="post" class="search-jobs-form" action="job-listings.php">
+            <form method="get" class="search-jobs-form" action="job-listings.php">
               <div class="row mb-5">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                   <input type="text" class="form-control form-control-lg" placeholder="Job title, Company..." name="searchjob">
@@ -165,70 +162,51 @@
                   <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search" name="searchbtn"><span class="icon-search icon mr-2"></span>Search Job</button>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-12 popular-keywords">
-                  <h3>Trending Keywords:</h3>
-                  <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a href="#" class="">UI Designer</a></li>
-                    <li><a href="#" class="">Python</a></li>
-                    <li><a href="#" class="">Developer</a></li>
-                  </ul>
+                <div class="col-md-12">
+                  <div class="row mb-5" style="margin-left:-30px;margin-top:-20px;">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                      <select class="selectpicker" data-size="5" data-style="btn-white btn-lg" data-width="100%" title="Minimum salary" name="searchminimum" style="max-height:100px;">
+                        <option value="1000">1000 ~</option>
+                        <option value="2000">2000 ~</option>
+                        <option value="3000">3000 ~</option>
+                        <option value="4000">4000 ~</option>
+                        <option value="5000">5000 ~</option>
+                        <option value="6000">6000 ~</option>
+                        <option value="7000">7000 ~</option>
+                        <option value="8000">8000 ~</option>
+                        <option value="9000">9000 ~</option>
+                        <option value="10000">10000 ~</option>
+                      </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
+                  <select class="selectpicker" data-size="5" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Category" name="searchcategory" style="max-height:100px;">
+                    <?php 
+                    if(mysqli_num_rows($category_result) > 0)
+                    {
+                      while($category_row = mysqli_fetch_assoc($category_result))
+                      {
+                    ?>
+                     <option value="<?php echo $category_row["Main_Category_Name"];?>"><?php echo $category_row["Main_Category_Name"]; ?></option>
+                    <?php 
+                      }
+                    }
+                    ?>
+                  </select>
                 </div>
+                  </div>
               </div>
             </form>
           </div>
+          
+          </div>
         </div>
       </div>
 
-      <a href="#next" class="scroll-button smoothscroll">
+      <!-- <a href="#next" class="scroll-button smoothscroll">
         <span class=" icon-keyboard_arrow_down"></span>
-      </a>
-
+      </a> -->
     </section>
-    
-    <!-- <section class="py-5 bg-image overlay-primary fixed overlay" id="next" style="background-image: url('images/hero_1.jpg');">
-      <div class="container">
-        <div class="row mb-5 justify-content-center">
-          <div class="col-md-7 text-center">
-            <h2 class="section-title mb-2 text-white">JobBoard Site Stats</h2>
-            <p class="lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita unde officiis recusandae sequi excepturi corrupti.</p>
-          </div>
-        </div>
-        <div class="row pb-0 block__19738 section-counter">
 
-          <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-            <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="1930">0</strong>
-            </div>
-            <span class="caption">Candidates</span>
-          </div>
-
-          <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-            <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="54">0</strong>
-            </div>
-            <span class="caption">Jobs Posted</span>
-          </div>
-
-          <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-            <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="120">0</strong>
-            </div>
-            <span class="caption">Jobs Filled</span>
-          </div>
-
-          <div class="col-6 col-md-6 col-lg-3 mb-5 mb-lg-0">
-            <div class="d-flex align-items-center justify-content-center mb-2">
-              <strong class="number" data-number="550">0</strong>
-            </div>
-            <span class="caption">Companies</span>
-          </div>
-
-            
-        </div>
-      </div>
-    </section> -->
-    
     <?php 
       if (!isset($_SESSION['User_ID'])) {
         ?>
@@ -290,43 +268,23 @@
                       <span class="icon-money"></span> RM<?php echo $row["Job_Post_MinSalary"];?> - RM<?php echo $row["Job_Post_MaxSalary"];?>
                     </div>
                     <div class="job-listing-meta">
-                      <?php
+                    <?php
                         switch($row["Job_Post_Type"])
                         {
-                          case "1" :  $JobType = "Part Time";break;
-                          case "2" :  $JobType = "Full Time";break;
-                          case "3" :  $JobType = "Internship";break;
-                          case "4" :  $JobType = "Contract";break;
-                          default: $JobType = "";break;
+                          case "1" :  $badgeClass = "badge-danger";$JobType = "Part Time";break;
+                          case "2" :  $badgeClass = "badge-primary";$JobType = "Full Time";break;
+                          case "3" :  $badgeClass = "badge-info";$JobType = "Internship";break;
+                          case "4" :  $badgeClass = "badge-secondary";$JobType = "Contract";break;
+                          default: $badgeClass = "badge-secondary";$JobType = "";break;
                         }
                       ?>
-                      <span class="badge badge-danger"><?php echo $JobType;?></span>
+                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span>
                     </div>
                   </div>
                 </li>
               <?php
               }
               ?>
-          <!-- <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="job-single.php"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_2.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
-            </div>
-
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Digital Marketing Director</h2>
-                <strong>Sprint</strong>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span> Overland Park, Kansas 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Full Time</span>
-              </div>
-            </div>
-          </li>-->
-        
         </ul> 
 
         <div class="row pagination-wrap">
@@ -493,8 +451,9 @@
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Company</h3>
             <ul class="list-unstyled">
-              <li><a href="#">About Us</a></li>
-              <li><a href="#">Career</a></li>
+              <li><a href="about.php">About Us</a></li> 
+              <li><a href="term_of_use.php">Term of use</a></li>
+              <li><a href="privacy.php">Privacy policy</a></li>
               <li><a href="#">Blog</a></li>
               <li><a href="#">Resources</a></li>
             </ul>

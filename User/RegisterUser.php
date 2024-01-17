@@ -40,6 +40,9 @@ $location_result = mysqli_query($connect,$location_query);
             transform: translate(-50%, -50%);
             text-align: center;
         }
+		.input-group-append:hover i {
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
@@ -51,13 +54,13 @@ $location_result = mysqli_query($connect,$location_query);
 	<div class="login-header box-shadow">
 		<div class="container-fluid d-flex justify-content-between align-items-center">
 			<div class="brand-logo">
-				<a href="index.php">
-					<img src="vendors/images/logo.png" alt="">
+			<a href="index.php"  style="color:black;font-weight: bold;">
+					Home
 				</a>
 			</div>
 			<div class="login-menu">
 				<ul>
-					<li><a href="Login.php">Login</a></li>
+					<li><a href="Login.php" style="color:green;">Login</a></li>
 				</ul>
 			</div>
 		</div>
@@ -115,29 +118,35 @@ $location_result = mysqli_query($connect,$location_query);
 						<input type="text" placeholder="Enter email"  name="email" id="email" class="form-control" value=""/>
 						</div>
 						<h5 style="display: inline-block;">Password</h5>
-						<div class="form-group">
-							<input type="password" placeholder="Enter password"  name="password" id="password" class="form-control" value=""/>
-						</div>
+						<div class="form-group custom">
+								<input type="password" class="form-control form-control-lg" placeholder="New Password" name="password" id="password">
+								<div class="input-group-append custom">
+									<span class="input-group-text"><i class="dw dw-eye"></i></span>
+								</div>
+							</div>
 						<h5 style="display: inline-block;">Comfirm password</h5>
-						<div class="form-group">
-						<input type="password" placeholder="Comfirm password"  name="c_password" id="c_password" class="form-control" value=""/>
-						</div>
+						<div class="form-group custom">
+								<input type="password" class="form-control form-control-lg" placeholder="New Password" name="c_password" id="c_password">
+								<div class="input-group-append custom">
+									<span class="input-group-text"><i class="dw dw-eye"></i></span>
+								</div>
+							</div>
 							<div class="form-group">
 								<input type="checkbox" name="agree-term" id="agree-term"
 									class="agree-term" /> <label for="agree-term"
 									class="label-agree-term"><span><span></span></span>I
-									agree all statements in <a href="#" class="term-service">Terms
+									agree all statements in <a href="term_of_service.php" class="term-service">Terms
 										of service</a></label>
 							</div>
-							<div class="form-group form-button">
+							<div class="form-group form-button" style="color:green;">
 								<input type="submit" name="signup" id="submitbtn"
-									class="form-submit" value="Register" />
+									class="btn btn-success btn-lg btn-block" value="Register" />
 							</div>
 						</form>
 					</div>
 					<div class="signup-image">
 						<figure>
-							<img src="images/signup-image.jpg" alt="sing up image" style="height:500px;">
+							<img src="images/login-img1.avif" alt="sing up image" style="height:500px;width:500px;">
 						</figure>
 						<h3><a href="login.php" class="signup-image-link" style="color:grey;">Already have account?</a></h3>
 					</div>
@@ -165,7 +174,22 @@ $location_result = mysqli_query($connect,$location_query);
 	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
 	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
-	<script src="vendors/scripts/datatable-setting.js"></script></body>
+	<script src="vendors/scripts/datatable-setting.js"></script>
+	<script>
+    $(document).ready(function () {
+        // 监听眼睛图标的点击事件
+        $('.input-group-append i').on('click', function () {
+            var passwordInput = $(this).closest('.form-group').find('input');
+            
+            // 切换密码输入框的type属性
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+            } else {
+                passwordInput.attr('type', 'password');
+            }
+        });
+    });
+</script>
 </body>
 
 <!-- This templates was made by Colorlib (https://colorlib.com) -->

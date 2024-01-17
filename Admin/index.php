@@ -1,3 +1,7 @@
+<?php
+  session_start();
+  include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +22,9 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
-
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
@@ -44,13 +49,18 @@
 			</div>
 		</div>
 	</div> -->
-
+	<?php 
+		if (!isset($_SESSION['Admin_ID'])) {
+			header("Location: admin_login.php");
+			exit();
+		}
+	?>
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<form>
+				<!-- <form>
 					<div class="form-group mb-0">
 						<i class="dw dw-search2 search-icon"></i>
 						<input type="text" class="form-control search-input" placeholder="Search Here">
@@ -83,7 +93,7 @@
 							</div>
 						</div>
 					</div>
-				</form>
+				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -154,20 +164,19 @@
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
 			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -249,7 +258,7 @@
 
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.html">
+			<a href="index.php">
 				<img src="vendors/images/logo.png" alt="" class="dark-logo">
 				<img src="vendors/images/logo.png" alt="" class="light-logo">
 			</a>
@@ -260,14 +269,10 @@
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+					<li>
+						<a href="index.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
-						<ul class="submenu">
-							<li><a href="index.html">Dashboard style 1</a></li>
-							<li><a href="index2.html">Dashboard style 2</a></li>
-						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
@@ -292,12 +297,18 @@
 							<li><a href="datatable.html">DataTables</a></li>
 						</ul>
 					</li>
-					<li>
-						<a href="admin.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
-						</a>
-					</li>
- <li class="dropdown">
+					<?php
+					if ($_SESSION['AdminType'] == 'super admin') {
+					?>
+						<li>
+							<a href="admin.php" class="dropdown-toggle no-arrow">
+								<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
+							</a>
+						</li>
+					<?php
+					}
+					?>
+ 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
                         <span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
@@ -468,98 +479,232 @@
 	<div class="mobile-menu-overlay"></div>
 
 	<div class="main-container">
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<div class="page-header">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							<div class="title">
-								<h4>blank</h4>
+		<div class="pd-ltr-20">
+			<div class="card-box pd-20 height-100-p mb-30">
+				<div class="row align-items-center">
+					<div class="col-md-4">
+						<img src="vendors/images/banner-img.png" alt="">
+					</div>
+					<div class="col-md-8">
+						<h4 class="font-20 weight-500 mb-10 text-capitalize">
+							Welcome back <div class="weight-600 font-30 text-blue"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></div>
+						</h4>
+						<p class="font-18 max-width-600">As you step into the admin page, the world is at your fingertips. Welcome back, <?php echo $_SESSION['First_Name'];?>!
+</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart"></div>
 							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">blank</li>
-								</ol>
-							</nav>
-						</div>
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">2020</div>
+								<div class="weight-600 font-14">Contact</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<!-- <div class="pd-20 bg-white border-radius-4 box-shadow mb-30">
-				</div> -->
-			</div>
-			<?php 
-				include("C:/xampp/htdocs/FYP/dataconnection.php");
-				if(isset($_GET['edit']))
-				{
-					$Adminid = $_GET['adminID'];
-					$result = mysqli_query($connect,"SELECT * FROM admins WHERE AdminID = '$Adminid'");
-					$row = mysqli_fetch_assoc($result);
-				}
-			?>
-
-		<div class="container rounded bg-white mt-5 mb-5">
-    	<div class="row" style="margin-top :-120px;margin-bottom:50px;">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50"><?php echo $row['Email']; ?></span><span> </span></div>
-        </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-				
-				<form name="update profile" method="post" action="">
-
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Admin ID :</label><input type="text" class="form-control" placeholder="first name" value="<?php echo $row['AdminID']; ?>"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Email</label><input name="Email" type="text" class="form-control" value="<?php echo $row['Email']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">First Name</label><input type="text" class="form-control" name="FirstName" value="<?php echo $row['FirstName']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">Last Name</label><input type="text" class="form-control" name="LastName" value="<?php echo $row['LastName']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">Admin Type</label><input type="text" class="form-control" name="AdminType" value="<?php echo $row['AdminType']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">Address</label><input type="text" class="form-control" name="StreetAddress" placeholder="enter address line 2" value="<?php echo $row['StreetAddress']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">City</label><input type="text" class="form-control" name="City" placeholder="enter address line 2" value="<?php echo $row['City']; ?>"></div> 
-                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" name="PostalCode" placeholder="enter address line 2" value="<?php echo $row['PostalCode']; ?>"></div>
-                    <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" name="State" placeholder="enter address line 2" value="<?php echo $row['State']; ?>"></div>
-                    
-                    <div class="col-md-12">
-					<label class="labels">Admin Status :</label>
-					<select class="custom-select2 form-control" name="AdminStatus" style="width: 100%; height: 38px;" value="<?php echo $row['AdminStatus']; ?>">
-							<!--<option value="Verify" <?php if($row['CompanyStatus'] == 'Verify') echo 'selected'; ?>>Verify</option> -->
-							<!-- <option value="Active" <?php if($row['CompanyStatus'] == 'Active') echo 'selected'; ?>>Active</option>
-							<option value="Blocked" <?php if($row['CompanyStatus'] == 'Closed') echo 'selected'; ?>>Blocked</option>
-							<option value="Blocked" <?php if($row['CompanyStatus'] == 'Closed') echo 'selected'; ?>>Closed</option> -->
-							<option value="Active">Active</option>
-							<option value="Closed">Closed</option>
-					</select>
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart2"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">400</div>
+								<div class="weight-600 font-14">Deals</div>
+							</div>
+						</div>
 					</div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
-                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
-                </div>
-				<div class="row mt-3" style="margin-left: 120px;">
-				<div class="mt-5 text-center"><button class="btn btn-primary profile-button" name="submitbtn" type="submit">Save Profile</button></div>
-                <div class="mt-5 text-center"><button class="btn btn-second profile-button" type="button">Delete</button></div>
-                </div>
-            </div>
-        </div>
-		</form>
-</div>
+				</div>
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart3"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">350</div>
+								<div class="weight-600 font-14">Campaign</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 mb-30">
+					<div class="card-box height-100-p widget-style1">
+						<div class="d-flex flex-wrap align-items-center">
+							<div class="progress-data">
+								<div id="chart4"></div>
+							</div>
+							<div class="widget-data">
+								<div class="h4 mb-0">$6060</div>
+								<div class="weight-600 font-14">Worth</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-8 mb-30">
+					<div class="card-box height-100-p pd-20">
+						<h2 class="h4 mb-20">Activity</h2>
+						<div id="chart5"></div>
+					</div>
+				</div>
+				<div class="col-xl-4 mb-30">
+					<div class="card-box height-100-p pd-20">
+						<h2 class="h4 mb-20">Lead Target</h2>
+						<div id="chart6"></div>
+					</div>
+				</div>
+			</div>
+			<div class="card-box mb-30">
+				<h2 class="h4 pd-20">Best Selling Products</h2>
+				<table class="data-table table nowrap">
+					<thead>
+						<tr>
+							<th class="table-plus datatable-nosort">Product</th>
+							<th>Name</th>
+							<th>Color</th>
+							<th>Size</th>
+							<th>Price</th>
+							<th>Oty</th>
+							<th class="datatable-nosort">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="table-plus">
+								<img src="vendors/images/product-1.jpg" width="70" height="70" alt="">
+							</td>
+							<td>
+								<h5 class="font-16">Shirt</h5>
+								by John Doe
+							</td>
+							<td>Black</td>
+							<td>M</td>
+							<td>$1000</td>
+							<td>1</td>
+							<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-plus">
+								<img src="vendors/images/product-2.jpg" width="70" height="70" alt="">
+							</td>
+							<td>
+								<h5 class="font-16">Boots</h5>
+								by Lea R. Frith
+							</td>
+							<td>brown</td>
+							<td>9UK</td>
+							<td>$900</td>
+							<td>1</td>
+							<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-plus">
+								<img src="vendors/images/product-3.jpg" width="70" height="70" alt="">
+							</td>
+							<td>
+								<h5 class="font-16">Hat</h5>
+								by Erik L. Richards
+							</td>
+							<td>Orange</td>
+							<td>M</td>
+							<td>$100</td>
+							<td>4</td>
+							<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-plus">
+								<img src="vendors/images/product-4.jpg" width="70" height="70" alt="">
+							</td>
+							<td>
+								<h5 class="font-16">Long Dress</h5>
+								by Renee I. Hansen
+							</td>
+							<td>Gray</td>
+							<td>L</td>
+							<td>$1000</td>
+							<td>1</td>
+							<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-plus">
+								<img src="vendors/images/product-5.jpg" width="70" height="70" alt="">
+							</td>
+							<td>
+								<h5 class="font-16">Blazer</h5>
+								by Vicki M. Coleman
+							</td>
+							<td>Blue</td>
+							<td>M</td>
+							<td>$1000</td>
+							<td>1</td>
+							<td>
+								<div class="dropdown">
+									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+										<i class="dw dw-more"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
+										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 			<div class="footer-wrap pd-20 mb-20 card-box">
 				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
 			</div>
@@ -570,32 +715,11 @@
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
+	<script src="src/plugins/apexcharts/apexcharts.min.js"></script>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<script src="vendors/scripts/dashboard.js"></script>
 </body>
 </html>
-
-<?php
-if (isset($_POST["submitbtn"]))
-{
-    $email = $_POST["Email"];
-	$fname = $_POST["FirstName"];
-	$lname = $_POST["LastName"];
-    $status = $_POST["AdminStatus"];
-	$address = $_POST["StreetAddress"];
-	$city = $_POST["City"];
-	$postcode = $_POST["PostalCode"];
-	$state = $_POST["State"];
-
-
-	
-	$sql = mysqli_query($connect,"UPDATE admins SET Email='$email', FirstName='$fname', LastName='$lname', AdminStatus='$status', StreetAddress='$address',  City='$city', PostalCode='$postcode', State='$state'  WHERE AdminID = '$Adminid'");
-	echo "Hello, your user name is:".$name;
-    echo "Your email is: ".$email;
-	echo "Your first name is: ".$fname;
-    echo "Your last name is: ".$lname;
-    echo "Admin status is: ".$status;
-	echo "Street Address is: ".$address;
-	echo "City is: ".$city;
-	echo "Postcode is: ".$postcode;
-	echo "State is: ".$state;
-}
-?>
