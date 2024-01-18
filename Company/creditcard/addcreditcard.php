@@ -333,7 +333,7 @@ if (isset($_SESSION['companyID'])) {
             this.dataset.valid = '1';
             validationcardNumber.classList.add('hide'); // Hide the validation message
         }
-    }); cacat
+    });
 
     // Get the input field and the validation message elements
     var cardNameInput = document.getElementById('cardNameInput');

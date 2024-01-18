@@ -251,17 +251,15 @@ if (isset($_POST["submitbtn"])) {
 
                 <div class="form-group">
                     <label class="question" style="padding-bottom: 8px;">Required years of experience</label>
-                    <select class="form-dropdown" name="requiredexperience" id="requiredexperience" style="height:46px;width:604.67px;">
+                    <select class="form-dropdown" name="requiredexperience" id="requiredexperience"
+                        style="height:46px;width:604.67px;">
                         <option value="" disabled selected>Select required years of experience</option>
                         <?php
-                        echo '<option value="Not required">Not required</option>';
+                        $selectedExperience = isset($row['Job_Post_Exp']) ? $row['Job_Post_Exp'] : '';
+                        echo '<option value="Not required"' . ($selectedExperience == 'Not required' ? ' selected' : '') . '>Not required</option>';
                         for ($i = 1; $i <= 20; $i++) {
                             $years = $i . ' Year' . ($i > 1 ? 's' : '');
-                            echo '<option value="' . $years . '"';
-                            if (isset($row['Job_Post_Exp']) && $row['Job_Post_Exp'] == $years) {
-                                echo ' selected';
-                            }
-                            echo '>' . $years . ' and above</option>';
+                            echo '<option value="' . $years . '"' . ($selectedExperience == $years ? ' selected' : '') . '>' . $years . ' and above</option>';
                         }
                         ?>
                     </select>
@@ -278,7 +276,8 @@ if (isset($_POST["submitbtn"])) {
                                     <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                     </path>
                                 </svg></span><span><span id="requiredexperience-message"
-                                    class="validation_sentence">Please select the required years of experience</span></span></span></div>
+                                    class="validation_sentence">Please select the required years of
+                                    experience</span></span></span></div>
                 </div>
                 <div class="vertical-space"></div>
 

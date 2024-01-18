@@ -49,10 +49,16 @@ $result_responses = mysqli_query($connect, $sql_responses);
     <div style="padding:32px 24px;margin:0;">
         <div style="background:white;width:100%">
             <div style="display:flex;flex-direction:row;justify-content:space-between">
-                <h2 class="landing_sentence3" style="width:800px">
-                    <?php echo htmlspecialchars($row['FirstName']); ?>
-                    <?php echo htmlspecialchars($row['LastName']); ?>
-                </h2>
+                <div style="display:flex;flex-direction:column;">
+                    <h2 class="landing_sentence3" style="width:800px">
+                        <?php echo htmlspecialchars($row['FirstName']); ?>
+                        <?php echo htmlspecialchars($row['LastName']); ?>
+                    </h2>
+                    <div style="font-size:16px;line-height:24px;" class="landing_sentence2">
+                        Apply at
+                        <?php echo date('j F Y', strtotime($row['ApplyDate'])); ?>.
+                    </div>
+                </div>
                 <?php if ($row['Status'] == 'Accepted' || $row['Status'] == 'Rejected'): ?>
                     <span class="landing_sentence1" style="font-size:18px;">You have already
                         <?php echo strtolower($row['Status']); ?> this application.
