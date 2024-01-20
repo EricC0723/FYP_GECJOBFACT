@@ -315,12 +315,14 @@ if (isset($_SESSION['companyID'])) {
     // Add an event listener to the input field
     cardNumberInput.addEventListener('input', function () {
         var cardNumberMessage = document.getElementById('cardNumber-message');
+        var cardType = document.getElementById('cardType').value; // Fetch the cardType
+        var companyId = "<?php echo $_SESSION['companyID']; ?>"; 
         if (this.value.trim() === '') {
             // If the input field is empty
             cardNumberMessage.textContent = 'Required field';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
-        } else if ((cardType === 'amex' && this.value.trim().length !== 15) ||
+        } else if ((cardType === 'amex' && this.value.trim().length !== 17) ||
             (cardType !== 'amex' && this.value.trim().length !== 19)) {
             // If the card type is 'amex' and the input field does not contain 15 characters
             // or if the card type is not 'amex' and the input field does not contain 19 characters
@@ -328,10 +330,27 @@ if (isset($_SESSION['companyID'])) {
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
         } else {
-            // If the input field is not empty and contains 16 characters
-            cardNumberMessage.textContent = '';
-            this.dataset.valid = '1';
-            validationcardNumber.classList.add('hide'); // Hide the validation message
+            // If the input field is not empty and contains the correct number of characters
+            // Check if the card number exists in the database for the same company
+            $.ajax({
+                url: 'check_data.php',
+                type: 'post',
+                data: {
+                    cardNumber: this.value.trim(),
+                    companyId: companyId
+                },
+                success: function (response) {
+                    if (response == 1) {
+                        cardNumberMessage.textContent = 'Card number already exists for this company';
+                        cardNumberInput.dataset.valid = '0';
+                        validationcardNumber.classList.remove('hide'); // Show the validation message
+                    } else {
+                        cardNumberMessage.textContent = '';
+                        cardNumberInput.dataset.valid = '1';
+                        validationcardNumber.classList.add('hide'); // Hide the validation message
+                    }
+                }
+            });
         }
     });
 
