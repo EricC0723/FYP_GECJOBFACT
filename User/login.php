@@ -176,10 +176,10 @@ function hideLoading() {
 				<script>
 					console.log("login");
 					swal({
-					title: "User Login Successful",
+					title: "User Login Successfully",
 					text: "Welcome to GEC Job Fact",
 					icon: "success",
-					button: "OK!",
+					button: "OK",
 					}).then((value) => {
 						window.location.href = "index.php";
 				});
@@ -192,7 +192,7 @@ function hideLoading() {
 					console.log("blocked");
 					swal({
 					title: "Failed",
-					text: "Your account has already been blocked because of unlawful activity.",
+					text: "Due to illegal activities, your account has already been blocked.",
 					icon: "error",
 					button: "OK!",
 					}).then((value) => {
@@ -209,7 +209,7 @@ function hideLoading() {
 				<script>
 					console.log("verify");
 					swal({
-					title: "Your account havent verify, please verify first",
+					title: "Your account has not been verified, please verify",
 					icon: "warning",
 					buttons: ["cancel", "Verify"],
 					dangerMode: true,
@@ -227,7 +227,7 @@ function hideLoading() {
 							},
 							success: function (response) {
 								hideLoading();
-								swal("Success", "Register Successfully, OTP sent to your email", "success").then(function () {
+								swal("Success", "OTP sent to your email", "success").then(function () {
 								location.replace("verificationUser.php");
 							});
 							},

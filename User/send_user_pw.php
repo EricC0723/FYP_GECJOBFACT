@@ -32,7 +32,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 		$mail->Body="<b>Dear User</b>
 		<h3>We received a request to reset your password.</h3>
 		<p>Kindly click the below link to reset your password</p>
-		http://localhost/final_fyp/FYP/User/resetPassword.php
+		<a href='http://localhost/final_fyp/FYP/User/resetPassword.php'>Click here to reset your password</a>
 		<br><br>
 		<p>With regrads,</p>
 		<b>GEC Job Facts</b>";

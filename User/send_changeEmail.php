@@ -1,6 +1,7 @@
-
 <?php
-$email = $job_row["CompanyEmail"];
+session_start() ;
+$email = $_POST["email"];
+$_SESSION["new_email"] = $email;
         require "phpmailer/PHPMailerAutoload.php";
         $mail = new PHPMailer;
 
@@ -13,13 +14,17 @@ $email = $job_row["CompanyEmail"];
         $mail->Username='gecjobfacts888@gmail.com';
         $mail->Password='atteeyliyxloitmo';
 
-        $mail->setFrom('gecjobfacts888@gmail.com', 'New Job Application');
+        $mail->setFrom('gecjobfacts888@gmail.com', 'Email Change Request - GEC JobFacts');
         $mail->addAddress($email);
         $mail->addReplyTo('gecjobfacts888@gmail.com');
 
         $mail->isHTML(true);
-        $mail->Subject="New Job Application";
-        $mail->Body="<p>Dear company, </p><br><h3>Someone has applied for the job posted on GEC JobFact.</h3>
+        $mail->Subject="Email Change Request";
+        $mail->Body="<p>Dear user, </p><br><h3>You have requested to change your email on GEC JobFacts.</h3>
+        <a href='http://localhost/final_fyp/FYP/User/update_email.php'>Click here to change your email</a>
+        <br>
+        <p>If you did not make this request, please ignore this email.</p>
+        <br>
         <br><br>
         <p>With regrads,</p>
         <b>GEC JobFacts</b>";
@@ -30,10 +35,6 @@ $email = $job_row["CompanyEmail"];
 				</script>
 			<?php
 		}else{
-			?>
-				<script>
-					window.location.replace("login.php");
-				</script>
-			<?php
+					 echo 'Change password link send to your email';
 		}
         ?>

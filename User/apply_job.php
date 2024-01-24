@@ -293,7 +293,7 @@
 	<div class="row justify-content-center">
 		<div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
             <div class="card px-0 pt-4 pb-0 mt-3 mb-3" style="border-radius:20px;width:1000px;margin-left:-150px;text-align: left;">
-                <img src="images/job_logo_5.jpg" alt="Image" style="width:120px;border-radius: 25px;margin-bottom:50px;position:absolute;margin-left:100px;">
+                <img src="<?php echo $job_row['Job_Logo_Url']; ?>" alt="Image" style="width:120px;height:120;border-radius: 25px;margin-bottom:50px;position:absolute;margin-left:100px;">
                 <h2 id="heading" style="margin-left:270px;margin-top:20px;"><?php echo $job_row['Job_Post_Title'];?></h2>
                 <p style="margin-left:270px;margin-top:-10px;"><?php echo $job_row['CompanyName'];?></p>
                 <div data-toggle="modal" data-target="#job_description">

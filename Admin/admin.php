@@ -2,7 +2,7 @@
 session_start();
 require 'VeridationAdminPage/edit_admin_veridate.php';
 include("C:/xampp/htdocs/FYP/dataconnection.php");
-$query = "SELECT * FROM  admins";
+$query = "SELECT * FROM  admins WHERE AdminType='normal admin'";
 $result = mysqli_query($connect,$query);
 $location_query = "SELECT * FROM job_location";
 $location_result = mysqli_query($connect,$location_query);
@@ -21,7 +21,7 @@ function confirmation()
 </script>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>GEC JOB FACT</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -184,9 +184,6 @@ function confirmation()
 						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>

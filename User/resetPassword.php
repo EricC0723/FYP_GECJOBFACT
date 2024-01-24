@@ -152,7 +152,22 @@
 				displayError($('input[name="comfirmpw"]'), 'Password must contain at least one number and one letter');
 			</script>
 			<?php
-		} elseif ($psw != $c_psw) {
+		}
+		elseif (!preg_match('/^(?=.*[A-Z]).*$/', $psw)) {
+			?>
+			<script>
+				displayError($('input[name="comfirmpw"]'), 'Password must contain at least one uppercase letter');
+			</script>
+			<?php
+		}
+		elseif (!preg_match('/^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$/', $psw)) {
+			?>
+			<script>
+				displayError($('input[name="comfirmpw"]'), 'Password must contain at least one number and one letter');
+			</script>
+			<?php
+		}
+		 elseif ($psw != $c_psw) {
 			?>
 			<script>
 				displayError($('input[name="comfirmpw"]'), 'Passwords do not match');
@@ -160,10 +175,19 @@
 			<?php
         }
         else{
-        // $token = $_SESSION['token'];
         $Email = $_SESSION['email'];
-
-        $hash = password_hash( $psw , PASSWORD_DEFAULT );
+		$result_old_password = mysqli_query($connect, "SELECT Password FROM users WHERE Email='$Email'");
+		$row = mysqli_fetch_assoc($result_old_password);
+		
+		if (password_verify($psw, $row['Password'])) {
+			?>
+			<script>
+				displayError($('input[name="comfirmpw"]'), 'New password cannot be the same as the old password.');
+			</script>
+			<?php
+		}
+		else{
+		$hash = password_hash( $psw , PASSWORD_DEFAULT );
 		$new_pass = $hash;
         $result = mysqli_query($connect, "UPDATE users SET Password='$new_pass' WHERE Email='$Email'");
 		
@@ -176,6 +200,7 @@
         }else {
 			echo "error : " . mysqli_error($connect);
 		}
+		} 
     }
     }
 

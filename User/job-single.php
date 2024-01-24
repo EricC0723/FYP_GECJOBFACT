@@ -57,25 +57,11 @@
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.php" class="nav-link ">Home</a></li>
+              <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.php">Contact</a></li>
             </ul>
           </nav>
@@ -275,16 +261,6 @@
                 ?>
             </ul>
             </div>
-            <!-- <div class="mb-5">
-              <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-book mr-3"></span>Education + Experience</h3>
-              <ul class="list-unstyled m-0 p-0">
-                <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Necessitatibus quibusdam facilis</span></li>
-                <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Velit unde aliquam et voluptas reiciendis non sapiente labore</span></li>
-                <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Commodi quae ipsum quas est itaque</span></li>
-                <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit</span></li>
-                <li class="d-flex align-items-start mb-2"><span class="icon-check_circle mr-2 text-muted"></span><span>Deleniti asperiores blanditiis nihil quia officiis dolor</span></li>
-              </ul>
-            </div> -->
             <div class="mb-5">
               <h3 class="h5 d-flex align-items-center mb-4 text-primary"><i class="icon-copy fa fa-question-circle" aria-hidden="true" style="margin-right:10px;"></i>Question</h3>
               <ul class="list-unstyled m-0 p-0">
@@ -298,7 +274,7 @@
             </div>
             
             <div class="mb-5">
-              <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-turned_in mr-3"></span>Other Benifits</h3>
+              <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-turned_in mr-3"></span>Other Benefits</h3>
               <ul class="list-unstyled m-0 p-0">
               <?php
                 $BenefitsText = $row['Job_Post_Benefits'];
@@ -329,7 +305,16 @@
                 <li class="mb-2"><strong class="text-black">Position: </strong> <?php echo $row["Job_Post_Position"];?></li>
                 <li class="mb-2"><strong class="text-black">Vacancy: </strong> <?php echo $row["CompanySize"];?></li>
                 <li class="mb-2"><strong class="text-black">Employment Status: </strong> <?php echo $JobType;?></li>
-                <li class="mb-2"><strong class="text-black">Experience:</strong>&nbsp<?php echo $row["Job_Post_Exp"];?> above</li>
+                <?php 
+                  if($row["Job_Post_Exp"] != "Not required")
+                  {
+                    $experian = $row["Job_Post_Exp"] ." and above";
+                  }
+                  else{
+                    $experian = "Not required";
+                  }
+                ?>
+                <li class="mb-2"><strong class="text-black">Experience:</strong>&nbsp<?php echo $experian;?></li>
                 <li class="mb-2"><strong class="text-black">Job Location:</strong> <?php echo $row["Job_Post_Location"];?></li>
                 <li class="mb-2"><strong class="text-black">Salary:</strong> RM<?php echo $row['Job_Post_MinSalary']; ?> - RM<?php echo $row['Job_Post_MaxSalary']; ?></li>
                 <!-- <li class="mb-2"><strong class="text-black">Gender:</strong> Any</li> -->
@@ -338,7 +323,7 @@
             </div>
 
             <div class="bg-light p-3 border rounded">
-              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Registrition No : </h3>
+              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Registration Number : </h3>
               <ul class="list-unstyled pl-3 mb-0">
                 <li class="mb-2"><strong class="text-black"></strong> <?php echo $row["RegistrationNo"];?></li>
               </ul>
@@ -386,27 +371,8 @@
       </div>
 
     </section>
-
-    <!-- <section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
-            <h2 class="text-white">Get The Mobile Apps</h2>
-            <p class="mb-5 lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit tempora adipisci impedit.</p>
-            <p class="mb-0">
-              <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-apple mr-3"></span>App Store</a>
-              <a href="#" class="btn btn-dark btn-md px-4 border-width-2"><span class="icon-android mr-3"></span>Play Store</a>
-            </p>
-          </div>
-          <div class="col-md-6 ml-auto align-self-end">
-            <img src="images/apps.png" alt="Image" class="img-fluid">
-          </div>
-        </div>
-      </div>
-    </section> -->
     
     <footer class="site-footer">
-
       <a href="#top" class="smoothscroll scroll-top">
         <span class="icon-keyboard_arrow_up"></span>
       </a>
@@ -414,56 +380,39 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Search Trending</h3>
+            <h3>Job seekers</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Web Design</a></li>
-              <li><a href="#">Graphic Design</a></li>
-              <li><a href="#">Web Developers</a></li>
-              <li><a href="#">Python</a></li>
-              <li><a href="#">HTML5</a></li>
-              <li><a href="#">CSS3</a></li>
+              <li><a href="job-listings.php">Job listings</a></li>
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Company</h3>
+            <h3>About JOBFACT</h3>
             <ul class="list-unstyled">
               <li><a href="about.php">About Us</a></li> 
               <li><a href="term_of_use.php">Term of use</a></li>
-              <li><a href="privacy.php">Privacy policy</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Resources</a></li>
+              
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Support</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Privacy</a></li>
-              <li><a href="#">Terms of Service</a></li>
+            <li><a href="contact.php">Contact us</a></li>
+             <li><a href="privacy.php">Privacy policy</a></li>
+             <li><a href="term_of_service.php">Term of Service</a></li>
             </ul>
-          </div>
-          <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Contact Us</h3>
-            <div class="footer-social">
-              <a href="#"><span class="icon-facebook"></span></a>
-              <a href="#"><span class="icon-twitter"></span></a>
-              <a href="#"><span class="icon-instagram"></span></a>
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </div>
           </div>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center" style="margin-top:100px;">
           <div class="col-12">
             <p class="copyright"><small>
               <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></small></p>
           </div>
         </div>
       </div>
     </footer>
-  
   </div>
 
     <!-- SCRIPTS -->
@@ -508,11 +457,11 @@
                     if (action === "add_job") {
                         saveButton.html('<span class="icon-copy fa fa-heart" aria-hidden="true" style="margin-right:10px;color:red;"></span>Unsave');
                         saveButton.attr("onclick", "save_job('delete_job', " + job_id + ")");
-                        swal("Success", "Save successfully", "success")
+                        swal("Success", "Saved successfully", "success")
                     } else if (action === "delete_job") {
                         saveButton.html('<span class="icon-heart-o mr-2 text-danger"></span>Save');
                         saveButton.attr("onclick", "save_job('add_job', " + job_id + ")");
-                        swal("Success", "Unsave successfully", "success")
+                        swal("Success", "Unsaved successfully", "success")
                     }
             console.log("Ajax request successful!");
         //     swal("Success", response, "success").then(function() {
