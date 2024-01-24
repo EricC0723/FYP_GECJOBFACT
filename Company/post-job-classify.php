@@ -36,13 +36,14 @@ if (isset($_POST["submitbtn"])) {
     $jobRole = $_POST['jobRole'];
     $jobType = $_POST['jobType'];
     $jobPosition = $_POST['Jobposition'];
+    $jobRequiredyears = $_POST['requiredexperience'];
     $jobSalaryMin = $_POST['jobSalaryMin'];
     $jobSalaryMax = $_POST['jobSalaryMax'];
 
     if (isset($_GET['jobPostID'])) {
         // Update the existing job post
         $postid = $_GET["jobPostID"];
-        $sql = "UPDATE job_post SET Job_Post_Title = '$jobTitle', Job_Location_ID = '$jobLocationID', Job_Post_Location = '$jobLocation', Main_Category_ID = '$jobSpecialisationID', Main_Category_Name = '$jobSpecialisation', Sub_Category_ID = '$jobRoleID', Sub_Category_Name = '$jobRole', Job_Post_Type = '$jobType', Job_Post_Position = '$jobPosition', Job_Post_MinSalary = '$jobSalaryMin', Job_Post_MaxSalary = '$jobSalaryMax', CompanyID = '$CompanyID' WHERE Job_Post_ID = '$postid'";
+        $sql = "UPDATE job_post SET Job_Post_Title = '$jobTitle', Job_Location_ID = '$jobLocationID', Job_Post_Location = '$jobLocation', Main_Category_ID = '$jobSpecialisationID', Main_Category_Name = '$jobSpecialisation', Sub_Category_ID = '$jobRoleID', Sub_Category_Name = '$jobRole', Job_Post_Type = '$jobType', Job_Post_Position = '$jobPosition', Job_Post_Exp = '$jobRequiredyears', Job_Post_MinSalary = '$jobSalaryMin', Job_Post_MaxSalary = '$jobSalaryMax', CompanyID = '$CompanyID' WHERE Job_Post_ID = '$postid'";
         $result = mysqli_query($connect, $sql);
         if ($result) {
             // Store the job_post_ID in the session
@@ -53,7 +54,7 @@ if (isset($_POST["submitbtn"])) {
         }
     } else {
         // Insert a new job post
-        $sql = "INSERT INTO job_post (Job_Post_Title, Job_Location_ID, Job_Post_Location, Main_Category_ID, Main_Category_Name, Sub_Category_ID, Sub_Category_Name, Job_Post_Type, Job_Post_Position, Job_Post_MinSalary, Job_Post_MaxSalary, CompanyID, job_status) VALUES ('$jobTitle', '$jobLocationID', '$jobLocation', '$jobSpecialisationID', '$jobSpecialisation', '$jobRoleID', '$jobRole', '$jobType', '$jobPosition', '$jobSalaryMin', '$jobSalaryMax', '$CompanyID', 'Draft')";
+        $sql = "INSERT INTO job_post (Job_Post_Title, Job_Location_ID, Job_Post_Location, Main_Category_ID, Main_Category_Name, Sub_Category_ID, Sub_Category_Name, Job_Post_Type, Job_Post_Position, Job_Post_Exp, Job_Post_MinSalary, Job_Post_MaxSalary, CompanyID, job_status) VALUES ('$jobTitle', '$jobLocationID', '$jobLocation', '$jobSpecialisationID', '$jobSpecialisation', '$jobRoleID', '$jobRole', '$jobType', '$jobPosition', '$jobRequiredyears', '$jobSalaryMin', '$jobSalaryMax', '$CompanyID', 'Draft')";
         $result = mysqli_query($connect, $sql);
         if ($result) {
             // Get the ID of the new job post
@@ -113,17 +114,19 @@ if (isset($_POST["submitbtn"])) {
                         </div>
                         <div class="dropdown-content" id="dropdownContent">
                             <span class="companyName">
-                            <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>                            </span>
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
+                            </span>
                             <div style="padding-top:10px;">
                                 <span class="contactPerson">
-                                <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
+                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
                                 </span>
                             </div>
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
@@ -247,6 +250,38 @@ if (isset($_POST["submitbtn"])) {
                 <div class="vertical-space"></div>
 
                 <div class="form-group">
+                    <label class="question" style="padding-bottom: 8px;">Required years of experience</label>
+                    <select class="form-dropdown" name="requiredexperience" id="requiredexperience"
+                        style="height:46px;width:604.67px;">
+                        <option value="" disabled selected>Select required years of experience</option>
+                        <?php
+                        $selectedExperience = isset($row['Job_Post_Exp']) ? $row['Job_Post_Exp'] : '';
+                        echo '<option value="Not required"' . ($selectedExperience == 'Not required' ? ' selected' : '') . '>Not required</option>';
+                        for ($i = 1; $i <= 20; $i++) {
+                            $years = $i . ' Year' . ($i > 1 ? 's' : '');
+                            echo '<option value="' . $years . '"' . ($selectedExperience == $years ? ' selected' : '') . '>' . $years . ' and above</option>';
+                        }
+                        ?>
+                    </select>
+                    <div style="padding-top:4px;" id="validation-requiredexperience" class="hide"><span
+                            style="display:flex"><span
+                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
+                                    style="color:#b91e1e">
+                                    <path
+                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                    </path>
+                                    <circle cx="12" cy="17" r="1"></circle>
+                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                    </path>
+                                </svg></span><span><span id="requiredexperience-message"
+                                    class="validation_sentence">Please select the required years of
+                                    experience</span></span></span></div>
+                </div>
+                <div class="vertical-space"></div>
+
+                <div class="form-group">
                     <label for="jobSpecialisation" class="question">Category</label>
                     <label for="jobSpecialisation" class="question"
                         style="padding-bottom: 8px;font-weight: 400;color: rgb(90, 104, 129);">Suggested category based
@@ -326,7 +361,8 @@ if (isset($_POST["submitbtn"])) {
                                     <circle cx="12" cy="17" r="1"></circle>
                                     <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                     </path>
-                                </svg></span><span><span id="jobtype-message" class="validation_sentence">Please select job type</span></span></span></div>
+                                </svg></span><span><span id="jobtype-message" class="validation_sentence">Please select
+                                    job type</span></span></span></div>
                 </div>
             </div>
 
@@ -442,11 +478,6 @@ if (isset($_POST["submitbtn"])) {
             </div>
         </form>
     </div>
-
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="post-job.js"></script>
@@ -730,15 +761,15 @@ if (!isset($_SESSION['companyID'])) {
 } else if ($row['CompanyStatus'] == 'Block') {
     // Show swal box
     ?>
-        <script>
-            Swal.fire({
-                title: 'Error',
-                text: 'Your account has been blocked.',
-                icon: 'error',
-            }).then(function () {
-                window.location = "company_signout.php";
-            });
-        </script>
+            <script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Your account has been blocked.',
+                    icon: 'error',
+                }).then(function () {
+                    window.location = "company_signout.php";
+                });
+            </script>
     <?php
 }
 ?>

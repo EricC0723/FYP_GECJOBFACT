@@ -168,7 +168,7 @@ if (isset($_SESSION['companyID'])) {
         function confirmCloseJobPost(jobPostID) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "Once closed, you will not be able to reopen this job post!",
+                text: "Once closed, you will not be able to reopen this job post",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: 'Yes, close it!',
@@ -189,7 +189,7 @@ if (isset($_SESSION['companyID'])) {
                                 getblockedjob();
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error closing job post!", "error");
+                                Swal.fire("Error!", "Error closing job post", "error");
                             }
                         }
                     });
@@ -200,7 +200,7 @@ if (isset($_SESSION['companyID'])) {
         function changeAcceptstatus(applicantId) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "Once accepted, you will not be able to change the status!",
+                text: "Once accepted, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: 'Yes, accept it!',
@@ -217,7 +217,7 @@ if (isset($_SESSION['companyID'])) {
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error accepting application!", "error");
+                                Swal.fire("Error!", "Error accepting application", "error");
                             }
                         }
                     });
@@ -228,7 +228,7 @@ if (isset($_SESSION['companyID'])) {
         function changeRejectstatus(applicantId) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "Once rejected, you will not be able to change the status!",
+                text: "Once rejected, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: 'Yes, reject it!',
@@ -245,7 +245,7 @@ if (isset($_SESSION['companyID'])) {
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error rejecting application!", "error");
+                                Swal.fire("Error!", "Error rejecting application", "error");
                             }
                         }
                     });

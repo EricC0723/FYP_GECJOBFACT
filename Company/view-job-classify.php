@@ -97,7 +97,8 @@ if (isset($_POST["submitbtn"])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
@@ -164,6 +165,20 @@ if (isset($_POST["submitbtn"])) {
                     <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
                         value="<?php echo isset($row['Job_Post_Position']) ? htmlspecialchars($row['Job_Post_Position']) : ''; ?>"
                         disabled>
+                </div>
+                <div class="vertical-space"></div>
+
+                <div class="form-group">
+                    <label class="question" style="padding-bottom: 8px;">Required years of experience</label>
+                    <input type="text" id="jobTitle" name="jobTitle" class="input-box" placeholder="Enter the job title"
+                        value="<?php
+                        if (isset($row['Job_Post_Exp'])) {
+                            $experience = htmlspecialchars($row['Job_Post_Exp']);
+                            echo $experience == 'Not required' ? $experience : $experience . ' and above';
+                        } else {
+                            echo '';
+                        }
+                        ?>" disabled>
                 </div>
                 <div class="vertical-space"></div>
 

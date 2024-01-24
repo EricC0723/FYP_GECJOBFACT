@@ -342,7 +342,9 @@ $row = mysqli_fetch_assoc($result);
     // Add an event listener to the input field
     cardNumberInput.addEventListener('input', function () {
         var cardNumberMessage = document.getElementById('cardNumber-message');
-        var cardType = cardTypeInput.value; // Get the card type from the hidden input field
+        var cardType = document.getElementById('cardType').value; // Fetch the cardType
+        var companyId = "<?php echo $_SESSION['companyID']; ?>";
+        var originalCardNumber = "<?php echo $row['CreditCard_Number']; ?>";
 
         if (this.value.trim() === '') {
             // If the input field is empty
@@ -356,6 +358,28 @@ $row = mysqli_fetch_assoc($result);
             cardNumberMessage.textContent = 'Invalid card number';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
+        } else if (this.value.trim() !== originalCardNumber) {
+            // If the input field is not empty and contains the correct number of characters
+            // Check if the card number exists in the database for the same company
+            $.ajax({
+                url: 'check_data.php',
+                type: 'post',
+                data: {
+                    cardNumber: this.value.trim(),
+                    companyId: companyId
+                },
+                success: function (response) {
+                    if (response == 1) {
+                        cardNumberMessage.textContent = 'Card number already exists for this company';
+                        cardNumberInput.dataset.valid = '0';
+                        validationcardNumber.classList.remove('hide'); // Show the validation message
+                    } else {
+                        cardNumberMessage.textContent = '';
+                        cardNumberInput.dataset.valid = '1';
+                        validationcardNumber.classList.add('hide'); // Hide the validation message
+                    }
+                }
+            });
         } else {
             // If the input field is not empty and contains the correct number of characters
             cardNumberMessage.textContent = '';
