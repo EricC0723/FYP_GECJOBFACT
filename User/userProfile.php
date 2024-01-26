@@ -145,13 +145,13 @@
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <li><a href="contact.php" class="active">Contact</a></li>
+              <li><a href="contact.php">Contact</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
           
-    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white; margin-top: 5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
+    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white; margin-top: 5px; max-width: 150px; white-space: nowrap;z-index:-1;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -220,7 +220,11 @@
       $education_query = "SELECT * FROM education WHERE UserID = $user_id";
       $education_result = mysqli_query($connect,$education_query);
     ?>
-        <div class="row">
+    <div class="col-lg-12 mb-4" style="margin-top:0px;">
+            <h3>Profile Setting</h3>
+            <p>Any modifications made in your profile will become the default profile for your next job application.</p>
+    </div>
+        <div class="row" style="margin-top:100px;">
         <!-- Profile -->
         <div class="col-lg-12 mb-4" id="profile-section">
               <!-- <div class="block__87154 bg-primary"> -->

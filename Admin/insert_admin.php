@@ -3,7 +3,7 @@
     require 'C:/xampp/htdocs/FYP/dataconnection.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($_POST["action"] == "insert_admin")
-        {   
+        {
             $Fname= $_POST['Fname'];
             $Lname= $_POST['Lname'];
             $phone= $_POST['phone'];
@@ -12,7 +12,6 @@
             $postcode= $_POST['postcode'];
             $state= $_POST['state'];
             $email= $_POST['email'];
-            $password= $_POST['password'];
             $type= $_POST['type'];
 
             $picture = $_FILES['picture'];
@@ -26,16 +25,46 @@
 
             $picturetargetPath = $picture_dir . $unique_filename;
             move_uploaded_file($picture_tmp, $picturetargetPath);
-            $sql = "INSERT INTO admins (FirstName, LastName, AdminPhone,StreetAddress,StateAndCity,PostalCode,AdminStatus,Email,Password,DateOfBirth,AdminType,AdminPicture)
-            VALUES ('$Fname', '$Lname', '$phone', '$address', '$state', '$postcode', 'Active', '$email', '$password','$date_of_birth','$type','$picturetargetPath')";
+            $sql = "INSERT INTO admins (FirstName, LastName, AdminPhone,StreetAddress,StateAndCity,PostalCode,AdminStatus,Email,DateOfBirth,AdminType,AdminPicture)
+            VALUES ('$Fname', '$Lname', '$phone', '$address', '$state', '$postcode', 'Active', '$email', '$date_of_birth','$type','$picturetargetPath')";
             $result = mysqli_query($connect, $sql);
 
             if ($result) {
-                echo 'Insert successfully';
-            } else {
-                echo 'Insert failed';
+                $lastInsertID = mysqli_insert_id($connect);
+                $resetLink = 'http://localhost/final_fyp/FYP/Admin/update_password.php?admin_id=' . $lastInsertID;
+
+                echo 'Inserted successfully';
+                require "phpmailer/PHPMailerAutoload.php";
+                $mail = new PHPMailer;
+
+                $mail->isSMTP();
+                $mail->Host='smtp.gmail.com';
+                $mail->Port=587;
+                $mail->SMTPAuth=true;
+                $mail->SMTPSecure='tls';
+
+                $mail->Username='gecjobfacts888@gmail.com';
+                $mail->Password='atteeyliyxloitmo';
+
+                $mail->setFrom('gecjobfacts888@gmail.com', 'New Admin Registration - GEC JobFacts');
+                $mail->addAddress($email);
+                $mail->addReplyTo('gecjobfacts888@gmail.com');
+
+                $mail->isHTML(true);
+                $mail->Subject="Welcome to GEC JobFacts!";
+                $mail->Body="<p>We're excited to have you on board as a new admin. To ensure the security of your account, please click the link below to set up your account password:</p><br>
+                <a href='$resetLink'>Set Up Password</a>
+                <br>
+                <br><br>
+                <p>With regrads,</p>
+                <b>GEC JobFacts</b>";
+                if(!$mail->send()) {
+                    echo 'Mailer Error: ' . $mail->ErrorInfo;
+                } else {
+                    echo 'Message sent!';
+                }
+                }
             }
-        }
         else if($_POST["action"] == "edit_admin")
         {   $AdminID = $_POST['AdminID'];
              $Fname = $_POST['edit_FirstName'];
@@ -102,7 +131,44 @@
                 echo 'Update failed';
             }
             }
-           
-            
         }
+        if($_POST["action"] == "request_password_reset")
+        {
+            $adminID= $_POST['adminID'];
+            $email= $_POST['email'];
+
+                $resetLink = 'http://localhost/final_fyp/FYP/Admin/update_password.php?admin_id=' . $adminID;
+                echo 'Inserted successfully';
+                require "phpmailer/PHPMailerAutoload.php";
+                $mail = new PHPMailer;
+
+                $mail->isSMTP();
+                $mail->Host='smtp.gmail.com';
+                $mail->Port=587;
+                $mail->SMTPAuth=true;
+                $mail->SMTPSecure='tls';
+
+                $mail->Username='gecjobfacts888@gmail.com';
+                $mail->Password='atteeyliyxloitmo';
+
+                $mail->setFrom('gecjobfacts888@gmail.com', 'Change password request - GEC JobFacts');
+                $mail->addAddress($email);
+                $mail->addReplyTo('gecjobfacts888@gmail.com');
+
+                $mail->isHTML(true);
+                $mail->Subject="Welcome to GEC JobFacts!";
+                $mail->Body = "<p>Hello Admin,</p>
+                <p>We have received a request to change the password for your account at GEC JobFacts. Please click the link below to proceed with the password reset:</p>
+                <a href='$resetLink'>Reset Password</a>
+                <br><br>
+                <p>If you did not make this request, you can ignore this email.</p>
+                <br><br>
+                <p>Best regards,</p>
+                <b>GEC JobFacts</b>";
+                if(!$mail->send()) {
+                    echo 'Mailer Error: ' . $mail->ErrorInfo;
+                } else {
+                    echo 'Successfully';
+                }
+            }
     }

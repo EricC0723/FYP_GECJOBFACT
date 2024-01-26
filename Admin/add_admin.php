@@ -553,7 +553,7 @@
 						<div class="form-group">
 							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value=""/>
 						</div>
-						<div class="input-group custom">
+						<!-- <div class="input-group custom">
 						<input type="password" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-eye"></i></span>
@@ -564,7 +564,7 @@
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-eye"></i></span>
 								</div>
-							</div>
+							</div> -->
 					<!-- <h5 style="display: inline-block;">Password</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
