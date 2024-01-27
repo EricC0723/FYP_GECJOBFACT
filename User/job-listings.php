@@ -68,25 +68,9 @@
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php">About</a></li>
               <li>
-                <a href="job-listings.php" class="active">Job Listings</a>
+                <a href="job-listings.php">Job Listings</a>
               </li>
-              <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.php">Contact</a></li>
-              <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
-              <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
@@ -149,9 +133,9 @@
                   <input type="text" class="form-control form-control-lg" placeholder="Job title, Company..." name="searchjob" value="<?php echo isset($_SESSION['searchjob']) ? $_SESSION['searchjob'] : ''; ?>">
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Region" name="searchlocation">
+                  <select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Region" name="searchlocation" id="searchlocation">
                   <?php 
-                    $selectedRegion = isset($_SESSION['searchlocation']) ? $_SESSION['searchlocation'] : ''; // 获取保存的区域
+                    $selectedRegion = isset($_SESSION['searchlocation']) ? $_SESSION['searchlocation'] : '';
                     if(mysqli_num_rows($result) > 0) {
                       while($row = mysqli_fetch_assoc($result)) {
                         $optionValue = $row["Job_Location_Name"];
@@ -167,7 +151,7 @@
                     $selectedType = isset($_SESSION['searchtype']) ? $_SESSION['searchtype'] : '';
                     $jobTypes = array("Part Time", "Full Time", "Internship", "Contract");
 
-                    echo '<select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type" name="searchtype">';
+                    echo '<select class="selectpicker" data-size="3" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Job Type" name="searchtype" id="searchtype">';
 
                     foreach($jobTypes as $value => $type) {
                       $selected = ($value + 1 == $selectedType) ? 'selected' : '';
@@ -176,7 +160,6 @@
 
                     echo '</select>';
                   ?>
-                  <!-- </select> -->
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                   <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search" name="searchbtn"><span class="icon-search icon mr-2"></span>Search Job</button>
@@ -210,15 +193,12 @@
                 ?>
               </select>
             </div>
+            <button type="button" style="margin-top:50px;"class="btn btn-primary btn-lg btn-block text-white btn-search" onclick="resetFilters()">Reset Filters</button>
           </div>
             </form>
           </div>
         </div>
       </div>
-
-      <!-- <a href="#next" class="scroll-button smoothscroll">
-        <span class=" icon-keyboard_arrow_down"></span>
-      </a> -->
     </section>
     <?php 
       if (!isset($_SESSION['User_ID'])) {
@@ -248,10 +228,10 @@
           
           if (isset($_GET["page"])) {
             if (isset($_SESSION["searchjob"])) {
-              // 如果存在，可以使用 $_SESSION["searchjob"] 获取值
+              // exist
               $searchJob = $_SESSION["searchjob"];
           } else {
-              $searchJob = ""; // 如果不存在，可以设置默认值
+              $searchJob = ""; // no exist , set default
           }
           
           if (isset($_SESSION["searchlocation"])) {
@@ -274,12 +254,9 @@
         } else {
             $searchminimum = "";
         }
-            // $_SESSION["searchjob"] = $_GET["searchjob"];
-            // $_SESSION["searchlocation"] = $_GET["searchlocation"];
-            // $_SESSION["searchtype"] = $_GET["searchtype"];
             }
-            $query = "SELECT * FROM job_post WHERE job_status IN ('Active')";
-            // 如果搜索条件不为空，添加相应的条件到查询语句中
+            $query = "SELECT * FROM job_post WHERE job_status IN ('Active') ORDER BY AdStartDate DESC";
+            // search logic
             if (!empty($searchJob)) {
               $query .= " AND Job_Post_Title LIKE '%$searchJob%'";
             }
@@ -345,7 +322,27 @@
                           default: $badgeClass = "badge-secondary";$JobType = "";break;
                         }
                       ?>
-                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span>
+                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span><br>
+                      <?php
+                      date_default_timezone_set('Asia/Kuala_Lumpur');
+
+                      $adStartDate = $row["AdStartDate"];
+                      $timestamp = strtotime($adStartDate);
+                      $currentTimestamp = time();
+                      $timeDifference = $currentTimestamp - $timestamp;
+
+                      $minutesAgo = round($timeDifference / 60);
+                      $hoursAgo = round($timeDifference / 3600);
+                      $daysAgo = round($timeDifference / (3600 * 24));
+
+                      if ($minutesAgo < 60) {
+                          echo $minutesAgo . 'm ago';
+                      } elseif ($hoursAgo < 24) {
+                          echo $hoursAgo . 'h ago';
+                      } else {
+                          echo $daysAgo . 'd ago';
+                      }
+                      ?>
                     </div>
                   </div>
                 </li>
@@ -412,23 +409,6 @@
         </div>
       </div>
     </section>
-
-    <section class="py-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <h2 class="text-white">Looking For A Job?</h2>
-            <p class="mb-0 text-white lead">Lorem ipsum dolor sit amet consectetur adipisicing elit tempora adipisci impedit.</p>
-          </div>
-          <div class="col-md-3 ml-auto">
-            <a href="#" class="btn btn-warning btn-block btn-lg">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    
-    
     <footer class="site-footer">
 
       <a href="#top" class="smoothscroll scroll-top">
@@ -509,10 +489,24 @@
     
     <script src="js/custom.js"></script>
     <script>
-  function checkLoginAndRedirect() {
-    // 发送异步请求检查用户登录状态
-    // 这里使用简化的示例，实际上你可能需要使用AJAX或其他方法检查登录状态
+function resetFilters() {
+    // 清除文本框的值
+    document.querySelector('input[name="searchjob"]').value = '';
 
+    // 获取所有 select 元素
+    var selectElements = document.querySelectorAll('.selectpicker');
+
+    // 将所有选择框重置为默认选项
+    selectElements.forEach(function(selectElement) {
+        selectElement.selectedIndex = -1;
+    });
+
+    // 刷新 Bootstrap Select 插件
+    $('.selectpicker').val('').selectpicker('refresh');
+}
+</script>
+    <script>
+  function checkLoginAndRedirect() {
     var isLoggedIn = <?php echo isset($_SESSION['User_ID']) ? 'true' : 'false'; ?>;
 
     if (!isLoggedIn) {

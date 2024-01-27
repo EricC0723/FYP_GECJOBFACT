@@ -27,12 +27,15 @@
     });
     $('#edit_customCheck1').on('change', function () {
         updateEditEndDateRequirement();
+        validateEditDateRange($('#edit_start_date'));
+        validateEditDateRange($('#edit_end_date'));
     });
     $('#edit_career_submitbtn').on('click', function (event) {
     validateEditTitleCompanyInput($('#edit_job_title'));
     validateEditTitleCompanyInput($('#edit_company_name'));
     validateEditDateRange($('#edit_start_date'));
     validateEditStillInRole_EndDate($('#edit_end_date'));
+    validateEditDateRange($('#edit_end_date'));
   });
 
   function validateEditStillInRole_EndDate(input) {
@@ -88,13 +91,16 @@
     function validateEditDateRange(input) {
     var startDate = new Date($('#edit_start_date').val());
     var endDate = new Date($('#edit_end_date').val());
+    var isStillInRole = $("#edit_customCheck1").is(":checked");
     var value = input.val();
+
     console.log("validateEditDateRange called with input:", input);
-    if (value === "") {
-        displayEditError(input, 'Required field');
+
+    if (!isStillInRole && value === "" && isNaN(endDate)) {
+        displayEditError(input, 'Either end date or "Still in role" must be provided');
         hasCareerErrors = true;
         checkErrors();
-    } else if (!isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
+    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
         displayEditError(input, 'The end date cannot be earlier than the start date');
         hasCareerErrors = true;
         checkErrors();
@@ -155,8 +161,6 @@
       return isEmpty;
     }
 
-
-    // Initial setup when the document is ready
     updateEditEndDateRequirement();
   });
 </script>

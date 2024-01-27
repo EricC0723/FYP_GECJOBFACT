@@ -7,10 +7,10 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get the email from the AJAX request
     $email = isset($_POST['email']) ? $_POST['email'] : '';
-
+    $user_id = $_SESSION['User_ID'];
     // Sanitize the email input to prevent SQL injection
     $email = mysqli_real_escape_string($connect, $email);
-
+    
     // Perform the database query to check if the email exists
     $query = "SELECT COUNT(*) AS count FROM companies WHERE CompanyEmail = '$email'";
     $result = mysqli_query($connect, $query);

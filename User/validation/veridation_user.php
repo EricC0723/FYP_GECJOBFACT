@@ -106,9 +106,15 @@
             else if (value.length < 8 || value.length > 16) {
                 displayError(input, 'Password must be between 8 and 16 characters long');
             }
-            else if (!/^(?=.*\d)(?=.*[a-zA-Z])/.test(value)) {
-                displayError(input, 'Password must contain at least one number and one letter');
+            else if (!/^(?=.*\d)(?=.*[a-z]).*$/.test(value)) {
+            displayError(input, 'Password must contain at least one number and one letter');
             }
+            else if (!/^(?=.*[A-Z]).*$/.test(value)) {
+            displayError(input, 'Password must contain at least one uppercase letter');
+            }
+            else if (!/^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).*$/.test(value)) {
+            displayError(input, 'Password must contain at least one special character');
+            } 
             else {
                 removeError(input);
             }

@@ -2,7 +2,7 @@
 session_start();
 require 'VeridationAdminPage/edit_admin_veridate.php';
 include("C:/xampp/htdocs/FYP/dataconnection.php");
-$query = "SELECT * FROM  admins";
+$query = "SELECT * FROM  admins WHERE AdminType='normal admin'";
 $result = mysqli_query($connect,$query);
 $location_query = "SELECT * FROM job_location";
 $location_result = mysqli_query($connect,$location_query);
@@ -21,7 +21,7 @@ function confirmation()
 </script>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>GEC JOB FACT</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -69,40 +69,6 @@ function confirmation()
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<!-- <form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -184,9 +150,6 @@ function confirmation()
 						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -635,10 +598,10 @@ function confirmation()
                         <div class="form-group">
                         <p id="Email" class="form-control"></p>
                         </div>
-                    <h5 style="display: inline-block;">Password</h5>
+                    <!-- <h5 style="display: inline-block;">Password</h5>
                     <div class="form-group">
                     	<p id="Password" class="form-control"></p>
-                    </div>
+                    </div> -->
 					
                     <h5 style="display: inline-block;">Admin Status</h5>
                     <div class="form-group">
@@ -732,7 +695,7 @@ function confirmation()
                         </div>
                     <h5 style="display: inline-block;">Password</h5>
                     <div class="form-group">
-						<input type="text" class="form-control" id="edit_Password" style="margin-top:10px;border-color:#787785;">
+						<button type="button" class="btn btn-primary" id="requestPasswordBtn"><i class="icon-copy fa fa-send" aria-hidden="true" style="margin-right:10px;"></i>Request a new password</button>
                     </div>
                     <h5 style="display: inline-block;">Admin Status</h5>
                     <div class="form-group">
@@ -900,6 +863,27 @@ function confirmation()
 
     $('#profile_picture_label').off('click').on('click', function () {
         $('#edit_profile_picture').click();
+    });
+});
+</script>
+<script>
+	$(document).ready(function() {
+    $("#requestPasswordBtn").click(function() {
+		
+        var adminID = $("#AdminID").val();
+		var email = $("#edit_Email").val();
+		console.log(adminID);
+        $.ajax({
+            type: "POST",
+            url: "insert_admin.php",
+            data: { action: "request_password_reset", adminID: adminID, email: email },
+            success: function(response) {
+				swal("Success", response, "success");
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
     });
 });
 </script>

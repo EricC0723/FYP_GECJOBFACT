@@ -145,29 +145,13 @@
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.php">Contact</a></li>
-              <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
-              <li class="d-lg-none"><a href="login.php">Log In</a></li>
             </ul>
           </nav>
           
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
           
-    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white; margin-top: 5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
+    <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 560px; color: white; margin-top: 5px; max-width: 150px; white-space: nowrap;z-index:-1;">Employer site</button></a>
           <div class="ml-auto">
           <?php 
               if (isset($_SESSION['User_ID'])) {
@@ -176,7 +160,7 @@
                 <!-- <a href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>Eric Ching Khai Jie</a> -->
                 <div class="user-info-dropdown">
                 <div class="dropdown">
-                  <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style="color:white;border: 2px solid #787785;border-radius: 4px;padding: 5px;background-color:#787785;margin-left:30px;">
                     <span class="user-name" style="color:white;"><?php echo $_SESSION['First_Name'];?></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
@@ -236,7 +220,11 @@
       $education_query = "SELECT * FROM education WHERE UserID = $user_id";
       $education_result = mysqli_query($connect,$education_query);
     ?>
-        <div class="row">
+    <div class="col-lg-12 mb-4" style="margin-top:0px;">
+            <h3>Profile Setting</h3>
+            <p>Any modifications made in your profile will become the default profile for your next job application.</p>
+    </div>
+        <div class="row" style="margin-top:100px;">
         <!-- Profile -->
         <div class="col-lg-12 mb-4" id="profile-section">
               <!-- <div class="block__87154 bg-primary"> -->
@@ -257,7 +245,7 @@
                 <?php
                 }
                   ?>
-                <p><button type="button" class="btn btn-outline-secondary" style="font-size: 20px;border: 2px solid white;color:white;margin-top:40px;" data-toggle="modal" data-target="#modal-profile" data-toggle-class="modal-open-aside" onclick="hideOverlay()">Edit</button></p>
+                <p><button type="button" class="btn btn-outline-secondary" style="font-size: 20px;border: 2px solid white;color:white;margin-top:40px;" data-toggle="modal" data-target="#modal-profile" data-toggle-class="modal-open-aside">Edit</button></p>
                 </blockquote>
               </div>
             </div>
@@ -291,7 +279,10 @@
         ?>
             <!-- career history -->
 <div class="col-lg-12 mb-4" id="career-section"style="margin-top:40px;">
-    <h3>Career History</h3>
+<div class="row" style="margin-left:0px;">
+    <h3>Career History </h3>&nbsp;&nbsp;<h6 style="color:grey;">(Up to 3 Entries Allowed)</h6>
+</div>
+  
     <?php
     if (mysqli_num_rows($career_result) > 0) {
         ?>
@@ -425,7 +416,7 @@
               <div class="modal-content h-100 no-radius">
                 <div class="modal-header">
                   <!-- <div class="modal-title text-md">Add personal summary</div> -->
-                      <button class="close" data-dismiss="modal" onclick="hideOverlay()">&times;</button>
+                      <button class="close" data-dismiss="modal">&times;</button>
                   </div>
                     <div class="modal-body" style="text-align:left;">
                        <div class="p-4 text-left">
@@ -800,7 +791,6 @@
     </section>
     
     <footer class="site-footer">
-
       <a href="#top" class="smoothscroll scroll-top">
         <span class="icon-keyboard_arrow_up"></span>
       </a>
@@ -808,50 +798,34 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Search Trending</h3>
+            <h3>Job seekers</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Web Design</a></li>
-              <li><a href="#">Graphic Design</a></li>
-              <li><a href="#">Web Developers</a></li>
-              <li><a href="#">Python</a></li>
-              <li><a href="#">HTML5</a></li>
-              <li><a href="#">CSS3</a></li>
+              <li><a href="job-listings.php">Job listings</a></li>
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Company</h3>
+            <h3>About JOBFACT</h3>
             <ul class="list-unstyled">
               <li><a href="about.php">About Us</a></li> 
               <li><a href="term_of_use.php">Term of use</a></li>
-              <li><a href="privacy.php">Privacy policy</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Resources</a></li>
+              
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Support</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Privacy</a></li>
-              <li><a href="#">Terms of Service</a></li>
+            <li><a href="contact.php">Contact us</a></li>
+             <li><a href="privacy.php">Privacy policy</a></li>
+             <li><a href="term_of_service.php">Term of Service</a></li>
             </ul>
-          </div>
-          <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Contact Us</h3>
-            <div class="footer-social">
-              <a href="#"><span class="icon-facebook"></span></a>
-              <a href="#"><span class="icon-twitter"></span></a>
-              <a href="#"><span class="icon-instagram"></span></a>
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </div>
           </div>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center" style="margin-top:100px;">
           <div class="col-12">
             <p class="copyright"><small>
               <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></small></p>
           </div>
         </div>

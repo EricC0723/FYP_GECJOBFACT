@@ -168,9 +168,6 @@ function confirmation()
 					</div>
 				</div>
 			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div>
 		</div>
 	</div>
 
@@ -787,27 +784,6 @@ function confirmation()
 					</div>
                       </div>
                     </div>
-					<!-- <div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
-					<hr>
-					<h6 class="group-title"style="color:grey;" >Job description and requirements</h6>
-					<hr>
-					</div>
-					<h5 style="display: inline-block;">Experience Required</h5>
-					<div class="form-group">
-						<input type="text" class="form-control" id="edit_Job_Post_Exp" style="margin-top:10px;border-color:#787785;" disabled>
-					</div>
-					<h5 style="display: inline-block;">Job Description</h5>
-					<div class="form-group">
-						<textarea id="edit_Job_Post_Description" class="form-control" rows="5" disabled></textarea>
-					</div>
-					<h5 style="display: inline-block;">Responsibilities</h5>
-					<div class="form-group">
-						<textarea id="edit_Job_Post_Responsibilities" class="form-control" rows="5" disabled></textarea>
-					</div>
-					<h5 style="display: inline-block;">Benefits</h5>
-					<div class="form-group">
-						<textarea id="edit_Job_Post_Benefits" class="form-control" rows="5" disabled></textarea>
-					</div> -->
                         <div class="modal-footer">
 							<a class="updatejobBtn btn btn-primary" href="#" data-jobid="<?=$row['Job_Post_ID'];?>"> Save changes</a>
                         </div>

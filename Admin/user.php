@@ -546,9 +546,9 @@
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                                            
 															<a class="viewUserBtn dropdown-item" href="#" data-userid="<?=$row['UserID'];?>"><i class="dw dw-eye"></i> View</a>
 															<a class="editUserBtn dropdown-item" href="#" data-userid="<?=$row['UserID'];?>"><i class="dw dw-edit2"></i> Edit</a>
+															<a class="recordBtn dropdown-item" href="application_record.php?user_id=<?=$row['UserID'];?>"><i class="icon-copy fi-book-bookmark"></i>Application record</a>
 														</div>
 													</div>
 												</td>
@@ -562,9 +562,9 @@
 					</div>
 				</div>
 				<!-- Simple Datatable End --> 	
-			<div class="footer-wrap pd-20 mb-20 card-box">
+			<!-- <div class="footer-wrap pd-20 mb-20 card-box">
 				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
+			</div> -->
 		</div>
 	</div>
     <!-- View modal -->
@@ -699,7 +699,6 @@
 	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<!-- buttons for Export datatable -->
 	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
 	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
 	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
@@ -839,32 +838,4 @@
     });
         });
     </script>
-	<!-- <script>
-        $(document).on('click', '.updateUserBtn', function () {
-        console.log("update click");
-        // var user_id = $(this).data('userid');
-        var data = {
-            action: "updateUser",
-			user_id: $("#edit_userid").val(),
-            first_name: $("#edit_FirstName").val(),
-            last_name: $("#edit_LastName").val(),
-            location: $("#edit_Location").val(),
-            phone: $("#edit_Phone").val(),
-            status: $("#edit_UserStatus").val(),
-        };
-		console.log(data);
-        $.ajax({
-            type: "POST",
-            url: "view_user.php",
-          	async: true, 
-			data: data,
-            success: function (response) {
-                console.log(response);
-				swal("Success", response, "success").then(function() {
-					location.replace("user.php");
-          });
-            }
-        });
-        });
-    </script> -->
 </html>

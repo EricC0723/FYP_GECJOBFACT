@@ -1,3 +1,4 @@
+
 <?php
 $email = $job_row["CompanyEmail"];
         require "phpmailer/PHPMailerAutoload.php";

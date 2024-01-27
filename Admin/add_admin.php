@@ -56,35 +56,6 @@
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<!-- <form>
-					<div class="form-group mb-0">
-						<div class="dropdown">
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -582,7 +553,7 @@
 						<div class="form-group">
 							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value=""/>
 						</div>
-						<div class="input-group custom">
+						<!-- <div class="input-group custom">
 						<input type="password" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-eye"></i></span>
@@ -593,7 +564,7 @@
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-eye"></i></span>
 								</div>
-							</div>
+							</div> -->
 					<!-- <h5 style="display: inline-block;">Password</h5>
 						<div class="form-group">
 							<input type="text" placeholder="Enter password"  name="password"  id="password"class="form-control" value=""/>

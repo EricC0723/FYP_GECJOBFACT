@@ -27,12 +27,15 @@
     // Input event listener for checkbox
     $('#customCheck1').on('change', function () {
         updateEndDateRequirement();
+        validateDateRange($('#start_date'));
+        validateDateRange($('#end_date'));
     });
     $('#career_submitbtn').on('click', function (event) {
     validateTitleCompanyInput($('#job_title'));
     validateTitleCompanyInput($('#company_name'));
     validateDateRange($('#start_date'));
-      
+    validateDateRange($('#end_date'));
+    
   });
   function validateDescription(input) {
       // Get the entered value
@@ -70,16 +73,22 @@
         checkErrors();
       }
     }
+
     function validateDateRange(input) {
     var startDate = new Date($('#start_date').val());
     var endDate = new Date($('#end_date').val());
+    var isStillInRole = $("#customCheck1").is(":checked");
     var value = input.val();
-    console.log("validateDateRange called with input:", input);
-    if (value === "") {
-        displayError(input, 'Required field');
+    console.log("validateEditDateRange called with input:", input);
+    if(value === "")
+    {
+      displayError(input, 'Required field');
+    }
+    else if (!isStillInRole && value === "" && isNaN(endDate)) {
+        displayError(input, 'Either end date or "Still in role" must be provided');
         hasCareerErrors = true;
         checkErrors();
-    } else if (!isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
+    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
         displayError(input, 'The end date cannot be earlier than the start date');
         hasCareerErrors = true;
         checkErrors();

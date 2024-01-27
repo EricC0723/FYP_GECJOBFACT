@@ -171,9 +171,6 @@
 					</div>
 				</div>
 			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div>
 		</div>
 	</div>
 
@@ -546,6 +543,7 @@
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 															<a class="viewCompanyBtn dropdown-item" href="#" data-companyid="<?=$row['CompanyID'];?>"><i class="dw dw-eye"></i> View</a>
 															<a class="editCompanyBtn dropdown-item" href="#" data-companyid="<?=$row['CompanyID'];?>"><i class="dw dw-edit2"></i> Edit</a>
+															<a class="jobRecordBtn dropdown-item" href="job_post_record.php?company_id=<?=$row['CompanyID'];?>"><i class="icon-copy fi-book-bookmark"></i> Job post record</a>
 														</div>
 													</div>
 												</td>

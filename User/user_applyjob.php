@@ -145,20 +145,6 @@
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.php">Contact</a></li>
             </ul>
           </nav>
@@ -249,6 +235,28 @@
                 <p><span class="text-black"><span class="icon-room" style="margin-right:10px;"></span></span><?php echo $job_row['Job_Post_Location'];?></p>
                 <p style="margin-top:40px;margin-bottom:-2px;color:green;"><i class="icon-copy fa fa-check-circle-o" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Applied</p>
                 <small style="margin-left:26px;color:grey;font-size:15px;"><?php echo date('d-m-Y', strtotime($row['ApplyDate']));?></small>
+                <?php
+                switch($row['Status']){
+                case 'pending':
+                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:blue;"><i class="icon-copy ion-more" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Pending</p>';
+                  break;
+
+                case 'accepted':
+                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:green;"><i class="icon-copy ion-checkmark" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Accepted</p>';
+                  break;
+
+                case 'rejected':
+                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:red;"><i class="icon-copy ion-close" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Rejected</p>';
+                  break;
+
+                case 'processed':
+                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:orange;"><i class="icon-copy ion-load-b" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Proccess</p>';
+                  break;
+
+                default:
+                  break;
+              }
+              ?>
               </blockquote>
               </div>
             </div>
@@ -277,56 +285,39 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Search Trending</h3>
+            <h3>Job seekers</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Web Design</a></li>
-              <li><a href="#">Graphic Design</a></li>
-              <li><a href="#">Web Developers</a></li>
-              <li><a href="#">Python</a></li>
-              <li><a href="#">HTML5</a></li>
-              <li><a href="#">CSS3</a></li>
+              <li><a href="job-listings.php">Job listings</a></li>
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Company</h3>
+            <h3>About JOBFACT</h3>
             <ul class="list-unstyled">
               <li><a href="about.php">About Us</a></li> 
               <li><a href="term_of_use.php">Term of use</a></li>
-              <li><a href="privacy.php">Privacy policy</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Resources</a></li>
+              
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Support</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Privacy</a></li>
-              <li><a href="#">Terms of Service</a></li>
+            <li><a href="contact.php">Contact us</a></li>
+             <li><a href="privacy.php">Privacy policy</a></li>
+             <li><a href="term_of_service.php">Term of Service</a></li>
             </ul>
-          </div>
-          <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Contact Us</h3>
-            <div class="footer-social">
-              <a href="#"><span class="icon-facebook"></span></a>
-              <a href="#"><span class="icon-twitter"></span></a>
-              <a href="#"><span class="icon-instagram"></span></a>
-              <a href="#"><span class="icon-linkedin"></span></a>
-            </div>
           </div>
         </div>
 
-        <div class="row text-center">
+        <div class="row text-center" style="margin-top:100px;">
           <div class="col-12">
             <p class="copyright"><small>
               <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></small></p>
           </div>
         </div>
       </div>
     </footer>
-  
   </div>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

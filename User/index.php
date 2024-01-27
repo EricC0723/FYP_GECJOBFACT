@@ -50,31 +50,16 @@
       <div class="container-fluid">
         <div class="row align-items-center">
           <div class="site-logo col-6"><a href="index.php">GEC  JOBFACT</a></div>
-
+<!-- class="nav-link" -->
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.php" class="nav-link active">Home</a></li>
+              <li><a href="index.php" class="active" >Home</a></li>
               <li><a href="about.php">About</a></li>
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li>
-              <li><a href="blog.html">Blog</a></li>
               <li><a href="contact.php">Contact</a></li>
-              <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
-              <li class="d-lg-none"><a href="login.php">Log In</a></li>
+
             </ul>
           </nav>
           
@@ -243,7 +228,8 @@
               }  
 
               $page_first_result = ($page-1) * $results_per_page;
-              $result = mysqli_query($connect, "SELECT * FROM job_post WHERE job_status='Active' LIMIT " . $page_first_result . ',' . $results_per_page);
+              // $result = mysqli_query($connect, "SELECT * FROM job_post WHERE job_status='Active' LIMIT " . $page_first_result . ',' . $results_per_page);
+              $result = mysqli_query($connect, "SELECT * FROM job_post WHERE job_status='Active' ORDER BY AdStartDate DESC LIMIT " . $page_first_result . ',' . $results_per_page);
               $count = 0;
               $all_result = mysqli_query($connect,"SELECT * FROM job_post WHERE job_status IN ('Active')");
               $total_records = mysqli_num_rows($all_result);
@@ -278,7 +264,27 @@
                           default: $badgeClass = "badge-secondary";$JobType = "";break;
                         }
                       ?>
-                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span>
+                      <span class="badge <?php echo $badgeClass; ?>"><?php echo $JobType; ?></span><br>
+                      <?php
+                      date_default_timezone_set('Asia/Kuala_Lumpur');
+
+                      $adStartDate = $row["AdStartDate"];
+                      $timestamp = strtotime($adStartDate);
+                      $currentTimestamp = time();
+                      $timeDifference = $currentTimestamp - $timestamp;
+
+                      $minutesAgo = round($timeDifference / 60);
+                      $hoursAgo = round($timeDifference / 3600);
+                      $daysAgo = round($timeDifference / (3600 * 24));
+
+                      if ($minutesAgo < 60) {
+                          echo $minutesAgo . 'm ago';
+                      } elseif ($hoursAgo < 24) {
+                          echo $hoursAgo . 'h ago';
+                      } else {
+                          echo $daysAgo . 'd ago';
+                      }
+                      ?>
                     </div>
                   </div>
                 </li>
@@ -339,7 +345,7 @@
             <div class="row justify-content-center">
               <div class="col-md-7">
                 <h2 class="section-title mb-2">Company We've Helped</h2>
-                <p class="lead">Porro error reiciendis commodi beatae omnis similique voluptate rerum ipsam fugit mollitia ipsum facilis expedita tempora suscipit iste</p>
+                <p class="lead"></p>
               </div>
             </div>
             
@@ -356,7 +362,6 @@
           <div class="col-6 col-lg-3 col-md-6 text-center">
             <img src="images/logo_visa.svg" alt="Image" class="img-fluid logo-4">
           </div>
-
           <div class="col-6 col-lg-3 col-md-6 text-center">
             <img src="images/logo_apple.svg" alt="Image" class="img-fluid logo-5">
           </div>
@@ -374,7 +379,7 @@
     </section>
 
 
-    <section class="bg-light pt-5 testimony-full">
+    <!-- <section class="bg-light pt-5 testimony-full">
         
         <div class="owl-carousel single-carousel">
 
@@ -409,9 +414,9 @@
 
       </div>
 
-    </section>
+    </section> -->
 
-    <section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
+    <!-- <section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('images/hero_1.jpg');">
       <div class="container">
         <div class="row">
           <div class="col-md-6 align-self-center text-center text-md-left mb-5 mb-md-0">
@@ -427,10 +432,9 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     
     <footer class="site-footer">
-
       <a href="#top" class="smoothscroll scroll-top">
         <span class="icon-keyboard_arrow_up"></span>
       </a>
@@ -438,35 +442,41 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Search Trending</h3>
+            <h3>Job seekers</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Web Design</a></li>
-              <li><a href="#">Graphic Design</a></li>
-              <li><a href="#">Web Developers</a></li>
-              <li><a href="#">Python</a></li>
-              <li><a href="#">HTML5</a></li>
-              <li><a href="#">CSS3</a></li>
+              <li><a href="job-listings.php">Job listings</a></li>
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
-            <h3>Company</h3>
+            <h3>About JOBFACT</h3>
             <ul class="list-unstyled">
               <li><a href="about.php">About Us</a></li> 
               <li><a href="term_of_use.php">Term of use</a></li>
-              <li><a href="privacy.php">Privacy policy</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Resources</a></li>
+              
             </ul>
           </div>
           <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Support</h3>
             <ul class="list-unstyled">
-              <li><a href="#">Support</a></li>
-              <li><a href="#">Privacy</a></li>
-              <li><a href="#">Terms of Service</a></li>
+            <li><a href="contact.php">Contact us</a></li>
+             <li><a href="privacy.php">Privacy policy</a></li>
+             <li><a href="term_of_service.php">Term of Service</a></li>
             </ul>
           </div>
-          <div class="col-6 col-md-3 mb-4 mb-md-0">
+        </div>
+
+        <div class="row text-center" style="margin-top:100px;">
+          <div class="col-12">
+            <p class="copyright"><small>
+              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></small></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <!-- <div class="col-6 col-md-3 mb-4 mb-md-0">
             <h3>Contact Us</h3>
             <div class="footer-social">
               <a href="#"><span class="icon-facebook"></span></a>
@@ -475,20 +485,8 @@
               <a href="#"><span class="icon-linkedin"></span></a>
             </div>
           </div>
-        </div>
-
-        <div class="row text-center">
-          <div class="col-12">
-            <p class="copyright"><small>
-              <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
-            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></small></p>
-          </div>
-        </div>
-      </div>
-    </footer>
-  
-  </div>
+        </div> -->
+ 
     <!-- SCRIPTS -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="js/jquery.min.js"></script>
