@@ -1,6 +1,11 @@
-<?php
-  session_start();
-  include("C:/xampp/htdocs/FYP/dataconnection.php");
+<?php	
+session_start();
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+if (isset($_GET['company_id'])) {
+    $company_id = $_GET['company_id'];
+    $query = "SELECT * FROM  job_post WHERE CompanyID=$company_id ORDER BY AdStartDate DESC";
+    $result = mysqli_query($connect,$query);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,7 +18,33 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+	<head>
+    <style>
+.bordered-section {
+    border: 1px solid #e0e0e0; /* 浅色边框颜色 */
+    padding: 10px; /* 可选，用于增加内边距 */
+	.bordered-section table {
+    width: 100%;
+    border-collapse: collapse; /* 合并单元格边框 */
+}
 
+.bordered-section table td {
+    padding: 8px;
+    border: 1px solid #e0e0e0; /* 单元格边框颜色 */
+}
+
+.bordered-section table td:first-child {
+    text-align: right;
+    padding-right: 8px;
+}
+
+.bordered-section table td:last-child {
+    padding-left: 8px; /* 可选，增加最后一个单元格的左内边距 */
+}
+
+}
+    </style>
+</head>
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -22,8 +53,6 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
-	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -37,19 +66,6 @@
 	</script>
 </head>
 <body>
-	<!-- <div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="vendors/images/logo.png" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>70%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div> -->
-
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
@@ -157,17 +173,17 @@
 			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
-				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
+							<img src="vendors/images/photo1.jpg" alt="">
 						</span>
-						<span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
+						<span class="user-name">Ross C. Lopez</span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -298,7 +314,7 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-                    <li class="dropdown">
+ <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
                         <span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
@@ -307,11 +323,6 @@
 							<li><a href="user_career.php">User Career History</a></li>
 						</ul>
 					</li>
-					<!-- <li>
-						<a href="user.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user"></span><span class="mtext">User</span>
-						</a>
-					</li> -->
 					<li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
 						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
@@ -478,364 +489,282 @@
 			<div class="min-height-200px">
 				<div class="page-header">
 					<div class="row">
-						<div class="col-md-6 col-sm-12">
+						<div class="col-md-12 col-sm-12">
 							<div class="title">
-								<h4>User List</h4>
+								<h4>Job post record</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">User</li>
+									<li class="breadcrumb-item"><a href="index.php">Company</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Job post record</li>
 								</ol>
 							</nav>
 						</div>
 					</div>
 				</div>
-				<!-- User table -->
-				<div class="card-box mb-30">
-					<div class="pd-20">
-					</div>
-					<div class="pb-20">
-						
-						<table id="user_table"class="data-table table stripe hover nowrap">
-							<thead>
-								<tr>
-									<th class="table-plus datatable-nosort">ID</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Phone number</th>
-									<th>Registritration Date</th>
-									<th>User Status</th>
-									<th class="datatable-nosort">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?php
-									include("C:/xampp/htdocs/FYP/dataconnection.php");
-									$query = "SELECT * FROM users WHERE UserStatus IN ('Active', 'Blocked', 'Verify', 'Deleted')";
-									$result = mysqli_query($connect,$query);
-									$location_query = "SELECT * FROM job_location";
-									$location_result = mysqli_query($connect,$location_query);
-									if(mysqli_num_rows($result) > 0)
-									{
-										while($row = mysqli_fetch_assoc($result))
-										{
-											?>
-											<tr>
-												<td class="table-plus"><?php echo $row["UserID"]; ?></td>
-												<td><?php echo $row["FirstName"]; ?></td>
-												<td><?php echo $row["Email"]; ?></td>
-												<td><a target="_blank" href="https://api.whatsapp.com/send?phone=60<?php echo $row["Phone"]; ?>"><?php echo $row["Phone"]; ?></a></td>
-												<td><?php echo date('d-m-Y', strtotime($row['RegistrationDate'])); ?></td>
-												<td>
-												<?php
-                                                if($row["UserStatus"] == 'Blocked'){
-													echo '<button type="button" class="btn btn-danger">Blocked</button>';
-												}
-												else if($row["UserStatus"] == 'Active'){
-													echo '<button type="button" class="btn btn-success">Active</button>';
-												}
-												else if($row["UserStatus"] == 'Verify'){
-													echo '<button type="button" class="btn btn-dark">Verify</button>';
-												}
-												?>
-												</td>
-												<td>
-													<div class="dropdown">
-														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-															<i class="dw dw-more"></i>
-														</a>
-														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="viewUserBtn dropdown-item" href="#" data-userid="<?=$row['UserID'];?>"><i class="dw dw-eye"></i> View</a>
-															<a class="editUserBtn dropdown-item" href="#" data-userid="<?=$row['UserID'];?>"><i class="dw dw-edit2"></i> Edit</a>
-															<a class="recordBtn dropdown-item" href="application_record.php?user_id=<?=$row['UserID'];?>"><i class="icon-copy fi-book-bookmark"></i>Application record</a>
-														</div>
-													</div>
-												</td>
-											</tr>
-											<?php
-										}
-									}
-								?>
-							</tbody>
-						</table>
+				<div class="faq-wrap">
+					<h4 class="mb-30 h4 text-blue padding-top-30"># Compnay id :  <?php echo $company_id;?></h4><div class="padding-bottom-30">
+                    <?php 
+					if (mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $job_post_id = $row['Job_Post_ID'];
+                            ?>
+                            <div class="card">
+							<div class="card-header">
+                            <button class="btn btn-block" data-toggle="collapse" data-target="#faq-<?php echo $job_post_id; ?>">
+                            Job post ID #<?php echo $job_post_id; ?>
+								</button>
+							</div>
+                            <div id="faq-<?php echo $job_post_id; ?>" class="collapse">
+								<div class="card-body">
+									<div class="card-body">
+									<div class="row">
+											<div class="col-md-12 bordered-section">
+											<p style="text-align: center; font-weight: bold; position: relative;">Job information
+												<a class="viewJobBtn btn btn-link font-24 p-0 line-height-1 no-arrow" data-jobid="<?=$row['Job_Post_ID'];?>" href="#" role="button" data-toggle="tooltip" data-placement="top" title="more details"style="position: absolute; right: 0;">
+													<i class="dw dw-more"></i>
+												</a>
+											</p>
+													<table style="width:100%">
+													<tr>
+														<td>Job post id</td>
+														<td>:</td>	
+														<td><?php echo $row["Job_Post_ID"];?></td>
+													</tr>
+													<tr>
+														<td>Job post title</td>
+														<td>:</td>
+														<td><?php echo $row["Job_Post_Title"];?></td>
+													</tr>
+													<tr>
+														<td>Job post position</td>
+														<td>:</td>
+														<td><?php echo $row["Job_Post_Position"]; ?></td>
+													</tr>
+													<tr>
+														<td>Job post date</td>
+														<td>:</td>
+														<td><?php echo date('d-m-y', strtotime($row["AdStartDate"])) . ' - ' . date('d-m-y', strtotime($row["AdEndDate"])); ?></td>
+													</tr>
+													<tr>
+														<td>Job post status</td>
+														<td>:</td>
+														<td><?php echo $row["job_status"]; ?></td>
+													</tr>
+												</table>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+                        <?php
+                        }
+					}
+					else{
+						echo "<p>No job post records available for this user.</p>";
+					}
+                    ?>
+						</div>
 					</div>
 				</div>
-				<!-- Simple Datatable End --> 	
-			<!-- <div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div> -->
+			</div>
 		</div>
 	</div>
-    <!-- View modal -->
+	<!-- View modal -->
     <div class="col-md-4 col-sm-12 mb-30">
-            <div class="modal fade bs-example-modal-lg" id="view-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="">View user data</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="row" style="position:center;">
+    <div class="modal fade bs-example-modal-lg" id="view-job-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+					<h4 class="modal-title">Job ID -</h4><h4 class="modal-title" id="Job_Post_ID"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+				<div class="group-container">
+					<hr>
+					<h6 class="group-title" style="text-align:center;color:grey;">Basic Post Information</h6>
+					<hr>
+				</div>
+				<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">First Name</h5>
-                        <div class="form-group">
-                        <p id="FirstName" class="form-control"></p>
-                        </div>
+					  <h5 style="display: inline-block;">Job Logo</h5>
+						<div class="form-group">
+							<img id="Job_Logo_Url" class="img-fluid" alt="Job Logo" style="width:120px;height:100px;">
+						</div>
                       </div>
                       <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">Last Name</h5>
-                        <div class="form-group">
-                        <p id="LastName" class="form-control"></p>
-                        </div>
+					  <h5 style="display: inline-block;">Job Cover</h5>
+					<div class="form-group">
+						<img id="Job_Cover_Url" class="img-fluid" alt="Job Cover" style="width:120px;height:100px;">
+					</div>
                       </div>
                     </div>
-                    <h5 style="display: inline-block;">Email</h5>
-                        <div class="form-group">
-                        <p id="Email" class="form-control"></p>
-                        </div>
-                    <h5 style="display: inline-block;">Password</h5>
+                    <h5 style="display: inline-block;">Job Post Title</h5>
                     <div class="form-group">
-                    <p class="form-control">* * * * * * * * *</p>
+                        <p id="Job_Post_Title" class="form-control"></p>
                     </div>
-					<h5 style="display: inline-block;">Phone number</h5>
+
+                    <h5 style="display: inline-block;">Job Post Position</h5>
                     <div class="form-group">
-                    <p id="Phone" class="form-control"></p>
+                        <p id="Job_Post_Position" class="form-control"></p>
+                    </div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Main Category Name</h5>
+						<div class="form-group">
+						<p id="Main_Category_Name" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Sub Category Name</h5>
+					<div class="form-group">
+					<p id="Sub_Category_Name" class="form-control"></p>
 					</div>
-                    <h5 style="display: inline-block;">Location</h5>
-                    <div class="form-group">
-                    <p id="Location" class="form-control"></p>
+                      </div>
+                    </div>
+					<h5 style="display: inline-block;">Job Type</h5>
+					<div class="form-group">
+						<p id="Job_Post_Type" class="form-control"></p>
 					</div>
-                    <h5 style="display: inline-block;">Registration Date</h5>
+					<h5 style="display: inline-block;">Job Location</h5>
+					<div class="form-group">
+						<p id="Job_Post_Location" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Job Status</h5>
                     <div class="form-group">
-                    <p id="RegistrationDate" class="form-control"></p>
+                        <p id="job_status" class="form-control"></p>
                     </div>
-                    <h5 style="display: inline-block;">User Status</h5>
-                    <div class="form-group">
-                    <p id="UserStatus" class="form-control"></p>
+				<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Salary and deadline information</h6>
+					<hr>
+				</div>
+                    <!-- Add other job-related fields here -->
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad Start Date</h5>
+						<div class="form-group">
+						<p id="AdStartDate" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Ad End Date</h5>
+					<div class="form-group">
+					<p id="AdEndDate" class="form-control"></p>
+					</div>
+                      </div>
                     </div>
+					<div class="row" style="position:center;">
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Minimum Salary</h5>
+						<div class="form-group">
+						<p id="Job_Post_MinSalary" class="form-control"></p>
+						</div>
+                      </div>
+                      <div class="col-md-6 col-sm-12">
+					  <h5 style="display: inline-block;">Maximum Salary</h5>
+					<div class="form-group">
+					<p id="Job_Post_MaxSalary" class="form-control"></p>
+					</div>
+                      </div>
                     </div>
+					<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+					<hr>
+					<h6 class="group-title"style="color:grey;" >Job description and requirements</h6>
+					<hr>
+					</div>
+					<h5 style="display: inline-block;">Experience Required</h5>
+					<div class="form-group">
+						<p id="Job_Post_Exp" class="form-control"></p>
+					</div>
+					<h5 style="display: inline-block;">Job Description</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Description" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Responsibilities</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Responsibilities" class="form-control" rows="5" disabled></textarea>
+					</div>
+					<h5 style="display: inline-block;">Benefits</h5>
+					<div class="form-group">
+						<textarea id="Job_Post_Benefits" class="form-control" rows="5" disabled></textarea>
+					</div>
+                    <div id="job-modal-data"></div>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
-        <!-- Edit modal -->
-        <div class="col-md-4 col-sm-12 mb-30">
-            <div class="modal fade bs-example-modal-lg" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="">Edit user data</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="row" style="position:center;">
-                      <div class="col-md-6 col-sm-12">
-					  	<input type="hidden" class="form-control" id="edit_userid" style="margin-top:10px;border-color:#787785;">
-                        <h5 style="display: inline-block;">First Name</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_FirstName" style="margin-top:10px;border-color:#787785;"disabled>
-                        </div>
-                      </div>
-                      <div class="col-md-6 col-sm-12">
-                        <h5 style="display: inline-block;">Last Name</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_LastName" style="margin-top:10px;border-color:#787785;"disabled>
-                        </div>
-                      </div>
-                    </div>
-                    <h5 style="display: inline-block;">Email</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_Email" style="margin-top:10px;border-color:#787785;" disabled>
-                        </div>
-                    <h5 style="display: inline-block;">Password</h5>
-                    <div class="form-group">
-                    <button type="button" class="btn btn-primary"><i class="icon-copy fa fa-send" aria-hidden="true" style="margin-right:10px;"></i>Request a new password from the user</button>
-                    </div>
-					<h5 style="display: inline-block;">Phone number</h5>
-                        <div class="form-group">
-                        <input type="text" class="form-control" id="edit_Phone" style="margin-top:10px;border-color:#787785;"disabled>
-                    </div>
-					<h5 style="display: inline-block;">Location</h5>
-					<select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_Location" id="edit_Location"style="max-height:100px;"disabled>
-                    <?php
-                    if(mysqli_num_rows($location_result) > 0)
-                    {
-                      while($row = mysqli_fetch_assoc($location_result))
-                      {
-                    ?>
-                     <option value="<?php echo $row["Job_Location_Name"];?>"><?php echo $row["Job_Location_Name"]; ?></option>
-                    <?php 
-                      }
-                    }
-                    ?>
-                  </select>
-                    <h5 style="display: inline-block;margin-top:30px;">Registration Date</h5>
-                    <div class="form-group">
-                     <input type="text" class="form-control" id="edit_RegistrationDate" style="margin-top:10px;border-color:#787785;" disabled>
-                    </div>
-                    <h5 style="display: inline-block;">User Status</h5>
-                    <div class="form-group">
-                    <select class="selectpicker form-control" name="edit_UserStatus" id="edit_UserStatus" style="width: 100%; height: 38px;">
-							<option value="Active">Active</option>
-							<option value="Blocked" >Blocked</option>
-					</select>
-                    </div>
-                        <div class="modal-footer">
-							<a class="updateUserBtn btn btn-primary" href="#" data-userid="<?=$row['UserID'];?>"> Save changes</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </div>
+</div>
+
 	<!-- js -->
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
-	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
-	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
-	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
-	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
-	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
-	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
-	<script src="vendors/scripts/datatable-setting.js"></script></body>
-    <!-- View User -->
-    <script>
-        $(document).on('click', '.viewUserBtn', function () {
-        console.log("view click");
-        var user_id = $(this).data('userid');
-        console.log("User ID : "+user_id);
-        $.ajax({
-            type: "GET",
-            url: "view_user.php?user_id=" + user_id,
-            success: function (response) {
-                console.log(response);
-                var res = jQuery.parseJSON(response);
-                if(res.status == 404) {
-                    alert(res.message);
-                }else if(res.status == 200){
-                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
-                    $('#FirstName').text(res.data.FirstName);
-                    $('#LastName').text(res.data.LastName);
-					var phoneNumber = res.data.Phone;
-					if(isNaN(phoneNumber) || phoneNumber === null || phoneNumber === "")
-					{
-						phoneNumber = "-";
-					}
-					else{
-						phoneNumber = "60 - " + phoneNumber;
-					}
-                    $('#Phone').text(phoneNumber);
-                    $('#Email').text(res.data.Email);
-                    $('#Password').text(res.data.Password);
-                    $('#UserStatus').text(res.data.UserStatus);
-                    $('#Location').text(res.data.Location);
-                    $('#RegistrationDate').text(formattedDate);
-
-                    $('#view-user-modal').modal('show');
-                }
-            }
-        });
-        });
-    </script>
-	<!-- edit btn click -->
-    <script>
-        $(document).on('click', '.editUserBtn', function () {
-        console.log("view click");
-        var user_id = $(this).data('userid');
-        console.log("User ID : "+user_id);
-        $.ajax({
-            type: "GET",
-            url: "view_user.php?user_id=" + user_id,
-            success: function (response) {
-                console.log(response);
-                var res = jQuery.parseJSON(response);
-                if(res.status == 404) {
-                    alert(res.message);
-                }else if(res.status == 200){
-                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
-                    $('#edit_FirstName').prop('value', res.data.FirstName);
-                    $('#edit_LastName').prop('value', res.data.LastName);
-					var phoneNumber = res.data.Phone;
-					if(isNaN(phoneNumber) || phoneNumber === null || phoneNumber === "")
-					{
-						phoneNumber = "-";
-					}
-                    $('#edit_Phone').prop('value', phoneNumber);
-					$('#edit_userid').prop('value', user_id);
-                    $('#edit_Email').prop('value', res.data.Email);
-                    $('#edit_Password').prop('value', res.data.Password);
-
-                    var userStatusSelect = $('#edit_UserStatus');
-					userStatusSelect.find('option').each(function() {
-						if ($(this).val() === res.data.UserStatus) {
-							$(this).prop('selected', true);
-						} else {
-							$(this).prop('selected', false);
-						}
-					});
-					$('#edit_UserStatus').selectpicker('refresh');
-                    var locationSelect = $('#edit_Location');
-					locationSelect.find('option').each(function() {
-						$('#edit_Location').selectpicker('refresh');
-						if ($(this).val() === res.data.Location) {
-							$(this).prop('selected', true);
-						} else {
-							$(this).prop('selected', false);
-						}
-					});
-                    $('#edit_RegistrationDate').prop('value', formattedDate);
-
-                    $('#edit-user-modal').modal('show');
-                }
-            }
-        });
-        });
-    </script>
-	<!-- update -->
+	<!-- View job -->
 	<script>
-        $(document).on('click', '.updateUserBtn', function () {
-        console.log("update click");
-        // var user_id = $(this).data('userid');
-        var data = {
-            action: "updateUser",
-			user_id: $("#edit_userid").val(),
-            first_name: $("#edit_FirstName").val(),
-            last_name: $("#edit_LastName").val(),
-            location: $("#edit_Location").val(),
-            phone: $("#edit_Phone").val(),
-            status: $("#edit_UserStatus").val(),
-        };
-		console.log(data);
-		swal({
-        title: "Are you sure?",
-        icon: "warning",
-        buttons: ["No, cancel it!", "Yes, I am sure!"],
-        dangerMode: true,
-    	}).then((result) => {
-        if (result) {
+        $(document).on('click', '.viewJobBtn', function () {
+        console.log("view click");
+        var job_id = $(this).data('jobid');
+        console.log("Job ID : "+job_id);
         $.ajax({
-            type: "POST",
-            url: "view_user.php",
-          	async: true, 
-			data: data,
+            type: "GET",
+            url: "view_job.php?job_id=" + job_id,
             success: function (response) {
                 console.log(response);
-				swal("Success", response, "success").then(function() {
-					location.replace("user.php");
-          });
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+                    $('#view-job-modal').modal('show');
+                    var startDate = moment(res.data.job.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
+					var endDate = moment(res.data.job.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#CompanyID ').text(res.data.job.CompanyID );
+					$('#Job_Post_ID ').text(job_id);
+                    $('#Job_Post_Title').text(res.data.job.Job_Post_Title);
+                    $('#Job_Post_Position').text(res.data.job.Job_Post_Position);
+					$('#Job_Post_Exp').text(res.data.job.Job_Post_Exp);
+					$('#Job_Post_MinSalary').text(res.data.job.Job_Post_MinSalary);
+					$('#Job_Post_MaxSalary').text(res.data.job.Job_Post_MaxSalary);
+					$('#Job_Post_Description').text(res.data.job.Job_Post_Description);
+					$('#AdStartDate').text(startDate);
+					$('#AdEndDate').text(endDate);
+					$('#Job_Post_Type').text(res.data.job.Job_Post_Type);
+					$('#job_status').text(res.data.job.job_status);
+					$('#Job_Post_Location').text(res.data.job.Job_Post_Location);
+					$('#Job_Post_Responsibilities').text(res.data.job.Job_Post_Responsibilities	);
+					$('#Job_Post_Benefits').text(res.data.job.Job_Post_Benefits);
+					$('#Main_Category_Name').text(res.data.job.Main_Category_Name);
+					$('#Sub_Category_Name').text(res.data.job.Sub_Category_Name);
+
+					var jobLogoUrl = res.data.job.Job_Logo_Url;
+					var jobCoverUrl = res.data.job.Job_Cover_Url;
+					$('#Job_Cover_Url').attr('src', jobCoverUrl);
+					$('#Job_Logo_Url').attr('src', jobLogoUrl);
+
+                    console.log(res.data.questions);
+                    var questionsTable = "<h4>Job post questions</h4>";
+                    questionsTable += "<table class='table table-bordered'>";
+                    questionsTable += "<tr><th>Question</th></tr>";
+
+                    for (var i = 0; i < res.data.questions.length; i++) {
+                        var question = res.data.questions[i];
+                        questionsTable += "<tr>";
+                        questionsTable += "<td>" + question.Job_Question_Name + "</td>";
+                        questionsTable += "</tr>";
+                    }
+
+                    questionsTable += "</table>";
+                    console.log(questionsTable);
+
+                    $('#job-modal-data').html(questionsTable);
+                }
             }
         });
-	}
-    });
         });
     </script>
+</body>
 </html>
