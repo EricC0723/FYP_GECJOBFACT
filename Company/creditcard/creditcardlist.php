@@ -68,7 +68,6 @@ if (isset($_SESSION['companyID'])) {
                             <div style="width:80px;"><img src="' . $imgSrc . '" style="width:100%"></div>
                             <div style="display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end;">   
                                 <span class="landing_sentence3" style="font-weight:400">' . $maskedNumber . '</span>
-                                <span class="landing_sentence2">' . htmlspecialchars($row['CreditCard_CVV']) . '</span>
                             </div> 
                             <div style="height:50px;"></div>
                             <div style="display:flex;flex-direction:row;justify-content:space-between">
@@ -109,7 +108,6 @@ if (isset($_SESSION['companyID'])) {
 <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="company_creditcard.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
