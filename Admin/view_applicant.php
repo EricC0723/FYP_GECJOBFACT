@@ -5,10 +5,10 @@ require 'C:/xampp/htdocs/FYP/dataconnection.php';
 if (isset($_GET['applicant_id'])) {
     $applicant_id = mysqli_real_escape_string($connect, $_GET['applicant_id']);
 
-    // 查询 applications 表
+    //application
     $query_applications = "SELECT * FROM applications WHERE ApplicationID = '$applicant_id'";
     $result_applications = mysqli_query($connect, $query_applications);
-    $applications_data = mysqli_fetch_array($result_applications);
+    $applications_data = mysqli_fetch_assoc($result_applications);    
 
     $query_career = "SELECT * FROM applicant_career WHERE ApplicationID = '$applicant_id'";
     $result_career = mysqli_query($connect, $query_career);
@@ -16,26 +16,28 @@ if (isset($_GET['applicant_id'])) {
     $query_career = "SELECT * FROM applicant_career WHERE ApplicationID = '$applicant_id'";
     $result_career = mysqli_query($connect, $query_career);
     
-    // 初始化一个数组来存储所有 career 的数据
+    //store career history
     $career_data = array();
-    
-    // 循环遍历结果集，将每一行数据添加到数组中
+
     while ($row = mysqli_fetch_assoc($result_career)) {
         $career_data[] = $row;
     }
 
-    // 查询 applicant_education 表
+    //store education
     $query_education = "SELECT * FROM applicant_education WHERE ApplicationID = '$applicant_id'";
     $result_education = mysqli_query($connect, $query_education);
     $education_data = mysqli_fetch_array($result_education);
 
-    $query_responses = "SELECT * FROM applicant_responses WHERE ApplicationID = '$applicant_id'";
+    $query_responses = "SELECT responses.*, questions.Job_Question_Name, options.Job_Question_Option_Name
+    FROM applicant_responses AS responses
+    LEFT JOIN job_question AS questions ON responses.QuestionID = questions.Job_Question_ID
+    LEFT JOIN job_question_option AS options ON responses.AnswerID = options.Job_Question_Option_ID
+    WHERE responses.ApplicationID = '$applicant_id'";
     $result_responses = mysqli_query($connect, $query_responses);
-
     $responses_data = array();
 
     while ($row = mysqli_fetch_assoc($result_responses)) {
-        $responses_data[] = $row;
+    $responses_data[] = $row;
     }
 
     $json_data = [

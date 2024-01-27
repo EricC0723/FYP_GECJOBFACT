@@ -506,6 +506,7 @@ if (isset($_GET['user_id'])) {
 				<div class="faq-wrap">
 					<h4 class="mb-30 h4 text-blue padding-top-30"># User id :  <?php echo $userId;?></h4><div class="padding-bottom-30">
                     <?php 
+					if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             $applicationId = $row['ApplicationID'];
 							$jobId = $row['JobID'];
@@ -639,6 +640,10 @@ if (isset($_GET['user_id'])) {
 						</div>
                         <?php
                         }
+					}
+					else{
+						echo "<p>No application records available for this user.</p>";
+					}
                     ?>
 						</div>
 					</div>
@@ -823,6 +828,27 @@ if (isset($_GET['user_id'])) {
         </div>
     </div>
 </div>
+
+<!-- Modal for Applicant View -->
+<div class="modal fade" id="view-applicant-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document"  style="max-width: 900px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Applicant Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- This is the div where data will be displayed -->
+                <div id="applicant-modal-data"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 	<!-- js -->
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
@@ -843,25 +869,119 @@ if (isset($_GET['user_id'])) {
                 if(res.status == 404) {
                     alert(res.message);
                 }else if(res.status == 200){
-                    // var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
-                    // $('#CompanyEmail').text(res.data.CompanyEmail);
-                    // $('#CompanyName').text(res.data.CompanyName);
-					// var phoneNumber = res.data.CompanyPhone;
-					// if(isNaN(phoneNumber) || phoneNumber === null || phoneNumber === "")
-					// {
-					// 	phoneNumber = "-";
-					// }
-					// else{
-					// 	phoneNumber = "60 - " + phoneNumber;
-					// }
-                    // $('#CompanyPhone').text(phoneNumber);
-                    // $('#ContactPerson').text(res.data.ContactPerson);
-                    // $('#CompanySize').text(res.data.CompanySize);
-                    // $('#CompanyStatus').text(res.data.CompanyStatus);
-                    // $('#RegistrationNo').text(res.data.RegistrationNo);
-                    // $('#RegistrationDate').text(formattedDate);
+					$('#view-applicant-modal').modal('show');
 
-                    // $('#view-company-modal').modal('show');
+					var modalContent = '';
+
+					var applicationsData = res.data.applications;
+					modalContent += "<h2>Applicant Information</h2>";
+					modalContent += "<table class='table table-bordered'>";
+					modalContent += "<tr><th>Field</th><th>Value</th></tr>";
+
+					modalContent += "<tr><td><strong>Application ID</strong></td><td>" + applicationsData.ApplicationID + "</td></tr>";
+					modalContent += "<tr><td><strong>User ID</strong></td><td>" + applicationsData.UserID + "</td></tr>";
+					modalContent += "<tr><td><strong>Job ID</strong></td><td>" + applicationsData.JobID + "</td></tr>";
+					modalContent += "<tr><td><strong>First Name</strong></td><td>" + applicationsData.FirstName + "</td></tr>";
+					modalContent += "<tr><td><strong>Last Name</strong></td><td>" + applicationsData.LastName + "</td></tr>";
+					modalContent += "<tr><td><strong>Phone</strong></td><td>" + applicationsData.Phone + "</td></tr>";
+					modalContent += "<tr><td><strong>Email</strong></td><td>" + applicationsData.Email + "</td></tr>";
+					modalContent += "<tr><td><strong>Location</strong></td><td>" + applicationsData.Location + "</td></tr>";
+					modalContent += "<tr><td><strong>Profile Description</strong></td><td>" + applicationsData.Profile_Description + "</td></tr>";
+					modalContent += "<tr><td><strong>Resume</strong></td><td>" + getEmbedCode(applicationsData.ResumePath) + "</td></tr>";
+					modalContent += "<tr><td><strong>Cover Letter</strong></td><td>" + getEmbedCode(applicationsData.CoverLetterPath) + "</td></tr>";
+					var originalDate = new Date(applicationsData.ApplyDate);
+					var formattedDate = ('0' + originalDate.getDate()).slice(-2) + '-' +
+										('0' + (originalDate.getMonth() + 1)).slice(-2) + '-' +
+										originalDate.getFullYear().toString().slice(-2) + ' ' +
+										('0' + originalDate.getHours()).slice(-2) + ':' +
+										('0' + originalDate.getMinutes()).slice(-2);
+					modalContent += "<tr><td><strong>Apply Date</strong></td><td>" + formattedDate + "</td></tr>";
+					modalContent += "<tr><td><strong>Status</strong></td><td>" + applicationsData.Status + "</td></tr>";
+					modalContent += "</table>";
+					modalContent += "<hr>";
+					//career history
+					var careerData = res.data.career;
+				modalContent += "<h2>Career History</h2>";
+
+				if (careerData.length > 0) {
+					modalContent += "<table class='table table-bordered'>";
+					modalContent += "<colgroup>";
+					modalContent += "<col style='width: 20%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 20%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 20%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 40%;'>"; // Adjust the width as needed
+					modalContent += "</colgroup>";
+					modalContent += "<tr><th>Job Title</th><th>Company Name</th><th>Date Range</th><th>Description</th></tr>";
+
+					for (var i = 0; i < careerData.length; i++) {
+						var career = careerData[i];
+						modalContent += "<tr>";
+						modalContent += "<td>" + career.JobTitle + "</td>";
+						modalContent += "<td>" + career.CompanyName + "</td>";
+						modalContent += "<td>" + formatDateRange(career.StartDate, career.EndDate) + "</td>";
+						modalContent += "<td>" + career.Description + "</td>";
+						modalContent += "</tr>";
+					}
+
+					modalContent += "</table>";
+					//education
+					var educationData = res.data.education;
+				modalContent += "<h2>Education</h2>";
+
+				if (educationData) {
+					modalContent += "<table class='table table-bordered'>";
+					modalContent += "<colgroup>";
+					modalContent += "<col style='width: 25%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 25%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 25%;'>"; // Adjust the width as needed
+					modalContent += "<col style='width: 25%;'>"; // Adjust the width as needed
+					modalContent += "</colgroup>";
+					modalContent += "<tr><th>Institution</th><th>Course or Qualification</th><th>Course Highlight</th><th>Qualification Complete</th></tr>";
+
+					modalContent += "<tr>";
+					modalContent += "<td>" + (educationData.Institution ? educationData.Institution : "Not specified") + "</td>";
+					modalContent += "<td>" + (educationData.Course_or_Qualification ? educationData.Course_or_Qualification : "Not specified") + "</td>";
+					modalContent += "<td>" + (educationData.Course_Highlight ? educationData.Course_Highlight : "Not specified") + "</td>";
+					modalContent += "<td>" + (educationData.Qualification_complete ? "Yes" : "No") + "</td>";
+					modalContent += "</tr>";
+
+					modalContent += "</table>";
+				} else {
+					modalContent += "<p>User has not uploaded education information.</p>";
+				}
+				} else {
+					modalContent += "<p>User has not uploaded career history information.</p>";
+				}
+
+				// Add a horizontal line to separate career history from other information
+				modalContent += "<hr>";
+                var responsesData = res.data.responses;
+                modalContent += "<h2>Responses</h2>";
+
+                if (responsesData.length > 0) {
+                    modalContent += "<table class='table table-bordered'>";
+                    modalContent += "<colgroup>";
+                    modalContent += "<col style='width: 50%;'>"; // 调整宽度
+                    modalContent += "<col style='width: 50%;'>"; // 调整宽度
+                    modalContent += "</colgroup>";
+                    modalContent += "<tr><th>Question</th><th>Answer</th></tr>";
+
+                    for (var i = 0; i < responsesData.length; i++) {
+                        var response = responsesData[i];
+                        modalContent += "<tr>";
+                        modalContent += "<td>"+response.Job_Question_Name+"</td><td>" + response.Job_Question_Option_Name + "</td>";
+                        modalContent += "</tr>";
+                        // modalContent += "<tr>";
+                        // modalContent += "<td><strong>Answer:</strong></td><td>" + response.Job_Question_Option_Name + "</td>";
+                        // modalContent += "</tr>";
+                    }
+
+                    modalContent += "</table>";
+                } else {
+                    modalContent += "<p>No responses available.</p>";
+                }
+				$('#applicant-modal-data').html(modalContent);
+
                 }
             }
         });
@@ -951,5 +1071,17 @@ if (isset($_GET['user_id'])) {
         });
         });
     </script>
+	<script>
+		function getEmbedCode(filePath) {
+    if (filePath !== "") {
+        return "<embed src='" + filePath + "' width='500' height='400' type='application/pdf'></embed>";
+    } else {
+        return "-";
+    }
+}
+function formatDateRange(startDate, endDate) {
+    return startDate + (endDate ? " - " + endDate : " - Present");
+}
+	</script>
 </body>
 </html>
