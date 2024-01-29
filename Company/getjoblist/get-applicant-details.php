@@ -50,7 +50,7 @@ $result_responses = mysqli_query($connect, $sql_responses);
         <div style="background:white;width:100%">
             <div style="display:flex;flex-direction:row;justify-content:space-between">
                 <div style="display:flex;flex-direction:column;">
-                    <h2 class="landing_sentence3" style="width:800px">
+                    <h2 class="landing_sentence3">
                         <?php echo htmlspecialchars($row['FirstName']); ?>
                         <?php echo htmlspecialchars($row['LastName']); ?>
                     </h2>
@@ -60,15 +60,20 @@ $result_responses = mysqli_query($connect, $sql_responses);
                     </div>
                 </div>
                 <?php if ($row['Status'] == 'Accepted' || $row['Status'] == 'Rejected'): ?>
-                    <span class="landing_sentence1" style="font-size:18px;">You have already
-                        <?php echo strtolower($row['Status']); ?> this application.
-                    </span>
-                <?php else: ?>
-                    <button class="cont-button" onclick="changeAcceptstatus(<?php echo $applicantId; ?>)">Accept</button>
-                    <button class="save-button" style="margin-left:5px;border:1px solid rgb(73, 100, 233)"
-                        onclick="changeRejectstatus(<?php echo $applicantId; ?>)">Reject</button>
-                <?php endif; ?>
+                    <div>
+                        <span class="landing_sentence1" style="font-size:18px;">You have already
+                            <?php echo strtolower($row['Status']); ?> this application.
+                        </span>
+                    </div>
 
+                <?php else: ?>
+                    <div>
+                        <button class="cont-button"
+                            onclick="changeAcceptstatus(<?php echo $applicantId; ?>)">Accept</button>
+                        <button class="save-button" style="margin-left:5px;border:1px solid rgb(73, 100, 233)"
+                            onclick="changeRejectstatus(<?php echo $applicantId; ?>)">Reject</button>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div>

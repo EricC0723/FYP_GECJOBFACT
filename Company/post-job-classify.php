@@ -146,6 +146,7 @@ if (isset($_POST["submitbtn"])) {
             </div>
 
     </header>
+
     <div
         style="width:100%;height:155px;background:white;box-shadow:rgba(28, 35, 48, 0.1) 0px 2px 4px 0px, rgba(28, 35, 48, 0.1) 0px 2px 2px -2px, rgba(28, 35, 48, 0.2) 0px 4px 4px -4px;">
         <div class="container">
@@ -467,7 +468,6 @@ if (isset($_POST["submitbtn"])) {
                                 </svg></span><span><span id="totalsalary-message"
                                     class="validation_sentence"></span></span></span></div>
                 </div>
-
 
 
             </div>

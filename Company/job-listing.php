@@ -79,7 +79,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
@@ -142,6 +143,11 @@ if (isset($_SESSION['companyID'])) {
     </div>
 
     <div class="content-div" id="applicants" style="padding-bottom:100px;">
+
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+        <!-- Your content goes here -->
 
     </div>
 
@@ -256,6 +262,9 @@ if (isset($_SESSION['companyID'])) {
         function fetchAndOpenNav(button) {
             var applicantId = $(button).data('applicant-id');
 
+            // Set the applicantId as a data attribute of the sidebar
+            $('#mySidebar').data('applicant-id', applicantId);
+
             // First AJAX call to get the applicant details
             $.ajax({
                 url: 'getjoblist/get-applicant-details.php',
@@ -265,11 +274,17 @@ if (isset($_SESSION['companyID'])) {
                     // Update the sidebar content with the applicant details
                     $('#mySidebar').html(data);
                     openNav();
-                    $.ajax({
-                        url: 'change_status/process.php',
-                        method: 'GET',
-                        data: { applicant_id: applicantId }
-                    });
+                    // $.ajax({
+                    //     url: 'change_status/process.php',
+                    //     method: 'GET',
+                    //     data: { applicant_id: applicantId },
+                    //     success: function (response) {
+                    //         if (response == 'success') {
+                    //             // Update the status in the table
+                    //             getapplicants();
+                    //         } 
+                    //     }
+                    // });
                 }
             });
         }

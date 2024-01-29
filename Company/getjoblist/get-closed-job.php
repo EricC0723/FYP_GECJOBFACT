@@ -69,6 +69,17 @@ session_start(); // Start the session at the beginning
 <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
 
     <?php
+    function getApplicantCount($jobId)
+    {
+        global $connect; // Assuming $connect is your database connection variable
+    
+        $sql = "SELECT COUNT(*) as count FROM applications WHERE JobID = $jobId";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        return $row['count'];
+    }
+
     $CompanyID = null;
     if (isset($_SESSION['companyID'])) {
         $CompanyID = $_SESSION['companyID'];
@@ -127,7 +138,7 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                <div class="td_title">-</div>
+                            <div class="td_title">' . getApplicantCount($row['Job_Post_ID']) . '</div>                            </td>
                                 </td>
                                 <td>
                                 <div class="td_title" style="width:160px;">
