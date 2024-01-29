@@ -1,3 +1,7 @@
+<?php
+  session_start();
+  include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +22,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -49,40 +55,6 @@
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
 			</div>
 		</div>
 		<div class="header-right">
@@ -151,22 +123,19 @@
 			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -292,9 +261,9 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-<li>
+                    <li>
 						<a href="user.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user"></span><span class="mtext">Admin</span>
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
 					</li>
 					<li>
@@ -305,6 +274,11 @@
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
+						</a>
+					</li>
+                    <li>
+						<a href="payment_record.php" class="dropdown-toggle no-arrow">
+                        <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment</span>
 						</a>
 					</li>
 					<li class="dropdown">
@@ -463,175 +437,295 @@
 			<div class="min-height-200px">
 				<div class="page-header">
 					<div class="row">
-						<div class="col-md-12 col-sm-12">
+						<div class="col-md-6 col-sm-12">
 							<div class="title">
-								<h4>Sitemap</h4>
+								<h4>Payment Record</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Sitemap</li>
+									<li class="breadcrumb-item active" aria-current="page">Payment Record</li>
 								</ol>
 							</nav>
 						</div>
 					</div>
 				</div>
-				<div class="mb-30">
+				<!-- User table -->
+				<div class="card-box mb-30">
+					<div class="pd-20">
+					</div>
 					<div class="pb-20">
-						<div class="row">
-							<div class="col-lg-3 col-md-6 col-sm-12">
-								<div class="sitemap">
-									<h5 class="h5">Home</h5>
-									<ul>
-										<li><a href="index.php">Dashboard style 1</a></li>
-										<li><a href="index2.html">Dashboard style 2</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Forms</h5>
-									<ul>
-										<li><a href="form-basic.html">Form Basic</a></li>
-										<li><a href="advanced-components.html">Advanced Components</a></li>
-										<li><a href="form-wizard.html">Form Wizard</a></li>
-										<li><a href="html5-editor.html">HTML5 Editor</a></li>
-										<li><a href="form-pickers.html">Form Pickers</a></li>
-										<li><a href="image-cropper.html">Image Cropper</a></li>
-										<li><a href="image-dropzone.html">Image Dropzone</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Invoice</h5>
-									<ul>
-										<li><a href="invoice.html">Invoice</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Chat Module</h5>
-									<ul>
-										<li><a href="chat.html">Chat</a></li>
-									</ul>
-								</div>
+						
+						<table id="user_table"class="data-table table stripe hover nowrap">
+							<thead>
+								<tr>
+									<th class="table-plus datatable-nosort">ID</th>
+									<th>Company name</th>
+									<th>Contact Person</th>
+									<th>Phone number</th>
+									<th>Payment Amount</th>
+									<th class="datatable-nosort">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+									include("C:/xampp/htdocs/FYP/dataconnection.php");
+									$query = "SELECT * FROM payment";
+									$result = mysqli_query($connect,$query);
+									$location_query = "SELECT * FROM job_location";
+									$location_result = mysqli_query($connect,$location_query);
+									if(mysqli_num_rows($result) > 0)
+									{
+										while($row = mysqli_fetch_assoc($result))
+										{
+											?>
+											<tr>
+												<td class="table-plus"><?php echo $row["PaymentID"]; ?></td>
+												<td><?php echo $row["CompanyName"]; ?></td>
+												<td><?php echo $row["ContactPerson"]; ?></td>
+												<td><a target="_blank" href="https://api.whatsapp.com/send?phone=60<?php echo $row["CompanyPhone"]; ?>"><?php echo $row["CompanyPhone"]; ?></a></td>
+												<td><?php echo "RM". " ".$row["Payment_Amount"]; ?></td>
+												<td>
+													<div class="dropdown">
+														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+															<i class="dw dw-more"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<a class="viewPaymentBtn dropdown-item" href="#" data-paymentid="<?=$row['PaymentID'];?>"><i class="dw dw-eye"></i> View</a>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<?php
+										}
+									}
+								?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+		</div>
+	</div>
+    <!-- View modal -->
+    <div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="view-payment-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width: 830px;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="">Company data</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                        <div id="payment-modal-data"></div>
+                        <!-- <div class="invoice-wrap">
+					<div class="invoice-box">
+						<div class="invoice-header">
+							<div class="logo text-center">
+								<img src="vendors/images/logo.png" alt="" style="height:50px;">
 							</div>
-							<div class="col-lg-3 col-md-6 col-sm-12">
-								<div class="sitemap">
-									<h5 class="h5">Tables</h5>
-									<ul>
-										<li><a href="basic-table.html">Basic Tables</a></li>
-										<li><a href="datatable.html">DataTables</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Calendar</h5>
-									<ul>
-										<li><a href="calendar.html">Calendar</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Icons</h5>
-									<ul>
-										<li><a href="font-awesome.html">FontAwesome Icons</a></li>
-										<li><a href="foundation.html">Foundation Icons</a></li>
-										<li><a href="ionicons.html">Ionicons Icons</a></li>
-										<li><a href="themify.html">Themify Icons</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Charts</h5>
-									<ul>
-										<li><a href="highchart.html">Highchart</a></li>
-										<li><a href="knob-chart.html">jQuery Knob</a></li>
-										<li><a href="jvectormap.html">jvectormap</a></li>
-									</ul>
-								</div>
+						</div>
+						<h4 class="text-center mb-30 weight-600">INVOICE</h4>
+						<div class="row pb-30">
+							<div class="col-md-6">
+								<h5 class="mb-15">Infinion sdn bhd</h5>
+								<p class="font-14 mb-5">Date Issued: <strong class="weight-600">10 Jan 2018</strong></p>
+								<p class="font-14 mb-5">Invoice No: <strong class="weight-600">4556</strong></p>
 							</div>
-							<div class="col-lg-3 col-md-6 col-sm-12">
-								<div class="sitemap">
-									<h5 class="h5">UI Elements</h5>
-									<ul>
-										<li><a href="ui-buttons.html">Buttons</a></li>
-										<li><a href="ui-cards.html">Cards</a></li>
-										<li><a href="ui-cards-hover.html">Cards Hover</a></li>
-										<li><a href="ui-modals.html">Modals</a></li>
-										<li><a href="ui-tabs.html">Tabs</a></li>
-										<li><a href="ui-tooltip-popover.html">Tooltip &amp; Popover</a></li>
-										<li><a href="ui-sweet-alert.html">Sweet Alert</a></li>
-										<li><a href="ui-notification.html">Notification</a></li>
-										<li><a href="ui-timeline.html">Timeline</a></li>
-										<li><a href="ui-progressbar.html">Progressbar</a></li>
-										<li><a href="ui-typography.html">Typography</a></li>
-										<li><a href="ui-list-group.html">List group</a></li>
-										<li><a href="ui-range-slider.html">Range slider</a></li>
-										<li><a href="ui-carousel.html">Carousel</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-lg-3 col-md-6 col-sm-12">
-								<div class="sitemap">
-									<h5 class="h5">Additional Pages</h5>
-									<ul>
-										<li><a href="video-player.html">Video Player</a></li>
-										<li><a href="login.html">Login</a></li>
-										<li><a href="forgot-password.html">Forgot Password</a></li>
-										<li><a href="reset-password.html">Reset Password</a></li>
-										<li><a href="403.html">403</a></li>
-										<li><a href="404.html">404</a></li>
-										<li><a href="500.html">500</a></li>
-									</ul>
-								</div>
-								<div class="sitemap">
-									<h5 class="h5">Extra Pages</h5>
-									<ul>
-										<li><a href="blank.html">Blank</a></li>
-										<li><a href="contact-directory.html">Contact Directory</a></li>
-										<li><a href="blog.html">Blog</a></li>
-										<li><a href="blog-detail.html">Blog Detail</a></li>
-										<li><a href="product.html">Product</a></li>
-										<li><a href="product-detail.html">Product Detail</a></li>
-										<li><a href="faq.html">FAQ</a></li>
-										<li><a href="profile.html">Profile</a></li>
-										<li><a href="gallery.html">Gallery</a></li>
-										<li><a href="pricing-table.html">Pricing Tables</a></li>
-									</ul>
+							<div class="col-md-6">
+								<div class="text-right">
+									<p class="font-14 mb-5">GEC JOB FACT</strong></p>
+									<p class="font-14 mb-5">Jalan Ayer Keroh Lama</p>
+									<p class="font-14 mb-5">Bukit Beruang</p>
+									<p class="font-14 mb-5">75450, Melaka</p>
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-lg-12 col-md-12 col-sm-12">
-								<div class="sitemap">
-									<h5 class="h5">Multi Level Sitemap</h5>
+						<div class="invoice-desc pb-30">
+							<div class="invoice-desc-head clearfix">
+								<div class="invoice-sub">Description</div>
+								<div class="invoice-rate">Rate</div>
+								<div class="invoice-hours">Hours</div>
+								<div class="invoice-subtotal">Subtotal</div>
+							</div>
+							<div class="invoice-desc-body">
+								<ul>
+									<li class="clearfix">
+										<div class="invoice-sub">Website Design</div>
+										<div class="invoice-rate">$20</div>
+										<div class="invoice-hours">100</div>
+										<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+									</li>
+									<li class="clearfix">
+										<div class="invoice-sub">Logo Design</div>
+										<div class="invoice-rate">$20</div>
+										<div class="invoice-hours">100</div>
+										<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+									</li>
+									<li class="clearfix">
+										<div class="invoice-sub">Website Design</div>
+										<div class="invoice-rate">$20</div>
+										<div class="invoice-hours">100</div>
+										<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+									</li>
+									<li class="clearfix">
+										<div class="invoice-sub">Logo Design</div>
+										<div class="invoice-rate">$20</div>
+										<div class="invoice-hours">100</div>
+										<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+									</li>
+								</ul>
+							</div>
+							<div class="invoice-desc-footer">
+								<div class="invoice-desc-head clearfix">
+									<div class="invoice-sub">Bank Info</div>
+									<div class="invoice-rate">Due By</div>
+									<div class="invoice-subtotal">Total Due</div>
+								</div>
+								<div class="invoice-desc-body">
 									<ul>
-										<li><a href="#">Level 1</a></li>
-										<li><a href="#">Level 1</a></li>
-										<li class="child">
-											<h5 class="h5">Level 2</h5>
-											<ul>
-												<li><a href="#">Level 2</a></li>
-												<li><a href="#">Level 2</a></li>
-												<li class="child">
-													<h5 class="h5">Level 3</h5>
-													<ul>
-														<li><a href="#">Level 3</a></li>
-														<li><a href="#">Level 3</a></li>
-													</ul>
-												</li>
-											</ul>
+										<li class="clearfix">
+											<div class="invoice-sub">
+												<p class="font-14 mb-5">Account No: <strong class="weight-600">123 456 789</strong></p>
+												<p class="font-14 mb-5">Code: <strong class="weight-600">4556</strong></p>
+											</div>
+											<div class="invoice-rate font-20 weight-600">10 Jan 2018</div>
+											<div class="invoice-subtotal"><span class="weight-600 font-24 text-danger">$8000</span></div>
 										</li>
 									</ul>
 								</div>
 							</div>
 						</div>
+						<h4 class="text-center pb-20">Thank You!!</h4>
 					</div>
-				</div>
-			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
-		</div>
-	</div>
+				</div> -->
+                        </div>
+                </div>
+            </div>
+            </div>
+    </div>
 	<!-- js -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
-</body>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+	<script src="vendors/scripts/datatable-setting.js"></script></body>
+    <!-- View User -->
+    <script>
+        $(document).on('click', '.viewPaymentBtn', function () {
+        console.log("view click");
+        var payment_id = $(this).data('paymentid');
+        console.log("Payment ID : "+payment_id);
+        $.ajax({
+            type: "GET",
+            url: "view_payment.php?payment_id=" + payment_id,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+                    $('#view-payment-modal').modal('show');
+
+                    var modalContent = '';
+
+					var paymentData = res.data;
+                    modalContent += '<div class="invoice-box">';
+                    modalContent += '<div class="invoice-header">';
+                    modalContent += '<div class="logo text-center">';
+                    modalContent += '<img src="vendors/images/logo.png" alt="" style="height:50px;">';
+                    modalContent += '</div>';
+                    modalContent += '</div>';
+                    modalContent += '<h4 class="text-center mb-30 weight-600">INVOICE</h4>';
+                    modalContent += '<div class="row pb-30">';
+                    modalContent += '<div class="col-md-6">';
+                    modalContent += '<h5 class="mb-15">Infinion sdn bhd</h5>';
+                    modalContent += '<p class="font-14 mb-5">Date Issued: <strong class="weight-600">' + res.data.Payment_Date + '</strong></p>';
+                    modalContent += '<p class="font-14 mb-5">Invoice No: <strong class="weight-600">' +  res.data.PaymentID + '</strong></p>';
+                    modalContent += '</div>';
+                    modalContent += '<div class="col-md-6">';
+                    modalContent += '<div class="text-right">';
+                    modalContent += '<p class="font-14 mb-5">GEC JOB FACT</p>';
+                    modalContent += '<p class="font-14 mb-5">Jalan Ayer Keroh Lama</p>';
+                    modalContent += '<p class="font-14 mb-5">Bukit Beruang</p>';
+                    modalContent += '<p class="font-14 mb-5">75450, Melaka</p>';
+                    modalContent += '</div>';
+                    modalContent += '</div>';
+                    modalContent += '</div>';
+                    modalContent += '<div class="invoice-desc pb-30">';
+                    modalContent += '<div class="invoice-desc-head clearfix">';
+                    modalContent += '<div class="invoice-sub">Description</div>';
+                    modalContent += '<div class="invoice-rate">Rate</div>';
+                    // modalContent += '<div class="invoice-hours">Hours</div>';
+                    modalContent += '<div class="invoice-subtotal">Total</div>';
+                    modalContent += '</div>';
+                    modalContent += '<div class="invoice-desc-body">';
+                    modalContent += '<ul>';
+                    $('#payment-modal-data').html(modalContent);
+				// 					<li class="clearfix">
+				// 						<div class="invoice-sub">Website Design</div>
+				// 						<div class="invoice-rate">$20</div>
+				// 						<div class="invoice-hours">100</div>
+				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+				// 					</li>
+				// 					<li class="clearfix">
+				// 						<div class="invoice-sub">Logo Design</div>
+				// 						<div class="invoice-rate">$20</div>
+				// 						<div class="invoice-hours">100</div>
+				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+				// 					</li>
+				// 					<li class="clearfix">
+				// 						<div class="invoice-sub">Website Design</div>
+				// 						<div class="invoice-rate">$20</div>
+				// 						<div class="invoice-hours">100</div>
+				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+				// 					</li>
+				// 					<li class="clearfix">
+				// 						<div class="invoice-sub">Logo Design</div>
+				// 						<div class="invoice-rate">$20</div>
+				// 						<div class="invoice-hours">100</div>
+				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
+				// 					</li>
+				// 				</ul>
+				// 			</div>
+				// 			<div class="invoice-desc-footer">
+				// 				<div class="invoice-desc-head clearfix">
+				// 					<div class="invoice-sub">Bank Info</div>
+				// 					<div class="invoice-rate">Due By</div>
+				// 					<div class="invoice-subtotal">Total Due</div>
+				// 				</div>
+				// 				<div class="invoice-desc-body">
+				// 					<ul>
+				// 						<li class="clearfix">
+				// 							<div class="invoice-sub">
+				// 								<p class="font-14 mb-5">Account No: <strong class="weight-600">123 456 789</strong></p>
+				// 								<p class="font-14 mb-5">Code: <strong class="weight-600">4556</strong></p>
+				// 							</div>
+				// 							<div class="invoice-rate font-20 weight-600">10 Jan 2018</div>
+				// 							<div class="invoice-subtotal"><span class="weight-600 font-24 text-danger">$8000</span></div>
+				// 						</li>
+				// 					</ul>
+				// 				</div>
+				// 			</div>
+				// 		</div>
+				// 		<h4 class="text-center pb-20">Thank You!!</h4>
+				// 	</div>
+				// </div>
+                }
+            }
+        });
+        });
+    </script>
 </html>

@@ -71,7 +71,7 @@ if (isset($_GET['user_id'])) {
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<form>
+				<!-- <form>
 					<div class="form-group mb-0">
 						<i class="dw dw-search2 search-icon"></i>
 						<input type="text" class="form-control search-input" placeholder="Search Here">
@@ -104,7 +104,7 @@ if (isset($_GET['user_id'])) {
 							</div>
 						</div>
 					</div>
-				</form>
+				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -173,23 +173,23 @@ if (isset($_GET['user_id'])) {
 			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
-			<div class="github-link">
+			<!-- <div class="github-link">
 				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div>
+			</div> -->
 		</div>
 	</div>
 
@@ -314,14 +314,10 @@ if (isset($_GET['user_id'])) {
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-user"></span><span class="mtext">User</span>
+					<li>
+						<a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
-						<ul class="submenu">
-							<li><a href="user.php">User List</a></li>
-							<li><a href="user_career.php">User Career History</a></li>
-						</ul>
 					</li>
 					<li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
@@ -823,6 +819,7 @@ if (isset($_GET['user_id'])) {
 					<div class="form-group">
 						<textarea id="Job_Post_Benefits" class="form-control" rows="5" disabled></textarea>
 					</div>
+					<div id="job-modal-data"></div>
                 </div>
             </div>
         </div>
@@ -971,9 +968,6 @@ if (isset($_GET['user_id'])) {
                         modalContent += "<tr>";
                         modalContent += "<td>"+response.Job_Question_Name+"</td><td>" + response.Job_Question_Option_Name + "</td>";
                         modalContent += "</tr>";
-                        // modalContent += "<tr>";
-                        // modalContent += "<td><strong>Answer:</strong></td><td>" + response.Job_Question_Option_Name + "</td>";
-                        // modalContent += "</tr>";
                     }
 
                     modalContent += "</table>";
@@ -1041,31 +1035,48 @@ if (isset($_GET['user_id'])) {
                 if(res.status == 404) {
                     alert(res.message);
                 }else if(res.status == 200){
-                    var startDate = moment(res.data.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
-					var endDate = moment(res.data.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
-					$('#CompanyID ').text(res.data.CompanyID );
+					$('#view-job-modal').modal('show');
+                    var startDate = moment(res.data.job.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
+					var endDate = moment(res.data.job.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#CompanyID ').text(res.data.job.CompanyID );
 					$('#Job_Post_ID ').text(job_id);
-                    $('#Job_Post_Title').text(res.data.Job_Post_Title);
-                    $('#Job_Post_Position').text(res.data.Job_Post_Position);
-					$('#Job_Post_Exp').text(res.data.Job_Post_Exp);
-					$('#Job_Post_MinSalary').text(res.data.Job_Post_MinSalary);
-					$('#Job_Post_MaxSalary').text(res.data.Job_Post_MaxSalary);
-					$('#Job_Post_Description').text(res.data.Job_Post_Description);
+                    $('#Job_Post_Title').text(res.data.job.Job_Post_Title);
+                    $('#Job_Post_Position').text(res.data.job.Job_Post_Position);
+					$('#Job_Post_Exp').text(res.data.job.Job_Post_Exp);
+					$('#Job_Post_MinSalary').text(res.data.job.Job_Post_MinSalary);
+					$('#Job_Post_MaxSalary').text(res.data.job.Job_Post_MaxSalary);
+					$('#Job_Post_Description').text(res.data.job.Job_Post_Description);
 					$('#AdStartDate').text(startDate);
 					$('#AdEndDate').text(endDate);
-					$('#Job_Post_Type').text(res.data.Job_Post_Type);
-					$('#job_status').text(res.data.job_status);
-					$('#Job_Post_Location').text(res.data.Job_Post_Location);
-					$('#Job_Post_Responsibilities').text(res.data.Job_Post_Responsibilities	);
-					$('#Job_Post_Benefits').text(res.data.Job_Post_Benefits);
-					$('#Main_Category_Name').text(res.data.Main_Category_Name);
-					$('#Sub_Category_Name').text(res.data.Sub_Category_Name);
+					$('#Job_Post_Type').text(res.data.job.Job_Post_Type);
+					$('#job_status').text(res.data.job.job_status);
+					$('#Job_Post_Location').text(res.data.job.Job_Post_Location);
+					$('#Job_Post_Responsibilities').text(res.data.job.Job_Post_Responsibilities	);
+					$('#Job_Post_Benefits').text(res.data.job.Job_Post_Benefits);
+					$('#Main_Category_Name').text(res.data.job.Main_Category_Name);
+					$('#Sub_Category_Name').text(res.data.job.Sub_Category_Name);
 
-					var jobLogoUrl = res.data.Job_Logo_Url;
-					var jobCoverUrl = res.data.Job_Cover_Url;
+					var jobLogoUrl = res.data.job.Job_Logo_Url;
+					var jobCoverUrl = res.data.job.Job_Cover_Url;
 					$('#Job_Cover_Url').attr('src', jobCoverUrl);
 					$('#Job_Logo_Url').attr('src', jobLogoUrl);
-                    $('#view-job-modal').modal('show');
+
+                    console.log(res.data.questions);
+                    var questionsTable = "<h4>Job post questions</h4>";
+                    questionsTable += "<table class='table table-bordered'>";
+                    questionsTable += "<tr><th>Question</th></tr>";
+
+                    for (var i = 0; i < res.data.questions.length; i++) {
+                        var question = res.data.questions[i];
+                        questionsTable += "<tr>";
+                        questionsTable += "<td>" + question.Job_Question_Name + "</td>";
+                        questionsTable += "</tr>";
+                    }
+
+                    questionsTable += "</table>";
+                    console.log(questionsTable);
+
+                    $('#job-modal-data').html(questionsTable);
                 }
             }
         });
