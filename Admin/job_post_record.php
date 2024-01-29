@@ -564,7 +564,7 @@ if (isset($_GET['company_id'])) {
                         }
 					}
 					else{
-						echo "<p>No job post records available for this user.</p>";
+						echo "<p>No job post records available for this company.</p>";
 					}
                     ?>
 						</div>

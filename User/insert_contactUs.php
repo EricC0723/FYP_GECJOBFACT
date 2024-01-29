@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['User_ID'];
     $user_email = $_SESSION['Email'];
     // 执行插入数据的 SQL 查询
-    $query = "INSERT INTO contact_us (UserID,UserEmail,Subject, Message) VALUES ('$user_id','$user_email','$subject', '$message')";
+    $query = "INSERT INTO user_contact_us (UserID,UserEmail,Subject, Message) VALUES ('$user_id','$user_email','$subject', '$message')";
     $result = mysqli_query($connect, $query);
 
     if ($result) {

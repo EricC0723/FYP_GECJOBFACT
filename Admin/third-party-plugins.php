@@ -295,14 +295,10 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-user"></span><span class="mtext">User</span>
+<li>
+						<a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">Admin</span>
 						</a>
-						<ul class="submenu">
-							<li><a href="user.php">User List</a></li>
-							<li><a href="user_career.php">User Career History</a></li>
-						</ul>
 					</li>
 					<li>
 						<a href="company.php" class="dropdown-toggle no-arrow">

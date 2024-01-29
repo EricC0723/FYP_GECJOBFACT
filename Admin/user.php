@@ -55,7 +55,7 @@
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<form>
+				<!-- <form>
 					<div class="form-group mb-0">
 						<i class="dw dw-search2 search-icon"></i>
 						<input type="text" class="form-control search-input" placeholder="Search Here">
@@ -88,7 +88,7 @@
 							</div>
 						</div>
 					</div>
-				</form>
+				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -171,9 +171,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="github-link">
+			<!-- <div class="github-link">
 				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div>
+			</div> -->
 		</div>
 	</div>
 
@@ -298,20 +298,11 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-                    <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-user"></span><span class="mtext">User</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="user.php">User List</a></li>
-							<li><a href="user_career.php">User Career History</a></li>
-						</ul>
-					</li>
-					<!-- <li>
+                    <li>
 						<a href="user.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
-					</li> -->
+					</li>
 					<li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
 						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
