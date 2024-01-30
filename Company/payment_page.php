@@ -1,19 +1,25 @@
 <!DOCTYPE html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
-unset($_SESSION['job_post_ID']);
+
+if (isset($_SESSION['job_post_ID'])) {
+    $job_post_ID = $_SESSION['job_post_ID'];
+    $result = mysqli_query($connect, "SELECT * FROM job_post WHERE Job_Post_ID = '$job_post_ID' ");
+    $row = mysqli_fetch_assoc($result);
+    echo "<script>
+        var jobPostData = " . json_encode($row) . ";
+        </script>";
+}
 
 $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
-    // Prepare the SQL statement to count the total number of jobs
-    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
-    $resultc = mysqli_query($connect, $sqlc);
-    $rowc = mysqli_fetch_assoc($resultc);
-    $totalJobs = $rowc['total'];
-
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 }
@@ -109,7 +115,7 @@ if (isset($_SESSION['companyID'])) {
         }
         ?>
 
-        <form method="POST" style="display:flex;flex-direction:column">
+        <form method="POST" style="display:flex;flex-direction:column" id="paymentForm">
             <div style="width: 110px;">
                 <a class="employee_sentence"
                     style="height: 28px;display: flex;align-items: center;border:none;background:none;cursor:pointer"><svg
@@ -150,8 +156,8 @@ if (isset($_SESSION['companyID'])) {
                                     <circle cx="12" cy="17" r="1"></circle>
                                     <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                     </path>
-                                </svg></span><span><span id="postDuration-message" class="validation_sentence">Required
-                                    field</span></span></span></div>
+                                </svg></span><span><span id="postDuration-message" class="validation_sentence">Please
+                                    select the duration of your job post</span></span></span></div>
                 </div>
             </div>
 
@@ -195,6 +201,7 @@ if (isset($_SESSION['companyID'])) {
                                 SST</span></div>
                         <div style=""><span class="landing_sentence1" id="total_price" style="font-weight:600;">RM
                                 0.00</span></div>
+                        <input type="hidden" id="totalPrice" name="totalPrice">
                     </div>
                 </div>
             </div>
@@ -204,8 +211,9 @@ if (isset($_SESSION['companyID'])) {
                 <div style="padding-top:24px;">
                     <div style="display:flex;flex-direction:row;">
                         <div style="padding-top:2px;">
-                            <input type="radio" id="existcardRadio" checked name="payment_type"
+                            <input type="radio" id="existcardRadio" checked name="payment_type" value="existcardRadio"
                                 onchange="showHideCards()">
+
                         </div>
                         <div style="padding-left:10px;width:100%;">
                             <span class="landing_sentence2">Pay by card</span>
@@ -220,12 +228,13 @@ if (isset($_SESSION['companyID'])) {
                                             <?php
 
                                             if (isset($_SESSION['companyID'])) {
-                                                $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND Card_isDeleted = 0";
+                                                $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0";
                                                 $result = mysqli_query($connect, $sql);
                                                 while ($row = mysqli_fetch_assoc($result)): ?>
                                                     <div class="card">
-                                                        <input type="radio" id="cardSelect" name="cardSelect"
-                                                            value="<?php echo $row['CreditCardID']; ?>">
+                                                        <input type="radio" name="cardSelect"
+                                                            value="<?php echo $row['CreditCardID']; ?>"
+                                                            id="cardSelect<?php echo $row['CreditCardID']; ?>">
                                                         <div style="display:flex;flex-direction:column;">
                                                             <div
                                                                 style="display:flex;flex-direction:row;justify-content:space-between;">
@@ -263,6 +272,24 @@ if (isset($_SESSION['companyID'])) {
                                             }
                                             ?>
                                         </div>
+                                        <div style="padding-top:4px;width:299px;" id="validation-cardSelect"
+                                            class="hide">
+                                            <span style="display:flex"><span
+                                                    style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        xml:space="preserve" focusable="false" fill="currentColor"
+                                                        width="16" height="16" aria-hidden="true" style="color:#b91e1e">
+                                                        <path
+                                                            d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                        </path>
+                                                        <circle cx="12" cy="17" r="1"></circle>
+                                                        <path
+                                                            d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                        </path>
+                                                    </svg></span><span><span id="cardSelect-message"
+                                                        class="validation_sentence">Please select a
+                                                        card</span></span></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -273,7 +300,8 @@ if (isset($_SESSION['companyID'])) {
                 <div style="padding-top:24px;">
                     <div style="display:flex;flex-direction:row;">
                         <div style="padding-top:2px;">
-                            <input type="radio" id="newcardRadio" name="payment_type" onchange="showHideCards()">
+                            <input type="radio" id="newcardRadio" name="payment_type" value="newcardRadio"
+                                onchange="showHideCards()">
                         </div>
                         <div style="padding-left:10px;width:100%;">
                             <span class="landing_sentence2">Pay by new card</span>
@@ -625,7 +653,7 @@ if (isset($_SESSION['companyID'])) {
 
             <div class="form-group" style="display: block;">
 
-                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
+                <input type="submit" value="Post my ad" class="create_btn" name="submitbtn">
                 <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>
@@ -646,196 +674,248 @@ if (isset($_SESSION['companyID'])) {
             if (existcardRadio.checked) {
                 existCardDiv.style.display = 'block';
                 newCardDiv.style.display = 'none';
+
+                var cardSelectRadios = document.getElementsByName('cardSelect');
+                var validationcardSelect = document.getElementById('validation-cardSelect');
+                var cardSelectMessage = document.getElementById('cardSelect-message');
+
+                // Function to check if any radio button is selected
+                function isAnyRadioChecked() {
+                    for (var i = 0; i < cardSelectRadios.length; i++) {
+                        if (cardSelectRadios[i].checked) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                // Add an event listener to each radio button
+                for (var i = 0; i < cardSelectRadios.length; i++) {
+                    if (cardSelectRadios[i]) {
+                        cardSelectRadios[i].addEventListener('change', function () {
+                            if (isAnyRadioChecked()) {
+                                // If a radio button is selected
+                                cardSelectMessage.textContent = '';
+                                validationcardSelect.classList.add('hide'); // Hide the validation message
+                                validationcardSelect.dataset.valid = '1'; // Set dataset.valid to 1
+                            } else {
+                                // If no radio button is selected
+                                cardSelectMessage.textContent = 'Please select a job type';
+                                validationcardSelect.classList.remove('hide'); // Show the validation message
+                                validationcardSelect.dataset.valid = '0'; // Set dataset.valid to 0
+                            }
+                        });
+                    }
+                }
+
+                // Function to validate the form
+                function validateFormExistCard(event) {
+                    var invalidInputs = [];
+
+                    if (validationcardSelect.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardSelectRadios[0], validation: validationcardSelect });
+                    }
+
+                    handleInvalidInputs(invalidInputs, event);
+                }
+
+                continueButton.addEventListener('click', validateFormExistCard); // Add the event listener for the existing card
+
             } else if (newCardRadio.checked) {
                 existCardDiv.style.display = 'none';
                 newCardDiv.style.display = 'block';
-            }
-        }
-    </script>
 
-    <script>
-        // Get the submit buttons
-        var continueButton = document.querySelector('.cont-button');
+                // Get the submit buttons
 
-        var newCardRadio = document.getElementById('newcardRadio');
-        if (!newCardRadio.checked) {
+                // Get the input field and the validation message elements
+                var cardNumberInput = document.getElementById('cardNumberInput');
+                var validationcardNumber = document.getElementById('validation-cardNumber');
 
-            // Get the input field and the validation message elements
-            var cardNumberInput = document.getElementById('cardNumberInput');
-            var validationcardNumber = document.getElementById('validation-cardNumber');
-
-            // Add an event listener to the input field
-            cardNumberInput.addEventListener('input', function () {
-                var cardNumberMessage = document.getElementById('cardNumber-message');
-                var cardType = document.getElementById('cardType').value; // Fetch the cardType
-                var companyId = "<?php echo $_SESSION['companyID']; ?>";
-                if (this.value.trim() === '') {
-                    // If the input field is empty
-                    cardNumberMessage.textContent = 'Required field';
-                    this.dataset.valid = '0';
-                    validationcardNumber.classList.remove('hide'); // Show the validation message
-                } else if ((cardType === 'amex' && this.value.trim().length !== 17) ||
-                    (cardType !== 'amex' && this.value.trim().length !== 19)) {
-                    // If the card type is 'amex' and the input field does not contain 15 characters
-                    // or if the card type is not 'amex' and the input field does not contain 19 characters
-                    cardNumberMessage.textContent = 'Invalid card number';
-                    this.dataset.valid = '0';
-                    validationcardNumber.classList.remove('hide'); // Show the validation message
-                } else {
-                    // If the input field is not empty and contains the correct number of characters
-                    // Check if the card number exists in the database for the same company
-                    $.ajax({
-                        url: 'check_data.php',
-                        type: 'post',
-                        data: {
-                            cardNumber: this.value.trim(),
-                            companyId: companyId
-                        },
-                        success: function (response) {
-                            if (response == 1) {
-                                cardNumberMessage.textContent = 'Card number already exists for this company';
-                                cardNumberInput.dataset.valid = '0';
-                                validationcardNumber.classList.remove('hide'); // Show the validation message
-                            } else {
-                                cardNumberMessage.textContent = '';
-                                cardNumberInput.dataset.valid = '1';
-                                validationcardNumber.classList.add('hide'); // Hide the validation message
+                // Add an event listener to the input field
+                cardNumberInput.addEventListener('input', function () {
+                    var cardNumberMessage = document.getElementById('cardNumber-message');
+                    var cardType = document.getElementById('cardType').value; // Fetch the cardType
+                    var companyId = "<?php echo $_SESSION['companyID']; ?>";
+                    if (this.value.trim() === '') {
+                        // If the input field is empty
+                        cardNumberMessage.textContent = 'Required field';
+                        this.dataset.valid = '0';
+                        validationcardNumber.classList.remove('hide'); // Show the validation message
+                    } else if ((cardType === 'amex' && this.value.trim().length !== 17) ||
+                        (cardType !== 'amex' && this.value.trim().length !== 19)) {
+                        // If the card type is 'amex' and the input field does not contain 15 characters
+                        // or if the card type is not 'amex' and the input field does not contain 19 characters
+                        cardNumberMessage.textContent = 'Invalid card number';
+                        this.dataset.valid = '0';
+                        validationcardNumber.classList.remove('hide'); // Show the validation message
+                    } else {
+                        // If the input field is not empty and contains the correct number of characters
+                        // Check if the card number exists in the database for the same company
+                        $.ajax({
+                            url: 'check_data.php',
+                            type: 'post',
+                            data: {
+                                cardNumber: this.value.trim(),
+                                companyId: companyId
+                            },
+                            success: function (response) {
+                                if (response == 1) {
+                                    cardNumberMessage.textContent = 'Card number already exists for this company';
+                                    cardNumberInput.dataset.valid = '0';
+                                    validationcardNumber.classList.remove('hide'); // Show the validation message
+                                } else {
+                                    cardNumberMessage.textContent = '';
+                                    cardNumberInput.dataset.valid = '1';
+                                    validationcardNumber.classList.add('hide'); // Hide the validation message
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                });
+
+                // Get the input field and the validation message elements
+                var cardNameInput = document.getElementById('cardNameInput');
+                var validationcardName = document.getElementById('validation-cardName');
+
+                // Add an event listener to the input field
+                cardNameInput.addEventListener('input', function () {
+                    var cardNameMessage = document.getElementById('cardName-message');
+                    if (this.value.trim() === '') {
+                        // If the input field is empty
+                        cardNameMessage.textContent = 'Please enter the card holder';
+                        this.dataset.valid = '0';
+                        validationcardName.classList.remove('hide'); // Show the validation message
+                    } else {
+                        // If the input field is not empty and contains 16 characters
+                        cardNameMessage.textContent = '';
+                        this.dataset.valid = '1';
+                        validationcardName.classList.add('hide'); // Hide the validation message
+                    }
+                });
+
+                // Get the select field and the validation message elements
+                var cardMonthSelect = document.getElementById('cardMonthInput');
+                var validationcardMonth = document.getElementById('validation-cardMonth');
+
+                // Add an event listener to the select field
+                cardMonthSelect.addEventListener('change', function () {
+                    var value = this.value;
+                    var cardMonthMessage = document.getElementById('cardMonth-message');
+                    // Check if the select field has a valid value
+                    if (value === '') {
+                        cardMonthMessage.textContent = 'Required field';
+                        this.dataset.valid = '0';
+                        validationcardMonth.classList.remove('hide'); // Show the validation message
+                    } else {
+                        // If the select field has a valid value
+                        cardMonthMessage.textContent = '';
+                        this.dataset.valid = '1';
+                        validationcardMonth.classList.add('hide'); // Hide the validation message
+                    }
+                });
+
+                // Get the select field and the validation message elements
+                var cardYearSelect = document.getElementById('cardYearInput');
+                var validationcardYear = document.getElementById('validation-cardYear');
+
+                // Add an event listener to the select field
+                cardYearSelect.addEventListener('change', function () {
+                    var value = this.value;
+                    var cardYearMessage = document.getElementById('cardYear-message');
+                    // Check if the select field has a valid value
+                    if (value === '') {
+                        cardYearMessage.textContent = 'Required field';
+                        this.dataset.valid = '0';
+                        validationcardYear.classList.remove('hide'); // Show the validation message
+                    } else {
+                        // If the select field has a valid value
+                        cardYearMessage.textContent = '';
+                        this.dataset.valid = '1';
+                        validationcardYear.classList.add('hide'); // Hide the validation message
+                    }
+                });
+
+                // Get the input field and the validation message elements
+                var cardCvvInput = document.getElementById('cardCvvInput');
+                var validationcardCvv = document.getElementById('validation-cardCvv');
+
+                // Add an event listener to the input field
+                cardCvvInput.addEventListener('input', function () {
+                    var cardCvvMessage = document.getElementById('cardCvv-message');
+                    if (this.value.trim() === '') {
+                        // If the input field is empty
+                        cardCvvMessage.textContent = 'Required field';
+                        this.dataset.valid = '0';
+                        validationcardCvv.classList.remove('hide'); // Show the validation message
+                    } else if (this.value.trim().length !== 3) {
+                        // If the input field does not contain 16 characters
+                        cardCvvMessage.textContent = 'Invalid card cvv';
+                        this.dataset.valid = '0';
+                        validationcardCvv.classList.remove('hide'); // Show the validation message
+                    } else {
+                        // If the input field is not empty and contains 16 characters
+                        cardCvvMessage.textContent = '';
+                        this.dataset.valid = '1';
+                        validationcardCvv.classList.add('hide'); // Hide the validation message
+                    }
+                });
+
+                // Function to validate the form
+                function validateFormNewCard(event) {
+                    var invalidInputs = [];
+
+                    // Check each input field
+                    if (cardNumberInput.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardNumberInput, validation: validationcardNumber });
+                    }
+                    if (cardNameInput.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardNameInput, validation: validationcardName });
+                    }
+                    if (cardMonthSelect.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardMonthSelect, validation: validationcardMonth });
+                    }
+                    if (cardYearSelect.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardYearSelect, validation: validationcardYear });
+                    }
+                    if (cardCvvInput.dataset.valid !== '1') {
+                        invalidInputs.push({ input: cardCvvInput, validation: validationcardCvv });
+                    }
+
+                    handleInvalidInputs(invalidInputs, event);
                 }
-            });
 
-            // Get the input field and the validation message elements
-            var cardNameInput = document.getElementById('cardNameInput');
-            var validationcardName = document.getElementById('validation-cardName');
-
-            // Add an event listener to the input field
-            cardNameInput.addEventListener('input', function () {
-                var cardNameMessage = document.getElementById('cardName-message');
-                if (this.value.trim() === '') {
-                    // If the input field is empty
-                    cardNameMessage.textContent = 'Please enter the card holder';
-                    this.dataset.valid = '0';
-                    validationcardName.classList.remove('hide'); // Show the validation message
-                } else {
-                    // If the input field is not empty and contains 16 characters
-                    cardNameMessage.textContent = '';
-                    this.dataset.valid = '1';
-                    validationcardName.classList.add('hide'); // Hide the validation message
-                }
-            });
-
-            // Get the select field and the validation message elements
-            var cardMonthSelect = document.getElementById('cardMonthInput');
-            var validationcardMonth = document.getElementById('validation-cardMonth');
-
-            // Add an event listener to the select field
-            cardMonthSelect.addEventListener('change', function () {
-                var value = this.value;
-                var cardMonthMessage = document.getElementById('cardMonth-message');
-                // Check if the select field has a valid value
-                if (value === '') {
-                    cardMonthMessage.textContent = 'Required field';
-                    this.dataset.valid = '0';
-                    validationcardMonth.classList.remove('hide'); // Show the validation message
-                } else {
-                    // If the select field has a valid value
-                    cardMonthMessage.textContent = '';
-                    this.dataset.valid = '1';
-                    validationcardMonth.classList.add('hide'); // Hide the validation message
-                }
-            });
-
-            // Get the select field and the validation message elements
-            var cardYearSelect = document.getElementById('cardYearInput');
-            var validationcardYear = document.getElementById('validation-cardYear');
-
-            // Add an event listener to the select field
-            cardYearSelect.addEventListener('change', function () {
-                var value = this.value;
-                var cardYearMessage = document.getElementById('cardYear-message');
-                // Check if the select field has a valid value
-                if (value === '') {
-                    cardYearMessage.textContent = 'Required field';
-                    this.dataset.valid = '0';
-                    validationcardYear.classList.remove('hide'); // Show the validation message
-                } else {
-                    // If the select field has a valid value
-                    cardYearMessage.textContent = '';
-                    this.dataset.valid = '1';
-                    validationcardYear.classList.add('hide'); // Hide the validation message
-                }
-            });
-
-            // Get the input field and the validation message elements
-            var cardCvvInput = document.getElementById('cardCvvInput');
-            var validationcardCvv = document.getElementById('validation-cardCvv');
-
-            // Add an event listener to the input field
-            cardCvvInput.addEventListener('input', function () {
-                var cardCvvMessage = document.getElementById('cardCvv-message');
-                if (this.value.trim() === '') {
-                    // If the input field is empty
-                    cardCvvMessage.textContent = 'Required field';
-                    this.dataset.valid = '0';
-                    validationcardCvv.classList.remove('hide'); // Show the validation message
-                } else if (this.value.trim().length !== 3) {
-                    // If the input field does not contain 16 characters
-                    cardCvvMessage.textContent = 'Invalid card cvv';
-                    this.dataset.valid = '0';
-                    validationcardCvv.classList.remove('hide'); // Show the validation message
-                } else {
-                    // If the input field is not empty and contains 16 characters
-                    cardCvvMessage.textContent = '';
-                    this.dataset.valid = '1';
-                    validationcardCvv.classList.add('hide'); // Hide the validation message
-                }
-            });
-
-            // Function to validate the form
-            function validateForm(event) {
-                var invalidInputs = [];
-
-                // Check each input field
-                if (cardNumberInput.dataset.valid !== '1') {
-                    invalidInputs.push({ input: cardNumberInput, validation: validationcardNumber });
-                }
-                if (cardNameInput.dataset.valid !== '1') {
-                    invalidInputs.push({ input: cardNameInput, validation: validationcardName });
-                }
-                if (cardMonthSelect.dataset.valid !== '1') {
-                    invalidInputs.push({ input: cardMonthSelect, validation: validationcardMonth });
-                }
-                if (cardYearSelect.dataset.valid !== '1') {
-                    invalidInputs.push({ input: cardYearSelect, validation: validationcardYear });
-                }
-                if (cardCvvInput.dataset.valid !== '1') {
-                    invalidInputs.push({ input: cardCvvInput, validation: validationcardCvv });
-                }
-
-                if (invalidInputs.length > 0) {
-                    // If there are invalid inputs, prevent the form submission
-                    event.preventDefault();
-
-                    // Focus on the first invalid input
-                    invalidInputs[0].input.focus();
-
-                    // Show validation messages for all invalid inputs
-                    invalidInputs.forEach(function (invalidInput) {
-                        invalidInput.validation.classList.remove('hide');
-                    });
-                }
-                // If all inputs are valid, the form will submit normally
-
+                continueButton.addEventListener('click', validateFormNewCard); // Add the event listener for the new card
 
             }
 
-            // Add event listeners to the submit buttons
-            continueButton.addEventListener('click', validateForm);
-        }
-    </script>
+            // Add an event listener to the existcardRadio element
+            existcardRadio.addEventListener('change', function () {
+                if (existcardRadio.checked) {
+                    // Add the event listener for the existing
+                    continueButton.removeEventListener('click', validateFormNewCard);
 
+                    continueButton.addEventListener('click', validateFormExistCard);
+                } else {
+                    // Remove the event listener for the existing card
+                    continueButton.removeEventListener('click', validateFormExistCard);
+                }
+            });
+
+            // Add an event listener to the newCardRadio element
+            newCardRadio.addEventListener('change', function () {
+                if (newCardRadio.checked) {
+                    // Remove the event listener for the existing card
+                    continueButton.removeEventListener('click', validateFormExistCard);
+                    // Add the event listener for the new card
+                    continueButton.addEventListener('click', validateFormNewCard);
+                } else {
+                    // Remove the event listener for the new card
+                    continueButton.removeEventListener('click', validateFormNewCard);
+                }
+            });
+        }
+
+    </script>
     <script>
         // Get all the card elements
         var cards = document.querySelectorAll('.card');
@@ -852,7 +932,12 @@ if (isset($_SESSION['companyID'])) {
                 this.classList.add('selected');
 
                 // Check the radio button inside the clicked card
-                this.querySelector('input[type="radio"]').checked = true;
+                var radioButton = this.querySelector('input[type="radio"]');
+                radioButton.checked = true;
+
+                // Manually trigger the change event
+                var event = new Event('change');
+                radioButton.dispatchEvent(event);
             });
         });
     </script>
@@ -876,23 +961,126 @@ if (isset($_SESSION['companyID'])) {
 
             // Add the SST to the price
             var totalPrice = price + sst;
+
             // Update the price element
             priceElement.textContent = 'RM ' + totalPrice.toFixed(2);
             subtotalElement.textContent = 'RM ' + price.toFixed(2);
             sstElement.textContent = 'RM ' + sst.toFixed(2);
+
+            document.getElementById('totalPrice').value = totalPrice.toFixed(2);
+        });
+
+        var continueButton = document.querySelector('.cont-button');
+
+        // Get the select field and the validation message elements
+        var validationpostDuration = document.getElementById('validation-postDuration');
+        var postDurationMessage = document.getElementById('postDuration-message');
+
+        // Add an event listener to the select field
+        selectElement.addEventListener('change', function () {
+            var value = this.value;
+
+            // Check if the select field has a valid value
+            if (value === '') {
+                postDurationMessage.textContent = 'Required field';
+                this.dataset.valid = '0';
+                validationpostDuration.classList.remove('hide'); // Show the validation message
+            } else {
+                // If the select field has a valid value
+                postDurationMessage.textContent = '';
+                this.dataset.valid = '1';
+                validationpostDuration.classList.add('hide'); // Hide the validation message
+            }
+        });
+
+        // Function to validate the form
+        function validateFormGeneral(event) {
+            var invalidInputs = [];
+
+            // Check each input field
+            if (selectElement.dataset.valid !== '1') {
+                invalidInputs.push({ input: selectElement, validation: validationpostDuration });
+            }
+
+            handleInvalidInputs(invalidInputs, event);
+        }
+
+        // Function to handle invalid inputs
+        function handleInvalidInputs(invalidInputs, event) {
+            if (invalidInputs.length > 0) {
+                // If there are invalid inputs, prevent the form submission
+                event.preventDefault();
+
+                // Focus on the first invalid input
+                invalidInputs[0].input.focus();
+
+                // Show validation messages for all invalid inputs
+                invalidInputs.forEach(function (invalidInput) {
+                    invalidInput.validation.classList.remove('hide');
+                });
+            }
+            // If all inputs are valid, the form will submit normally
+        }
+
+        // Add event listeners to the submit buttons
+        continueButton.addEventListener('click', validateFormGeneral);
+
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from being submitted immediately
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to proceed with the payment. Please note that this action cannot be reversed.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, proceed!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var formData = new FormData(this);
+
+                    // Append the CompanyID and job_post_ID from the session
+                    formData.append('CompanyID', <?php echo $_SESSION['companyID']; ?>);
+                    formData.append('job_post_ID', <?php echo $_SESSION['job_post_ID']; ?>);
+                    $.ajax({
+                        url: 'process_payment.php',
+                        type: 'POST',
+                        data: formData,
+                        processData: false, // Necessary for FormData
+                        contentType: false, // Necessary for FormData
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire({
+                                    title: "Success",
+                                    text: "Payment received! Thank you for your purchase.",
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location.href = "company_landing.php";
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "Payment unsuccessful. Please check your details and try again.",
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+                }
+            });
         });
     </script>
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
     <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
     <script src="company_creditcard.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="post-job.js"></script>
 </body>
 
 </html>
+
+
 
 <?php
 if (isset($_SESSION['companyID'])) {
@@ -900,6 +1088,22 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
+}
+
+if (!isset($_SESSION['job_post_ID'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action. You have already completed your payment.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
+    <?php
+    exit;
 }
 
 if (!isset($_SESSION['companyID'])) {

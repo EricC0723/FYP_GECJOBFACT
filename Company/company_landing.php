@@ -129,7 +129,7 @@ if (isset($_SESSION['companyID'])) {
                         } else {
                             # code...
                             // Prepare the SQL statement to fetch the top 5 recent jobs
-                            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID ORDER BY AdStartDate DESC LIMIT 1";
+                            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT 1";
                             $result = mysqli_query($connect, $sql);
 
                             // Fetch the most recent job
@@ -370,7 +370,7 @@ if (isset($_SESSION['companyID'])) {
                         // $totalJobs = $row['total'];
                     
                         // Prepare the SQL statement to fetch the top 5 recent jobs
-                        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID ORDER BY AdStartDate DESC LIMIT 5";
+                        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT 5";
                         $result = mysqli_query($connect, $sql);
 
                         // Fetch all the rows

@@ -241,7 +241,7 @@ if (isset($_GET['savebtn'])) {
 
     $id = $_GET['id'];
 
-    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id' AND CompanyID = '$CompanyID' AND Card_isDeleted = 0";
+    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id' AND CompanyID = '$CompanyID' AND CreditCard_isDeleted = 0";
 
     $result = mysqli_query($connect, $sql);
 

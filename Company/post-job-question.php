@@ -45,7 +45,7 @@ if (isset($_POST['submitbtn'])) {
         }
     }
 
-    echo "<script type='text/javascript'>alert('Submission successful!'); window.location.href = 'company_landing.php';</script>";
+    echo "<script type='text/javascript'>window.location.href = 'payment_page.php';</script>";
 }
 
 ?>
@@ -223,7 +223,7 @@ if (isset($_POST['submitbtn'])) {
             </div>
 
             <div class="form-group" style="display: block;">
-                <input type="submit" value="Submit" class="cont-button" name="submitbtn">
+                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
                 <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>

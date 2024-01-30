@@ -23,7 +23,7 @@ if (isset($_SESSION['companyID'])) {
         <div style="padding: 0 30px 30px 30px;width:100%;">
             <?php
 
-            $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND Card_isDeleted = 0";
+            $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0";
             $result = mysqli_query($connect, $sql);
 
             echo "<table style='width:100%;'>";

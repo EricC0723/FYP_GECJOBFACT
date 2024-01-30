@@ -41,8 +41,8 @@ if (isset($_SESSION['companyID'])) {
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
-                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
+                    <span class="header-link"><a href="company_landing.php" >Home</a></span>
+                    <span class="header-link"><a href="job-listing.php" class="company_nav_active">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>

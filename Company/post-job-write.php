@@ -26,9 +26,9 @@ if (isset($_SESSION['companyID'])) {
 
 
 if (isset($_POST['submitbtn'])) {
-    $jobDescription = $_POST['jobDescription'];
-    $jobResponsibilities = $_POST['jobResponsibilities'];
-    $jobBenefits = $_POST['jobBenefits'];
+    $jobDescription = mysqli_real_escape_string($connect, $_POST['jobDescription']);
+    $jobResponsibilities = mysqli_real_escape_string($connect, $_POST['jobResponsibilities']);
+    $jobBenefits = mysqli_real_escape_string($connect, $_POST['jobBenefits']);
     // Start the SQL query
     $sql = "UPDATE job_post SET Job_Post_Description = '$jobDescription', Job_Post_Responsibilities = '$jobResponsibilities', Job_Post_Benefits = '$jobBenefits'";
 
@@ -78,6 +78,8 @@ if (isset($_POST['submitbtn'])) {
         // If no new cover image is uploaded and the cover image was removed, set the Job_Cover_Url field to NULL
         $sql .= ", Job_Cover_Url=NULL";
     }
+
+    $job_post_ID = mysqli_real_escape_string($connect, $job_post_ID);
 
     // Add the WHERE clause to the SQL query
     $sql .= " WHERE Job_Post_ID=" . $job_post_ID;
@@ -159,7 +161,8 @@ if (isset($_POST['submitbtn'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>

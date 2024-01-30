@@ -17,7 +17,7 @@ if (isset($_SESSION['companyID'])) {
 $id = $_GET['id'];
 
 // Fetch the credit card details from the database
-$query = "SELECT * FROM credit_card WHERE CreditCardID = $id AND Card_isDeleted = 0";
+$query = "SELECT * FROM credit_card WHERE CreditCardID = $id AND CreditCard_isDeleted = 0";
 $result = mysqli_query($connect, $query);
 $row = mysqli_fetch_assoc($result);
 ?>
