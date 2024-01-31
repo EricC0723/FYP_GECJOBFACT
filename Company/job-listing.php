@@ -41,7 +41,7 @@ if (isset($_SESSION['companyID'])) {
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="company_landing.php" >Home</a></span>
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
                     <span class="header-link"><a href="job-listing.php" class="company_nav_active">Jobs</a></span>
                     <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
@@ -409,59 +409,94 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
+        function countApplicant(jobPostID) {
+            $.ajax({
+                url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    jobPostID: jobPostID // Pass the jobPostID to get-applicants.php
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#applicants').html(data);
+                }
+            });
+        }
+
 
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            var buttons = document.querySelectorAll('.joblistbtn');
-            var underline = document.querySelector('.underline');
-            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
+        var buttons = document.querySelectorAll('.joblistbtn');
+        var underline = document.querySelector('.underline');
+        var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
 
-            // Function to update the visibility of the divs based on the id in the URL
-            function updateDivVisibility() {
-                // Hide all divs
-                divs.forEach(function (div) {
-                    div.style.display = 'none';
-                });
+        // Function to update the visibility of the divs based on the id in the URL
+        function updateDivVisibility() {
+            // Hide all divs
+            divs.forEach(function (div) {
+                div.style.display = 'none';
+            });
 
-                // Remove the 'active' class from all buttons
-                buttons.forEach(function (btn) {
-                    btn.classList.remove('active');
-                });
+            // Remove the 'active' class from all buttons
+            buttons.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
 
-                // Get the id from the URL
-                var id = window.location.href.split('#')[1];
+            // Get the id from the URL
+            var id = window.location.href.split('#')[1];
 
-                // If there's no id in the URL, default to 'active'
-                if (!id) {
-                    id = 'active';
-                }
-
-                // Show the div that matches the id in the URL and add the 'active' class to the associated button
-                if (id) {
-                    document.getElementById(id).style.display = 'block';
-                    document.getElementById(id + 'Button').classList.add('active');
-
-                    // Update the underline
-                    var activeButton = document.getElementById(id + 'Button');
-                    underline.style.width = activeButton.offsetWidth + 'px';
-                    underline.style.left = activeButton.offsetLeft + 'px';
-                }
+            // If there's no id in the URL, default to 'active'
+            if (!id) {
+                id = 'active';
             }
 
-            // Update the visibility of the divs when the DOM content is loaded
-            updateDivVisibility();
+            // If the id is 'applicants', get the jobPostID from the URL
+            if (id === 'applicants') {
+                var urlParams = new URLSearchParams(window.location.search);
+                var jobPostID = urlParams.get('jobPostID');
 
-            buttons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    // Add the button id to the URL
-                    var id = this.id.replace('Button', '');
-                    window.history.pushState(null, null, '#' + id);
+                // Now you can use the jobPostID in your code
+            }
 
-                    // Update the visibility of the divs, the underline, and the 'active' class
-                    updateDivVisibility();
-                });
+            // Show the div that matches the id in the URL and add the 'active' class to the associated button
+            if (id) {
+                document.getElementById(id).style.display = 'block';
+                document.getElementById(id + 'Button').classList.add('active');
+
+                // Update the underline
+                var activeButton = document.getElementById(id + 'Button');
+                underline.style.width = activeButton.offsetWidth + 'px';
+                underline.style.left = activeButton.offsetLeft + 'px';
+            }
+        }
+
+        // Get the 'applicants' element
+        var applicantsElement = document.getElementById('applicantsButton');
+
+        // Add an event listener to the 'applicants' element
+        applicantsElement.addEventListener('click', function () {
+            // Get the current URL without the query parameters and hash
+            var url = window.location.href.split('?')[0].split('#')[0];
+
+            // Change the URL
+            window.history.pushState(null, null, url + '#applicants');
+
+            searchApplicant('');
+
+        });
+
+        // Update the visibility of the divs when the DOM content is loaded
+        updateDivVisibility();
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Add the button id to the URL
+                var id = this.id.replace('Button', '');
+                window.history.pushState(null, null, '#' + id);
+
+                // Update the visibility of the divs, the underline, and the 'active' class
+                updateDivVisibility();
             });
         });
 

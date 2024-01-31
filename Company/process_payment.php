@@ -54,6 +54,18 @@ if (isset($_POST['payment_type']) && $_POST['payment_type'] == 'existcardRadio')
 
 }
 
+// Get the current date and time
+$AdStartDate = date('Y-m-d H:i:s');
+
+// Calculate the AdEndDate based on the postDuration
+$AdEndDate = date('Y-m-d H:i:s', strtotime("+$postDuration months", strtotime($AdStartDate)));
+
+// Prepare the SQL query
+$sql = "UPDATE job_post SET job_status = 'Active', AdStartDate = '$AdStartDate', AdEndDate = '$AdEndDate' WHERE Job_Post_ID = '$job_post_ID'";
+
+// Execute the query
+$result = mysqli_query($connect, $sql);
+
 if ($result) {
     echo 'success';
 } else {

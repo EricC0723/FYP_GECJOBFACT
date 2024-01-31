@@ -136,7 +136,9 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="td_title">' . getApplicantCount($row['Job_Post_ID']) . '</div>
+                                    <div class="td_title">
+                                    <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
+                                    </div>
                                 </td>
                                 <td>
                                 <div class="td_title" style="width:160px;">
@@ -169,6 +171,29 @@ session_start(); // Start the session at the beginning
             }
             echo '
             </table>';
+            // Add the event listener to the 'applicantCount' element
+            echo '
+            <script>
+            // Get the button
+            var applicantCountButtons = document.getElementsByClassName("applicantCount");
+        
+            // Add an event listener to each button
+            for (var i = 0; i < applicantCountButtons.length; i++) {
+                applicantCountButtons[i].addEventListener("click", function () {
+                    // Get the Job_Post_ID from the buttons data attribute
+                    var jobPostID = this.getAttribute("data-jobpostid");
+
+                    // Manually update the URL
+                    window.history.pushState(null, null, "?jobPostID=" + jobPostID + "#applicants");
+
+                    countApplicant(jobPostID);
+
+                    // Update the visibility of the divs, the underline, and the "active" class
+                    updateDivVisibility();
+                });
+            }
+            </script>
+            ';
         } else {
             // No results, check if a search term was provided
             if ($searchTerm != '') {

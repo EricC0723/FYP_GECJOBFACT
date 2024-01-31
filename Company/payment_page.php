@@ -116,16 +116,6 @@ if (isset($_SESSION['companyID'])) {
         ?>
 
         <form method="POST" style="display:flex;flex-direction:column" id="paymentForm">
-            <div style="width: 110px;">
-                <a class="employee_sentence"
-                    style="height: 28px;display: flex;align-items: center;border:none;background:none;cursor:pointer"><svg
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false"
-                        fill="currentColor" width="16" height="16" class="backsvg" aria-hidden="true">
-                        <path
-                            d="M20.7 7.3c-.4-.4-1-.4-1.4 0L12 14.6 4.7 7.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l8 8c.2.2.5.3.7.3s.5-.1.7-.3l8-8c.4-.4.4-1 0-1.4z">
-                        </path>
-                    </svg> Back</a>
-            </div>
 
             <div style="padding-top:24px;">
                 <h2 class="landing_sentence3">Pay & post</h2>
@@ -660,6 +650,14 @@ if (isset($_SESSION['companyID'])) {
 
     </div>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
+    <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
+    <script src="company_creditcard.js"></script>
+    <script src="post-job.js"></script>
+
     <script>
         window.onload = function () {
             showHideCards();
@@ -970,7 +968,7 @@ if (isset($_SESSION['companyID'])) {
             document.getElementById('totalPrice').value = totalPrice.toFixed(2);
         });
 
-        var continueButton = document.querySelector('.cont-button');
+        var continueButton = document.querySelector('.create_btn');
 
         // Get the select field and the validation message elements
         var validationpostDuration = document.getElementById('validation-postDuration');
@@ -1071,17 +1069,9 @@ if (isset($_SESSION['companyID'])) {
             });
         });
     </script>
-
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js'></script>
-    <script src='https://unpkg.com/vue-the-mask@0.11.1/dist/vue-the-mask.js'></script>
-    <script src="company_creditcard.js"></script>
-    <script src="post-job.js"></script>
 </body>
 
 </html>
-
-
-
 <?php
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];

@@ -72,15 +72,27 @@ session_start(); // Start the session at the beginning
             $searchTerm = mysqli_real_escape_string($connect, $_GET['applicantsearch']);
         }
 
+        $jobPostID = '';
+        if (isset($_GET['jobPostID'])) {
+            $jobPostID = mysqli_real_escape_string($connect, $_GET['jobPostID']);
+        }
+
         $sql = "SELECT job_post.*, applications.*
-                    FROM applications 
-                    INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
-                    WHERE job_post.CompanyID = $CompanyID 
-                    AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
-                    OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
-                    AND job_post.Job_isDeleted = '0' 
-                    AND job_post.job_status IN ('Active', 'Closed', 'Blocked')
-                    ORDER BY applications.ApplyDate DESC";
+        FROM applications
+        INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+        WHERE job_post.CompanyID = $CompanyID 
+        AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+        OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+        AND job_post.Job_isDeleted = '0' 
+        AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+        // If a Job_Post_ID is received, add a condition to the WHERE clause
+        if ($jobPostID != '') {
+            $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+        }
+
+        $sql .= " ORDER BY applications.ApplyDate DESC";
+
         $result = mysqli_query($connect, $sql);
 
         // Check if there are any results
@@ -319,6 +331,11 @@ session_start(); // Start the session at the beginning
     $(document).ready(function () {
         $('#applicantForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
+
+            var url = window.location.href.split('?')[0].split('#')[0];
+
+            // Change the URL
+            window.history.pushState(null, null, url + '#applicants');
 
             var searchTerm = $('#applicantInput').val();
 
