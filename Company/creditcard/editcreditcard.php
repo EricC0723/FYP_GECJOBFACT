@@ -358,6 +358,11 @@ $row = mysqli_fetch_assoc($result);
             cardNumberMessage.textContent = 'Invalid card number';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message
+        } else if (!new RegExp("^(4|34|37|5[1-5]|6011|9792)").test(this.value.trim())) {
+            // If the card number does not start with the specified patterns
+            cardNumberMessage.textContent = 'Invalid card number';
+            this.dataset.valid = '0';
+            validationcardNumber.classList.remove('hide'); // Show the validation message
         } else if (this.value.trim() !== originalCardNumber) {
             // If the input field is not empty and contains the correct number of characters
             // Check if the card number exists in the database for the same company

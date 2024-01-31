@@ -42,7 +42,7 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -743,6 +743,11 @@ if (isset($_SESSION['companyID'])) {
                         (cardType !== 'amex' && this.value.trim().length !== 19)) {
                         // If the card type is 'amex' and the input field does not contain 15 characters
                         // or if the card type is not 'amex' and the input field does not contain 19 characters
+                        cardNumberMessage.textContent = 'Invalid card number';
+                        this.dataset.valid = '0';
+                        validationcardNumber.classList.remove('hide'); // Show the validation message
+                    } else if (!new RegExp("^(4|34|37|5[1-5]|6011|9792)").test(this.value.trim())) {
+                        // If the card number does not start with the specified patterns
                         cardNumberMessage.textContent = 'Invalid card number';
                         this.dataset.valid = '0';
                         validationcardNumber.classList.remove('hide'); // Show the validation message

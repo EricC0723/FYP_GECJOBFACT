@@ -33,13 +33,12 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo" style="width:150px;"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
                     <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
