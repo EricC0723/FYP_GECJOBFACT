@@ -261,16 +261,50 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-                    <li>
-						<a href="user.php" class="dropdown-toggle no-arrow">
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+						<ul class="submenu">
+						<li>
+							<a href="user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
-					<li>
+                    <li>
+						<!-- <a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
+						</a>
+					</li> -->
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+						</a>
+						<ul class="submenu">
+						<li>
+							<a href="company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company assistance</span>
+							</a>
+						</li>
+						</ul>
+					</li>
+					<!-- <li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
 						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
 						</a>
-					</li>
+					</li> -->
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>

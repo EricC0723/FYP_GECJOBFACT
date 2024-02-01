@@ -1,3 +1,7 @@
+<?php
+  session_start();
+  include("C:/xampp/htdocs/FYP/dataconnection.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +13,27 @@
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="vendors/images/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
+	<style>
+        #loading {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1001; /* Set a higher z-index */
+}
 
+#loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1002; /* Set a higher z-index */
+}
+</style>
 	<!-- Mobile Specific Metas -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -18,6 +42,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" type="text/css" href="src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="vendors/styles/style.css">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -31,58 +57,16 @@
 	</script>
 </head>
 <body>
-	<!-- <div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="vendors/images/logo.png" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>70%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div> -->
-
+<div id="loading">
+        <div id="loading-spinner">
+            <img src="vendors/images/loading.gif" alt="Loading Spinner">
+        </div>
+    </div>
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
 			</div>
 		</div>
 		<div class="header-right">
@@ -151,22 +135,19 @@
 			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+				<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name">Ross C. Lopez</span>
+						<span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
-			</div>
-			<div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
 			</div>
 		</div>
 	</div>
@@ -292,16 +273,50 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-<li>
-						<a href="user.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-user"></span><span class="mtext">Admin</span>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+						<ul class="submenu">
+						<li>
+							<a href="user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
-					<li>
+                    <li>
+						<!-- <a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
+						</a>
+					</li> -->
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+						</a>
+						<ul class="submenu">
+						<li>
+							<a href="company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company assistance</span>
+							</a>
+						</li>
+						</ul>
+					</li>
+					<!-- <li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
 						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
 						</a>
-					</li>
+					</li> -->
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
@@ -465,95 +480,297 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
 							<div class="title">
-								<h4>Charts</h4>
+								<h4>Company assistance</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Charts</li>
+									<li class="breadcrumb-item active" aria-current="page">Company assistance</li>
 								</ol>
 							</nav>
 						</div>
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2020
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart1"></div>
+				<!-- User table -->
+				<div class="card-box mb-30">
+					<div class="pd-20">
+					</div>
+					<div class="pb-20">
+						
+						<table id="user_table"class="data-table table stripe hover nowrap">
+							<thead>
+								<tr>
+									<th class="table-plus datatable-nosort">ID</th>
+									<th>Company email</th>
+									<th>Subject</th>
+									<th>CreatedAt</th>
+									<th>Response</th>
+									<th class="datatable-nosort">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+									$query = "SELECT * FROM company_contact_us
+									ORDER BY ResponseStatus ASC;";
+									$result = mysqli_query($connect, $query);
+									if(mysqli_num_rows($result) > 0)
+									{
+										while($row = mysqli_fetch_assoc($result))
+										{
+											?>
+											<tr>
+												<td class="table-plus"><?php echo $row["c_ContactID"]; ?></td>
+												<td><?php echo $row["CompanyEmail"]; ?></td>
+												<td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo $row["Subject"]; ?></td>
+												<td><?php echo date('d-m-Y : H:i', strtotime($row["CreatedAt"])); ?></td>
+												<td><?php echo ($row["ResponseStatus"] == 1) ? 'Yes' : 'No'; ?></td>
+												<td>
+													<div class="dropdown">
+														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+															<i class="dw dw-more"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+															<a class="viewContactBtn dropdown-item" href="#" data-contactid="<?=$row['c_ContactID'];?>"><i class="dw dw-eye"></i> View</a>
+															<?php
+															// Check if ResponseStatus is 0 before rendering "Reply" button
+															if ($row["ResponseStatus"] == 0) {
+																?>
+																<a class="editContactBtn dropdown-item" href="#" data-contactid="<?=$row['c_ContactID'];?>"><i class="icon-copy fa fa-reply"></i> Reply</a>
+																<?php
+															}
+															?>
+														</div>
+													</div>
+												</td>
+											</tr>
+											<?php
+										}
+									}
+								?>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart2"></div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart3"></div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart4">asdasd</div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart5"></div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart6"></div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart7"></div>
-				</div>
-				<div class="bg-white pd-20 card-box mb-30">
-					<div id="chart8"></div>
-				</div>
-			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
 		</div>
 	</div>
+    <!-- View modal -->
+    <div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="view-contact-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="">Company data</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+							<h5 style="display: inline-block;">Contact ID</h5>
+								<div class="form-group">
+									<p id="ContactID" class="form-control"></p>
+								</div>
+							<h5 style="display: inline-block;">Company ID</h5>
+								<div class="form-group">
+									<p id="CompanyID" class="form-control"></p>
+								</div>
+							<h5 style="display: inline-block;">Company Email</h5>
+								<div class="form-group">
+									<p id="CompanyEmail" class="form-control"></p>
+								</div>
+							<h5 style="display: inline-block;">Subject</h5>
+								<div class="form-group">
+									<textarea id="Subject" class="form-control" rows="2" style="height:100%;" disabled></textarea>
+								</div>
+							<h5 style="display: inline-block;">Message</h5>
+								<div class="form-group">
+									<textarea id="Message" class="form-control" rows="3" disabled></textarea>
+								</div>
+							<h5 style="display: inline-block;">Create at</h5>
+								<div class="form-group">
+									<p id="CreateAt" class="form-control"></p>
+								</div>
+								<div id="contact-modal-data"></div>
+                    	</div>
+                	</div>
+            	</div>
+            </div>
+    	</div>
+	<!-- Edit modal -->
+    <div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="edit-contact-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id=""></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+						<input type="hidden" id="edit_ContactID">
+							<h5 style="display: inline-block;">Company Email</h5>
+							<div class="form-group">
+								<input type="text" id="edit_CompanyEmail" class="form-control">
+							</div>
+							<h5 style="display: inline-block;">Subject</h5>
+							<div class="form-group">
+								<textarea id="edit_Subject" class="form-control" rows="2" style="height:100%;"disabled></textarea>
+							</div>
+							<h5 style="display: inline-block;">Content</h5>
+							<div class="form-group">
+								<textarea id="edit_Message" class="form-control" rows="3" disabled></textarea>
+							</div>
+							<h5 style="display: inline-block;">Response to company</h5>
+							<div class="form-group">
+								<textarea id="edit_Response" class="form-control" rows="3"></textarea>
+							</div>
+							<div class="modal-footer">
+							<a class="updateContactBtn btn btn-primary" href="#" data-contactid="<?=$row['c_ContactID'];?>">Send response</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
 	<!-- js -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
 	<script src="vendors/scripts/layout-settings.js"></script>
-	<script src="src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
-	<script src="https://code.highcharts.com/highcharts-3d.js"></script>
-	<script src="src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
-	<script src="vendors/scripts/highchart-setting.js"></script>
+	<script src="src/plugins/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
+	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
+	<!-- buttons for Export datatable -->
+	<script src="src/plugins/datatables/js/dataTables.buttons.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.bootstrap4.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.print.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.html5.min.js"></script>
+	<script src="src/plugins/datatables/js/buttons.flash.min.js"></script>
+	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
+	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
+	<script src="vendors/scripts/datatable-setting.js"></script></body>
+    <!-- View User -->
+    <script>
+        $(document).on('click', '.viewContactBtn', function () {
+        console.log("view click");
+        var contactid = $(this).data('contactid');
+        console.log("contactid : "+contactid);
+        $.ajax({
+            type: "GET",
+            url: "handle_c_contact.php?contactid=" + contactid,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+					var modalContent = '';
+					$('#view-contact-modal').modal('show');
+                    var formattedDate = moment(res.data.CreatedAt).format('DD-MM-YYYY HH:mm:ss');
+                    $('#ContactID').text(res.data.c_ContactID);
+                    $('#CompanyID').text(res.data.CompanyID);
+
+                    $('#CompanyEmail').text(res.data.CompanyEmail);
+                    $('#Subject').text(res.data.Subject);
+                    $('#Message').text(res.data.Message);
+					$('#response').text(res.data.Response);
+                    $('#CreateAt').text(formattedDate);
+
+					if(res.data.Response !== "")
+					{
+					modalContent += '<hr>';
+					modalContent += '<h6 class="group-title" style="text-align:center;color:grey;">Reponse</h6>';
+					modalContent += '<hr>';
+                    modalContent += '<h5 style="display: inline-block;">Response</h5>';
+					modalContent += '<div class="form-group">';
+                    modalContent += '<textarea id="response" class="form-control" rows="3" disabled>'+ res.data.Response +'</textarea>';
+                    modalContent += '</div>';
+					}
+                    $('#contact-modal-data').html(modalContent);
+					
+                }
+            }
+        });
+        });
+    </script>
+	<!-- View User -->
+    <script>
+        $(document).on('click', '.editContactBtn', function () {
+        console.log("view click");
+        var contactid = $(this).data('contactid');
+        console.log("contactid : "+contactid);
+        $.ajax({
+            type: "GET",
+            url: "handle_c_contact.php?contactid=" + contactid,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+					$('#edit_ContactID').val(res.data.c_ContactID);
+                    $('#edit_CompanyEmail').val(res.data.CompanyEmail);
+                    $('#edit_Subject').val(res.data.Subject);
+                    $('#edit_Message').val(res.data.Message);
+
+                    $('#edit-contact-modal').modal('show');
+                }
+            }
+        });
+        });
+    </script>
+	<!-- update -->
 	<script>
-		var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-		var yValues = [55, 49, 44, 24, 15];
-		var barColors = [
-		  "#b91d47",
-		  "#00aba9",
-		  "#2b5797",
-		  "#e8c3b9",
-		  "#1e7145"
-		];
-		
-		new Chart("chart6", {
-		  type: "pie",
-		  data: {
-			labels: xValues,
-			datasets: [{
-			  backgroundColor: barColors,
-			  data: yValues
-			}]
-		  },
-		  options: {
-			title: {
-			  display: true,
-			  text: "World Wide Wine Production 2018"
-			}
-		  }
-		});
-		</script>
-</body>
+        $(document).on('click', '.updateContactBtn', function () {
+        console.log("update click");
+        var data = {
+            action: "updateResponse",
+
+			contactid: $("#edit_ContactID").val(),
+            company_email: $("#edit_CompanyEmail").val(),
+			subject: $("#edit_Subject").val(),
+			message: $("#edit_Message").val(),
+			response: $("#edit_Response").val(),
+        };
+		console.log(data);
+		swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
+        $.ajax({
+            type: "POST",
+            url: "handle_c_contact.php",
+          	async: true, 
+			data: data,
+			beforeSend: function () {
+			$('#edit-contact-modal [data-dismiss="modal"]').click();
+			showLoading();
+			},
+			success:function(response){
+			hideLoading();
+                console.log(response);
+				if(response==="Failed")
+				{
+					swal("Oops...", "Response cannot be empty!", "error");
+				}
+				else{
+					swal("Success", response, "success").then(function() {
+					location.replace("contact_us_company.php");
+				});
+				}
+				
+            }
+        });
+	}
+    });
+        });
+		function showLoading() {
+			$('#loading').show();
+		}
+
+		function hideLoading() {
+			$('#loading').hide();
+		}
+    </script>
 </html>

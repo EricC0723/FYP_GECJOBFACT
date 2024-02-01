@@ -37,12 +37,12 @@
   </head>
   <body id="top">
 
-  <div id="overlayer"></div>
+  <!-- <div id="overlayer"></div>
   <div class="loader">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
-  </div>
+  </div> -->
     
 
 <div class="site-wrap">
@@ -255,23 +255,26 @@
             $searchminimum = "";
         }
             }
-            $query = "SELECT * FROM job_post WHERE job_status IN ('Active') ORDER BY AdStartDate DESC";
+            $query = "SELECT * FROM job_post WHERE job_status IN ('Active')";
+
             // search logic
             if (!empty($searchJob)) {
-              $query .= " AND Job_Post_Title LIKE '%$searchJob%'";
+                $query .= " AND Job_Post_Title LIKE '%$searchJob%'";
             }
             if (!empty($searchLocation)) {
-              $query .= " AND Job_Post_Location LIKE '%$searchLocation%'";
+                $query .= " AND Job_Post_Location LIKE '%$searchLocation%'";
             }
             if (!empty($searchType)) {
-              $query .= " AND Job_Post_Type LIKE '%$searchType%'";
+                $query .= " AND Job_Post_Type LIKE '%$searchType%'";
             }
             if (!empty($searchcategory)) {
-              $query .= " AND Main_Category_Name = '$searchcategory'";
+                $query .= " AND Main_Category_Name = '$searchcategory'";
             }
             if (!empty($searchminimum)) {
-              $query .= "AND Job_Post_MinSalary >= $searchminimum";
+                $query .= " AND Job_Post_MinSalary >= $searchminimum";
             }
+            
+            $query .= " ORDER BY AdStartDate DESC";
             
             if (!isset ($_GET['page']) ) {
                 $page = 1;  

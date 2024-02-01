@@ -1,6 +1,26 @@
 <?php
-  session_start();
-  include("C:/xampp/htdocs/FYP/dataconnection.php");
+session_start();
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+
+$query = "SELECT mc.Main_Category_ID, mc.Main_Category_Name, COUNT(jp.Main_Category_ID) as post_count
+          FROM main_category mc
+          LEFT JOIN job_post jp ON mc.Main_Category_ID = jp.Main_Category_ID
+          GROUP BY mc.Main_Category_ID";
+
+$result = mysqli_query($connect, $query);
+
+$xValues = [];
+$yValues = [];
+
+// Fetch data from the result set
+while ($row = mysqli_fetch_assoc($result)) {
+    // Add Main_Category_Name to xValues
+    $xValues[] = $row['Main_Category_Name'];
+
+    // Add post count to yValues
+    $yValues[] = $row['post_count'];
+}
+$totalPosts = array_sum($yValues);
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,18 +57,6 @@
 	</script>
 </head>
 <body>
-	<!-- <div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="vendors/images/logo.png" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>70%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div> -->
 	<?php 
 		if (!isset($_SESSION['Admin_ID'])) {
 			header("Location: admin_login.php");
@@ -60,40 +68,6 @@
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-				<!-- <form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form> -->
 			</div>
 		</div>
 		<div class="header-right">
@@ -310,17 +284,42 @@
 					?>
  					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-                        <span class="micon dw dw-user"></span><span class="mtext">User</span>
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="user.php">User List</a></li>
-							<li><a href="user_career.php">User Career History</a></li>
+						<li>
+							<a href="user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User assistance</span>
+							</a>
+						</li>
 						</ul>
 					</li>
-					<li>
-						<a href="company.php" class="dropdown-toggle no-arrow">
-						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+                    <li>
+						<!-- <a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+					</li> -->
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+						</a>
+						<ul class="submenu">
+						<li>
+							<a href="company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
@@ -562,151 +561,25 @@
 					</div>
 				</div>
 			</div>
-			<div class="card-box mb-30">
-				<h2 class="h4 pd-20">Best Selling Products</h2>
-				<table class="data-table table nowrap">
-					<thead>
-						<tr>
-							<th class="table-plus datatable-nosort">Product</th>
-							<th>Name</th>
-							<th>Color</th>
-							<th>Size</th>
-							<th>Price</th>
-							<th>Oty</th>
-							<th class="datatable-nosort">Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-1.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Shirt</h5>
-								by John Doe
-							</td>
-							<td>Black</td>
-							<td>M</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
+			<div class="card-box mb-50" style="height: 650px;">
+			<div class="row justify-content-end" style="padding-top: 20px; padding-right: 15px;">
+				<div class="col-md-4 col-sm-6">
+					<form id="filterForm">
+						<div class="form-group">
+							<div class="input-group">
+								<input class="form-control datetimepicker-range" placeholder="Select Month" type="text">
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary" onclick="filterData()">Filter</button>
 								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-2.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Boots</h5>
-								by Lea R. Frith
-							</td>
-							<td>brown</td>
-							<td>9UK</td>
-							<td>$900</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-3.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Hat</h5>
-								by Erik L. Richards
-							</td>
-							<td>Orange</td>
-							<td>M</td>
-							<td>$100</td>
-							<td>4</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-4.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Long Dress</h5>
-								by Renee I. Hansen
-							</td>
-							<td>Gray</td>
-							<td>L</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="table-plus">
-								<img src="vendors/images/product-5.jpg" width="70" height="70" alt="">
-							</td>
-							<td>
-								<h5 class="font-16">Blazer</h5>
-								by Vicki M. Coleman
-							</td>
-							<td>Blue</td>
-							<td>M</td>
-							<td>$1000</td>
-							<td>1</td>
-							<td>
-								<div class="dropdown">
-									<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-										<i class="dw dw-more"></i>
-									</a>
-									<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-										<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-										<a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
+				<canvas id="myChart" style="width:100%;max-width:1000px;max-height:520px;"></canvas>
+				<div id="totalPosts" style="margin-top:-20px;text-align:center;">Total Posts: <?php echo $totalPosts; ?></div>
+			</div>
+			<div class="footer-wrap pd-20 mb-20 card-box" style="margin-top:50px;">
 			</div>
 		</div>
 	</div>
@@ -721,5 +594,94 @@
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
 	<script src="vendors/scripts/dashboard.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script>
+$('.datetimepicker-range').datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+});
+
+function filterData() {
+    // 获取选择的日期范围
+    var selectedDateRange = $('.datetimepicker-range').val();
+	console.log(selectedDateRange);
+    
+    // 解析日期范围
+    var dateRange = selectedDateRange.split(' - ');
+    var startDate = dateRange[0];
+    var endDate = dateRange[1];
+
+    // 将日期转换为数据库时间戳格式
+    var startTimestamp = new Date(startDate).toLocaleString();
+	var endTimestamp = new Date(endDate).toLocaleString();
+	console.log(startTimestamp);
+	console.log(endTimestamp);
+    // 发送 AJAX 请求到服务器
+    $.ajax({
+        type: "GET",
+        url: "handle_chart.php",
+        data: {
+            startDate: startTimestamp,
+            endDate: endTimestamp
+        },
+        success: function(response) {
+            var res = JSON.parse(response);
+        console.log(res.xValues);
+        console.log(res.yValues);
+        console.log(res.totalPosts);
+
+		updateChart(res.xValues, res.yValues,res.totalPosts);
+        }
+    });
+}
+function updateChart(xValues, yValues,totalPosts) {
+    // 假设 myChart 是你的图表变量
+    myChart.data.labels = xValues;
+    myChart.data.datasets[0].data = yValues;
+	$('#totalPosts').text("Total Posts : "+totalPosts);
+    myChart.update();
+}
+</script>
+	<script>
+var xValues = <?php echo json_encode($xValues); ?>;
+var yValues = <?php echo json_encode($yValues); ?>;
+var barColors = [
+    "#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145",
+    "#FF6633", "#FFB399", "#FF33FF", "#FFFF99", "#00B3E6",
+    "#E6B333", "#3366E6", "#999966", "#99FF99", "#B34D4D",
+    "#80B300", "#809900", "#E6B3B3", "#6680B3", "#66991A",
+    "#FF99E6", "#CCFF1A", "#FF1A66", "#E6331A", "#33FFCC",
+    "#66994D", "#B366CC", "#4D8000", "#B33300", "#CC80CC"
+];
+var myChart = new Chart("myChart", {
+    type: "pie",
+    data: {
+        labels: xValues,
+        datasets: [{
+            backgroundColor: barColors,
+            data: yValues
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: "Total job post"
+        },
+        legend: {
+            position: "left",
+            align: "start"
+        },
+        layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 30
+            }
+        }
+    }
+});
+
+</script>
 </body>
 </html>

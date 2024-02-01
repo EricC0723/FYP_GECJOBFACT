@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $Dstart_date = DateTime::createFromFormat('Y-m', $_POST['start_date']);
         $Dend_date = DateTime::createFromFormat('Y-m', $_POST['end_date']);
 
-        if (empty($job_title) || empty($company_name) || empty($start_date) || (empty($still_in_role) && empty($end_date)) || strlen($job_title) > 100 || strlen($company_name) > 100 || strlen($description) > 700){
+        if (empty($job_title) || empty($company_name) || empty($start_date) || (empty($still_in_role) && empty($end_date)) || strlen($job_title) > 100 || strlen($company_name) > 100 || strlen($description) > 700 || ($start_date == $end_date && empty($still_in_role))){
             echo 'failed';
             exit;
         }
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $Dstart_date = DateTime::createFromFormat('Y-m', $_POST['start_date']);
         $Dend_date = DateTime::createFromFormat('Y-m', $_POST['end_date']);
-        if (empty($job_title) || empty($company_name) || empty($start_date) || (empty($still_in_role) && empty($end_date)) || strlen($job_title) > 100 || strlen($company_name) > 100 || strlen($description) > 700){
+        if (empty($job_title) || empty($company_name) || empty($start_date) || (empty($still_in_role) && empty($end_date)) || strlen($job_title) > 100 || strlen($company_name) > 100 || strlen($description) > 700 || ($start_date == $end_date && empty($still_in_role))){
             echo 'failed';
             exit;
         }

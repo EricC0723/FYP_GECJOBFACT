@@ -100,8 +100,8 @@
         displayEditError(input, 'Either end date or "Still in role" must be provided');
         hasCareerErrors = true;
         checkErrors();
-    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
-        displayEditError(input, 'The end date cannot be earlier than the start date');
+    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate <= startDate) {
+        displayEditError(input, 'The end date must be later than the start date');
         hasCareerErrors = true;
         checkErrors();
     } else {
