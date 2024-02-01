@@ -44,8 +44,7 @@ session_start(); // Start the session at the beginning
                     $searchTerm = isset($_GET['blockedsearch']) ? $_GET['blockedsearch'] : '';
                     ?>
                     <input id="blockedInput" type="text" class="input-box" name="blockedsearch"
-                        style="padding-left:44px;padding-right:44px;width:512px;"
-                        placeholder="Search job title"
+                        style="padding-left:44px;padding-right:44px;width:512px;" placeholder="Search job title"
                         value="<?php echo htmlspecialchars($searchTerm); ?>">
                     <button id="clearblocked" class="clear-button" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
@@ -69,6 +68,17 @@ session_start(); // Start the session at the beginning
 <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
 
     <?php
+    function getApplicantCount($jobId)
+    {
+        global $connect; // Assuming $connect is your database connection variable
+    
+        $sql = "SELECT COUNT(*) as count FROM applications WHERE JobID = $jobId";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        return $row['count'];
+    }
+
     $CompanyID = null;
     if (isset($_SESSION['companyID'])) {
         $CompanyID = $_SESSION['companyID'];
@@ -126,7 +136,9 @@ session_start(); // Start the session at the beginning
                                 </div>
                             </td>
                             <td>
-                            <div class="td_title">-</div>
+                            <div class="td_title">
+                            <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
+                            </div>
                             </td>
                             <td>
                             <div class="td_title" style="width:160px;">
@@ -151,7 +163,28 @@ session_start(); // Start the session at the beginning
                         ';
         }
         echo '</table>';
+        echo '
+        <script>
+        // Get the button
+        var applicantCountButtons = document.getElementsByClassName("applicantCount");
+    
+        // Add an event listener to each button
+        for (var i = 0; i < applicantCountButtons.length; i++) {
+            applicantCountButtons[i].addEventListener("click", function () {
+                // Get the Job_Post_ID from the buttons data attribute
+                var jobPostID = this.getAttribute("data-jobpostid");
 
+                // Manually update the URL
+                window.history.pushState(null, null, "?jobPostID=" + jobPostID + "#applicants");
+
+                countApplicant(jobPostID);
+
+                // Update the visibility of the divs, the underline, and the "active" class
+                updateDivVisibility();
+            });
+        }
+        </script>
+        ';
     } else {
         // No results, check if a search term was provided
         if ($searchTerm != '') {

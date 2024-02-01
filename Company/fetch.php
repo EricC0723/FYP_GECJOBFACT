@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     if (isset($_GET['fetch']) && $_GET['fetch'] === 'job_questions') {
         // Fetch job questions
-        $query = "SELECT Job_Question_ID, Job_Question_Name, Job_Question_Type FROM job_question WHERE Recommended_Question = 0";
+        $query = "SELECT Job_Question_ID, Job_Question_Name FROM job_question WHERE Recommended_Question = 0";
         $result = mysqli_query($connect, $query);
 
         $data = array();
@@ -66,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $data[] = array(
                 'value' => $row['Job_Question_ID'],
                 'label' => $row['Job_Question_Name'],
-                'type' => $row['Job_Question_Type']
             );
         }
 
@@ -78,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['fetch']) && $_GET['fetch'] === 'job_question_options' && isset($_GET['questionId'])) {
         // Fetch job question options
         $questionId = $_GET['questionId'];
-        $query = "SELECT job_question_option.Job_Question_Option_Name, job_question.Job_Question_Type 
+        $query = "SELECT job_question_option.Job_Question_Option_Name
                   FROM job_question_option 
                   INNER JOIN job_question ON job_question_option.Job_Question_ID = job_question.Job_Question_ID 
                   WHERE job_question_option.Job_Question_ID = $questionId";
@@ -89,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         while ($row = mysqli_fetch_assoc($result)) {
             $data[] = array(
                 'name' => $row['Job_Question_Option_Name'],
-                'type' => $row['Job_Question_Type']
             );
         }
 

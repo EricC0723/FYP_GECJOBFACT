@@ -44,8 +44,7 @@ session_start(); // Start the session at the beginning
                     $searchTerm = isset($_GET['closedsearch']) ? $_GET['closedsearch'] : '';
                     ?>
                     <input id="closedInput" type="text" class="input-box" name="closedsearch"
-                        style="padding-left:44px;padding-right:44px;width:512px;"
-                        placeholder="Search job title"
+                        style="padding-left:44px;padding-right:44px;width:512px;" placeholder="Search job title"
                         value="<?php echo htmlspecialchars($searchTerm); ?>">
                     <button id="clearclosed" class="clear-button" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
@@ -69,6 +68,17 @@ session_start(); // Start the session at the beginning
 <div style="width: 100%;margin: auto;height: 100%;padding-top:12px;">
 
     <?php
+    function getApplicantCount($jobId)
+    {
+        global $connect; // Assuming $connect is your database connection variable
+    
+        $sql = "SELECT COUNT(*) as count FROM applications WHERE JobID = $jobId";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+
+        return $row['count'];
+    }
+
     $CompanyID = null;
     if (isset($_SESSION['companyID'])) {
         $CompanyID = $_SESSION['companyID'];
@@ -127,7 +137,10 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                <div class="td_title">-</div>
+                                    <div class="td_title">          
+                                        <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
+                                    </div>                           
+                                </td>
                                 </td>
                                 <td>
                                 <div class="td_title" style="width:160px;">
@@ -136,6 +149,11 @@ session_start(); // Start the session at the beginning
                                             <a class="listlink" href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" style="display:flex;align-items:center;">
                                             <svg style="width:24px;height:24px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor"  aria-labelledby="b33ee29c-5454-4dc1-a348-be2854231b73-edit"  role="img"><title>View</title><path d="M21.912 11.59C21.791 11.32 18.867 5 12 5s-9.791 6.32-9.912 6.59a1.001 1.001 0 0 0 0 .82C2.209 12.68 5.133 19 12 19s9.791-6.32 9.912-6.59a1.001 1.001 0 0 0 0-.82ZM12 17c-4.708 0-7.173-3.728-7.877-5C4.827 10.728 7.292 7 12 7c4.71 0 7.175 3.73 7.877 5-.704 1.272-3.169 5-7.877 5Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
                                             </a>
+                                        </div>
+                                        <div style="display:flex;justify-content:center;align-items:center;width:44px;">
+                                            <button class="listlink" style="background:none;border:none;" onclick="copyJobPost(\'' . $row['Job_Post_ID'] . '\')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                            </button>
                                         </div>
                                         <div style="display:flex;justify-content:center;align-items:center;width:44px;">
                                             <button class="listlink" style="background:none;border:none;" onclick="confirmDeleteJobPost(\'' . $row['Job_Post_ID'] . '\')"><svg style="width:24px;height:24px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor"  aria-labelledby="e41a2bdd-71ff-4371-9193-37aee43f4338-delete"  role="img">
@@ -154,6 +172,28 @@ session_start(); // Start the session at the beginning
 
         }
         echo '</table>';
+        echo '
+            <script>
+            // Get the button
+            var applicantCountButtons = document.getElementsByClassName("applicantCount");
+        
+            // Add an event listener to each button
+            for (var i = 0; i < applicantCountButtons.length; i++) {
+                applicantCountButtons[i].addEventListener("click", function () {
+                    // Get the Job_Post_ID from the buttons data attribute
+                    var jobPostID = this.getAttribute("data-jobpostid");
+
+                    // Manually update the URL
+                    window.history.pushState(null, null, "?jobPostID=" + jobPostID + "#applicants");
+
+                    countApplicant(jobPostID);
+
+                    // Update the visibility of the divs, the underline, and the "active" class
+                    updateDivVisibility();
+                });
+            }
+            </script>
+            ';
 
     } else {
         // No results, check if a search term was provided

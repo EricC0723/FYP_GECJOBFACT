@@ -316,7 +316,7 @@ if (isset($_SESSION['companyID'])) {
     cardNumberInput.addEventListener('input', function () {
         var cardNumberMessage = document.getElementById('cardNumber-message');
         var cardType = document.getElementById('cardType').value; // Fetch the cardType
-        var companyId = "<?php echo $_SESSION['companyID']; ?>"; 
+        var companyId = "<?php echo $_SESSION['companyID']; ?>";
         if (this.value.trim() === '') {
             // If the input field is empty
             cardNumberMessage.textContent = 'Required field';
@@ -326,6 +326,11 @@ if (isset($_SESSION['companyID'])) {
             (cardType !== 'amex' && this.value.trim().length !== 19)) {
             // If the card type is 'amex' and the input field does not contain 15 characters
             // or if the card type is not 'amex' and the input field does not contain 19 characters
+            cardNumberMessage.textContent = 'Invalid card number';
+            this.dataset.valid = '0';
+            validationcardNumber.classList.remove('hide'); // Show the validation message
+        } else if (!new RegExp("^(4|34|37|5[1-5]|6011|9792)").test(this.value.trim())) {
+            // If the card number does not start with the specified patterns
             cardNumberMessage.textContent = 'Invalid card number';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message

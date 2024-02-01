@@ -37,13 +37,13 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
-                    <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
-                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
+                    <span class="header-link"><a href="company_landing.php">Home</a></span>
+                    <span class="header-link"><a href="job-listing.php" class="company_nav_active">Jobs</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
@@ -79,7 +79,8 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
@@ -145,6 +146,11 @@ if (isset($_SESSION['companyID'])) {
 
     </div>
 
+    <div id="mySidebar" class="sidebar">
+        <!-- Your content goes here -->
+
+    </div>
+
 
 
 
@@ -171,7 +177,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once closed, you will not be able to reopen this job post",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, close it!',
+                confirmButtonText: 'Yes, close it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -181,7 +187,7 @@ if (isset($_SESSION['companyID'])) {
                         data: { jobPostID: jobPostID },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Closed!", "Job post has been closed.", "success");
+                                Swal.fire("Closed", "Job post has been closed.", "success");
                                 // Update the status in the table
                                 getactivejob();
                                 getclosedjob();
@@ -189,7 +195,103 @@ if (isset($_SESSION['companyID'])) {
                                 getblockedjob();
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error closing job post", "error");
+                                Swal.fire("Error", "Error closing job post", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDeleteJobPost(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once delete, you will not be able to recover this job post",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/delete.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Deleted", "Job post has been delete.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error deleting job post", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDeleteDraft(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once delete, you will not be able to recover this draft",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/delete-draft.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Deleted", "Draft has been delete.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error deleting draft", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function copyJobPost(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once copied, the copied job post will be generated in drafts",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/copy.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Copied", "Job post has been copied.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error copying job post", "error");
                             }
                         }
                     });
@@ -203,7 +305,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once accepted, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, accept it!',
+                confirmButtonText: 'Yes, accept it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -213,11 +315,11 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Accepted!", "Application has been accepted.", "success");
+                                Swal.fire("Accepted", "Application has been accepted.", "success");
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error accepting application", "error");
+                                Swal.fire("Error", "Error accepting application", "error");
                             }
                         }
                     });
@@ -231,7 +333,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once rejected, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, reject it!',
+                confirmButtonText: 'Yes, reject it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -241,11 +343,11 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Rejected!", "Application has been rejected.", "success");
+                                Swal.fire("Rejected", "Application has been rejected.", "success");
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error rejecting application", "error");
+                                Swal.fire("Error", "Error rejecting application", "error");
                             }
                         }
                     });
@@ -256,6 +358,9 @@ if (isset($_SESSION['companyID'])) {
         function fetchAndOpenNav(button) {
             var applicantId = $(button).data('applicant-id');
 
+            // Set the applicantId as a data attribute of the sidebar
+            $('#mySidebar').data('applicant-id', applicantId);
+
             // First AJAX call to get the applicant details
             $.ajax({
                 url: 'getjoblist/get-applicant-details.php',
@@ -265,11 +370,17 @@ if (isset($_SESSION['companyID'])) {
                     // Update the sidebar content with the applicant details
                     $('#mySidebar').html(data);
                     openNav();
-                    $.ajax({
-                        url: 'change_status/process.php',
-                        method: 'GET',
-                        data: { applicant_id: applicantId }
-                    });
+                    // $.ajax({
+                    //     url: 'change_status/process.php',
+                    //     method: 'GET',
+                    //     data: { applicant_id: applicantId },
+                    //     success: function (response) {
+                    //         if (response == 'success') {
+                    //             // Update the status in the table
+                    //             getapplicants();
+                    //         } 
+                    //     }
+                    // });
                 }
             });
         }
@@ -394,59 +505,94 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
+        function countApplicant(jobPostID) {
+            $.ajax({
+                url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
+                type: 'GET',
+                data: {
+                    jobPostID: jobPostID // Pass the jobPostID to get-applicants.php
+                },
+                success: function (data) {
+                    // Update the table with the new data
+                    $('#applicants').html(data);
+                }
+            });
+        }
+
 
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            var buttons = document.querySelectorAll('.joblistbtn');
-            var underline = document.querySelector('.underline');
-            var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
+        var buttons = document.querySelectorAll('.joblistbtn');
+        var underline = document.querySelector('.underline');
+        var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
 
-            // Function to update the visibility of the divs based on the id in the URL
-            function updateDivVisibility() {
-                // Hide all divs
-                divs.forEach(function (div) {
-                    div.style.display = 'none';
-                });
+        // Function to update the visibility of the divs based on the id in the URL
+        function updateDivVisibility() {
+            // Hide all divs
+            divs.forEach(function (div) {
+                div.style.display = 'none';
+            });
 
-                // Remove the 'active' class from all buttons
-                buttons.forEach(function (btn) {
-                    btn.classList.remove('active');
-                });
+            // Remove the 'active' class from all buttons
+            buttons.forEach(function (btn) {
+                btn.classList.remove('active');
+            });
 
-                // Get the id from the URL
-                var id = window.location.href.split('#')[1];
+            // Get the id from the URL
+            var id = window.location.href.split('#')[1];
 
-                // If there's no id in the URL, default to 'active'
-                if (!id) {
-                    id = 'active';
-                }
-
-                // Show the div that matches the id in the URL and add the 'active' class to the associated button
-                if (id) {
-                    document.getElementById(id).style.display = 'block';
-                    document.getElementById(id + 'Button').classList.add('active');
-
-                    // Update the underline
-                    var activeButton = document.getElementById(id + 'Button');
-                    underline.style.width = activeButton.offsetWidth + 'px';
-                    underline.style.left = activeButton.offsetLeft + 'px';
-                }
+            // If there's no id in the URL, default to 'active'
+            if (!id) {
+                id = 'active';
             }
 
-            // Update the visibility of the divs when the DOM content is loaded
-            updateDivVisibility();
+            // If the id is 'applicants', get the jobPostID from the URL
+            if (id === 'applicants') {
+                var urlParams = new URLSearchParams(window.location.search);
+                var jobPostID = urlParams.get('jobPostID');
 
-            buttons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    // Add the button id to the URL
-                    var id = this.id.replace('Button', '');
-                    window.history.pushState(null, null, '#' + id);
+                // Now you can use the jobPostID in your code
+            }
 
-                    // Update the visibility of the divs, the underline, and the 'active' class
-                    updateDivVisibility();
-                });
+            // Show the div that matches the id in the URL and add the 'active' class to the associated button
+            if (id) {
+                document.getElementById(id).style.display = 'block';
+                document.getElementById(id + 'Button').classList.add('active');
+
+                // Update the underline
+                var activeButton = document.getElementById(id + 'Button');
+                underline.style.width = activeButton.offsetWidth + 'px';
+                underline.style.left = activeButton.offsetLeft + 'px';
+            }
+        }
+
+        // Get the 'applicants' element
+        var applicantsElement = document.getElementById('applicantsButton');
+
+        // Add an event listener to the 'applicants' element
+        applicantsElement.addEventListener('click', function () {
+            // Get the current URL without the query parameters and hash
+            var url = window.location.href.split('?')[0].split('#')[0];
+
+            // Change the URL
+            window.history.pushState(null, null, url + '#applicants');
+
+            searchApplicant('');
+
+        });
+
+        // Update the visibility of the divs when the DOM content is loaded
+        updateDivVisibility();
+
+        buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Add the button id to the URL
+                var id = this.id.replace('Button', '');
+                window.history.pushState(null, null, '#' + id);
+
+                // Update the visibility of the divs, the underline, and the 'active' class
+                updateDivVisibility();
             });
         });
 

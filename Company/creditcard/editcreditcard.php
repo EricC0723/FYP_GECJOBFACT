@@ -17,7 +17,7 @@ if (isset($_SESSION['companyID'])) {
 $id = $_GET['id'];
 
 // Fetch the credit card details from the database
-$query = "SELECT * FROM credit_card WHERE CreditCardID = $id AND Card_isDeleted = 0";
+$query = "SELECT * FROM credit_card WHERE CreditCardID = $id AND CreditCard_isDeleted = 0";
 $result = mysqli_query($connect, $query);
 $row = mysqli_fetch_assoc($result);
 ?>
@@ -355,6 +355,11 @@ $row = mysqli_fetch_assoc($result);
             (cardType !== 'amex' && this.value.trim().length !== 19)) {
             // If the card type is 'amex' and the input field does not contain 17 characters
             // or if the card type is not 'amex' and the input field does not contain 19 characters
+            cardNumberMessage.textContent = 'Invalid card number';
+            this.dataset.valid = '0';
+            validationcardNumber.classList.remove('hide'); // Show the validation message
+        } else if (!new RegExp("^(4|34|37|5[1-5]|6011|9792)").test(this.value.trim())) {
+            // If the card number does not start with the specified patterns
             cardNumberMessage.textContent = 'Invalid card number';
             this.dataset.valid = '0';
             validationcardNumber.classList.remove('hide'); // Show the validation message

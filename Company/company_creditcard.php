@@ -29,13 +29,12 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
                     <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
@@ -241,7 +240,7 @@ if (isset($_GET['savebtn'])) {
 
     $id = $_GET['id'];
 
-    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id' AND CompanyID = '$CompanyID' AND Card_isDeleted = 0";
+    $sql = "UPDATE credit_card SET CreditCard_Type = '$cardType', CreditCard_Number = '$cardNumber', CreditCard_Holder = '$cardName', CreditCard_ExpMonth = '$cardMonth', CreditCard_ExpYear = '$cardYear', CreditCard_CVV = '$cardCvv' WHERE CreditCardID = '$id' AND CompanyID = '$CompanyID' AND CreditCard_isDeleted = 0";
 
     $result = mysqli_query($connect, $sql);
 

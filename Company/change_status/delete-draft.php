@@ -1,11 +1,11 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 
-if (isset($_GET['id'])) {
-    $creditcardID = $_GET['id'];
+if (isset($_GET['jobPostID'])) {
+    $jobPostID = $_GET['jobPostID'];
 
     // Prepare the SQL statement
-    $sql = "UPDATE credit_card SET CreditCard_isDeleted = '1' WHERE CreditCardID = $creditcardID";
+    $sql = "DELETE FROM job_post WHERE Job_Post_ID = $jobPostID";
 
     // Execute the SQL statement
     if (mysqli_query($connect, $sql)) {
@@ -14,5 +14,4 @@ if (isset($_GET['id'])) {
         echo 'error';
     }
 }
-
 ?>

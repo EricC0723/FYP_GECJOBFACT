@@ -83,13 +83,12 @@ if (isset($_POST["submitbtn"])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php">Home</a></span>
                     <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
@@ -146,6 +145,7 @@ if (isset($_POST["submitbtn"])) {
             </div>
 
     </header>
+
     <div
         style="width:100%;height:155px;background:white;box-shadow:rgba(28, 35, 48, 0.1) 0px 2px 4px 0px, rgba(28, 35, 48, 0.1) 0px 2px 2px -2px, rgba(28, 35, 48, 0.2) 0px 4px 4px -4px;">
         <div class="container">
@@ -467,7 +467,6 @@ if (isset($_POST["submitbtn"])) {
                                 </svg></span><span><span id="totalsalary-message"
                                     class="validation_sentence"></span></span></span></div>
                 </div>
-
 
 
             </div>

@@ -34,13 +34,12 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
                     <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
@@ -129,7 +128,7 @@ if (isset($_SESSION['companyID'])) {
                         } else {
                             # code...
                             // Prepare the SQL statement to fetch the top 5 recent jobs
-                            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID ORDER BY AdStartDate DESC LIMIT 1";
+                            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT 1";
                             $result = mysqli_query($connect, $sql);
 
                             // Fetch the most recent job
@@ -370,7 +369,7 @@ if (isset($_SESSION['companyID'])) {
                         // $totalJobs = $row['total'];
                     
                         // Prepare the SQL statement to fetch the top 5 recent jobs
-                        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID ORDER BY AdStartDate DESC LIMIT 5";
+                        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT 5";
                         $result = mysqli_query($connect, $sql);
 
                         // Fetch all the rows

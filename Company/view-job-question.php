@@ -52,13 +52,13 @@ if (isset($_POST['submitbtn'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
                     <span class="header-link"><a href="company_landing.php">Home</a></span>
                     <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                    <span class="header-link"><a href="#products">Products</a></span>
                 </nav>
             </div>
             <div style="flex:1 1 auto;"></div>
@@ -94,7 +94,8 @@ if (isset($_POST['submitbtn'])) {
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
                             <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
                             <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
                             </div>
@@ -166,7 +167,7 @@ if (isset($_POST['submitbtn'])) {
                 <?php
                 //Recommended questions
                 // Execute a SELECT query to get all questions where Recommended_Question is 1
-                $result = mysqli_query($connect, "SELECT Job_Question_Name, Job_Question_ID, Job_Question_Type FROM job_question WHERE Recommended_Question = 1");
+                $result = mysqli_query($connect, "SELECT Job_Question_Name, Job_Question_ID FROM job_question WHERE Recommended_Question = 1");
                 $selected_questions = isset($selected_questions) ? $selected_questions : array();
 
                 // Check if the query returned any results
@@ -180,7 +181,7 @@ if (isset($_POST['submitbtn'])) {
                         if ($checked == 'checked') {
                             // Display each question as a checkbox
                             echo '<div class="question-group" style="">';
-                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" ' . $checked . '>';
+                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '"  type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" ' . $checked . '>';
                             echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;cursor:default;">' . $row['Job_Question_Name'] . '</label>';
                             echo '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>'; // New div for the limit message
                             echo '</div>';
@@ -192,7 +193,7 @@ if (isset($_POST['submitbtn'])) {
                 <?php
                 // User-selected non-recommended questions
                 // First, get all the questions that are not recommended
-                $result = mysqli_query($connect, "SELECT Job_Question_Name, Job_Question_ID, Job_Question_Type FROM job_question WHERE Recommended_Question = 0");
+                $result = mysqli_query($connect, "SELECT Job_Question_Name, Job_Question_ID FROM job_question WHERE Recommended_Question = 0");
 
                 // Check if the query returned any results
                 if (mysqli_num_rows($result) > 0) {
@@ -202,7 +203,7 @@ if (isset($_POST['submitbtn'])) {
                         if (in_array($row['Job_Question_ID'], $selected_questions)) {
                             // Display each question as a checkbox
                             echo '<div class="question-group" style="">';
-                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" data-question-type="' . $row['Job_Question_Type'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" checked>';
+                            echo '<input disabled class="question_checkbox" data-question-id="' . $row['Job_Question_ID'] . '" type="checkbox" id="' . $row['Job_Question_Name'] . '" name="questions[]" value="' . $row['Job_Question_ID'] . '" checked>';
                             echo '<label class="job_question" for="' . $row['Job_Question_Name'] . '" style="padding-left: 30px;user-select: none;cursor:default;">' . $row['Job_Question_Name'] . '</label>';
                             echo '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>'; // New div for the limit message
                             echo '</div>';
@@ -276,7 +277,6 @@ if (isset($_POST['submitbtn'])) {
 
                     var questionId = ui.item.value;
                     var questionName = ui.item.label;
-                    var questionType = ui.item.type;
 
                     // Check if the total number of checked checkboxes is already 8
                     var totalChecked = $('.question_checkbox:checked').length;
@@ -284,7 +284,7 @@ if (isset($_POST['submitbtn'])) {
                     var isDisabled = totalChecked >= 8 ? 'disabled' : '';
 
                     var questionGroup = '<div class="question-group" style="">' +
-                        '<input class="question_checkbox" data-question-id="' + questionId + '" data-question-type="' + questionType + '" type="checkbox" id="' + questionName + '" name="questions[]" value="' + questionId + '" ' + isChecked + ' ' + isDisabled + '>' +
+                        '<input class="question_checkbox" data-question-id="' + questionId + '" type="checkbox" id="' + questionName + '" name="questions[]" value="' + questionId + '" ' + isChecked + ' ' + isDisabled + '>' +
                         '<label class="job_question" for="' + questionName + '" style="padding-left: 30px;user-select: none;">' + questionName + '</label>' +
                         '<div class="limit-message" style="display: none;"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="20" height="20"  aria-hidden="true" style="position:relative;top:4px;"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"></path><circle cx="12" cy="17" r="1"></circle><path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z"></path></svg></span> You\'ve added 8 out of 8 questions. Please remove a question to add one.</div>' +
                         '</div>';
@@ -335,7 +335,6 @@ if (isset($_POST['submitbtn'])) {
                 var questionId = $(this).data("question-id");
                 var isChecked = $(this).is(":checked");
                 var questionGroup = $(this).parent();
-                var questionType = $(this).data("question-type");
 
                 if (isChecked) {
 
@@ -344,11 +343,8 @@ if (isset($_POST['submitbtn'])) {
                         var optionsDiv = $('<div class="question_options"></div>');
 
                         var instructionDiv = $('<div class="question_instruction"></div>'); // New div for instruction
-                        if (questionType == 1) {
-                            instructionDiv.text("This question allows applicants to choose multiple options");
-                        } else {
-                            instructionDiv.text("This question allows applicants to choose only one option");
-                        }
+                        instructionDiv.text("This question allows applicants to choose only one option");
+
                         questionGroup.append(instructionDiv); // Append instruction div to question group
 
                         options.forEach(function (option, index) {
@@ -357,14 +353,11 @@ if (isset($_POST['submitbtn'])) {
                             var input = $('<input>');
                             var label = $('<label>').text(option.name).addClass("job_question"); // Add class to label
 
-                            if (option.type == 1) {
-                                input.attr("type", "checkbox");
-                                input.addClass("option_checkbox"); // Add class to checkbox
-                            } else {
-                                input.attr("type", "radio");
-                                input.attr("name", "optionGroup" + questionId); // Group the radio buttons
-                                input.addClass("option_radio"); // Add class to radio button
-                            }
+
+                            input.attr("type", "radio");
+                            input.attr("name", "optionGroup" + questionId); // Group the radio buttons
+                            input.addClass("option_radio"); // Add class to radio button
+
 
                             inputWrapper.append(input); // Append input to input wrapper
                             inputWrapper.append(label); // Append label to input wrapper
