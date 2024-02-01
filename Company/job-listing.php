@@ -37,7 +37,8 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -176,7 +177,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once closed, you will not be able to reopen this job post",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, close it!',
+                confirmButtonText: 'Yes, close it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -186,7 +187,7 @@ if (isset($_SESSION['companyID'])) {
                         data: { jobPostID: jobPostID },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Closed!", "Job post has been closed.", "success");
+                                Swal.fire("Closed", "Job post has been closed.", "success");
                                 // Update the status in the table
                                 getactivejob();
                                 getclosedjob();
@@ -194,7 +195,103 @@ if (isset($_SESSION['companyID'])) {
                                 getblockedjob();
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error closing job post", "error");
+                                Swal.fire("Error", "Error closing job post", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDeleteJobPost(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once delete, you will not be able to recover this job post",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/delete.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Deleted", "Job post has been delete.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error deleting job post", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmDeleteDraft(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once delete, you will not be able to recover this draft",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/delete-draft.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Deleted", "Draft has been delete.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error deleting draft", "error");
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function copyJobPost(jobPostID) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once copied, the copied job post will be generated in drafts",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'change_status/copy.php',
+                        type: 'GET',
+                        data: { jobPostID: jobPostID },
+                        success: function (response) {
+                            if (response == 'success') {
+                                Swal.fire("Copied", "Job post has been copied.", "success");
+                                // Update the status in the table
+                                getactivejob();
+                                getclosedjob();
+                                getdraftjob();
+                                getblockedjob();
+                                getapplicants();
+                            } else {
+                                Swal.fire("Error", "Error copying job post", "error");
                             }
                         }
                     });
@@ -208,7 +305,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once accepted, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, accept it!',
+                confirmButtonText: 'Yes, accept it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -218,11 +315,11 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Accepted!", "Application has been accepted.", "success");
+                                Swal.fire("Accepted", "Application has been accepted.", "success");
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error accepting application", "error");
+                                Swal.fire("Error", "Error accepting application", "error");
                             }
                         }
                     });
@@ -236,7 +333,7 @@ if (isset($_SESSION['companyID'])) {
                 text: "Once rejected, you will not be able to change the status",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Yes, reject it!',
+                confirmButtonText: 'Yes, reject it',
                 cancelButtonText: 'No, keep it'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -246,11 +343,11 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Rejected!", "Application has been rejected.", "success");
+                                Swal.fire("Rejected", "Application has been rejected.", "success");
                                 // Update the status in the table
                                 getapplicants();
                             } else {
-                                Swal.fire("Error!", "Error rejecting application", "error");
+                                Swal.fire("Error", "Error rejecting application", "error");
                             }
                         }
                     });

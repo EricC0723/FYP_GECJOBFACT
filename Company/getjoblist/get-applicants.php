@@ -83,7 +83,6 @@ session_start(); // Start the session at the beginning
         WHERE job_post.CompanyID = $CompanyID 
         AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
         OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
-        AND job_post.Job_isDeleted = '0' 
         AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
 
         // If a Job_Post_ID is received, add a condition to the WHERE clause
