@@ -1,7 +1,25 @@
 <?php
 session_start();
 include("C:/xampp/htdocs/FYP/dataconnection.php");
+$ProfitValues = [];
+$MonthValues = [];
 
+$currentYear = date('Y');
+
+$profit_query = "SELECT YEAR(Payment_Date) AS Payment_Year, MONTH(Payment_Date) AS Payment_Month, SUM(Payment_Amount) 
+                AS Monthly_Payment_Total 
+                FROM payment 
+                WHERE YEAR(Payment_Date) = $currentYear
+                GROUP BY YEAR(Payment_Date), MONTH(Payment_Date) 
+                ORDER BY YEAR(Payment_Date), MONTH(Payment_Date);";
+
+$profit_result = mysqli_query($connect, $profit_query);
+
+while ($row = mysqli_fetch_assoc($profit_result)) {
+    $ProfitValues[] = $row['Monthly_Payment_Total'];
+    $MonthValues[] = $row['Payment_Month'];
+}
+$totalProfit = array_sum($ProfitValues);
 $query = "SELECT mc.Main_Category_ID, mc.Main_Category_Name, COUNT(jp.Main_Category_ID) as post_count
           FROM main_category mc
           LEFT JOIN job_post jp ON mc.Main_Category_ID = jp.Main_Category_ID
@@ -554,20 +572,36 @@ $totalPosts = array_sum($yValues);
 						<div id="chart5"></div>
 					</div>
 				</div>
-				<div class="col-xl-4 mb-30">
-					<div class="card-box height-100-p pd-20">
-						<h2 class="h4 mb-20">Lead Target</h2>
-						<div id="chart6"></div>
-					</div>
-				</div>
+
 			</div>
 			<div class="card-box mb-50" style="height: 650px;">
+			<div style="text-align:center; font-weight: bold; font-size: 20px;">Profit</div>
 			<div class="row justify-content-end" style="padding-top: 20px; padding-right: 15px;">
 				<div class="col-md-4 col-sm-6">
-					<form id="filterForm">
+					<form id="filterForm1">
 						<div class="form-group">
 							<div class="input-group">
-								<input class="form-control datetimepicker-range" placeholder="Select Month" type="text">
+							<input class="form-control" placeholder="Select Month" type="month" max="<?php echo date('Y-m'); ?>" id="profit">
+								<div class="input-group-append">
+									<button type="button" class="btn btn-primary" onclick="filterProfit()">Filter</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+				<canvas id="ProfitChart" style="width:100%;max-width:1000px;max-height:520px;padding-left:100px;"></canvas>
+				<div style="text-align: center; font-weight: bold; font-size: 20px; margin-top: 20px;"><span id="totalProfit"></span></div>
+			</div>
+
+			<div class="card-box mb-50" style="height: 650px;margin-top:100px;">
+			<div style="text-align:center; font-weight: bold; font-size: 20px;">Total job post</div>
+			<div class="row justify-content-end" style="padding-top: 20px; padding-right: 15px;">
+				<div class="col-md-4 col-sm-6">
+					<form id="filterForm2">
+						<div class="form-group">
+							<div class="input-group">
+								<input class="form-control datetimepicker-range" placeholder="Select Month" type="text" id="job_post">
 								<div class="input-group-append">
 									<button type="button" class="btn btn-primary" onclick="filterData()">Filter</button>
 								</div>
@@ -594,6 +628,12 @@ $totalPosts = array_sum($yValues);
 	<script src="src/plugins/datatables/js/dataTables.responsive.min.js"></script>
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
 	<script src="vendors/scripts/dashboard.js"></script>
+	
+	<script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 然后引入 chartjs-plugin-datalabels -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 	<script>
 $('.datetimepicker-range').datepicker({
@@ -602,8 +642,7 @@ $('.datetimepicker-range').datepicker({
 });
 
 function filterData() {
-    // 获取选择的日期范围
-    var selectedDateRange = $('.datetimepicker-range').val();
+    var selectedDateRange = $('#job_post').val();
 	console.log(selectedDateRange);
     
     // 解析日期范围
@@ -621,6 +660,7 @@ function filterData() {
         type: "GET",
         url: "handle_chart.php",
         data: {
+			action : "updatePost",
             startDate: startTimestamp,
             endDate: endTimestamp
         },
@@ -640,6 +680,43 @@ function updateChart(xValues, yValues,totalPosts) {
     myChart.data.datasets[0].data = yValues;
 	$('#totalPosts').text("Total Posts : "+totalPosts);
     myChart.update();
+}
+
+function filterProfit() {
+var selectedDateRange = $('#profit').val();
+console.log(selectedDateRange);
+
+$.ajax({
+	type: "GET",
+	url: "handle_chart.php",
+	data: {
+		selectedDateRange: selectedDateRange,
+		action : "updateProfit"
+	},
+	success: function(response) {
+		var res = JSON.parse(response);
+		console.log(res);
+		updateProfitChart(res);
+	}
+});
+}
+function updateProfitChart(data) {
+	ProfitChart.data.labels = Array.from({ length: data.length }, (_, i) => i + 1);
+        ProfitChart.data.datasets[0].data = data;
+		ProfitChart.data.datasets[0].label = 'Daily profit';
+        ProfitChart.update();
+
+		var totalProfit = data.reduce((sum, value) => {
+        // Check if the value is a valid number before adding to the sum
+        var numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+            return sum + numericValue;
+        }
+        return sum;
+    }, 0).toFixed(2);
+
+    console.log('Total Profit:', totalProfit); // Check if the totalProfit is correct
+    document.getElementById('totalProfit').innerText = 'Total Profit: $' + totalProfit;
 }
 </script>
 	<script>
@@ -682,6 +759,48 @@ var myChart = new Chart("myChart", {
     }
 });
 
+</script>
+<script>
+const ProfitValues = <?php echo json_encode($ProfitValues); ?>;
+const MonthValues = <?php echo json_encode($MonthValues); ?>;
+
+const monthAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthLabels = MonthValues.map(month => monthAbbreviations[month - 1]);
+
+const maxProfit = Math.max(...ProfitValues);
+const roundedMaxProfit = Math.ceil(maxProfit / 1000) * 1000;
+
+var ProfitChart =  new Chart("ProfitChart", {
+  type: "bar",
+  data: {
+    labels: monthLabels,
+    datasets: [
+      {
+        label: 'Monthly profit',
+        backgroundColor: "rgba(0,0,255,0.5)",
+        data: ProfitValues
+      },
+    ]
+  },
+  options: {
+    scales: {
+      yAxes: [{ticks: {min: 0, max: roundedMaxProfit}}],
+    },
+    plugins: {
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+        offset: 4,
+        formatter: (value, context) => {
+          return 'Profit: ' + value;
+        },
+        display: 'auto',
+        color: 'black'
+      }
+    }
+  }
+});
+document.getElementById('totalProfit').innerText = 'Total Profit: RM' + <?php echo $totalProfit; ?>;
 </script>
 </body>
 </html>
