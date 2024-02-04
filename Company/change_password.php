@@ -3,6 +3,7 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
+unset($_SESSION['job_post_ID']);
 
 
 $CompanyID = null;
