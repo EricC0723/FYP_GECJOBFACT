@@ -275,16 +275,50 @@ function confirmation()
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-					<li>
-						<a href="user.php" class="dropdown-toggle no-arrow">
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+						<ul class="submenu">
+						<li>
+							<a href="user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
-					<li>
+                    <li>
+						<!-- <a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
+						</a>
+					</li> -->
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+						</a>
+						<ul class="submenu">
+						<li>
+							<a href="company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company assistance</span>
+							</a>
+						</li>
+						</ul>
+					</li>
+					<!-- <li>
 						<a href="company.php" class="dropdown-toggle no-arrow">
 						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
 						</a>
-					</li>
+					</li> -->
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
@@ -800,7 +834,7 @@ function confirmation()
 					var phoneNumber = res.data.AdminPhone;
                     $('#edit_Phone').prop('value',phoneNumber);
                     $('#edit_Email').prop('value',res.data.Email);
-                    $('#edit_Password').prop('value',res.data.Password);             
+                    $('#edit_Password').prop('value',res.data.Password);
                     $('#edit_StreetAddress').prop('value',res.data.StreetAddress);
 					var locationSelect = $('#edit_StateAndCity');
 					locationSelect.find('option').each(function() {
@@ -818,10 +852,6 @@ function confirmation()
 					var profilePictureUrl = res.data.AdminPicture;
 					$('#profile_picture_preview').attr('src', profilePictureUrl);
 
-					// var profilePictureUrl = res.data.AdminPicture;
-					// var img = $('<img>').attr('src', profilePictureUrl).css('width', '200px').css('height', '200px').css('border-radius', '20px');
-					
-					// $('.form-group').append(img);
 					var adminTypeSelect = $('#edit_AdminType');
 					adminTypeSelect.find('option').each(function() {
 						if ($(this).val() === res.data.AdminStatus) {

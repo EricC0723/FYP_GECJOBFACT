@@ -31,12 +31,28 @@
         validateDateRange($('#end_date'));
     });
     $('#career_submitbtn').on('click', function (event) {
-    validateTitleCompanyInput($('#job_title'));
+      validateTitleCompanyInput($('#job_title'));
     validateTitleCompanyInput($('#company_name'));
     validateDateRange($('#start_date'));
+    validateStillInRole_EndDate($('#end_date'));
     validateDateRange($('#end_date'));
     
   });
+  function validateStillInRole_EndDate(input) {
+    var startDate = new Date($('#start_date').val());
+    var endDate = new Date($('#end_date').val());
+    var isStillInRole = $("#customCheck1").is(":checked");
+    var value = input.val();
+    if(isNaN(endDate) && !isStillInRole){
+        displayError(input, 'Required field');
+        hasCareerErrors = true;
+        checkErrors();
+    } else {
+        removeError(input);
+        hasCareerErrors = false;
+        checkErrors();
+    }
+}
   function validateDescription(input) {
       // Get the entered value
       var value = input.val();
@@ -79,17 +95,15 @@
     var endDate = new Date($('#end_date').val());
     var isStillInRole = $("#customCheck1").is(":checked");
     var value = input.val();
-    console.log("validateEditDateRange called with input:", input);
-    if(value === "")
-    {
-      displayError(input, 'Required field');
-    }
-    else if (!isStillInRole && value === "" && isNaN(endDate)) {
+
+    console.log("validateDateRange called with input:", input);
+
+    if (!isStillInRole && value === "" && isNaN(endDate)) {
         displayError(input, 'Either end date or "Still in role" must be provided');
         hasCareerErrors = true;
         checkErrors();
-    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate < startDate) {
-        displayError(input, 'The end date cannot be earlier than the start date');
+    } else if (!isStillInRole && !isNaN(startDate) && !isNaN(endDate) && endDate <= startDate) {
+        displayError(input, 'The end date must be later than the start date');
         hasCareerErrors = true;
         checkErrors();
     } else {
@@ -150,7 +164,48 @@
     }
 
 
-    // Initial setup when the document is ready
     updateEndDateRequirement();
   });
+
+
+
+
+
+
+    //   function validateEndDateRange(input) {
+  //   var startDate = new Date($('#start_date').val());
+  //   var endDate = new Date($('#end_date').val());
+  //   var isStillInRole = $("#customCheck1").is(":checked");
+  //   var value = input.val();
+  //   if(value === "")
+  //   {
+  //     displayError(input, 'Required field');
+  //   }else if (endDate.getTime() === startDate.getTime()) {
+  //       displayError(input, 'The start date cannot be same the end date');
+  //       hasCareerErrors = true;
+  //       checkErrors();
+  //   }else {
+  //       removeError(input);
+  //       hasCareerErrors = false;
+  //       checkErrors();
+  //   }
+  // }
+  //   function validateStartDateRange(input) {
+  //   var startDate = new Date($('#start_date').val());
+  //   var endDate = new Date($('#end_date').val());
+  //   var isStillInRole = $("#customCheck1").is(":checked");
+  //   var value = input.val();
+  //   if(value === "")
+  //   {
+  //     displayError(input, 'Required field');
+  //   }else if (endDate.getTime() === startDate.getTime()) {
+  //       displayError(input, 'The start date cannot be same the end date');
+  //       hasCareerErrors = true;
+  //       checkErrors();
+  //   }else {
+  //       removeError(input);
+  //       hasCareerErrors = false;
+  //       checkErrors();
+  //   }
+  // }
 </script>

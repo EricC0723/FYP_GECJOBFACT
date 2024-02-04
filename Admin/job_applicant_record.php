@@ -662,7 +662,7 @@ if (isset($_GET['job_id'])) {
                         }
 					}
 					else{
-						echo "<p>No application records available for this user.</p>";
+						echo "<p>No application records available for this post.</p>";
 					}
                     ?>
 						</div>
