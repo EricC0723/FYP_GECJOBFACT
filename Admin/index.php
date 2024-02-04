@@ -643,7 +643,7 @@ $('.datetimepicker-range').datepicker({
 
 function filterData() {
     var selectedDateRange = $('#job_post').val();
-	console.log(selectedDateRange);
+    console.log(selectedDateRange);
     
     // 解析日期范围
     var dateRange = selectedDateRange.split(' - ');
@@ -651,26 +651,27 @@ function filterData() {
     var endDate = dateRange[1];
 
     // 将日期转换为数据库时间戳格式
-    var startTimestamp = new Date(startDate).toLocaleString();
-	var endTimestamp = new Date(endDate).toLocaleString();
-	console.log(startTimestamp);
-	console.log(endTimestamp);
+    var startTimestamp = new Date(startDate).toISOString();
+    var endTimestamp = new Date(endDate).toISOString();
+    console.log(startTimestamp);
+    console.log(endTimestamp);
+
     // 发送 AJAX 请求到服务器
     $.ajax({
         type: "GET",
         url: "handle_chart.php",
         data: {
-			action : "updatePost",
+            action: "updatePost",
             startDate: startTimestamp,
             endDate: endTimestamp
         },
         success: function(response) {
             var res = JSON.parse(response);
-        console.log(res.xValues);
-        console.log(res.yValues);
-        console.log(res.totalPosts);
+            console.log(res.xValues);
+            console.log(res.yValues);
+            console.log(res.totalPosts);
 
-		updateChart(res.xValues, res.yValues,res.totalPosts);
+            updateChart(res.xValues, res.yValues, res.totalPosts);
         }
     });
 }
