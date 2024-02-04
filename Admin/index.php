@@ -600,6 +600,7 @@ $totalPosts = array_sum($yValues);
 				<div class="col-md-4 col-sm-6">
 					<form id="filterForm2">
 						<div class="form-group">
+						<button type="button" class="btn btn-primary hide-before-print" onclick="downloadPDF()">Print</button>
 							<div class="input-group">
 								<input class="form-control datetimepicker-range" placeholder="Select Month" type="text" id="job_post">
 								<div class="input-group-append">
@@ -629,13 +630,12 @@ $totalPosts = array_sum($yValues);
 	<script src="src/plugins/datatables/js/responsive.bootstrap4.min.js"></script>
 	<script src="vendors/scripts/dashboard.js"></script>
 	
-	<script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- 然后引入 chartjs-plugin-datalabels -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js" integrity="sha512-t2JWqzirxOmR9MZKu+BMz0TNHe55G5BZ/tfTmXMlxpUY8tsTo3QMD27QGoYKZKFAraIPDhFv56HLdN11ctmiTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script>
+		
 $('.datetimepicker-range').datepicker({
     format: "dd/mm/yyyy",
     autoclose: true,
@@ -707,7 +707,7 @@ function updateProfitChart(data) {
         ProfitChart.update();
 
 		var totalProfit = data.reduce((sum, value) => {
-        // Check if the value is a valid number before adding to the sum
+
         var numericValue = parseFloat(value);
         if (!isNaN(numericValue)) {
             return sum + numericValue;
@@ -715,7 +715,7 @@ function updateProfitChart(data) {
         return sum;
     }, 0).toFixed(2);
 
-    console.log('Total Profit:', totalProfit); // Check if the totalProfit is correct
+    console.log('Total Profit:', totalProfit);
     document.getElementById('totalProfit').innerText = 'Total Profit: $' + totalProfit;
 }
 </script>
@@ -730,8 +730,18 @@ var barColors = [
     "#FF99E6", "#CCFF1A", "#FF1A66", "#E6331A", "#33FFCC",
     "#66994D", "#B366CC", "#4D8000", "#B33300", "#CC80CC"
 ];
+const bgColor = {
+        id : 'bgColor',
+        beforeDraw: (chart,steps,options) =>{
+            const { ctx,width,height} = chart;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0,0,width,height)
+            ctx.restore();
+        }
+    }
+	
 var myChart = new Chart("myChart", {
-    type: "pie",
+    type: "bar",
     data: {
         labels: xValues,
         datasets: [{
@@ -755,10 +765,39 @@ var myChart = new Chart("myChart", {
                 top: 10,
                 bottom: 30
             }
-        }
-    }
+        },
+		plugins:{
+			datalabels:{
+				color: 'white',
+				formatter: (value) => {
+					console.log(value)
+					if(value == 0)
+					{
+						return '';
+					}
+				}
+			}
+		}
+    },
+	plugins: [bgColor,ChartDataLabels]
+	// plugins: [ChartDataLabels]
 });
 
+</script>
+<script>
+	function downloadPDF(){
+        const canvas = document.getElementById('myChart');
+		canvas.style.backgroundColor = 'white';
+        //create image
+        const canvasImage = canvas.toDataURL('image/jpeg',1.0);
+        console.log(canvasImage);
+        //image to pdf
+        let pdf = new jsPDF('landscape');
+        pdf.setFontSize(20);
+        pdf.addImage(canvasImage,'JPEG',15,15,280,150);
+        pdf.text(15,15,"We have discovered that");
+        pdf.save('jobpostchart.pdf');
+    }
 </script>
 <script>
 const ProfitValues = <?php echo json_encode($ProfitValues); ?>;
@@ -802,5 +841,6 @@ var ProfitChart =  new Chart("ProfitChart", {
 });
 document.getElementById('totalProfit').innerText = 'Total Profit: RM' + <?php echo $totalProfit; ?>;
 </script>
+
 </body>
 </html>
