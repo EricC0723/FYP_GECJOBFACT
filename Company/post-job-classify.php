@@ -54,7 +54,7 @@ if (isset($_POST["submitbtn"])) {
         }
     } else {
         // Insert a new job post
-        $sql = "INSERT INTO job_post (Job_Post_Title, Job_Location_ID, Job_Post_Location, Main_Category_ID, Main_Category_Name, Sub_Category_ID, Sub_Category_Name, Job_Post_Type, Job_Post_Position, Job_Post_Exp, Job_Post_MinSalary, Job_Post_MaxSalary, CompanyID, job_status) VALUES ('$jobTitle', '$jobLocationID', '$jobLocation', '$jobSpecialisationID', '$jobSpecialisation', '$jobRoleID', '$jobRole', '$jobType', '$jobPosition', '$jobRequiredyears', '$jobSalaryMin', '$jobSalaryMax', '$CompanyID', 'Draft')";
+        $sql = "INSERT INTO job_post (Job_Post_Title, Job_Location_ID, Job_Post_Location, Main_Category_ID, Main_Category_Name, Sub_Category_ID, Sub_Category_Name, Job_Post_Type, Job_Post_Position, Job_Post_Exp, Job_Post_MinSalary, Job_Post_MaxSalary, CompanyID) VALUES ('$jobTitle', '$jobLocationID', '$jobLocation', '$jobSpecialisationID', '$jobSpecialisation', '$jobRoleID', '$jobRole', '$jobType', '$jobPosition', '$jobRequiredyears', '$jobSalaryMin', '$jobSalaryMax', '$CompanyID')";
         $result = mysqli_query($connect, $sql);
         if ($result) {
             // Get the ID of the new job post
@@ -343,11 +343,11 @@ if (isset($_POST["submitbtn"])) {
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="type3" name="jobType" value="3" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 3 ? 'checked' : ''; ?>>
-                        <label for="type3" class="option">Contract</label>
+                        <label for="type3" class="option">Internship</label>
                     </div>
                     <div class="radio-option">
                         <input type="radio" id="type4" name="jobType" value="4" onclick="boldOption1(this)" <?php echo isset($row['Job_Post_Type']) && $row['Job_Post_Type'] == 4 ? 'checked' : ''; ?>>
-                        <label for="type4" class="option">Casual</label>
+                        <label for="type4" class="option">Contract</label>
                     </div>
                     <div style="padding-top:4px;width:299px;" id="validation-jobtype" class="hide"><span
                             style="display:flex"><span
