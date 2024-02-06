@@ -1052,3 +1052,9 @@ a.ui-button:active,
     font-size: 12px;
     font-weight: 600;
 }
+
+.contactlink:hover{
+    text-decoration: underline !important;
+    text-underline-offset:3px;
+    text-decoration-thickness:0.08em;
+}
