@@ -93,7 +93,6 @@
                     <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
-                    <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
                     <a class="dropdown-item" href="logout.php"style="color:red;"><i class="dw dw-logout" style="margin-right: 10px;"></i> Log Out</a>
                   </div>
                 </div>
@@ -302,7 +301,7 @@
                 <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                 <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>" class="job-link"></a>
                   <div class="job-listing-logo">
-                  <img src="<?php echo $row['Job_Logo_Url']; ?>" alt="Image" style="width:100px;height:80px;margin-left:20px;">
+                  <img src="<?php echo $row["Job_Logo_Url"];?>" alt="compny logo" class="img-fluid" style="width:100px;height:auto;margin-left:25px;">
                   </div>
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">

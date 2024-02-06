@@ -43,7 +43,6 @@ $totalPosts = array_sum($yValues);
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- Basic Page Info -->
 	<meta charset="utf-8">
 	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
 
@@ -266,7 +265,7 @@ $totalPosts = array_sum($yValues);
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 					</li>
-					<li class="dropdown">
+					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-edit2"></span><span class="mtext">Forms</span>
 						</a>
@@ -288,7 +287,7 @@ $totalPosts = array_sum($yValues);
 							<li><a href="basic-table.html">Basic Tables</a></li>
 							<li><a href="datatable.html">DataTables</a></li>
 						</ul>
-					</li>
+					</li> -->
 					<?php
 					if ($_SESSION['AdminType'] == 'super admin') {
 					?>
@@ -344,7 +343,12 @@ $totalPosts = array_sum($yValues);
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
 						</a>
 					</li>
-					<li class="dropdown">
+					<li>
+						<a href="payment_record.php" class="dropdown-toggle no-arrow">
+                        <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment record</span>
+						</a>
+					</li>
+					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-apartment"></span><span class="mtext"> UI Elements </span>
 						</a>
@@ -488,7 +492,7 @@ $totalPosts = array_sum($yValues);
 							<span class="micon dw dw-paper-plane1"></span>
 							<span class="mtext">Landing Page <img src="vendors/images/coming-soon.png" alt="" width="25"></span>
 						</a>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 		</div>
@@ -516,7 +520,7 @@ $totalPosts = array_sum($yValues);
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
 							<div class="progress-data">
-								<div id="chart"></div>
+							<img src="vendors/images/cart2.jpg" alt=""><!-- <div id="chart"></div> -->
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">2020</div>
@@ -529,7 +533,7 @@ $totalPosts = array_sum($yValues);
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
 							<div class="progress-data">
-								<div id="chart2"></div>
+								<img src="vendors/images/cart2.jpg" alt="">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">400</div>
@@ -539,10 +543,10 @@ $totalPosts = array_sum($yValues);
 					</div>
 				</div>
 				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
+					<div class="card-box height-100-p widget-style1" >
 						<div class="d-flex flex-wrap align-items-center">
 							<div class="progress-data">
-								<div id="chart3"></div>
+								<img src="vendors/images/cart2.jpg" alt="">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">350</div>
@@ -552,10 +556,10 @@ $totalPosts = array_sum($yValues);
 					</div>
 				</div>
 				<div class="col-xl-3 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
+					<div class="card-box height-100-p widget-style1" >
+						<div class="d-flex flex-wrap align-items-center" >
 							<div class="progress-data">
-								<div id="chart4"></div>
+								<img src="vendors/images/cart2.jpg" alt="">
 							</div>
 							<div class="widget-data">
 								<div class="h4 mb-0">$6060</div>
@@ -565,24 +569,25 @@ $totalPosts = array_sum($yValues);
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-xl-8 mb-30">
 					<div class="card-box height-100-p pd-20">
 						<h2 class="h4 mb-20">Activity</h2>
 						<div id="chart5"></div>
 					</div>
-				</div>
+				</div> -->
 
 			</div>
-			<div class="card-box mb-50" style="height: 650px;">
+			<div class="card-box mb-50" style="height: 800px;">
 			<div style="text-align:center; font-weight: bold; font-size: 20px;">Profit</div>
 			<div class="row justify-content-end" style="padding-top: 20px; padding-right: 15px;">
 				<div class="col-md-4 col-sm-6">
+				<button type="button" class="btn btn-primary hide-before-print" onclick="downloadProfitPDF()" style="margin-bottom:30px;margin-left:395px;">Print</button>
 					<form id="filterForm1">
 						<div class="form-group">
 							<div class="input-group">
 							<input class="form-control" placeholder="Select Month" type="month" max="<?php echo date('Y-m'); ?>" id="profit">
-								<div class="input-group-append">
+								<div class="input-group-append">	
 									<button type="button" class="btn btn-primary" onclick="filterProfit()">Filter</button>
 								</div>
 							</div>
@@ -594,13 +599,13 @@ $totalPosts = array_sum($yValues);
 				<div style="text-align: center; font-weight: bold; font-size: 20px; margin-top: 20px;"><span id="totalProfit"></span></div>
 			</div>
 
-			<div class="card-box mb-50" style="height: 650px;margin-top:100px;">
-			<div style="text-align:center; font-weight: bold; font-size: 20px;">Total job post</div>
+			<div class="card-box mb-50" style="height: 730px;margin-top:100px;">
+			<div style="text-align:center; font-weight: bold; font-size: 20px;">Job post</div>
 			<div class="row justify-content-end" style="padding-top: 20px; padding-right: 15px;">
 				<div class="col-md-4 col-sm-6">
+					<button type="button" class="btn btn-primary hide-before-print" onclick="downloadPDF()" style="margin-bottom:30px;margin-left:395px;">Print</button>
 					<form id="filterForm2">
 						<div class="form-group">
-						<button type="button" class="btn btn-primary hide-before-print" onclick="downloadPDF()">Print</button>
 							<div class="input-group">
 								<input class="form-control datetimepicker-range" placeholder="Select Month" type="text" id="job_post">
 								<div class="input-group-append">
@@ -611,7 +616,7 @@ $totalPosts = array_sum($yValues);
 					</form>
 				</div>
 			</div>
-				<canvas id="myChart" style="width:100%;max-width:1000px;max-height:520px;"></canvas>
+				<canvas id="myChart" style="width:100%;max-width:1000px;max-height:520px;margin-left:130px;"></canvas>
 				<div id="totalPosts" style="margin-top:-20px;text-align:center;">Total Posts: <?php echo $totalPosts; ?></div>
 			</div>
 			<div class="footer-wrap pd-20 mb-20 card-box" style="margin-top:50px;">
@@ -645,18 +650,15 @@ function filterData() {
     var selectedDateRange = $('#job_post').val();
     console.log(selectedDateRange);
     
-    // 解析日期范围
     var dateRange = selectedDateRange.split(' - ');
     var startDate = dateRange[0];
     var endDate = dateRange[1];
 
-    // 将日期转换为数据库时间戳格式
     var startTimestamp = new Date(startDate).toISOString();
     var endTimestamp = new Date(endDate).toISOString();
     console.log(startTimestamp);
     console.log(endTimestamp);
 
-    // 发送 AJAX 请求到服务器
     $.ajax({
         type: "GET",
         url: "handle_chart.php",
@@ -746,6 +748,7 @@ var myChart = new Chart("myChart", {
     data: {
         labels: xValues,
         datasets: [{
+			label: 'Job post record',
             backgroundColor: barColors,
             data: yValues
         }]
@@ -781,26 +784,92 @@ var myChart = new Chart("myChart", {
 		}
     },
 	plugins: [bgColor,ChartDataLabels]
-	// plugins: [ChartDataLabels]
 });
 
 </script>
 <script>
-	function downloadPDF(){
-        const canvas = document.getElementById('myChart');
-		canvas.style.backgroundColor = 'white';
-        //create image
-        const canvasImage = canvas.toDataURL('image/jpeg',1.0);
-        console.log(canvasImage);
-        //image to pdf
-        let pdf = new jsPDF('landscape');
-        pdf.setFontSize(20);
-        pdf.addImage(canvasImage,'JPEG',15,15,280,150);
-        pdf.text(15,15,"We have discovered that");
-        pdf.save('jobpostchart.pdf');
+	function downloadProfitPDF() {
+    const canvas = document.getElementById('ProfitChart');
+    canvas.style.backgroundColor = 'white';
+
+    // 获取过滤器的值作为报告名称的一部分
+    const filterValue = document.getElementById('profit').value;
+
+    if (filterValue.trim() === '') {
+        console.warn('No filter value provided for profit. Using default name "profitchart.pdf".');
+        generatePDF(canvas, 'profitchart.pdf');
+        return;
     }
+    // 生成 PDF
+    const reportName = `profitchart_${filterValue}.pdf`;
+    generatePDF(canvas, reportName);
+}
+function downloadPDF() {
+    const canvas = document.getElementById('myChart');
+    canvas.style.backgroundColor = 'white';
+
+    // 获取过滤器的值作为报告名称的一部分
+    const filterValue = document.getElementById('job_post').value;
+
+    // 检查是否存在过滤器值
+    if (filterValue.trim() === '') {
+        console.warn('No filter value provided. Using default name "jobpostchart.pdf".');
+        generatePDF(canvas, 'jobpostchart.pdf');
+        return;
+    }
+
+    // 进行日期格式的处理
+    const dateRanges = filterValue.split(' - ');
+
+    // 检查是否有足够的值进行 split
+    if (dateRanges.length < 2) {
+        console.error('Invalid date range format. Cannot generate PDF.');
+        return;
+    }
+
+    const startDate = new Date(dateRanges[0]);
+    const endDate = new Date(dateRanges[1]);
+
+    const formattedStartDate = `${startDate.getDate()}-${startDate.getMonth() + 1}-${startDate.getFullYear()}`;
+    const formattedEndDate = `${endDate.getDate()}-${endDate.getMonth() + 1}-${endDate.getFullYear()}`;
+    console.log(formattedStartDate);
+    console.log(formattedEndDate);
+
+    // 将下划线替换为连字符
+    const formattedFilterValue = filterValue.replace(/[_\s]/g, '-');
+
+    // 生成 PDF
+    const reportName = `jobpostchart_${formattedStartDate} - ${formattedEndDate}.pdf`;
+    generatePDF(reportName);
+}
+function generatePDF(canvas, reportName) {
+    // 创建图像
+    const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
+
+    // 图像添加到PDF
+    let pdf = new jsPDF('landscape');
+    pdf.setFontSize(20);
+    pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+    // pdf.text(15, 15, "We have discovered that");
+
+    // 添加总数信息
+    const totalPosts = document.getElementById('totalPosts').innerText;
+    pdf.text(15, 180, totalPosts);
+
+    // 保存PDF
+    pdf.save(reportName);
+}
 </script>
 <script>
+	const bgColors = {
+        id : 'bgColors',
+        beforeDraw: (chart,steps,options) =>{
+            const { ctx,width,height} = chart;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0,0,width,height)
+            ctx.restore();
+        }
+    }
 const ProfitValues = <?php echo json_encode($ProfitValues); ?>;
 const MonthValues = <?php echo json_encode($MonthValues); ?>;
 
@@ -838,7 +907,8 @@ var ProfitChart =  new Chart("ProfitChart", {
         color: 'black'
       }
     }
-  }
+  },
+  plugins: [bgColors]
 });
 document.getElementById('totalProfit').innerText = 'Total Profit: RM' + <?php echo $totalProfit; ?>;
 </script>

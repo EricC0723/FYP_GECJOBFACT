@@ -23,15 +23,16 @@
     <link rel="stylesheet" type="text/css" href="vendors/styles/icon-font.min.css">
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="css/style.css">    
+    
   </head>
   <body id="top">
 
-  <div id="overlayer"></div>
+  <!-- <div id="overlayer"></div>
   <div class="loader">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
-  </div>
+  </div> -->
     
 
 <div class="site-wrap">
@@ -80,7 +81,6 @@
                     <a class="dropdown-item" href="setting.php"><i class="dw dw-settings2" style="margin-right: 10px;"></i> Setting</a>
                     <a class="dropdown-item" href="user_savedjob.php"><i class="icon-copy fa fa-bookmark-o" style="margin-right: 10px;"></i>Saved job</a>
                     <a class="dropdown-item" href="user_applyjob.php"><i class="icon-copy fa fa-check-square-o" style="margin-right: 10px;"></i></i>Job applications</a>
-                    <a class="dropdown-item" href="faq.html"><i class="dw dw-help" style="margin-right: 10px;"></i> Help</a>
                     <a class="dropdown-item" href="logout.php"style="color:red;"><i class="dw dw-logout" style="margin-right: 10px;"></i> Log Out</a>
                   </div>
                 </div>
@@ -241,7 +241,7 @@
                 <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                 <a href="job-single.php?view&jobid=<?php echo $row["Job_Post_ID"];?>" class="job-link"></a>
                   <div class="job-listing-logo">
-                    <img src="<?php echo $row["Job_Logo_Url"];?>" alt="compny logo" class="img-fluid" style="width:100px;height:100px;margin-left:25px;border-radius:15px;">
+                  <img src="<?php echo $row["Job_Logo_Url"];?>" alt="compny logo" class="img-fluid" style="width:100px;height:auto;margin-left:25px;">
                   </div>
 
                   <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">

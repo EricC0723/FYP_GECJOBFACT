@@ -263,7 +263,7 @@ if (isset($_GET['job_id'])) {
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 					</li>
-					<li class="dropdown">
+					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-edit2"></span><span class="mtext">Forms</span>
 						</a>
@@ -285,28 +285,62 @@ if (isset($_GET['job_id'])) {
 							<li><a href="basic-table.html">Basic Tables</a></li>
 							<li><a href="datatable.html">DataTables</a></li>
 						</ul>
-					</li>
+					</li> -->
 					<li>
 						<a href="admin.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
 						</a>
 					</li>
-					<li>
-						<a href="user.php" class="dropdown-toggle no-arrow">
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+						<ul class="submenu">
+						<li>
+							<a href="user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_user.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">User assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
-					<li>
-						<a href="company.php" class="dropdown-toggle no-arrow">
-						<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+                    <li>
+						<!-- <a href="user.php" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-user"></span><span class="mtext">User</span>
 						</a>
+					</li> -->
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext">Company</span>
+						</a>
+						<ul class="submenu">
+						<li>
+							<a href="company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company list</span>
+							</a>
+						</li>
+						<li>
+							<a href="contact_us_company.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Company assistance</span>
+							</a>
+						</li>
+						</ul>
 					</li>
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
 						</a>
 					</li>
-					<li class="dropdown">
+					<li>
+						<a href="payment_record.php" class="dropdown-toggle no-arrow">
+                        <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment record</span>
+						</a>
+					</li>
+					<!-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-apartment"></span><span class="mtext"> UI Elements </span>
 						</a>
@@ -450,7 +484,7 @@ if (isset($_GET['job_id'])) {
 							<span class="micon dw dw-paper-plane1"></span>
 							<span class="mtext">Landing Page <img src="vendors/images/coming-soon.png" alt="" width="25"></span>
 						</a>
-					</li>
+					</li> -->
 				</ul>
 			</div>
 		</div>
