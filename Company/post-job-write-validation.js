@@ -104,11 +104,12 @@ window.addEventListener('load', function () {
 // Get the textarea and the validation message elements
 var jobDescriptionInput = document.getElementById('jobDescription');
 var validationDescription = document.getElementById('validation-jobdescription');
-var descriptionMessage = document.getElementById('jobdescription-message');
 var descriptionDiv = document.getElementById('Description');
 
 // Add an event listener to the textarea
 jobDescriptionInput.addEventListener('input', function () {
+    var descriptionMessage = document.getElementById('jobdescription-message');
+
     if (this.value.trim() === '') {
         // If the textarea is empty
         descriptionMessage.textContent = 'Please add job description';
@@ -139,11 +140,12 @@ window.addEventListener('load', function () {
 // Get the textarea and the validation message elements
 var jobResponsibilitiesInput = document.getElementById('jobResponsibilities');
 var validationResponsibilities = document.getElementById('validation-jobresponsibilities');
-var responsibilitiesMessage = document.getElementById('jobresponsibilities-message');
 var responsibilitiesDiv = document.getElementById('Responsibilities');
 
 // Add an event listener to the textarea
 jobResponsibilitiesInput.addEventListener('input', function () {
+    var responsibilitiesMessage = document.getElementById('jobresponsibilities-message');
+
     if (this.value.trim() === '') {
         // If the textarea is empty
         responsibilitiesMessage.textContent = 'Please add job responsibilities';
@@ -174,11 +176,11 @@ window.addEventListener('load', function () {
 // Get the textarea and the validation message elements
 var jobBenefitsInput = document.getElementById('jobBenefits');
 var validationBenefits = document.getElementById('validation-jobbenefits');
-var benefitsMessage = document.getElementById('benefits-message');
 var benefitsDiv = document.getElementById('Benefits');
 
 // Add an event listener to the textarea
 jobBenefitsInput.addEventListener('input', function () {
+    var benefitsMessage = document.getElementById('benefits-message');
     if (this.value.trim() === '') {
         // If the textarea is empty
         benefitsMessage.textContent = 'Please add job benefits';

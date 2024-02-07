@@ -216,7 +216,7 @@ if (isset($_POST['submitbtn'])) {
 
             <div class="form-group" style="display: block;">
                 <input type="submit" value="Home" class="cont-button" name="submitbtn">
-                <input type="submit" value="Save draft" class="save-button" style="margin-left:4px">
+                <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>
     </div>

@@ -115,7 +115,7 @@ if (isset($_SESSION['companyID'])) {
                                 <div class="form-group"><label for="contactName" class="question"
                                         style="padding-bottom: 8px;">Contact Name</label>
                                     <input type="text" id="contactName" name="contactName" class="input-box"
-                                        placeholder="Enter the job title">
+                                        placeholder="Enter the your name">
                                     <div style="padding-top:4px;" id="validation-contactName" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -136,7 +136,7 @@ if (isset($_SESSION['companyID'])) {
                                 <div style="padding-top:20px;" class="form-group">
                                     <label class="question" style="padding-bottom: 8px;">Email
                                         address</label>
-                                    <input class="input-box" type="email" id="contactEmail" name="contactEmail">
+                                    <input class="input-box" type="email" id="contactEmail" name="contactEmail" placeholder="Enter the your email">
                                     <div style="padding-top:4px;" id="validation-contactEmail" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -175,11 +175,11 @@ if (isset($_SESSION['companyID'])) {
                                                     class="validation_sentence">Required Field</span></span></span>
                                     </div>
                                 </div>
-                                <div class="form-group" style="padding-top:20px;">
+                                <div class="form-group" style="padding-top:20px;" id="Message">
                                     <label for="contactMessage" class="question" style="padding-bottom: 8px;">Message
                                         <span style="font-weight:400;">(Max 1000 characters)</span></label>
                                     <textarea id="contactMessage" name="contactMessage"
-                                        class="write-textarea"></textarea>
+                                        class="write-textarea" placeholder="Enter your message here"></textarea>
                                     <div style="padding-top:4px;" id="validation-contactMessage" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -234,6 +234,7 @@ if (isset($_SESSION['companyID'])) {
 
 
     <script src="post-job.js"></script>
+    <script src="company_contactus.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
