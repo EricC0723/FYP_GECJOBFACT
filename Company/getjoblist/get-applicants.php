@@ -50,7 +50,7 @@ session_start(); // Start the session at the beginning
                             </path>
                         </svg>
                     </button>
-                    <input type="submit" value="Seek" class="create_btn" style="">
+                    <input type="submit" value="Seek" class="create_btn" >
                 </div>
             </form>
         </div>
@@ -279,9 +279,18 @@ session_start(); // Start the session at the beginning
             data: { applicant_id: applicantId },
             success: function (response) {
                 if (response == 'success') {
-                    // Update the status in the table
+                // Get the jobPostID from the URL
+                var urlParams = new URLSearchParams(window.location.search);
+                var jobPostID = urlParams.get('jobPostID');
+
+                if (jobPostID) {
+                    // If the jobPostID is present, call the getapplicants function with it
+                    countApplicant(jobPostID);
+                } else {
+                    // If the jobPostID is not present, call the getapplicants function without it
                     getapplicants();
                 }
+            }
             }
         });
     }

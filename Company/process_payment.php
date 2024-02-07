@@ -46,7 +46,6 @@ if (isset($_POST['payment_type']) && $_POST['payment_type'] == 'existcardRadio')
     $sql = "INSERT INTO payment (CompanyID, CompanyName, CompanyPhone, ContactPerson, CreditCard_Type, CreditCard_Number, CreditCard_Holder, CreditCard_ExpMonth, CreditCard_ExpYear, CreditCard_CVV, JobID, Payment_Duration, Payment_Amount) VALUES ('$CompanyID', '$CompanyName', '$CompanyPhone', '$ContactPerson', '$cardType', '$cardNumber', '$cardName', '$cardMonth', '$cardYear', '$cardCvv', '$job_post_ID', '$postDuration', '$totalPrice')";
     $result = mysqli_query($connect, $sql);
     $paymentId = mysqli_insert_id($connect);
-
 } else if (isset($_POST['payment_type']) && $_POST['payment_type'] == 'newcardRadio') {
     $cardNumber = $_POST['cardNumberInput'];
     $cardName = $_POST['cardNameInput'];
@@ -102,14 +101,23 @@ if ($result) {
     $pdf->Cell(95, 10, 'Date Issued: ', 0, 0, 'L'); // Left-aligned text
     $pdf->SetXY(35, 60); // Position at 1 cm from bottom
     $pdf->SetFont('Arial', 'B', 12); // Set font to Arial, Bold, 24 pt
-    $currentDate = date('d M Y'); // Get the current date in '10 Jan 2018' format
-    $pdf->Cell(95, 10, $currentDate, 0, 0, 'L'); // Left-aligned text
+    $AdStartDateFormatted = date('d M Y H:i:s', strtotime($AdStartDate));
+    $pdf->Cell(95, 10, $AdStartDateFormatted, 0, 0, 'L'); // Left-aligned text
     $pdf->SetXY(10, 70); // Position at 1 cm from bottom
     $pdf->SetFont('Arial', '', 12); // Set font to Arial, Bold, 24 pt
     $pdf->Cell(95, 10, 'Email  : ', 0, 0, 'L'); // Left-aligned text
     $pdf->SetXY(35, 70); // Position at 1 cm from bottom
     $pdf->SetFont('Arial', 'B', 12); // Set font to Arial, Bold, 24 pt
     $pdf->Cell(95, 10, $CompanyEmail, 0, 0, 'L'); // Left-aligned text
+    $pdf->SetXY(10, 80); // Position at 1 cm from bottom
+    $pdf->SetFont('Arial', '', 12); // Set font to Arial, Bold, 24 pt
+    $pdf->Cell(95, 10, 'Duration  : ', 0, 0, 'L'); // Left-aligned text
+    $AdStartDateFormatted = date('d M Y', strtotime($AdStartDate));
+    $AdEndDateFormatted = date('d M Y', strtotime($AdEndDate));
+    $dateRange = $AdStartDateFormatted . ' - ' . $AdEndDateFormatted;
+    $pdf->SetXY(35, 80); // Position at 1 cm from bottom
+    $pdf->SetFont('Arial', 'B', 12); // Set font to Arial, Bold, 24 pt
+    $pdf->Cell(95, 10, $dateRange, 0, 0, 'L'); // Left-aligned text
 
     $pdf->SetXY(105, 50); // Position at 1 cm from bottom
     $pdf->SetFont('Arial', '', 12); // Set font to Arial, Bold, 24 pt
@@ -282,4 +290,3 @@ if ($result) {
 } else {
     echo 'error';
 }
-?>

@@ -119,7 +119,8 @@ if (isset($_POST['submitbtn'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -362,8 +363,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Description">
-                    <textarea id="jobDescription" name="jobDescription"
-                        class="write-textarea" placeholder="Enter the job description"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
+                    <textarea id="jobDescription" name="jobDescription" class="write-textarea"
+                        placeholder="Enter the job description"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobdescription" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -397,8 +398,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Responsibilities">
-                    <textarea id="jobResponsibilities" name="jobResponsibilities"
-                        class="write-textarea" placeholder="Enter the job responsibilities"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
+                    <textarea id="jobResponsibilities" name="jobResponsibilities" class="write-textarea"
+                        placeholder="Enter the job responsibilities"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobresponsibilities" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -432,8 +433,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Benefits">
-                    <textarea id="jobBenefits" name="jobBenefits"
-                        class="write-textarea" placeholder="Enter the job benefits"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
+                    <textarea id="jobBenefits" name="jobBenefits" class="write-textarea"
+                        placeholder="Enter the job benefits"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobbenefits" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -598,6 +599,22 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
+}
+
+if (!isset($_SESSION['job_post_ID'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
+    <?php
+    exit;
 }
 
 if (!isset($_SESSION['companyID'])) {

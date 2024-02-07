@@ -590,6 +590,22 @@ if (isset($_SESSION['companyID'])) {
     $row = mysqli_fetch_assoc($result);
 }
 
+if (!isset($_SESSION['job_post_ID'])) {
+    ?>
+        <script>
+            Swal.fire({
+                title: "Error",
+                text: "Invalid Action.",
+                icon: "error",
+                backdrop: `lightgrey`,
+            }).then(function() {
+                window.location.href = "company_landing.php";
+            });
+        </script>
+    <?php
+        exit;
+    }
+
 if (!isset($_SESSION['companyID'])) {
     ?>
     <script>

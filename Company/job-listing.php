@@ -317,9 +317,20 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Accepted", "Application has been accepted.", "success");
+                                // Get the jobPostID from the URL
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var jobPostID = urlParams.get('jobPostID');
                                 // Update the status in the table
-                                getapplicants();
+                                if (jobPostID) {
+                                    Swal.fire("Accepted", "Application has been accepted.", "success");
+                                    // If the jobPostID is present, call the getapplicants function with it
+                                    countApplicant(jobPostID);
+
+                                } else {
+                                    // If the jobPostID is not present, call the getapplicants function without it
+                                    Swal.fire("Accepted", "Application has been accepted.", "success");
+                                    getapplicants();
+                                }
                             } else {
                                 Swal.fire("Error", "Error accepting application", "error");
                             }
@@ -345,9 +356,20 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Rejected", "Application has been rejected.", "success");
+                                // Get the jobPostID from the URL
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var jobPostID = urlParams.get('jobPostID');
                                 // Update the status in the table
-                                getapplicants();
+                                if (jobPostID) {
+                                    Swal.fire("Rejected", "Application has been rejected.", "success");
+                                    // If the jobPostID is present, call the getapplicants function with it
+                                    countApplicant(jobPostID);
+
+                                } else {
+                                    // If the jobPostID is not present, call the getapplicants function without it
+                                    Swal.fire("Rejected", "Application has been rejected.", "success");
+                                    getapplicants();
+                                }
                             } else {
                                 Swal.fire("Error", "Error rejecting application", "error");
                             }
