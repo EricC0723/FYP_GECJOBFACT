@@ -529,6 +529,15 @@ if (isset($_SESSION['companyID'])) {
         var underline = document.querySelector('.underline');
         var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
 
+        $(document).ready(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var jobPostID = urlParams.get('jobPostID');
+
+            if (jobPostID) {
+                countApplicant(jobPostID);
+            }
+        });
+
         // Function to update the visibility of the divs based on the id in the URL
         function updateDivVisibility() {
             // Hide all divs
