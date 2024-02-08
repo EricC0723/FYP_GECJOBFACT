@@ -53,7 +53,8 @@ if (isset($_POST['submitbtn'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -194,7 +195,7 @@ if (isset($_POST['submitbtn'])) {
                                     </div>
 
                                 </div>
-                                
+
                             </div>
 
 
@@ -294,19 +295,19 @@ if (isset($_SESSION['companyID'])) {
 
 if (!isset($_SESSION['job_post_ID'])) {
     ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Invalid Action.",
-                icon: "error",
-                backdrop: `lightgrey`,
-            }).then(function() {
-                window.location.href = "company_landing.php";
-            });
-        </script>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
     <?php
-        exit;
-    }
+    exit;
+}
 
 if (!isset($_SESSION['companyID'])) {
     ?>

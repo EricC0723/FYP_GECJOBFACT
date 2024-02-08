@@ -12,7 +12,6 @@ if (isset($_SESSION['companyID'])) {
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
 }
-
 ?>
 
 <html lang="en">
@@ -107,7 +106,8 @@ if (isset($_SESSION['companyID'])) {
                         <div style="padding-top:10px;"><span class="landing_sentence2">Send us a message using the form
                                 below and we'll get back to you as soon as possible.</span></div>
                         <div style="padding-top:10px;"><a class="landing_sentence2 contactlink" href="#"
-                                style="color:#4964e9;font-weight:600;text-decoration:none;">Job seekers contact us here</a></div>
+                                style="color:#4964e9;font-weight:600;text-decoration:none;">Job seekers contact us
+                                here</a></div>
                     </div>
                     <div style="padding-top:24px;">
                         <form method="post">
@@ -136,7 +136,8 @@ if (isset($_SESSION['companyID'])) {
                                 <div style="padding-top:20px;" class="form-group">
                                     <label class="question" style="padding-bottom: 8px;">Email
                                         address</label>
-                                    <input class="input-box" type="email" id="contactEmail" name="contactEmail" placeholder="Enter the your email">
+                                    <input class="input-box" type="email" id="contactEmail" name="contactEmail"
+                                        placeholder="Enter the your email">
                                     <div style="padding-top:4px;" id="validation-contactEmail" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -178,8 +179,8 @@ if (isset($_SESSION['companyID'])) {
                                 <div class="form-group" style="padding-top:20px;" id="Message">
                                     <label for="contactMessage" class="question" style="padding-bottom: 8px;">Message
                                         <span style="font-weight:400;">(Max 1000 characters)</span></label>
-                                    <textarea id="contactMessage" name="contactMessage"
-                                        class="write-textarea" placeholder="Enter your message here"></textarea>
+                                    <textarea id="contactMessage" name="contactMessage" class="write-textarea"
+                                        placeholder="Enter your message here"></textarea>
                                     <div style="padding-top:4px;" id="validation-contactMessage" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -220,10 +221,14 @@ if (isset($_SESSION['companyID'])) {
                             <span class="landing_sentence2" style="font-weight:700;">Melaka</span>
                         </div>
                         <div style="padding-top:10px;">
-                            <span class="landing_sentence2">Multimedia University, Jalan Ayer Keroh Lama, 75450 Bukit Beruang, Melaka, Malaysia</span>
+                            <span class="landing_sentence2">Multimedia University, Jalan Ayer Keroh Lama, 75450 Bukit
+                                Beruang, Melaka, Malaysia</span>
                         </div>
                         <div style="padding-top:10px;">
-                            <span class="landing_sentence2">Customer Service: <a href="tel:+60 11 1061 4689" class="landing_sentence2 contactlink" style="color:#4964e9;font-weight:600;text-decoration:none;">+60 11 1061 4689</a></span>
+                            <span class="landing_sentence2">Customer Service: <a href="tel:+60 11 1061 4689"
+                                    class="landing_sentence2 contactlink"
+                                    style="color:#4964e9;font-weight:600;text-decoration:none;">+60 11 1061
+                                    4689</a></span>
                         </div>
                     </div>
                 </div>
@@ -247,6 +252,34 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
+}
+
+
+if (isset($_POST["submitbtn"])) {
+
+    $ContactName = $_POST["contactName"];
+    $ContactEmail = $_POST["contactEmail"];
+    $ContactSubject = $_POST["contactSubject"];
+    $ContactMessage = $_POST["contactMessage"];
+
+    $sql = "INSERT INTO company_contact_us (CompanyEmail, Subject, Message) VALUES ('$ContactEmail', '$ContactSubject', '$ContactMessage')";
+    $result = mysqli_query($connect, $sql);
+    if ($result) {
+        ?>
+        <script>
+            Swal.fire({
+                title: "Success",
+                text: "Your message has been sent",
+                icon: "success",
+                backdrop: `lightgrey`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "company_landing.php";
+                }
+            });
+        </script>
+        <?php
+    }
 }
 
 if (!isset($_SESSION['companyID'])) {

@@ -6,16 +6,6 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 
 <?php
 session_start();
-if (isset($_SESSION['job_post_ID'])) {
-    // Check if the job_post_ID is not already in the URL
-    $job_post_ID = $_SESSION['job_post_ID'];
-
-    if (!isset($_GET['jobPostID'])) {
-        // Redirect to the current page with the job_post_ID in the URL
-        header("Location: post-job-classify.php?jobPostID=$job_post_ID");
-        exit;
-    }
-}
 
 $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
@@ -55,7 +45,8 @@ if (isset($_POST["submitbtn"])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -590,21 +581,21 @@ if (isset($_SESSION['companyID'])) {
     $row = mysqli_fetch_assoc($result);
 }
 
-if (!isset($_SESSION['job_post_ID'])) {
+if (!isset($_GET['jobPostID'])) {
     ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Invalid Action.",
-                icon: "error",
-                backdrop: `lightgrey`,
-            }).then(function() {
-                window.location.href = "company_landing.php";
-            });
-        </script>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
     <?php
-        exit;
-    }
+    exit;
+}
 
 if (!isset($_SESSION['companyID'])) {
     ?>

@@ -1,6 +1,10 @@
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 require('C:/xampp/htdocs/FYP/Company/fpdf.php');
+require 'vendor/autoload.php'; // Add this line to include PHPMailer
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if (isset($_POST['CompanyID'])) {
     $CompanyID = $_POST['CompanyID'];
@@ -283,7 +287,37 @@ if ($result) {
     $updateResult = mysqli_query($connect, $sql);
 
     if ($updateResult) {
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
+            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            //Recipients
+            $mail->setFrom('jobfactsgec112@gmail.com', 'GEC Job Facts');
+            $mail->addAddress($CompanyEmail, $CompanyName);
+
+            //Attachments
+            $mail->addAttachment('C:/xampp/htdocs/FYP/Company/receipt/Job Post ' . $job_post_ID . ' Receipt.pdf');
+
+            //Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Here is your PDF report';
+            $mail->Body = 'Please find attached the PDF report.';
+
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+
         echo 'success';
+
     } else {
         echo 'error';
     }

@@ -458,19 +458,19 @@ if (isset($_SESSION['companyID'])) {
 
 if (!isset($_SESSION['job_post_ID'])) {
     ?>
-        <script>
-            Swal.fire({
-                title: "Error",
-                text: "Invalid Action.",
-                icon: "error",
-                backdrop: `lightgrey`,
-            }).then(function() {
-                window.location.href = "company_landing.php";
-            });
-        </script>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
     <?php
-        exit;
-    }
+    exit;
+}
 
 if (!isset($_SESSION['companyID'])) {
     ?>
