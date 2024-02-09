@@ -3,7 +3,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 session_start(); // Start the session at the beginning
 ?>
 
-<div style="width:100%;padding-top:32px;">
+<div style="width:100%;">
     <div style="flex-direction:column;display:flex;">
         <?php
         $CompanyID = null;
@@ -12,18 +12,13 @@ session_start(); // Start the session at the beginning
         }
 
         $searchTerm = '';
-        if (isset($_GET['applicantsearch'])) {
-            $searchTerm = mysqli_real_escape_string($connect, $_GET['applicantsearch']);
+        if (isset($_GET['paymentsearch'])) {
+            $searchTerm = mysqli_real_escape_string($connect, $_GET['paymentsearch']);
         }
 
         ?>
-        <h2 class="landing_sentence3" style="width:500px">
-            Applicants
-        </h2>
-        <span class="landing_sentence1" style="font-size:18px;line-height:28px;font-weight:400;padding-top:26px;">Search
-            for current and past applicants</span>
         <div style="padding-top:26px;">
-            <form id="applicantForm" method="GET" style="flex-direction:row;display:flex;">
+            <form id="paymentForm" method="GET" style="flex-direction:row;display:flex;">
                 <div style="position:relative;padding-right:5px;">
                     <div class="divsearchicon">
                         <span class="spansearchicon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
@@ -36,12 +31,12 @@ session_start(); // Start the session at the beginning
                     </div>
                     <?php
                     // Get the search term from the URL parameters
-                    $searchTerm = isset($_GET['applicantsearch']) ? $_GET['applicantsearch'] : '';
+                    $searchTerm = isset($_GET['paymentsearch']) ? $_GET['paymentsearch'] : '';
                     ?>
-                    <input id="applicantInput" type="text" class="input-box" name="applicantsearch"
+                    <input id="paymentInput" type="text" class="input-box" name="paymentsearch"
                         style="padding-left:44px;padding-right:44px;width:512px;"
                         placeholder="Search by name, job title" value="<?php echo htmlspecialchars($searchTerm); ?>">
-                    <button id="clearapplicant" class="clear-button" type="button">
+                    <button id="clearpayment" class="clear-button" type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                             focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
                             style="width:20px;height:20px;">
@@ -50,7 +45,7 @@ session_start(); // Start the session at the beginning
                             </path>
                         </svg>
                     </button>
-                    <input type="submit" value="Seek" class="create_btn" >
+                    <input type="submit" value="Seek" class="create_btn">
                 </div>
             </form>
         </div>
@@ -68,8 +63,8 @@ session_start(); // Start the session at the beginning
         }
 
         $searchTerm = '';
-        if (isset($_GET['applicantsearch'])) {
-            $searchTerm = mysqli_real_escape_string($connect, $_GET['applicantsearch']);
+        if (isset($_GET['paymentsearch'])) {
+            $searchTerm = mysqli_real_escape_string($connect, $_GET['paymentsearch']);
         }
 
         $jobPostID = '';
@@ -77,20 +72,12 @@ session_start(); // Start the session at the beginning
             $jobPostID = mysqli_real_escape_string($connect, $_GET['jobPostID']);
         }
 
-        $sql = "SELECT job_post.*, applications.*
-        FROM applications
-        INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+        $sql = "SELECT payment.*, job_post.*
+        FROM payment
+        INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
         WHERE job_post.CompanyID = $CompanyID 
-        AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
-        OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
-        AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
-
-        // If a Job_Post_ID is received, add a condition to the WHERE clause
-        if ($jobPostID != '') {
-            $sql .= " AND job_post.Job_Post_ID = $jobPostID";
-        }
-
-        $sql .= " ORDER BY applications.ApplyDate DESC";
+        AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+        ORDER BY payment.Payment_Date DESC";
 
         $result = mysqli_query($connect, $sql);
 
@@ -100,85 +87,31 @@ session_start(); // Start the session at the beginning
             echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
             <thead>
                 <tr>
-                    <th style="width:100px;">
-                        <div class="th_title">Status</div>
+                    <th style="width:395px;">
+                        <div class="th_title">Payment</div>
                     </th>
-                    <th style="width:400px;">
-                        <div class="th_title">Applicant Name</div>
+                    <th style="width:265px;">
+                        <div class="th_title">Payment Details</div>
                     </th>
-                    <th>
-                        <div class="th_title">Job Applied</div>
+                    <th style="width:161px;">
+                        <div class="th_title">Payment Amount</div>
                     </th>
-                    <th style="width:120px;">
-                        <div class="th_title">Job Status</div>
-                    </th>
-                    <th style="width:156px;">
-                        <div class="th_title" style="text-align:right;">Applicant Actions</div>
+                    <th style="width:154px;">
+                        <div class="th_title" style="text-align:right;">Payment Actions</div>
                     </th>
                 </tr>
             </thead>';
             while ($row = mysqli_fetch_assoc($result)) {
-                $jobStatus = htmlspecialchars($row['job_status']);
-                $jobstatusbox = '';
-                $jobstatustext = '';
-
-                // Determine the class based on the job status
-                switch ($jobStatus) {
-                    case 'Active':
-                        $jobstatusbox = 'active-box';
-                        $jobstatustext = 'active-text';
-                        break;
-                    case 'Closed':
-                        $jobstatusbox = 'closed-box';
-                        $jobstatustext = 'closed-text';
-                        break;
-                    case 'Blocked':
-                        $jobstatusbox = 'blocked-box';
-                        $jobstatustext = 'blocked-text';
-                        break;
+                $cardNumber = htmlspecialchars($row['CreditCard_Number']);
+                $formattedCardNumber = ''; // Initialize the variable
+                if (strlen($cardNumber) == 17) { // If the card number is "3488 888888 88887"
+                    $formattedCardNumber = substr_replace($cardNumber, '******', 5, 6);
+                } else if (strlen($cardNumber) == 19) { // If the card number is "9999 9999 9999 9999"
+                    $formattedCardNumber = substr_replace($cardNumber, '**** ****', 5, 9);
                 }
-
-                $Status = htmlspecialchars($row['Status']);
-                $statusbox = '';
-                $statustext = '';
-
-                // Determine the class based on the job status
-                switch ($Status) {
-                    case 'Accepted':
-                        $statusbox = 'active-box';
-                        $statustext = 'active-text';
-                        break;
-                    case 'Pending':
-                        $statusbox = 'draft-box';
-                        $statustext = 'draft-text';
-                        break;
-                    case 'Rejected':
-                        $statusbox = 'blocked-box';
-                        $statustext = 'blocked-text';
-                        break;
-                    case 'Processed':
-                        $statusbox = 'process-box';
-                        $statustext = 'process-text';
-                        break;
-                }
-
                 echo '
                         <tbody>
                             <tr style="border-top: 4px solid #f5f6f8;height: 80px">
-                                <td>
-                                    <div class="td_title"><span class="' . $statusbox . '">
-                                        <span class="' . $statustext . '">' . $Status . '</span></span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="td_title">
-                                        <div>
-                                            <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['FirstName']) . ' ' . htmlspecialchars($row['LastName']) . '</div>
-                                            <a href="mailto: ' . htmlspecialchars($row['Email']) . '" class="applicant_email"><div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Email']) . '</div></a>
-                                            <div style="font-size:16px;line-height:24px;">Apply at ' . date('j F Y', strtotime($row['ApplyDate'])) . '.</div>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="td_title">
                                         <div>
@@ -189,22 +122,42 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="td_title"><span class="' . $jobstatusbox . '">
-                                        <span class="' . $jobstatustext . '">' . $jobStatus . '</span></span>
+                                    <div class="td_title">
+                                        <div>
+                                            <div style="font-size:16px;line-height:24px;">Pay by ' . htmlspecialchars($row['ContactPerson']) . '</div>
+                                            <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($formattedCardNumber) . '</div>
+                                            <div style="font-size:16px;line-height:24px;">Pay on ' . date('j F Y', strtotime($row['Payment_Date'])) . '</div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
-                                <div class="td_title" style="width:160px;">
-                                    <div style="flex-direction:row;display:flex;justify-content:end;">
-                                        <div style="display:flex;justify-content:center;align-items:center;width:44px;">
-                                            <button class="listlink" style="background:none;border:none;" onclick="fetchAndOpenNav(this)" data-applicant-id="' . htmlspecialchars($row['ApplicationID']) . '">
-                                                <svg style="width:24px;height:24px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor"  aria-labelledby="b33ee29c-5454-4dc1-a348-be2854231b73-edit"  role="img"><title>View</title><path d="M21.912 11.59C21.791 11.32 18.867 5 12 5s-9.791 6.32-9.912 6.59a1.001 1.001 0 0 0 0 .82C2.209 12.68 5.133 19 12 19s9.791-6.32 9.912-6.59a1.001 1.001 0 0 0 0-.82ZM12 17c-4.708 0-7.173-3.728-7.877-5C4.827 10.728 7.292 7 12 7c4.71 0 7.175 3.73 7.877 5-.704 1.272-3.169 5-7.877 5Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
-                                            </button>
+                                    <div class="td_title">
+                                        <div>
+                                            <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Payment_Duration']) . ' month(s)</div>
+                                            <div style="font-size:16px;line-height:24px;">RM ' . htmlspecialchars($row['Payment_Amount']) . '</div>
                                         </div>
                                     </div>
-                                    <div class="continuedraft_button" style="display:none">
-                                        <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
+                                </td>
+                               
+                                <td>
+                                <div class="td_title" style="width:154px;">
+                                    <div style="flex-direction:row;display:flex;justify-content:end;">
+                                        <div style="display:flex;justify-content:center;align-items:center;width:44px;">
+                                            <a href="' . htmlspecialchars($row['Payment_Receipt']) . ' " target="_blank">
+                                                <button class="listlink" style="background:none;border:none;">
+                                                    <svg style="width:24px;height:24px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor"  aria-labelledby="b33ee29c-5454-4dc1-a348-be2854231b73-edit"  role="img"><title>View</title><path d="M21.912 11.59C21.791 11.32 18.867 5 12 5s-9.791 6.32-9.912 6.59a1.001 1.001 0 0 0 0 .82C2.209 12.68 5.133 19 12 19s9.791-6.32 9.912-6.59a1.001 1.001 0 0 0 0-.82ZM12 17c-4.708 0-7.173-3.728-7.877-5C4.827 10.728 7.292 7 12 7c4.71 0 7.175 3.73 7.877 5-.704 1.272-3.169 5-7.877 5Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+                                                </button>
+                                            </a>
+                                        </div>
+                                        <div style="display:flex;justify-content:center;align-items:center;width:44px;">
+                                            <a href="' . htmlspecialchars($row['Payment_Receipt']) . ' " download>
+                                                <button class="listlink" style="background:none;border:none;">
+                                                    <svg style="width:24px;height:24px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/></svg> 
+                                                </button>
+                                            </a>
+                                        </div>
                                     </div>
+                                   
                                 </div>
                                 </td>
                             </tr>
@@ -235,8 +188,7 @@ session_start(); // Start the session at the beginning
                             <div style="padding:24px;background:white;">
                                 <div style="text-align:center;padding:24px 0;">
                                     <div style="display:flex;flex-direction:column;align-items:center;padding-top:10px;"><svg width="121px" height="121px" viewBox="0 0 121 121" version="1.1"><title>Profile icon</title><defs><polygon id="path-1" points="0 0.8577 120.1422 0.8577 120.1422 120.9997 0 120.9997"></polygon></defs><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Zero_states_inbox" transform="translate(-797.000000, -376.000000)"><g id="Group-10" transform="translate(797.000000, 375.000000)"><g id="Group-3" transform="translate(0.000000, 0.143000)"><g id="Clip-2"></g><path d="M120.1422,60.9287 C120.1422,94.1047 93.2472,120.9997 60.0712,120.9997 C26.8952,120.9997 -0.0008,94.1047 -0.0008,60.9287 C-0.0008,27.7527 26.8952,0.8577 60.0712,0.8577 C93.2472,0.8577 120.1422,27.7527 120.1422,60.9287" id="Fill-1" fill="#EAF0FA" mask="url(#mask-2)"></path></g><path d="M83.0836,40.2451 C83.0836,53.4971 71.3146,68.2551 59.0886,68.2551 C46.9676,68.2551 35.0926,53.4971 35.0926,40.2451 C35.0926,26.9931 45.8356,16.2491 59.0886,16.2491 C72.3406,16.2491 83.0836,26.9931 83.0836,40.2451 Z" id="Stroke-4" stroke="#031D44" stroke-width="2" stroke-linecap="round"></path><path d="M13.2144,120.08 L13.2144,108.427 C13.2144,93.333 21.7154,80.347 33.4364,77.671 C41.6034,75.807 51.0804,74.206 59.5474,74.206 C67.5894,74.206 77.2184,75.881 85.6094,77.799 C95.2794,80.011 102.7734,89.198 105.1134,100.818" id="Stroke-6" stroke="#031D44" stroke-width="2" stroke-linecap="round"></path><path d="M84.1793,99.998 L69.9173,99.998 C68.2303,99.998 66.8623,98.63 66.8623,96.942 C66.8623,95.254 68.2303,93.886 69.9173,93.886 L84.1793,93.886 C85.8663,93.886 87.2353,95.254 87.2353,96.942 C87.2353,98.63 85.8663,99.998 84.1793,99.998 Z" id="Stroke-8" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path></g></g></g></svg></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center;padding-top:24px;"><h2 class="landing_sentence1">No applicants yet</h2></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center;padding-top:10px;"><span class="joblisttitle">Check back later to see if you have new applications.</span></div>
+                                    <div style="display:flex;flex-direction:column;align-items:center;padding-top:24px;"><h2 class="landing_sentence1">This account has no payment history.</h2></div>
                                 </div>
                             </div>
                         </div>
@@ -257,99 +209,50 @@ session_start(); // Start the session at the beginning
 </script>
 
 <script>
-    document.getElementById("overlay").addEventListener('click', closeNav);
-
-    function openNav() {
-        document.body.classList.add('no-scroll');
-        document.getElementById("mySidebar").classList.add("open");
-        document.getElementById("overlay").classList.add("open");
-    }
-
-    function closeNav() {
-        document.body.classList.remove('no-scroll');
-        document.getElementById("mySidebar").classList.remove("open");
-        document.getElementById("overlay").classList.remove("open");
-
-        // Get the applicantId from the sidebar
-        var applicantId = $('#mySidebar').data('applicant-id');
-
-        // AJAX call to change the status
-        $.ajax({
-            url: 'change_status/process.php',
-            method: 'GET',
-            data: { applicant_id: applicantId },
-            success: function (response) {
-                if (response == 'success') {
-                // Get the jobPostID from the URL
-                var urlParams = new URLSearchParams(window.location.search);
-                var jobPostID = urlParams.get('jobPostID');
-
-                if (jobPostID) {
-                    // If the jobPostID is present, call the getapplicants function with it
-                    countApplicant(jobPostID);
-                } else {
-                    // If the jobPostID is not present, call the getapplicants function without it
-                    getapplicants();
-                }
-            }
-            }
-        });
-    }
-
-    // Listen for click events on the document
-    document.addEventListener('mouseup', function (e) {
-        var sidebar = document.getElementById("mySidebar");
-
-        // If the clicked element is not the sidebar and not the button, close the sidebar
-        if (!sidebar.contains(e.target) && e.target.className !== 'listlink') {
-            closeNav();
-        }
-    });
-
 
     document.addEventListener('DOMContentLoaded', function () {
         // Get the elements
-        var clearapplicant = document.getElementById('clearapplicant');
-        var applicantInput = document.getElementById('applicantInput');
+        var clearpayment = document.getElementById('clearpayment');
+        var paymentInput = document.getElementById('paymentInput');
 
         // Hide the clear button initially
-        clearapplicant.style.display = 'none';
+        clearpayment.style.display = 'none';
 
         // Show/hide the clear button when the input box content changes
-        applicantInput.addEventListener('input', function () {
+        paymentInput.addEventListener('input', function () {
             if (this.value) {
-                clearapplicant.style.display = 'flex';
+                clearpayment.style.display = 'flex';
             } else {
-                clearapplicant.style.display = 'none';
+                clearpayment.style.display = 'none';
             }
         });
 
         // Clear the input box when the clear button is clicked
-        clearapplicant.addEventListener('click', function (e) {
+        clearpayment.addEventListener('click', function (e) {
             e.preventDefault();
-            applicantInput.value = '';
+            paymentInput.value = '';
             // Manually trigger the input event
             var event = new Event('input', {
                 bubbles: true,
                 cancelable: true,
             });
-            applicantInput.dispatchEvent(event);
+            paymentInput.dispatchEvent(event);
         });
     });
 
     $(document).ready(function () {
-        $('#applicantForm').on('submit', function (e) {
+        $('#paymentForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
 
             var url = window.location.href.split('?')[0].split('#')[0];
 
             // Change the URL
-            window.history.pushState(null, null, url + '#applicants');
+            window.history.pushState(null, null, url + '#payment');
 
-            var searchTerm = $('#applicantInput').val();
+            var searchTerm = $('#paymentInput').val();
 
             // Pass the search term to a function
-            searchApplicant(searchTerm);
+            searchPayment(searchTerm);
         });
     });
 

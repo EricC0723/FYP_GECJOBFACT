@@ -132,7 +132,7 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Created ' . date('j F Y', strtotime($row['AdStartDate'])) . ' by ' . htmlspecialchars($rowc['ContactPerson']) . ' .</div>
+                                            <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
                                             </div>
                                     </div>
                                 </td>

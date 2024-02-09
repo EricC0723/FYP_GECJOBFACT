@@ -20,7 +20,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
     <header class="postjob_header" style="background:#0d3880;">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
     </header>
 

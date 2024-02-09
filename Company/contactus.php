@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <?php
 include("C:/xampp/htdocs/FYP/dataconnection.php");
-session_start(); // Start the session at the beginning
-
-$CompanyID = null;
-if (isset($_SESSION['companyID'])) {
-    $CompanyID = $_SESSION['companyID'];
-
-    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
-    $result = mysqli_query($connect, $sql);
-    $row = mysqli_fetch_assoc($result);
-}
 ?>
 
 <html lang="en">
@@ -24,64 +14,19 @@ if (isset($_SESSION['companyID'])) {
 </head>
 
 <body class="postjob_body" style="background-color:white;">
-    <header class="postjob_header">
+<header class="postjob_header" style="background:#0d3880;">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
-                        alt="Logo"></a>
+                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
             </div>
             <div class="logo-nav">
-                <nav style="display:flex">
-                    <span class="header-link"><a href="company_landing.php" class="company_nav_active">Home</a></span>
-                    <span class="header-link"><a href="job-listing.php">Jobs</a></span>
-                </nav>
+
             </div>
             <div style="flex:1 1 auto;"></div>
 
             <div style="padding:0 20px">
                 <div class="flex-container">
-                    <div class="dropdown">
-                        <div style="display: flex; align-items: center;">
-                            <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
-                                    focusable="false" fill="currentColor" width="16" height="16"
-                                    class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
-                                    id="dropdown-icon"
-                                    style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
-                                    <path
-                                        d="M20.7 7.3c-.4-.4-1-.4-1.4 0L12 14.6 4.7 7.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l8 8c.2.2.5.3.7.3s.5-.1.7-.3l8-8c.4-.4.4-1 0-1.4z">
-                                    </path>
-                                </svg>
-                            </a>
 
-                        </div>
-                        <div class="dropdown-content" id="dropdownContent">
-                            <span class="companyName">
-                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?>
-                            </span>
-                            <div style="padding-top:10px;">
-                                <span class="contactPerson">
-                                    <?php echo isset($row['ContactPerson']) ? $row['ContactPerson'] : 'Contact Person'; ?>
-                                </span>
-                            </div>
-                            <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
-                                    details</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
-
-                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment History</a>
-                            </div>
-                            <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="company_contactus.php" class="dropdown-link">Contact us</a>
-                            </div>
-                            <div style="padding-top: 12px;"><a id="signout-link" href="company_signout.php"
-                                    class="dropdown-link">Sign out</a></div>
-                        </div>
-                    </div>
-                    <div class="add_button">
-                        <a href="post-job-classify.php" class="create_job_link">Create a job ad</a>
-                    </div>
                 </div>
             </div>
 
@@ -217,37 +162,10 @@ if (isset($_SESSION['companyID'])) {
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        document.getElementById('signout-link').addEventListener('click', function (e) {
-            e.preventDefault();
-            var href = this.href;
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You are about to sign out.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, sign out!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = href;
-                }
-            })
-        });
-    </script>
 </body>
 
 </html>
 <?php
-if (isset($_SESSION['companyID'])) {
-    $CompanyID = $_SESSION['companyID'];
-    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
-    $result = mysqli_query($connect, $sql);
-    $row = mysqli_fetch_assoc($result);
-}
-
-
 if (isset($_POST["submitbtn"])) {
 
     $ContactName = $_POST["contactName"];
@@ -267,7 +185,7 @@ if (isset($_POST["submitbtn"])) {
                 backdrop: `lightgrey`
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "company_landing.php";
+                    window.location.href = "company_login.php";
                 }
             });
         </script>
@@ -275,50 +193,4 @@ if (isset($_POST["submitbtn"])) {
     }
 }
 
-if (!isset($_SESSION['companyID'])) {
-    ?>
-    <script>
-        Swal.fire({
-            title: "Error",
-            text: "You haven\'t logged in",
-            icon: "error",
-            backdrop: `lightgrey`,
-        }).then(function () {
-            window.location.href = "company_login.php";
-        });
-    </script>
-    <?php
-    exit;
-} else if ($row['CompanyStatus'] == 'Verify') {
-    // Show swal box
-    ?>
-        <script>
-            Swal.fire({
-                title: 'Error',
-                text: 'Please verify your email first.',
-                icon: 'error',
-            }).then(function () {
-                window.location = "company_signout.php";
-            });
-        </script>
-    <?php
-} else if ($row['CompanyStatus'] == 'Block') {
-    // Show swal box
-    ?>
-            <script>
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Your account has been blocked.',
-                    icon: 'error',
-                }).then(function () {
-                    window.location = "company_signout.php";
-                });
-            </script>
-    <?php
-}
-?>
-
-<?php
-mysqli_free_result($result);
-mysqli_close($connect);
 ?>

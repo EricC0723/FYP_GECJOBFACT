@@ -123,19 +123,15 @@ if (isset($_POST["submitbtn"])) {
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
-                            <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
-                                    Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
 
-                            <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
-                            </div>
-                            <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
+                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment History</a>
                             </div>
                             <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#contact" class="dropdown-link">Contact us</a>
+                            <div style="padding-top: 12px;"><a href="company_contactus.php" class="dropdown-link">Contact us</a>
                             </div>
-                            <div style="padding-top: 12px;"><a href="company_signout.php" class="dropdown-link">Sign
-                                    out</a></div>
+                            <div style="padding-top: 12px;"><a id="signout-link" href="company_signout.php"
+                                    class="dropdown-link">Sign out</a></div>
                         </div>
                     </div>
                     <div class="add_button">
@@ -480,7 +476,28 @@ if (isset($_POST["submitbtn"])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="post-job.js"></script>
+    <script src="post-job-classify-validation.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        document.getElementById('signout-link').addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = this.href;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to sign out.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sign out!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+            })
+        });
+
         $.ui.autocomplete.filter = function (array, term) {
             var matcher = new RegExp($.ui.autocomplete.escapeRegex(term), "i");
             return $.grep(array, function (value) {
@@ -715,9 +732,7 @@ if (isset($_POST["submitbtn"])) {
 
     </script>
 
-    <script src="post-job-classify-validation.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 </body>
 
 </html>

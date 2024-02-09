@@ -1,23 +1,3 @@
-// Get the input field and the validation message elements
-var contactNameInput = document.getElementById('contactName');
-var validationcontactName = document.getElementById('validation-contactName');
-
-// Add an event listener to the input field
-contactNameInput.addEventListener('input', function () {
-    var contactNameMessage = document.getElementById('contactName-message');
-    if (this.value.trim() === '') {
-        // If the input field is empty
-        contactNameMessage.textContent = 'Required field';
-        this.dataset.valid = '0';
-        validationcontactName.classList.remove('hide'); // Show the validation message
-    } else {
-        // If the input field is not empty and the job title is not more than 80 characters
-        contactNameMessage.textContent = '';
-        this.dataset.valid = '1';
-        validationcontactName.classList.add('hide'); // Hide the validation message
-    }
-});
-
 // Select the email input field, the submit button, and the validation message container
 var contactEmailInput = document.getElementById('contactEmail');
 var validationcontactEmail = document.getElementById('validation-contactEmail');
