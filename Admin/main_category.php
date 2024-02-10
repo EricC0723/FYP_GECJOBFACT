@@ -322,7 +322,7 @@
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job post</span>
 						</a>
 					</li>
-					<li class="dropdown">
+                    <li class="dropdown">
 					<a href="javascript:;" class="dropdown-toggle">
 						<i class="icon-copy ion-ios-keypad" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Category</span>
 					</a>
@@ -344,151 +344,7 @@
                         <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment record</span>
 						</a>
 					</li>
-					<!-- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-apartment"></span><span class="mtext"> UI Elements </span>
-						</a>
-						<ul class="submenu">
-							<li><a href="ui-buttons.html">Buttons</a></li>
-							<li><a href="ui-cards.html">Cards</a></li>
-							<li><a href="ui-cards-hover.html">Cards Hover</a></li>
-							<li><a href="ui-modals.html">Modals</a></li>
-							<li><a href="ui-tabs.html">Tabs</a></li>
-							<li><a href="ui-tooltip-popover.html">Tooltip &amp; Popover</a></li>
-							<li><a href="ui-sweet-alert.html">Sweet Alert</a></li>
-							<li><a href="ui-notification.html">Notification</a></li>
-							<li><a href="ui-timeline.html">Timeline</a></li>
-							<li><a href="ui-progressbar.html">Progressbar</a></li>
-							<li><a href="ui-typography.html">Typography</a></li>
-							<li><a href="ui-list-group.html">List group</a></li>
-							<li><a href="ui-range-slider.html">Range slider</a></li>
-							<li><a href="ui-carousel.html">Carousel</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-paint-brush"></span><span class="mtext">Icons</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="font-awesome.html">FontAwesome Icons</a></li>
-							<li><a href="foundation.html">Foundation Icons</a></li>
-							<li><a href="ionicons.html">Ionicons Icons</a></li>
-							<li><a href="themify.html">Themify Icons</a></li>
-							<li><a href="custom-icon.html">Custom Icons</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-analytics-21"></span><span class="mtext">Charts</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="highchart.html">Highchart</a></li>
-							<li><a href="knob-chart.html">jQuery Knob</a></li>
-							<li><a href="jvectormap.html">jvectormap</a></li>
-							<li><a href="apexcharts.html">Apexcharts</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-right-arrow1"></span><span class="mtext">Additional Pages</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="video-player.html">Video Player</a></li>
-							<li><a href="login.html">Login</a></li>
-							<li><a href="forgot-password.html">Forgot Password</a></li>
-							<li><a href="reset-password.html">Reset Password</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-browser2"></span><span class="mtext">Error Pages</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="400.html">400</a></li>
-							<li><a href="403.html">403</a></li>
-							<li><a href="404.html">404</a></li>
-							<li><a href="500.html">500</a></li>
-							<li><a href="503.html">503</a></li>
-						</ul>
-					</li>
-
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-copy"></span><span class="mtext">Extra Pages</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="blank.html">Blank</a></li>
-							<li><a href="contact-directory.html">Contact Directory</a></li>
-							<li><a href="blog.html">Blog</a></li>
-							<li><a href="blog-detail.html">Blog Detail</a></li>
-							<li><a href="product.html">Product</a></li>
-							<li><a href="product-detail.html">Product Detail</a></li>
-							<li><a href="faq.html">FAQ</a></li>
-							<li><a href="profile.html">Profile</a></li>
-							<li><a href="gallery.html">Gallery</a></li>
-							<li><a href="pricing-table.html">Pricing Tables</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-list3"></span><span class="mtext">Multi Level Menu</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="javascript:;">Level 1</a></li>
-							<li><a href="javascript:;">Level 1</a></li>
-							<li><a href="javascript:;">Level 1</a></li>
-							<li class="dropdown">
-								<a href="javascript:;" class="dropdown-toggle">
-									<span class="micon fa fa-plug"></span><span class="mtext">Level 2</span>
-								</a>
-								<ul class="submenu child">
-									<li><a href="javascript:;">Level 2</a></li>
-									<li><a href="javascript:;">Level 2</a></li>
-								</ul>
-							</li>
-							<li><a href="javascript:;">Level 1</a></li>
-							<li><a href="javascript:;">Level 1</a></li>
-							<li><a href="javascript:;">Level 1</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="sitemap.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-diagram"></span><span class="mtext">Sitemap</span>
-						</a>
-					</li>
-					<li>
-						<a href="chat.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-chat3"></span><span class="mtext">Chat</span>
-						</a>
-					</li>
-					<li>
-						<a href="invoice.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-invoice"></span><span class="mtext">Invoice</span>
-						</a>
-					</li>
-					<li>
-						<div class="dropdown-divider"></div>
-					</li>
-					<li>
-						<div class="sidebar-small-cap">Extra</div>
-					</li>
-					<li>
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit-2"></span><span class="mtext">Documentation</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="introduction.html">Introduction</a></li>
-							<li><a href="getting-started.html">Getting Started</a></li>
-							<li><a href="color-settings.html">Color Settings</a></li>
-							<li><a href="third-party-plugins.html">Third Party Plugins</a></li>
-						</ul>
-					</li>
-					<li>
-						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="vendors/images/coming-soon.png" alt="" width="25"></span>
-						</a>
-					</li> -->
+                    
 				</ul>
 			</div>
 		</div>
@@ -502,14 +358,17 @@
 					<div class="row">
 						<div class="col-md-6 col-sm-12">
 							<div class="title">
-								<h4>User assistance</h4>
+								<h4>Main category</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">User assistance</li>
+									<li class="breadcrumb-item active" aria-current="page">Main category</li>
 								</ol>
 							</nav>
+						</div>
+                        <div class="col-md-6 col-sm-12 text-right">
+							<button type="button" class="AddMainBtn btn btn-primary">Add category</button>
 						</div>
 					</div>
 				</div>
@@ -523,17 +382,13 @@
 							<thead>
 								<tr>
 									<th class="table-plus datatable-nosort">ID</th>
-									<th>User email</th>
-									<th>Subject</th>
-									<th>Created at</th>
-									<th>Response</th>
+									<th>Main category name</th>
 									<th class="datatable-nosort">Action</th>
 								</tr>
 							</thead>
 							<tbody>
 							<?php
-									$query = "SELECT * FROM user_contact_us
-									ORDER BY ResponseStatus ASC;";
+									$query = "SELECT * FROM main_category WHERE MainCategory_isDeleted=0";
 									$result = mysqli_query($connect, $query);
 									if(mysqli_num_rows($result) > 0)
 									{
@@ -541,26 +396,15 @@
 										{
 											?>
 											<tr>
-												<td class="table-plus"><?php echo $row["u_ContactID"]; ?></td>
-												<td><?php echo $row["UserEmail"]; ?></td>
-												<td style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?php echo $row["Subject"]; ?></td>
-												<td><?php echo date('d-m-Y : H:i', strtotime($row["CreatedAt"])); ?></td>
-												<td><?php echo ($row["ResponseStatus"] == 1) ? 'Yes' : 'No'; ?></td>
-												<td>
+												<td class="table-plus"><?php echo $row["Main_Category_ID"]; ?></td>
+												<td><?php echo $row["Main_Category_Name"]; ?></td>
+                                                <td>
 													<div class="dropdown">
 														<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 															<i class="dw dw-more"></i>
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-															<a class="viewContactBtn dropdown-item" href="#" data-contactid="<?=$row['u_ContactID'];?>"><i class="dw dw-eye"></i> View</a>
-															<?php
-															// Check if ResponseStatus is 0 before rendering "Reply" button
-															if ($row["ResponseStatus"] == 0) {
-																?>
-																<a class="editContactBtn dropdown-item" href="#" data-contactid="<?=$row['u_ContactID'];?>"><i class="icon-copy fa fa-reply"></i> Reply</a>
-																<?php
-															}
-															?>
+														<a class="DeleteMainBtn dropdown-item" href="#" data-categoryid="<?=$row['Main_Category_ID'];?>"><i class="icon-copy fi-trash"></i>Delete</a>
 														</div>
 													</div>
 												</td>
@@ -575,75 +419,27 @@
 				</div>
 		</div>
 	</div>
-    <!-- View modal -->
-    <div class="col-md-4 col-sm-12 mb-30">
-            <div class="modal fade bs-example-modal-lg" id="view-contact-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+
+		 <!-- Add modal -->
+		 <div class="col-md-4 col-sm-12 mb-30">
+            <div class="modal fade bs-example-modal-lg" id="add-main-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="">Company data</h4>
+                            <h4 class="modal-title" id="">Add new main category</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         </div>
                         <div class="modal-body">
-							<h5 style="display: inline-block;">Contact ID</h5>
-								<div class="form-group">
-									<p id="ContactID" class="form-control"></p>
-								</div>
-							<h5 style="display: inline-block;">User Email</h5>
-								<div class="form-group">
-									<p id="UserEmail" class="form-control"></p>
-								</div>
-							<h5 style="display: inline-block;">Subject</h5>
-								<div class="form-group">
-									<textarea id="Subject" class="form-control" rows="2" style="height:100%;" disabled></textarea>
-								</div>
-							<h5 style="display: inline-block;">Message</h5>
-								<div class="form-group">
-									<textarea id="Message" class="form-control" rows="3" disabled></textarea>
-								</div>
-							<h5 style="display: inline-block;">Create at</h5>
-								<div class="form-group">
-									<p id="CreateAt" class="form-control"></p>
-								</div>
-								<div id="contact-modal-data"></div>
-                    	</div>
-                	</div>
-            	</div>
-            </div>
-    	</div>
-	<!-- Edit modal -->
-    <div class="col-md-4 col-sm-12 mb-30">
-            <div class="modal fade bs-example-modal-lg" id="edit-contact-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id=""></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-						<input type="hidden" id="edit_ContactID">
-							<h5 style="display: inline-block;">User Email</h5>
-							<div class="form-group">
-								<input type="text" id="edit_UserEmail" class="form-control">
-							</div>
-							<h5 style="display: inline-block;">Subject</h5>
-							<div class="form-group">
-								<textarea id="edit_Subject" class="form-control" rows="2" style="height:100%;"disabled></textarea>
-							</div>
-							<h5 style="display: inline-block;">Content</h5>
-							<div class="form-group">
-								<textarea id="edit_Message" class="form-control" rows="3" disabled></textarea>
-							</div>
-							<h5 style="display: inline-block;">Response to company</h5>
-							<div class="form-group">
-								<textarea id="edit_Response" class="form-control" rows="3"></textarea>
-							</div>
-							<div class="modal-footer">
-							<a class="updateContactBtn btn btn-primary" href="#" data-contactid="<?=$row['u_ContactID'];?>">Send response</a>
+						<h5 style="display: inline-block;margin-top:30px;">Category name</h5>
+						<div class="form-group">
+							<input type="text" class="form-control" id="new_main" style="margin-top:10px;border-color:#787785;">
+						</div>
+                    </div>
+                        <div class="modal-footer">
+							<a class="addNewMain btn btn-primary" href="#" id="addbtn"> Save</a>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
     </div>
 	<!-- js -->
@@ -665,88 +461,14 @@
 	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
-    <!-- View User -->
-    <script>
-        $(document).on('click', '.viewContactBtn', function () {
-        console.log("view click");
-        var contactid = $(this).data('contactid');
-        console.log("contactid : "+contactid);
-        $.ajax({
-            type: "GET",
-            url: "handle_u_contact.php?contactid=" + contactid,
-            success: function (response) {
-                console.log(response);
-                var res = jQuery.parseJSON(response);
-                if(res.status == 404) {
-                    alert(res.message);
-                }else if(res.status == 200){
-					var modalContent = '';
-					$('#view-contact-modal').modal('show');
-                    var formattedDate = moment(res.data.CreatedAt).format('DD-MM-YYYY HH:mm:ss');
-                    $('#ContactID').text(res.data.u_ContactID);
-                    $('#UserID').text(res.data.UserID);
-
-                    $('#UserEmail').text(res.data.UserEmail);
-                    $('#Subject').text(res.data.Subject);
-                    $('#Message').text(res.data.Message);
-					$('#response').text(res.data.Response);
-                    $('#CreateAt').text(formattedDate);
-
-					if(res.data.Response !== "")
-					{
-					modalContent += '<hr>';
-					modalContent += '<h6 class="group-title" style="text-align:center;color:grey;">Reponse</h6>';
-					modalContent += '<hr>';
-                    modalContent += '<h5 style="display: inline-block;">Response</h5>';
-					modalContent += '<div class="form-group">';
-                    modalContent += '<textarea id="response" class="form-control" rows="3" disabled>'+ res.data.Response +'</textarea>';
-                    modalContent += '</div>';
-					}
-                    $('#contact-modal-data').html(modalContent);
-					
-                }
-            }
-        });
-        });
-    </script>
-	<!-- View User -->
-    <script>
-        $(document).on('click', '.editContactBtn', function () {
-        console.log("view click");
-        var contactid = $(this).data('contactid');
-        console.log("contactid : "+contactid);
-        $.ajax({
-            type: "GET",
-            url: "handle_u_contact.php?contactid=" + contactid,
-            success: function (response) {
-                console.log(response);
-                var res = jQuery.parseJSON(response);
-                if(res.status == 404) {
-                    alert(res.message);
-                }else if(res.status == 200){
-					$('#edit_ContactID').val(res.data.u_ContactID);
-                    $('#edit_UserEmail').val(res.data.UserEmail);
-                    $('#edit_Subject').val(res.data.Subject);
-                    $('#edit_Message').val(res.data.Message);
-
-                    $('#edit-contact-modal').modal('show');
-                }
-            }
-        });
-        });
-    </script>
-	<!-- update -->
+    <!-- update -->
 	<script>
-        $(document).on('click', '.updateContactBtn', function () {
-        console.log("update click");
+        $(document).on('click', '.DeleteMainBtn', function () {
+		var categoryid = $(this).data('categoryid');
+        console.log("delete click");
         var data = {
-            action: "updateResponse",
-
-			contactid: $("#edit_ContactID").val(),
-            user_email: $("#edit_UserEmail").val(),
-			subject: $("#edit_Subject").val(),
-			message: $("#edit_Message").val(),
-			response: $("#edit_Response").val(),
+            action: "deleteMain",
+			categoryid: categoryid,
         };
 		console.log(data);
 		swal({
@@ -758,37 +480,104 @@
         if (result) {
         $.ajax({
             type: "POST",
-            url: "handle_u_contact.php",
+            url: "handle_category.php",
           	async: true, 
 			data: data,
-			beforeSend: function () {
-			$('#edit-contact-modal [data-dismiss="modal"]').click();
-			showLoading();
-			},
 			success:function(response){
-			hideLoading();
                 console.log(response);
-				if(response==="Failed")
-				{
-					swal("Oops...", "Response cannot be empty!", "error");
-				}
-				else{
 					swal("Success", response, "success").then(function() {
-					location.replace("contact_us_user.php");
+					location.replace("main_category.php");
 				});
-				}
-				
             }
         });
 	}
     });
         });
-		function showLoading() {
-			$('#loading').show();
+    </script>
+	<script>
+        $(document).on('click', '.AddMainBtn', function () {
+			$('#add-main-modal').modal('show');
+        });
+    </script>
+	<script>
+        var hasErrors = false;
+		console.log("add_main_category");
+		// Input event listener for first_name input
+		$('#new_main').on('input', function () {
+		validateInput($(this));
+		});
+		$('#addbtn').on('click', function (event) {
+		var hasErrors = false;
+		validateInput($('#new_main'));
+
+		if ($('.error-message').length > 0) {
+			hasErrors = true;
+			event.preventDefault();
+			console.log('got error');
+			swal("Oops...", "Please ensure that all information is entered accurately.", "error");
+		}
+		if (!hasErrors) {
+			event.preventDefault();
+			console.log('Insert action');
+			insertData();
+		}
+		});
+		
+		function insertData() {
+			console.log("update click");
+        // var user_id = $(this).data('userid');
+        var data = {
+            action: "insert_new_main",
+			new_main: $("#new_main").val(),
+        };
+		console.log(data);
+		swal({
+        title: "Are you sure?",
+        icon: "warning",
+        buttons: ["No, cancel it!", "Yes, I am sure!"],
+        dangerMode: true,
+    	}).then((result) => {
+        if (result) {
+        $.ajax({
+            type: "POST",
+            url: "insert_category.php",
+          	async: true, 
+			data: data,
+            success: function (response) {
+                console.log(response);
+				swal("Success", response, "success").then(function() {
+					location.replace("main_category.php");
+          });
+            }
+        });
+	}
+    });
+		}
+		function validateInput(input) {
+		var value = input.val();
+		if(value ==="")
+		{
+			displayError(input, 'Required field');
+		}
+		// else if (!/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
+		// 	displayError(input, 'Only alphabetic characters are allowed.');
+		// } 
+		else {
+			removeError(input);
+		}
+		}
+		function displayError(input, message) {
+      // Remove existing error message
+		removeError(input);
+		
+		// Add new error message
+		var errorMessageDiv = $('<div class="error-message" style="color: red;position:absolute;font-size: 12px;"></div>').text(message);
+		input.closest('.form-group').append(errorMessageDiv);
 		}
 
-		function hideLoading() {
-			$('#loading').hide();
+		// Function to remove error message
+		function removeError(input) {
+		input.next('.error-message').remove();
 		}
     </script>
 </html>

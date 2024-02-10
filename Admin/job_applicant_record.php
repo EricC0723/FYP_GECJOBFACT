@@ -335,6 +335,23 @@ if (isset($_GET['job_id'])) {
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
 						</a>
 					</li>
+					<li class="dropdown">
+					<a href="javascript:;" class="dropdown-toggle">
+						<i class="icon-copy ion-ios-keypad" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Category</span>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="main_category.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Main category</span>
+							</a>
+						</li>
+						<li>
+							<a href="sub_category.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Sub category</span>
+							</a>
+						</li>
+					</ul>
+				</li>
 					<li>
 						<a href="payment_record.php" class="dropdown-toggle no-arrow">
                         <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment record</span>

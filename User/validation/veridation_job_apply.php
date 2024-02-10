@@ -28,7 +28,10 @@ function validateStep(step) {
                 showResumeErrorMessage($("#file_resume_select"), "File size must be less than 2MB.");
                 validateResume = false;
             }
-            
+            else if (!isPDF(uploadedFile.name)) {
+                showResumeErrorMessage($("#file_resume_select"), "File must be a PDF.");
+                validateResume = false;
+            }
             else{
               removeErrorMessage($("#file_resume_select"));
               removeRadioErrorMessage($("input[name='resumeRadio'][value='noneResume']"));
@@ -37,6 +40,7 @@ function validateStep(step) {
         }
         else{
           validateResume = true;
+          removeRadioErrorMessage($("input[name='resumeRadio'][value='noneResume']"));
         }
         //cover letter
         if(selectedCoverOption === undefined)
@@ -58,6 +62,10 @@ function validateStep(step) {
               showCoverErrorMessage($("#file_cover_select"), "File size must be less than 2MB.");
                 validateCover = false;
             }
+            else if (!isPDF(uploadedCover.name)) {
+                showCoverErrorMessage($("#file_cover_select"), "File must be a PDF.");
+                validateCover = false;
+            }
             else{
               removeCoverErrorMessage($("#file_cover_select"));
               removeRadioErrorMessage($("input[name='coverRadio'][value='noneCover']"));
@@ -66,6 +74,7 @@ function validateStep(step) {
         }
         else{
           validateCover = true;
+          removeRadioErrorMessage($("input[name='coverRadio'][value='noneCover']"));
         }
         //return
         if(validateResume && validateCover)
@@ -144,12 +153,27 @@ function showCoverErrorMessage(input, message) {
 }
 // 隐藏错误信息的函数
 function removeRadioErrorMessage(input) {
-    input.closest('.custom-control').find('.error-message').remove();
+    console.log("Removing radio error message");
+    var errorElement = input.closest('.custom-control').find('.error-message');
+    console.log("Error element:", errorElement);
+    errorElement.remove();
 }
+
 function removeErrorMessage(input) {
-    input.closest('.custom-file').find('.error-message').remove();
+    console.log("Removing error message");
+    var errorElement = input.closest('.custom-file').find('.error-message');
+    console.log("Error element:", errorElement);
+    errorElement.remove();
 }
+
 function removeCoverErrorMessage(input) {
-    input.closest('.custom-file').find('.error-message').remove();
+    console.log("Removing cover error message");
+    var errorElement = input.closest('.custom-file').find('.error-message');
+    console.log("Error element:", errorElement);
+    errorElement.remove();
+}
+function isPDF(fileName) {
+    var extension = fileName.split('.').pop().toLowerCase();
+    return extension === 'pdf';
 }
 </script>

@@ -113,6 +113,9 @@
             
             $save_job_result = mysqli_query($connect,$save_job_query);
           }
+          $apply_job_query = "SELECT * FROM applications WHERE UserID='$user_id' AND JobID='$jobID'";
+          $apply_job_result = mysqli_query($connect,$apply_job_query);
+          $apply_job_count = mysqli_num_rows($apply_job_result);
 
 					// $result = mysqli_query($connect,"SELECT * FROM job_post WHERE Job_Post_ID = '$jobID'");
 					
@@ -210,9 +213,18 @@
                 <?php 
                   if($row['job_status']=='Active')
                   {
+                    if($apply_job_count > 0)
+                    {
+                      ?>
+                        <!-- <span class="text-grey" style="margin-top:30px;"><strong>Already requested</strong></span> -->
+                        <span class="btn btn-block btn-primary" style="margin-top:5px;"><i class="icon-copy fi-check" style="margin-right:10px;"></i>Requested</span>
+                      <?php
+                    }
+                    else{
                     ?>
                     <a href="apply_job.php?jobid=<?php echo $jobID; ?>" class="btn btn-block btn-primary btn-md">Quick apply</a>
                     <?php
+                    }
                   }
                   else{
                     ?>
@@ -334,7 +346,7 @@
     </section>
     
 
-    <section class="bg-light pt-5 testimony-full">
+    <!-- <section class="bg-light pt-5 testimony-full">
         
         <div class="owl-carousel single-carousel">
 
@@ -369,7 +381,7 @@
 
       </div>
 
-    </section>
+    </section> -->
     
     <footer class="site-footer">
       <a href="#top" class="smoothscroll scroll-top">
@@ -463,9 +475,6 @@
                         swal("Success", "Unsaved successfully", "success")
                     }
             console.log("Ajax request successful!");
-        //     swal("Success", response, "success").then(function() {
-
-        // });
           }
           
         }

@@ -202,7 +202,7 @@
       <div class="container">
       <?php 
       $user_id = $_SESSION['User_ID'];
-      $query = "SELECT * FROM applications WHERE UserID = $user_id";
+      $query = "SELECT * FROM applications WHERE UserID = $user_id AND applicant_isDeleted=0 ORDER BY ApplyDate DESC";
       $result = mysqli_query($connect,$query);
     ?>
     <?php
@@ -218,12 +218,11 @@
        ?>
         <div class="row">
         <!-- Profile -->
-        <div class="col-lg-10 mb-4" id="savejob-section">
-              <!-- <div class="block__87154 bg-primary"> -->
+        <div class="col-lg-10 mb-4" id="application-section">
               <div class="block__87154 bg-white">
                 <blockquote>
                   <div class="block__91147 d-flex align-items-center" style="margin-bottom:20px;">
-                  <i class="icon-copy fa fa-trash-o" class="deleteCareerBtn" data-toggle="tooltip" title="Delete" aria-hidden="true" style="position:absolute;margin-left:800px;margin-top:-21px;font-size:26px;cursor: -webkit-grab; cursor: grab;" onclick="save_job('delete_job',<?php echo $job_post_id; ?>)"></i>
+                  <i class="icon-copy fa fa-trash-o" class="deleteCareerBtn" data-toggle="tooltip" title="Delete" aria-hidden="true" style="position:absolute;margin-left:800px;margin-top:-21px;font-size:26px;cursor: -webkit-grab; cursor: grab;" onclick="save_job('delete_application',<?php echo $job_post_id; ?>)"></i>
                   <div>
                     <a href="job-single.php?view&jobid=<?php echo $job_post_id;?>"><h4 class="text-black" style="text-decoration:underline;"><?php echo $job_row['Job_Post_Title'];?></h4></a>
                   </div>
@@ -236,20 +235,20 @@
                 <small style="margin-left:26px;color:grey;font-size:15px;"><?php echo date('d-m-Y', strtotime($row['ApplyDate']));?></small>
                 <?php
                 switch($row['Status']){
-                case 'pending':
+                case 'Pending':
                   echo '<p style="margin-top:40px;margin-bottom:-2px;color:blue;"><i class="icon-copy ion-more" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Pending</p>';
                   break;
 
-                case 'accepted':
+                case 'Accepted':
                   echo '<p style="margin-top:40px;margin-bottom:-2px;color:green;"><i class="icon-copy ion-checkmark" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Accepted</p>';
                   break;
 
-                case 'rejected':
+                case 'Rejected':
                   echo '<p style="margin-top:40px;margin-bottom:-2px;color:red;"><i class="icon-copy ion-close" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Rejected</p>';
                   break;
 
-                case 'processed':
-                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:orange;"><i class="icon-copy ion-load-b" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Proccess</p>';
+                case 'Processed':
+                  echo '<p style="margin-top:40px;margin-bottom:-2px;color:orange;"><i class="icon-copy ion-load-b" aria-hidden="true" style="font-size:20px;margin-right:10px;"></i>Application reviewed by company</p>';
                   break;
 
                 default:
@@ -342,7 +341,7 @@
     $(document).ready(function(){
       //summary
       console.log(job_id);
-      console.log("save_job");
+      console.log("delete_application");
       var data = {
             action: action,
             job_id: job_id,
@@ -356,14 +355,14 @@
     }).then((result) => {
         if (result) {
             $.ajax({
-              url: 'save_job.php',
+              url: 'updateApplicationStatus.php',
               type: 'post',
               data: data,
               async: true, 
               success:function(response){
                     console.log(response);
                     swal("Success", "Delete successfully", "success").then(function () {
-                      $('#savejob-section').load(location.href + " #savejob-section > *");
+                      $('#application-section').load(location.href + " #application-section > *");
                     });
                 },
             });
