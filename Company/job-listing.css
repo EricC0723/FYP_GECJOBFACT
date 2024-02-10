@@ -397,6 +397,9 @@ nav ul {
     color: #2e3849;
     padding: 5px 24px;
     text-align: left;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .td_title {
@@ -754,7 +757,7 @@ input[type='radio'] {
     text-decoration-thickness: 0.08em;
 }
 
-.pagination{
+.pagination {
     padding-top: 10px;
     text-align: right;
 }
@@ -763,4 +766,26 @@ input[type='radio'] {
     text-decoration: underline;
     text-decoration-thickness: 0.08em;
 
+}
+
+.sorting_asc {
+    background: none;
+    border: none;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.sorting_desc {
+    background: none;
+    border: none;
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
 }

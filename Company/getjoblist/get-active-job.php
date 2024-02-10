@@ -102,8 +102,32 @@ session_start(); // Start the session at the beginning
             $searchTerm = mysqli_real_escape_string($connect, $_GET['activesearch']);
         }
 
-        // Prepare the SQL statement
-        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+        $activeSortOrder = isset($_GET['active_sort_order']) ? $_GET['active_sort_order'] : 'normal';
+
+        if ($activeSortOrder === 'titleasc' || $activeSortOrder === 'titledesc') {
+            if ($activeSortOrder === 'titleasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY Job_Post_Title $order LIMIT $start_from, $limit";
+        } else if ($activeSortOrder === 'dateasc' || $activeSortOrder === 'datedesc') {
+            if ($activeSortOrder === 'dateasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate $order LIMIT $start_from, $limit";
+        } else if ($activeSortOrder === 'canasc' || $activeSortOrder === 'candesc') {
+            if ($activeSortOrder === 'canasc') {
+                $order = 'DESC';
+            } else {
+                $order = 'ASC';
+            }
+            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY (SELECT COUNT(*) FROM applications WHERE applications.JobID = job_post.Job_Post_ID) $order LIMIT $start_from, $limit";
+        } else {
+            $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+        }
 
         // Execute the SQL statement
         $result = mysqli_query($connect, $sql);
@@ -115,20 +139,81 @@ session_start(); // Start the session at the beginning
             <thead>
                 <tr>
                     <th style="width:100px">
-                        <div class="th_title">Status</div>
+                        <div class="th_title" >
+                            <div>Status</div>
+                        </div>
                     </th>
                     <th>
-                        <div class="th_title">Job</div>
+                        <div class="th_title">
+                        <div>
+                                Job
+                        </div>
+                        <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="title_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="title_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </th>
-                    <th style="width:146px;">
-                        <div class="th_title">Candidates</div>
+                    <th style="width:330px;">
+                        <div class="th_title">
+                            <div>
+                                Duration
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                    
                     </th>
-                    <th style="width:156px;">
-                        <div class="th_title" style="text-align:right;">Job Actions</div>
+                    <th style="width:140px;">
+                        <div class="th_title">
+                            <div>
+                                Candidates
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="can_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="can_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="width:120px;">
+                        <div class="th_title" style="justify-content:right;">Job Actions</div>
                     </th>
                 </tr>
             </thead>';
             while ($row = mysqli_fetch_assoc($result)) {
+                $JobID = $row['Job_Post_ID'];
+                $sql2 = "SELECT * FROM payment WHERE JobID = $JobID";
+                $result2 = mysqli_query($connect, $sql2);
+                $row2 = mysqli_fetch_assoc($result2);
+
                 echo '
                         <tbody>
                             <tr style="border-top: 4px solid #f5f6f8;height: 80px">
@@ -142,8 +227,13 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
                                         </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="td_title">
+                                    <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row2['Payment_Duration'] ?? '') . ' month(s)</div>
+                                    <div style="font-size:16px;line-height:24px;">' . date('j F Y', strtotime($row['AdStartDate'])) . ' - ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
                                     </div>
                                 </td>
                                 <td>
@@ -152,7 +242,7 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                <div class="td_title" style="width:160px;">
+                                <div class="td_title" >
                                     <div style="flex-direction:row;display:flex;justify-content:end;">
                                         <div style="display:flex;justify-content:center;align-items:center;width:44px;">
                                             <a class="listlink" href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" style="display:flex;align-items:center;">
@@ -270,18 +360,67 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
+    var activeSortOrder = localStorage.getItem('activeSortOrder') || 'normal';
+    var searchTerm = '';
+
     $(document).off('click', '.page-button.active').on('click', '.page-button.active', function (e) {
         e.preventDefault();
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
         var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadActivePage(pageNumber);
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(pageNumber, searchTerm, activeSortOrder);
     });
 
-    function loadActivePage(pageNumber) {
+    document.querySelector('#title_asc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titledesc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titleasc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    document.querySelector('#title_desc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titledesc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    document.querySelector('#date_asc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'datedesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'dateasc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    document.querySelector('#date_desc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'dateasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'datedesc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    document.querySelector('#can_asc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'candesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'canasc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    document.querySelector('#can_desc').addEventListener('click', function () {
+        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'canasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'candesc' : 'normal';
+        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+        localStorage.setItem('activeSortOrder', activeSortOrder);
+        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+    });
+
+    function loadActivePage(pageNumber, searchTerm, activeSortOrder) {
         $.ajax({
             url: 'getjoblist/get-active-job.php',
             type: 'get',
             data: {
-                page: pageNumber
+                page: pageNumber,
+                active_sort_order: activeSortOrder, // Pass the title sort order as a parameter
+                activesearch: searchTerm // Pass the current search term as a parameter
             },
             success: function (response) {
                 // Replace your table content with the response
@@ -324,10 +463,10 @@ session_start(); // Start the session at the beginning
         $('#activeForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
 
-            var searchTerm = $('#activeInput').val();
+            searchTerm = $('#activeInput').val(); // Update the global searchTerm variable
 
             // Pass the search term to a function
-            searchActive(searchTerm);
+            loadActivePage(1, searchTerm);
         });
     });
 
