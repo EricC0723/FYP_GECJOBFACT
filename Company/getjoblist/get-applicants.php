@@ -50,7 +50,7 @@ session_start(); // Start the session at the beginning
                             </path>
                         </svg>
                     </button>
-                    <input type="submit" value="Seek" class="create_btn" style="">
+                    <input type="submit" value="Seek" class="create_btn">
                 </div>
             </form>
         </div>
@@ -66,6 +66,17 @@ session_start(); // Start the session at the beginning
         if (isset($_SESSION['companyID'])) {
             $CompanyID = $_SESSION['companyID'];
         }
+
+        $limit = 10; // Number of entries to show in a page.
+        // Look for a GET variable page if not found default is 1.  
+        if (isset($_GET["page"])) {
+            $pn = $_GET["page"];
+        } else {
+            $pn = 1;
+        }
+        ;
+
+        $start_from = ($pn - 1) * $limit;
 
         $searchTerm = '';
         if (isset($_GET['applicantsearch'])) {
@@ -90,7 +101,7 @@ session_start(); // Start the session at the beginning
             $sql .= " AND job_post.Job_Post_ID = $jobPostID";
         }
 
-        $sql .= " ORDER BY applications.ApplyDate DESC";
+        $sql .= " ORDER BY applications.ApplyDate DESC LIMIT $start_from, $limit";
 
         $result = mysqli_query($connect, $sql);
 
@@ -175,6 +186,7 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['FirstName']) . ' ' . htmlspecialchars($row['LastName']) . '</div>
                                             <a href="mailto: ' . htmlspecialchars($row['Email']) . '" class="applicant_email"><div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Email']) . '</div></a>
+                                            <div style="font-size:16px;line-height:24px;">Apply at ' . date('j F Y', strtotime($row['ApplyDate'])) . '.</div>
                                         </div>
                                     </div>
                                 </td>
@@ -183,8 +195,8 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Apply at ' . date('j F Y', strtotime($row['ApplyDate'])) . '.</div>
-                                            </div>
+                                            <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -213,6 +225,53 @@ session_start(); // Start the session at the beginning
             }
             echo '
             </table>';
+            $sql_total = "SELECT COUNT(*)
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql_total .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql_total .= " ORDER BY applications.ApplyDate DESC";
+
+            $rs_result = mysqli_query($connect, $sql_total);
+            $row = mysqli_fetch_row($rs_result);
+            $total_records = $row[0];
+
+            // Number of pages required. 
+            $total_pages = ceil($total_records / $limit);
+            $pagLink = "<div class='pagination'>";
+
+            $range = 1; // Range of pages to show around the current page
+            $currentPage = $pn; // Current page - you should replace this with the actual current page
+        
+            for ($i = 1; $i <= $total_pages; $i++) {
+                // If total pages are less than 10, show all pages
+                if ($total_pages < 10) {
+                    $pagLink .= "<button class='page-button applicants" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                } else {
+                    // Always show the first and last pages
+                    if ($i == 1 || $i == $total_pages) {
+                        $pagLink .= "<button class='page-button applicants" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is in the range of the current page, show it
+                    else if ($i >= $currentPage - $range && $i <= $currentPage + $range) {
+                        $pagLink .= "<button class='page-button applicants" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is just outside the range of the current page, show an ellipsis
+                    else if ($i == $currentPage - $range - 1 || $i == $currentPage + $range + 1) {
+                        $pagLink .= "<span>...</span>";
+                    }
+                }
+            }
+
+            echo $pagLink . "</div>";
         } else {
             // No results, check if a search term was provided
             if ($searchTerm != '') {
@@ -251,23 +310,51 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
+    $(document).off('click', '.page-button.applicants').on('click', '.page-button.applicants', function (e) {
+        e.preventDefault();
+        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+        loadApplicantsPage(pageNumber);
+    });
+
+    function loadApplicantsPage(pageNumber) {
+        $.ajax({
+            url: 'getjoblist/get-applicants-job.php',
+            type: 'get',
+            data: {
+                page: pageNumber
+            },
+            success: function (response) {
+                // Replace your table content with the response
+                $('#applicants').html(response);
+            }
+        });
+    }
 
 
 </script>
 
 <script>
-    document.getElementById("overlay").addEventListener('click', closeNav);
+    var isSidebarOpen = false; // Add this flag
+
+    document.getElementById("overlay").addEventListener('click', function () {
+        if (isSidebarOpen) {
+            closeNav();
+        }
+    });
 
     function openNav() {
         document.body.classList.add('no-scroll');
         document.getElementById("mySidebar").classList.add("open");
         document.getElementById("overlay").classList.add("open");
+        isSidebarOpen = true; // Set the flag to true when the sidebar is open
+
     }
 
     function closeNav() {
         document.body.classList.remove('no-scroll');
         document.getElementById("mySidebar").classList.remove("open");
         document.getElementById("overlay").classList.remove("open");
+        isSidebarOpen = false; // Set the flag to false when the sidebar is closed
 
         // Get the applicantId from the sidebar
         var applicantId = $('#mySidebar').data('applicant-id');
@@ -279,8 +366,17 @@ session_start(); // Start the session at the beginning
             data: { applicant_id: applicantId },
             success: function (response) {
                 if (response == 'success') {
-                    // Update the status in the table
-                    getapplicants();
+                    // Get the jobPostID from the URL
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var jobPostID = urlParams.get('jobPostID');
+
+                    if (jobPostID) {
+                        // If the jobPostID is present, call the getapplicants function with it
+                        countApplicant(jobPostID);
+                    } else {
+                        // If the jobPostID is not present, call the getapplicants function without it
+                        getapplicants();
+                    }
                 }
             }
         });
@@ -290,8 +386,8 @@ session_start(); // Start the session at the beginning
     document.addEventListener('mouseup', function (e) {
         var sidebar = document.getElementById("mySidebar");
 
-        // If the clicked element is not the sidebar and not the button, close the sidebar
-        if (!sidebar.contains(e.target) && e.target.className !== 'listlink') {
+        // If the clicked element is not the sidebar, not the button, and the sidebar is open, close the sidebar
+        if (!sidebar.contains(e.target) && e.target.className !== 'listlink' && isSidebarOpen) {
             closeNav();
         }
     });

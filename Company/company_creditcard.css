@@ -626,3 +626,30 @@
   }
 }
 
+.page-button {
+  text-decoration: none;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+  color: #4964e9;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.page-button:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+}
+
+.pagination{
+  padding-top: 10px;
+  text-align: right;
+}
+
+.current-page {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+
+}

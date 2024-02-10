@@ -1052,3 +1052,21 @@ a.ui-button:active,
     font-size: 12px;
     font-weight: 600;
 }
+
+.contactlink:hover{
+    text-decoration: underline !important;
+    text-underline-offset:3px;
+    text-decoration-thickness:0.08em;
+}
+
+.applicantCount{
+    font-size: 16px;
+    color: #2e3849;
+    font-weight: 600;
+    line-height: 24px;
+    font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+}

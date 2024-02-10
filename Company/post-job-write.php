@@ -119,7 +119,8 @@ if (isset($_POST['submitbtn'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -159,19 +160,15 @@ if (isset($_POST['submitbtn'])) {
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
-                            <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
-                                    Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
 
-                            <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
-                            </div>
-                            <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
+                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment History</a>
                             </div>
                             <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#contact" class="dropdown-link">Contact us</a>
+                            <div style="padding-top: 12px;"><a href="company_contactus.php" class="dropdown-link">Contact us</a>
                             </div>
-                            <div style="padding-top: 12px;"><a href="company_signout.php" class="dropdown-link">Sign
-                                    out</a></div>
+                            <div style="padding-top: 12px;"><a id="signout-link" href="company_signout.php"
+                                    class="dropdown-link">Sign out</a></div>
                         </div>
                     </div>
                     <div class="add_button">
@@ -362,8 +359,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Description">
-                    <textarea id="jobDescription" name="jobDescription"
-                        class="write-textarea"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
+                    <textarea id="jobDescription" name="jobDescription" class="write-textarea"
+                        placeholder="Enter the job description"><?php echo isset($row['Job_Post_Description']) ? $row['Job_Post_Description'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobdescription" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -397,8 +394,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Responsibilities">
-                    <textarea id="jobResponsibilities" name="jobResponsibilities"
-                        class="write-textarea"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
+                    <textarea id="jobResponsibilities" name="jobResponsibilities" class="write-textarea"
+                        placeholder="Enter the job responsibilities"><?php echo isset($row['Job_Post_Responsibilities']) ? $row['Job_Post_Responsibilities'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobresponsibilities" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -432,8 +429,8 @@ if (isset($_POST['submitbtn'])) {
                     </span>
                 </div>
                 <div class="form-group" id="Benefits">
-                    <textarea id="jobBenefits" name="jobBenefits"
-                        class="write-textarea"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
+                    <textarea id="jobBenefits" name="jobBenefits" class="write-textarea"
+                        placeholder="Enter the job benefits"><?php echo isset($row['Job_Post_Benefits']) ? $row['Job_Post_Benefits'] : ''; ?></textarea>
                     <div style="padding-top:4px;" id="validation-jobbenefits" class="hide"><span
                             style="display:flex"><span
                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
@@ -463,8 +460,27 @@ if (isset($_POST['submitbtn'])) {
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
     <script src="post-job.js"></script>
     <script src="post-job-write-validation.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        document.getElementById('signout-link').addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = this.href;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to sign out.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sign out!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+            })
+        });
 
         document.getElementById('uploadLogo').addEventListener('click', function () {
             document.getElementById('logoInput').click();
@@ -585,8 +601,7 @@ if (isset($_POST['submitbtn'])) {
             });
         }
     </script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
 </body>
 
@@ -598,6 +613,22 @@ if (isset($_SESSION['companyID'])) {
     $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
     $result = mysqli_query($connect, $sql);
     $row = mysqli_fetch_assoc($result);
+}
+
+if (!isset($_SESSION['job_post_ID'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "Invalid Action.",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_landing.php";
+        });
+    </script>
+    <?php
+    exit;
 }
 
 if (!isset($_SESSION['companyID'])) {

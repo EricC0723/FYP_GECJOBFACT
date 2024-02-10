@@ -80,19 +80,18 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
-                            <div style="padding-top: 12px;"><a href="#team" class="dropdown-link">Your team</a></div>
                             <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
                                     Payment</a></div>
 
-                            <div style="padding-top: 12px;"><a href="#logos" class="dropdown-link">Logos & Brands</a>
-                            </div>
-                            <div style="padding-top: 12px;"><a href="#adprice" class="dropdown-link">Ad price lookup</a>
+                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment
+                                    History</a>
                             </div>
                             <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="#contact" class="dropdown-link">Contact us</a>
+                            <div style="padding-top: 12px;"><a href="company_contactus.php"
+                                    class="dropdown-link">Contact us</a>
                             </div>
-                            <div style="padding-top: 12px;"><a href="company_signout.php" class="dropdown-link">Sign
-                                    out</a></div>
+                            <div style="padding-top: 12px;"><a id="signout-link" href="company_signout.php"
+                                    class="dropdown-link">Sign out</a></div>
                         </div>
                     </div>
                     <div class="add_button">
@@ -162,8 +161,28 @@ if (isset($_SESSION['companyID'])) {
     <script src="post-job.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+
+        document.getElementById('signout-link').addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = this.href;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are about to sign out.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, sign out!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = href;
+                }
+            })
+        });
 
         $(document).ready(function () {
             getactivejob();
@@ -317,9 +336,20 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Accepted", "Application has been accepted.", "success");
+                                // Get the jobPostID from the URL
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var jobPostID = urlParams.get('jobPostID');
                                 // Update the status in the table
-                                getapplicants();
+                                if (jobPostID) {
+                                    Swal.fire("Accepted", "Application has been accepted.", "success");
+                                    // If the jobPostID is present, call the getapplicants function with it
+                                    countApplicant(jobPostID);
+
+                                } else {
+                                    // If the jobPostID is not present, call the getapplicants function without it
+                                    Swal.fire("Accepted", "Application has been accepted.", "success");
+                                    getapplicants();
+                                }
                             } else {
                                 Swal.fire("Error", "Error accepting application", "error");
                             }
@@ -345,9 +375,20 @@ if (isset($_SESSION['companyID'])) {
                         data: { applicantId: applicantId },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Rejected", "Application has been rejected.", "success");
+                                // Get the jobPostID from the URL
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var jobPostID = urlParams.get('jobPostID');
                                 // Update the status in the table
-                                getapplicants();
+                                if (jobPostID) {
+                                    Swal.fire("Rejected", "Application has been rejected.", "success");
+                                    // If the jobPostID is present, call the getapplicants function with it
+                                    countApplicant(jobPostID);
+
+                                } else {
+                                    // If the jobPostID is not present, call the getapplicants function without it
+                                    Swal.fire("Rejected", "Application has been rejected.", "success");
+                                    getapplicants();
+                                }
                             } else {
                                 Swal.fire("Error", "Error rejecting application", "error");
                             }
@@ -529,6 +570,15 @@ if (isset($_SESSION['companyID'])) {
         var underline = document.querySelector('.underline');
         var divs = [document.getElementById('active'), document.getElementById('closed'), document.getElementById('draft'), document.getElementById('blocked'), document.getElementById('applicants')];
 
+        $(document).ready(function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var jobPostID = urlParams.get('jobPostID');
+
+            if (jobPostID) {
+                countApplicant(jobPostID);
+            }
+        });
+
         // Function to update the visibility of the divs based on the id in the URL
         function updateDivVisibility() {
             // Hide all divs
@@ -600,9 +650,7 @@ if (isset($_SESSION['companyID'])) {
 
 
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 </body>
 
 </html>

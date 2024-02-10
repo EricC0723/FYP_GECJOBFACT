@@ -1,17 +1,22 @@
 // Get the input field and the validation message elements
 var jobTitleInput = document.getElementById('jobTitle');
 var validationTitle = document.getElementById('validation-title');
-var titleMessage = document.getElementById('title-message');
 
 // Add an event listener to the input field
 jobTitleInput.addEventListener('input', function () {
+    var titleMessage = document.getElementById('title-message');
     if (this.value.trim() === '') {
         // If the input field is empty
         titleMessage.textContent = 'Please add job title';
         this.dataset.valid = '0';
         validationTitle.classList.remove('hide'); // Show the validation message
+    } else if (this.value.length > 80) {
+        // If the job title is more than 80 characters
+        titleMessage.textContent = 'Job title cannot be more than 80 characters';
+        this.dataset.valid = '0';
+        validationTitle.classList.remove('hide'); // Show the validation message
     } else {
-        // If the input field is not empty
+        // If the input field is not empty and the job title is not more than 80 characters
         titleMessage.textContent = '';
         this.dataset.valid = '1';
         validationTitle.classList.add('hide'); // Hide the validation message

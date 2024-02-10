@@ -77,6 +77,17 @@ session_start(); // Start the session at the beginning
             return $row['count'];
         }
 
+        $limit = 10; // Number of entries to show in a page.
+        // Look for a GET variable page if not found default is 1.  
+        if (isset($_GET["page"])) {
+            $pn = $_GET["page"];
+        } else {
+            $pn = 1;
+        }
+        ;
+
+        $start_from = ($pn - 1) * $limit;
+
         $CompanyID = null;
         if (isset($_SESSION['companyID'])) {
             $CompanyID = $_SESSION['companyID'];
@@ -92,7 +103,7 @@ session_start(); // Start the session at the beginning
         }
 
         // Prepare the SQL statement
-        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
 
         // Execute the SQL statement
         $result = mysqli_query($connect, $sql);
@@ -131,8 +142,8 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Created ' . date('j F Y', strtotime($row['AdStartDate'])) . ' by ' . htmlspecialchars($rowc['ContactPerson']) . ' .</div>
-                                            </div>
+                                            <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -154,9 +165,6 @@ session_start(); // Start the session at the beginning
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="continuedraft_button" style="display:none">
-                                        <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
-                                    </div>
                                 </div>
                                 </td>
                             </tr>
@@ -166,6 +174,41 @@ session_start(); // Start the session at the beginning
             }
             echo '
             </table>';
+
+            $sql_total = "SELECT COUNT(*) FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC ";
+            $rs_result = mysqli_query($connect, $sql_total);
+            $row = mysqli_fetch_row($rs_result);
+            $total_records = $row[0];
+
+            // Number of pages required. 
+            $total_pages = ceil($total_records / $limit);
+            $pagLink = "<div class='pagination'>";
+
+            $range = 1; // Range of pages to show around the current page
+            $currentPage = $pn; // Current page - you should replace this with the actual current page
+        
+            for ($i = 1; $i <= $total_pages; $i++) {
+                // If total pages are less than 10, show all pages
+                if ($total_pages < 10) {
+                    $pagLink .= "<button class='page-button active" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                } else {
+                    // Always show the first and last pages
+                    if ($i == 1 || $i == $total_pages) {
+                        $pagLink .= "<button class='page-button active" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is in the range of the current page, show it
+                    else if ($i >= $currentPage - $range && $i <= $currentPage + $range) {
+                        $pagLink .= "<button class='page-button active" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is just outside the range of the current page, show an ellipsis
+                    else if ($i == $currentPage - $range - 1 || $i == $currentPage + $range + 1) {
+                        $pagLink .= "<span>...</span>";
+                    }
+                }
+            }
+
+            echo $pagLink . "</div>";
+
             // Add the event listener to the 'applicantCount' element
             echo '
             <script>
@@ -227,6 +270,26 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
+    $(document).off('click', '.page-button.active').on('click', '.page-button.active', function (e) {
+        e.preventDefault();
+        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+        loadActivePage(pageNumber);
+    });
+
+    function loadActivePage(pageNumber) {
+        $.ajax({
+            url: 'getjoblist/get-active-job.php',
+            type: 'get',
+            data: {
+                page: pageNumber
+            },
+            success: function (response) {
+                // Replace your table content with the response
+                $('#active').html(response);
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         // Get the elements
         var clearactive = document.getElementById('clearactive');
