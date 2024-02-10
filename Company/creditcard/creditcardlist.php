@@ -23,7 +23,20 @@ if (isset($_SESSION['companyID'])) {
         <div style="padding: 0 30px 30px 30px;width:100%;">
             <?php
 
-            $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0";
+
+            $limit = 10; // Number of entries to show in a page.
+            // Look for a GET variable page if not found default is 1.  
+            if (isset($_GET["page"])) {
+                $pn = $_GET["page"];
+            } else {
+                $pn = 1;
+            }
+            ;
+
+            $start_from = ($pn - 1) * $limit;
+
+
+            $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0 ORDER BY CreditCardID DESC LIMIT $start_from, $limit";
             $result = mysqli_query($connect, $sql);
 
             if (mysqli_num_rows($result) > 0) {
@@ -98,6 +111,40 @@ if (isset($_SESSION['companyID'])) {
                 }
 
                 echo "</table>";
+
+                $sql_total = "SELECT COUNT(*) FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0 ORDER BY CreditCardID DESC";
+                $rs_result = mysqli_query($connect, $sql_total);
+                $row = mysqli_fetch_row($rs_result);
+                $total_records = $row[0];
+
+                // Number of pages required. 
+                $total_pages = ceil($total_records / $limit);
+                $pagLink = "<div class='pagination'>";
+
+                $range = 1; // Range of pages to show around the current page
+                $currentPage = $pn; // Current page - you should replace this with the actual current page
+            
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    // If total pages are less than 10, show all pages
+                    if ($total_pages < 10) {
+                        $pagLink .= "<button class='page-button card" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    } else {
+                        // Always show the first and last pages
+                        if ($i == 1 || $i == $total_pages) {
+                            $pagLink .= "<button class='page-button card" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                        }
+                        // If the page is in the range of the current page, show it
+                        else if ($i >= $currentPage - $range && $i <= $currentPage + $range) {
+                            $pagLink .= "<button class='page-button card" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                        }
+                        // If the page is just outside the range of the current page, show an ellipsis
+                        else if ($i == $currentPage - $range - 1 || $i == $currentPage + $range + 1) {
+                            $pagLink .= "<span>...</span>";
+                        }
+                    }
+                }
+
+                echo $pagLink . "</div>";
             } else {
                 // Display a message for no jobs
                 echo '<div style="padding:32px;">
@@ -131,7 +178,26 @@ if (isset($_SESSION['companyID'])) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    $(document).off('click', '.page-button.card').on('click', '.page-button.card', function (e) {
+        e.preventDefault();
+        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+        loadCardPage(pageNumber);
+    });
 
+    function loadCardPage(pageNumber) {
+        $.ajax({
+            url: 'creditcard/creditcardlist.php',
+            type: 'get',
+            data: {
+                page: pageNumber
+            },
+            success: function (response) {
+                // Replace your table content with the response
+                $('#creditcard').html(response);
+            }
+        });
+    }
+    
     // Select the add buttons
     var addButton1 = document.getElementById('add-creditcard-button1');
     var addButton2 = document.getElementById('add-creditcard-button2');

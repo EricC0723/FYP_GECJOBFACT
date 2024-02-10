@@ -62,6 +62,17 @@ session_start(); // Start the session at the beginning
             $CompanyID = $_SESSION['companyID'];
         }
 
+        $limit = 10; // Number of entries to show in a page.
+        // Look for a GET variable page if not found default is 1.  
+        if (isset($_GET["page"])) {
+            $pn = $_GET["page"];
+        } else {
+            $pn = 1;
+        }
+        ;
+
+        $start_from = ($pn - 1) * $limit;
+
         $searchTerm = '';
         if (isset($_GET['paymentsearch'])) {
             $searchTerm = mysqli_real_escape_string($connect, $_GET['paymentsearch']);
@@ -77,7 +88,7 @@ session_start(); // Start the session at the beginning
         INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
         WHERE job_post.CompanyID = $CompanyID 
         AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
-        ORDER BY payment.Payment_Date DESC";
+        ORDER BY payment.Payment_Date DESC LIMIT $start_from, $limit";
 
         $result = mysqli_query($connect, $sql);
 
@@ -167,6 +178,43 @@ session_start(); // Start the session at the beginning
             }
             echo '
             </table>';
+            $sql_total = "SELECT COUNT(*)
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' ORDER BY payment.Payment_Date DESC";
+            $rs_result = mysqli_query($connect, $sql_total);
+            $row = mysqli_fetch_row($rs_result);
+            $total_records = $row[0];
+
+            // Number of pages required. 
+            $total_pages = ceil($total_records / $limit);
+            $pagLink = "<div class='pagination'>";
+
+            $range = 1; // Range of pages to show around the current page
+            $currentPage = $pn; // Current page - you should replace this with the actual current page
+        
+            for ($i = 1; $i <= $total_pages; $i++) {
+                // If total pages are less than 10, show all pages
+                if ($total_pages < 10) {
+                    $pagLink .= "<button class='page-button payment" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                } else {
+                    // Always show the first and last pages
+                    if ($i == 1 || $i == $total_pages) {
+                        $pagLink .= "<button class='page-button payment" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is in the range of the current page, show it
+                    else if ($i >= $currentPage - $range && $i <= $currentPage + $range) {
+                        $pagLink .= "<button class='page-button payment" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                    }
+                    // If the page is just outside the range of the current page, show an ellipsis
+                    else if ($i == $currentPage - $range - 1 || $i == $currentPage + $range + 1) {
+                        $pagLink .= "<span>...</span>";
+                    }
+                }
+            }
+
+            echo $pagLink . "</div>";
         } else {
             // No results, check if a search term was provided
             if ($searchTerm != '') {
@@ -204,11 +252,25 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
+    $(document).off('click', '.page-button.payment').on('click', '.page-button.payment', function (e) {
+        e.preventDefault();
+        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+        loadPaymentPage(pageNumber);
+    });
 
-
-</script>
-
-<script>
+    function loadPaymentPage(pageNumber) {
+        $.ajax({
+            url: 'getjoblist/get-payment.php',
+            type: 'get',
+            data: {
+                page: pageNumber
+            },
+            success: function (response) {
+                // Replace your table content with the response
+                $('#payment').html(response);
+            }
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         // Get the elements

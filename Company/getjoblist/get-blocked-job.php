@@ -79,6 +79,17 @@ session_start(); // Start the session at the beginning
         return $row['count'];
     }
 
+    $limit = 10; // Number of entries to show in a page.
+    // Look for a GET variable page if not found default is 1.  
+    if (isset($_GET["page"])) {
+        $pn = $_GET["page"];
+    } else {
+        $pn = 1;
+    }
+    ;
+
+    $start_from = ($pn - 1) * $limit;
+
     $CompanyID = null;
     if (isset($_SESSION['companyID'])) {
         $CompanyID = $_SESSION['companyID'];
@@ -93,7 +104,7 @@ session_start(); // Start the session at the beginning
     }
 
     // Prepare the SQL statement
-    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
 
     // Execute the SQL statement
     $result = mysqli_query($connect, $sql);
@@ -163,6 +174,41 @@ session_start(); // Start the session at the beginning
                         ';
         }
         echo '</table>';
+
+        $sql_total = "SELECT COUNT(*) FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC";
+        $rs_result = mysqli_query($connect, $sql_total);
+        $row = mysqli_fetch_row($rs_result);
+        $total_records = $row[0];
+
+        // Number of pages required. 
+        $total_pages = ceil($total_records / $limit);
+        $pagLink = "<div class='pagination'>";
+
+        $range = 1; // Range of pages to show around the current page
+        $currentPage = $pn; // Current page - you should replace this with the actual current page
+    
+        for ($i = 1; $i <= $total_pages; $i++) {
+            // If total pages are less than 10, show all pages
+            if ($total_pages < 10) {
+                $pagLink .= "<button class='page-button blocked" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+            } else {
+                // Always show the first and last pages
+                if ($i == 1 || $i == $total_pages) {
+                    $pagLink .= "<button class='page-button blocked" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                }
+                // If the page is in the range of the current page, show it
+                else if ($i >= $currentPage - $range && $i <= $currentPage + $range) {
+                    $pagLink .= "<button class='page-button blocked" . ($i == $currentPage ? " current-page" : "") . "' data-page-number='" . $i . "'>" . $i . "</button>";
+                }
+                // If the page is just outside the range of the current page, show an ellipsis
+                else if ($i == $currentPage - $range - 1 || $i == $currentPage + $range + 1) {
+                    $pagLink .= "<span>...</span>";
+                }
+            }
+        }
+
+        echo $pagLink . "</div>";
+
         echo '
         <script>
         // Get the button
@@ -219,6 +265,25 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
+    $(document).off('click', '.page-button.blocked').on('click', '.page-button.blocked', function (e) {
+        e.preventDefault();
+        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+        loadBlockedPage(pageNumber);
+    });
+
+    function loadBlockedPage(pageNumber) {
+        $.ajax({
+            url: 'getjoblist/get-blocked-job.php',
+            type: 'get',
+            data: {
+                page: pageNumber
+            },
+            success: function (response) {
+                // Replace your table content with the response
+                $('#blocked').html(response);
+            }
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         // Get the elements
