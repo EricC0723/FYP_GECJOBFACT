@@ -202,7 +202,7 @@
       <div class="container">
       <?php 
       $user_id = $_SESSION['User_ID'];
-      $query = "SELECT * FROM save_job WHERE UserID = $user_id";
+      $query = "SELECT * FROM save_job WHERE UserID = $user_id ORDER BY DateAdded DESC";
       $result = mysqli_query($connect,$query);
     ?>
     <?php

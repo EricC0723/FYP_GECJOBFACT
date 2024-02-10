@@ -6,10 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 接收前端传递的数据
     $subject = $_POST["subject"];
     $message = $_POST["message"];
-    $user_id = $_SESSION['User_ID'];
-    $user_email = $_SESSION['Email'];
+    $user_email = $_POST['email'];
     // 执行插入数据的 SQL 查询
-    $query = "INSERT INTO user_contact_us (UserID,UserEmail,Subject, Message) VALUES ('$user_id','$user_email','$subject', '$message')";
+    $query = "INSERT INTO user_contact_us (UserEmail,Subject, Message) VALUES ('$user_email','$subject', '$message')";
     $result = mysqli_query($connect, $query);
 
     if ($result) {

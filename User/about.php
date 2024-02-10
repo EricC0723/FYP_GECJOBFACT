@@ -22,12 +22,12 @@
   </head>
   <body id="top">
 
-  <div id="overlayer"></div>
+  <!-- <div id="overlayer"></div>
   <div class="loader">
     <div class="spinner-border text-primary" role="status">
       <span class="sr-only">Loading...</span>
     </div>
-  </div>
+  </div> -->
     
 
 <div class="site-wrap">
@@ -230,7 +230,7 @@
       </div>
     </section>
 
-    <footer class="site-footer">
+    <footer class="site-footer" style="margin-top:100px;">
       <a href="#top" class="smoothscroll scroll-top">
         <span class="icon-keyboard_arrow_up"></span>
       </a>

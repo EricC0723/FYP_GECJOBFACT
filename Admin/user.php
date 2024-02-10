@@ -270,29 +270,6 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 					</li>
-					<!-- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit2"></span><span class="mtext">Forms</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="form-basic.html">Form Basic</a></li>
-							<li><a href="advanced-components.html">Advanced Components</a></li>
-							<li><a href="form-wizard.html">Form Wizard</a></li>
-							<li><a href="html5-editor.html">HTML5 Editor</a></li>
-							<li><a href="form-pickers.html">Form Pickers</a></li>
-							<li><a href="image-cropper.html">Image Cropper</a></li>
-							<li><a href="image-dropzone.html">Image Dropzone</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-library"></span><span class="mtext">Tables</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="basic-table.html">Basic Tables</a></li>
-							<li><a href="datatable.html">DataTables</a></li>
-						</ul>
-					</li> -->
 					<li>
 						<a href="admin.php" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
@@ -347,6 +324,23 @@
 							<span class="micon dw dw-edit1"></span><span class="mtext">Job post</span>
 						</a>
 					</li>
+					<li class="dropdown">
+					<a href="javascript:;" class="dropdown-toggle">
+						<i class="icon-copy ion-ios-keypad" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Category</span>
+					</a>
+					<ul class="submenu">
+						<li>
+							<a href="main_category.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Main category</span>
+							</a>
+						</li>
+						<li>
+							<a href="sub_category.php" class="dropdown-toggle no-arrow">
+								<span class="mtext">Sub category</span>
+							</a>
+						</li>
+					</ul>
+				</li>
 					<li>
 						<a href="payment_record.php" class="dropdown-toggle no-arrow">
                         <i class="icon-copy fa fa-credit-card" aria-hidden="true" style="margin-right:30px;margin-left:-47px;font-size: 20px;"></i><span class="mtext">Payment record</span>

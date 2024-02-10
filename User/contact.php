@@ -61,20 +61,6 @@
               <li>
                 <a href="job-listings.php">Job Listings</a>
               </li>
-              <!-- <li class="has-children">
-                <a href="services.html">Pages</a>
-                <ul class="dropdown">
-                  <li><a href="services.html">Services</a></li>
-                  <li><a href="service-single.html">Service Single</a></li>
-                  <li><a href="blog-single.html">Blog Single</a></li>
-                  <li><a href="portfolio.html">Portfolio</a></li>
-                  <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                  <li><a href="testimonials.html">Testimonials</a></li>
-                  <li><a href="faq.html">Frequently Ask Questions</a></li>
-                  <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-              </li> -->
-              <!-- <li><a href="blog.html">Blog</a></li> -->
               <li><a href="contact.php" class="active">Contact</a></li>
               <!-- <li class="d-lg-none"><a href="post-job.html"><span class="mr-2">+</span> Post a Job</a></li>
               <li class="d-lg-none"><a href="login.php">Log In</a></li> -->
@@ -144,13 +130,13 @@
           <div class="col-lg-6 mb-5 mb-lg-0">
             <form action="#" class="" method="post">
 
-              <!-- <div class="row form-group">
+              <div class="row form-group">
                 
                 <div class="col-md-12">
                   <label class="text-black" for="email">Email</label> 
                   <input type="email" id="email" class="form-control">
                 </div>
-              </div> -->
+              </div>
 
               <div class="row form-group">
                 
@@ -265,10 +251,14 @@
     $('#message').on('input', function () {
       validateMessage($(this));
     });
+    $('#email').on('input', function () {
+      validateEmail($(this));
+    });
     $('#contact_btn').on('click', function (event) {
     var hasErrors = false;
     validateInput($('#subject'));
     validateMessage($('#message'));
+    validateEmail($('#email'));
 
     if ($('.error-message').length > 0) {
         hasErrors = true;
@@ -278,21 +268,7 @@
       }
       if (!hasErrors) {
         event.preventDefault();
-        var userLoggedIn = <?php echo isset($_SESSION['User_ID']) ? 'true' : 'false'; ?>;
-
-      if (!userLoggedIn) {
-        swal({
-        icon: "warning",
-        text:"Please log in before sending a message.",
-        buttons: ["No, cancel it!", "Login"],
-        dangerMode: true,
-    	}).then((result) => {
-        location.replace("login.php");
-      });
-      }
-      else{
          insert_contact();
-      }
       }
     });
     function validateInput(input) {
@@ -308,6 +284,22 @@
       {
         displayError(input, '50 characters or less (' + value.length+")");
       }else {
+        removeError(input);
+      }
+    }
+    function validateEmail(input) {
+        var email = input.val();
+
+    // Use a regular expression for email validation
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (email === "") {
+        // If the email is empty, show an error
+        displayError(input, 'Email is required.');
+    } else if (!emailRegex.test(email)) {
+        // If the email does not match the regex pattern, show an error
+        displayError(input, 'Invalid email format.');
+    } else {
         removeError(input);
       }
     }
@@ -332,6 +324,7 @@
         var data = {
             subject: $("#subject").val(),
             message: $("#message").val(),
+            email: $("#email").val(),
         };
         swal({
         title: "Are you sure?",
@@ -346,8 +339,8 @@
             data: data,
             success: function (response) {
               swal("Success", response, "success").then(function() {
-					location.replace("index.php");
-				});
+            location.replace("index.php");
+            });
             },
             error: function (error) {
                 console.error("Error:", error);

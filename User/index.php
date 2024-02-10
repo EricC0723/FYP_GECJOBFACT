@@ -203,7 +203,7 @@
                     <p class="mb-0 text-white lead">Your dream job is just a click away.  Sign up now!</p>
                   </div>
                   <div class="col-md-3 ml-auto">
-                    <a href="#" class="btn btn-warning btn-block btn-lg">Sign Up</a>
+                    <a href="RegisterUser.php" class="btn btn-warning btn-block btn-lg">Sign Up</a>
                   </div>
                 </div>
               </div>
