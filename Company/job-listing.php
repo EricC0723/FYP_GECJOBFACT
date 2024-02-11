@@ -478,19 +478,7 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
-        function searchActive(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-active-job.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    activesearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#active').html(data);
-                }
-            });
-        }
+        
 
         function searchClosed(searchTerm) {
             $.ajax({
@@ -650,7 +638,7 @@ if (isset($_SESSION['companyID'])) {
 
 
     </script>
-    
+
 </body>
 
 </html>
