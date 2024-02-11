@@ -393,6 +393,7 @@
 														</a>
 														<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 															<a class="viewPaymentBtn dropdown-item" href="#" data-paymentid="<?=$row['PaymentID'];?>"><i class="dw dw-eye"></i> View</a>
+															<a class="printPaymentBtn dropdown-item" href="#" data-paymentid="<?=$row['PaymentID'];?>"><i class="icon-copy fa fa-file-pdf-o" aria-hidden="true"></i> Print to PDF</a>
 														</div>
 													</div>
 												</td>
@@ -443,7 +444,22 @@
 	<script src="src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="src/plugins/datatables/js/vfs_fonts.js"></script>
 	<script src="vendors/scripts/datatable-setting.js"></script></body>
-    <!-- View User -->
+	<script>
+        $(document).on('click', '.printPaymentBtn', function () {
+        console.log("print click");
+        var paymentid = $(this).data('paymentid');
+        console.log("paymentid : "+paymentid);
+        $.ajax({
+            type: "GET",
+            url: "view_payment.php?paymentid=" + paymentid,
+            success: function (response) {
+                console.log(response);
+				swal("Success", "PDF generated and saved successfully! You can find it in the D drive.", "success");
+            }
+        });
+        });
+    </script>
+    <!-- View payment -->
     <script>
         $(document).on('click', '.viewPaymentBtn', function () {
         console.log("view click");
@@ -459,10 +475,38 @@
                     alert(res.message);
                 }else if(res.status == 200){
                     $('#view-payment-modal').modal('show');
+					var paymentAmount = res.data.payment.Payment_Amount; // 获取 Payment_Amount
 
+					// 计算 Subtotal，假设 SST 税率为6%
+					var sstRate = 0.06;
+					var subtotal = paymentAmount / (1 + sstRate);
+					subtotal = Math.ceil(subtotal);
+					// 计算 SST
+					var sst = paymentAmount - subtotal;
+					sst = sst.toFixed(2);
                     var modalContent = '';
 
-					var paymentData = res.data;
+					var paymentDate = new Date(res.data.payment.Payment_Date);
+					var day = paymentDate.getDate();
+					var month = paymentDate.toLocaleString('en-us', { month: 'short' });
+					var year = paymentDate.getFullYear();
+					var hours = paymentDate.getHours();
+					var minutes = paymentDate.getMinutes();
+					var seconds = paymentDate.getSeconds();
+					var $paymentDate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+
+					var adStartDate = new Date(res.data.job.AdStartDate);
+					var day = adStartDate.getDate();
+					var month = adStartDate.toLocaleString('en-us', { month: 'short' });
+					var year = adStartDate.getFullYear();
+					var $formattedAdStartDate = day + ' ' + month + ' ' + year;
+
+					var adEndDate = new Date(res.data.job.AdEndDate);
+					var day = adEndDate.getDate();
+					var month = adEndDate.toLocaleString('en-us', { month: 'short' });
+					var year = adEndDate.getFullYear();
+					var $formattedAdEndDate = day + ' ' + month + ' ' + year;
+
                     modalContent += '<div class="invoice-box">';
                     modalContent += '<div class="invoice-header">';
                     modalContent += '<div class="logo text-center">';
@@ -472,9 +516,11 @@
                     modalContent += '<h4 class="text-center mb-30 weight-600">INVOICE</h4>';
                     modalContent += '<div class="row pb-30">';
                     modalContent += '<div class="col-md-6">';
-                    modalContent += '<h5 class="mb-15">Infinion sdn bhd</h5>';
-                    modalContent += '<p class="font-14 mb-5">Date Issued: <strong class="weight-600">' + res.data.Payment_Date + '</strong></p>';
-                    modalContent += '<p class="font-14 mb-5">Invoice No: <strong class="weight-600">' +  res.data.PaymentID + '</strong></p>';
+                    modalContent += '<h5 class="mb-15">'+ res.data.payment.CompanyName +'</h5>';
+                    modalContent += '<p class="font-14 mb-5">Date Issued: <strong class="weight-600">' + $paymentDate + '</strong></p>';
+                    modalContent += '<p class="font-14 mb-5">Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <strong class="weight-600">' +  res.data.company.CompanyEmail + '</strong></p>';
+					modalContent += '<p class="font-14 mb-5">Duration&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <strong class="weight-600">' +  $formattedAdStartDate +' - '+$formattedAdEndDate + '</strong></p>';
+					
                     modalContent += '</div>';
                     modalContent += '<div class="col-md-6">';
                     modalContent += '<div class="text-right">';
@@ -487,63 +533,61 @@
                     modalContent += '</div>';
                     modalContent += '<div class="invoice-desc pb-30">';
                     modalContent += '<div class="invoice-desc-head clearfix">';
-                    modalContent += '<div class="invoice-sub">Description</div>';
-                    modalContent += '<div class="invoice-rate">Rate</div>';
-                    // modalContent += '<div class="invoice-hours">Hours</div>';
-                    modalContent += '<div class="invoice-subtotal">Total</div>';
+					modalContent += '<div class="invoice-sub">Description</div>';
+					modalContent += '<div class="invoice-rate">Price (per month)</div>';
+					modalContent += '<div class="invoice-rate">Quantity</div>';
+					modalContent += '<div class="invoice-subtotal">Subtotal</div>';
                     modalContent += '</div>';
                     modalContent += '<div class="invoice-desc-body">';
                     modalContent += '<ul>';
+					modalContent += '<li class="clearfix">';
+                    modalContent += '<div class="invoice-sub">'+ res.data.job.Job_Post_Title +'</div>';
+					modalContent += '<div class="invoice-rate">RM 98.00</div>';
+					modalContent += '<div class="invoice-hours">'+ res.data.payment.Payment_Duration +'</div>';
+					modalContent += '<div class="invoice-subtotal"><span class="weight-600"> RM '+ subtotal +'</span></div>';
+					modalContent += '</li>';
+					modalContent += '<li class="clearfix" style="margin-top:280px;">';
+                    modalContent += '<div class="invoice-sub"></div>';
+					modalContent += '<div class="invoice-rate"></div>';
+					modalContent += '<div class="invoice-hours">sst (6%)</div>';
+					modalContent += '<div class="invoice-subtotal"><span class="weight-600"> RM '+ sst +'</span></div>';
+					modalContent += '</li>';
+					modalContent += '</ul>';
+
+					modalContent += '</div>';
+					modalContent += '<div class="invoice-desc-footer">';
+					modalContent += '<div class="invoice-desc-head clearfix">';
+					modalContent += '<div class="invoice-sub">Card Info</div>';
+					modalContent += '<div class="invoice-rate">Pay By</div>';
+					modalContent += '<div class="invoice-subtotal">Total Price</div>';
+					modalContent += '</div>';
+					modalContent += '<div class="invoice-desc-body">';
+					modalContent += '<ul>';
+					modalContent += '<li class="clearfix">';
+					modalContent += '<div class="invoice-sub">';
+					var cardNumber = res.data.payment.CreditCard_Number;
+
+					// 取得前四位和后四位
+					var firstFourDigits = cardNumber.slice(0, 4);
+					var lastFourDigits = cardNumber.slice(-4);
+
+					// 生成隐藏中间数字的字符串
+					var hiddenDigits = '*'.repeat(cardNumber.length - 8);
+
+					var formattedCardNumber = firstFourDigits + ' ' + hiddenDigits + ' ' + lastFourDigits;
+					modalContent += '<p class="font-14 mb-5">Account No: <strong class="weight-600">' + formattedCardNumber  + '</strong></p>';
+					modalContent += '</div>';
+					modalContent += '<div class="invoice-rate font-20 weight-600">' + res.data.company.ContactPerson  + '</div>';
+					modalContent += '<div class="invoice-subtotal"><span class="weight-600 font-24 text-danger">RM' + paymentAmount  + '</span></div>';
+					modalContent += '</li>';
+					modalContent += '</ul>';
+					modalContent += '</div>';
+					modalContent += '</div>';
+					modalContent += '</div>';
+					modalContent += '<h4 class="text-center pb-20">Thank You</h4>';
+					modalContent += '</div>';
+					modalContent += '</div>';
                     $('#payment-modal-data').html(modalContent);
-				// 					<li class="clearfix">
-				// 						<div class="invoice-sub">Website Design</div>
-				// 						<div class="invoice-rate">$20</div>
-				// 						<div class="invoice-hours">100</div>
-				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
-				// 					</li>
-				// 					<li class="clearfix">
-				// 						<div class="invoice-sub">Logo Design</div>
-				// 						<div class="invoice-rate">$20</div>
-				// 						<div class="invoice-hours">100</div>
-				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
-				// 					</li>
-				// 					<li class="clearfix">
-				// 						<div class="invoice-sub">Website Design</div>
-				// 						<div class="invoice-rate">$20</div>
-				// 						<div class="invoice-hours">100</div>
-				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
-				// 					</li>
-				// 					<li class="clearfix">
-				// 						<div class="invoice-sub">Logo Design</div>
-				// 						<div class="invoice-rate">$20</div>
-				// 						<div class="invoice-hours">100</div>
-				// 						<div class="invoice-subtotal"><span class="weight-600">$2000</span></div>
-				// 					</li>
-				// 				</ul>
-				// 			</div>
-				// 			<div class="invoice-desc-footer">
-				// 				<div class="invoice-desc-head clearfix">
-				// 					<div class="invoice-sub">Bank Info</div>
-				// 					<div class="invoice-rate">Due By</div>
-				// 					<div class="invoice-subtotal">Total Due</div>
-				// 				</div>
-				// 				<div class="invoice-desc-body">
-				// 					<ul>
-				// 						<li class="clearfix">
-				// 							<div class="invoice-sub">
-				// 								<p class="font-14 mb-5">Account No: <strong class="weight-600">123 456 789</strong></p>
-				// 								<p class="font-14 mb-5">Code: <strong class="weight-600">4556</strong></p>
-				// 							</div>
-				// 							<div class="invoice-rate font-20 weight-600">10 Jan 2018</div>
-				// 							<div class="invoice-subtotal"><span class="weight-600 font-24 text-danger">$8000</span></div>
-				// 						</li>
-				// 					</ul>
-				// 				</div>
-				// 			</div>
-				// 		</div>
-				// 		<h4 class="text-center pb-20">Thank You!!</h4>
-				// 	</div>
-				// </div>
                 }
             }
         });

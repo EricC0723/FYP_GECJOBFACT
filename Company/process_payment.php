@@ -82,7 +82,7 @@ $result = mysqli_query($connect, $sql);
 if ($result) {
 
     $pdf = new FPDF('P', 'mm', 'A4');
-    $pdf->SetMargins(10, 10, 10); // Set the margins to 10mm on each side
+    $pdf->SetMargins(10, 10, 10);
 
     $pdf->AddPage();
     // Insert an image
@@ -139,7 +139,6 @@ if ($result) {
     $pdf->SetXY(10, 100); // Position at 1 cm from bottom
     $pdf->SetFont('Arial', '', 12); // Set font to Arial, Bold, 12 pt
 
-    // Set the fill color to light gray (RGB: 200, 200, 200)
     $pdf->SetFillColor(234, 234, 234);
 
     // Header

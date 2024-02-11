@@ -6,6 +6,30 @@ $MonthValues = [];
 
 $currentYear = date('Y');
 
+$user_sql = mysqli_query($connect, "SELECT * FROM users WHERE DATE(RegistrationDate) = CURDATE()");
+$user_count = mysqli_num_rows($user_sql);
+
+$company_sql = mysqli_query($connect, "SELECT * FROM companies WHERE DATE(RegistrationDate) = CURDATE()");
+$company_count = mysqli_num_rows($company_sql);
+
+$job_sql = mysqli_query($connect, "SELECT * FROM job_post WHERE DATE(AdStartDate) = CURDATE()");
+$job_count = mysqli_num_rows($job_sql);
+
+// 获取今天的开始时间和结束时间
+$todayStartDateTime = date('Y-m-d 00:00:00');
+$todayEndDateTime = date('Y-m-d 23:59:59');
+
+// 查询今天的所有付款记录
+$sqlPayments = mysqli_query($connect, "SELECT * FROM payment WHERE Payment_Date >= '$todayStartDateTime' AND Payment_Date <= '$todayEndDateTime'");
+
+// 计算总收入
+$todayProfit = 0;
+
+while ($paymentRow = mysqli_fetch_assoc($sqlPayments)) {
+    $paymentAmount = $paymentRow['Payment_Amount'];
+    $todayProfit += $paymentAmount;
+}
+
 $profit_query = "SELECT YEAR(Payment_Date) AS Payment_Year, MONTH(Payment_Date) AS Payment_Month, SUM(Payment_Amount) 
                 AS Monthly_Payment_Total 
                 FROM payment 
@@ -365,11 +389,11 @@ $totalPosts = array_sum($yValues);
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
 							<div class="progress-data">
-							<img src="vendors/images/cart2.jpg" alt=""><!-- <div id="chart"></div> -->
+							<i class="icon-copy fa fa-user-o" aria-hidden="true" style="font-size:50px;margin-left:20px;margin-top:10px;"></i>
 							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">2020</div>
-								<div class="weight-600 font-14">Contact</div>
+							<div class="widget-data" style="padding-left:40px;padding-top:10px;">
+								<div class="h4 mb-0">New user</div>
+								<div class="weight-600 font-14"><?php echo $user_count ?></div>
 							</div>
 						</div>
 					</div>
@@ -377,12 +401,12 @@ $totalPosts = array_sum($yValues);
 				<div class="col-xl-3 mb-30">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<img src="vendors/images/cart2.jpg" alt="">
+							<div class="progress-data" style="padding-top:15px;">
+								<span class="micon dw dw-apartment" style="font-size:45px;margin-left:20px;padding-top:110px;"></span>
 							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">400</div>
-								<div class="weight-600 font-14">Deals</div>
+							<div class="widget-data" style="padding-top:5px;padding-left:40px;">
+								<div class="h4 mb-0">New company</div>
+								<div class="weight-600 font-14"><?php echo $company_count ?></div>
 							</div>
 						</div>
 					</div>
@@ -390,12 +414,12 @@ $totalPosts = array_sum($yValues);
 				<div class="col-xl-3 mb-30">
 					<div class="card-box height-100-p widget-style1" >
 						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<img src="vendors/images/cart2.jpg" alt="">
+							<div class="progress-data" style="padding-top:15px;">
+								<span class="micon dw dw-edit1" style="font-size:45px;margin-left:20px;padding-top:110px;"></span>
 							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">350</div>
-								<div class="weight-600 font-14">Campaign</div>
+							<div class="widget-data" style="padding-top:5px;padding-left:40px;">
+								<div class="h4 mb-0">New job post</div>
+								<div class="weight-600 font-14"><?php echo $job_count ?></div>
 							</div>
 						</div>
 					</div>
@@ -404,11 +428,11 @@ $totalPosts = array_sum($yValues);
 					<div class="card-box height-100-p widget-style1" >
 						<div class="d-flex flex-wrap align-items-center" >
 							<div class="progress-data">
-								<img src="vendors/images/cart2.jpg" alt="">
+								<i class="icon-copy fa fa-dollar" aria-hidden="true" style="font-size:50px;margin-left:20px;margin-top:10px;"></i>
 							</div>
-							<div class="widget-data">
-								<div class="h4 mb-0">$6060</div>
-								<div class="weight-600 font-14">Worth</div>
+							<div class="widget-data" style="padding-left:40px;padding-top:10px;">
+								<div class="h4 mb-0">Profit today</div>
+								<div class="weight-600 font-14">RM <?php echo $todayProfit ?></div>
 							</div>
 						</div>
 					</div>
@@ -569,7 +593,7 @@ function updateProfitChart(data) {
     }, 0).toFixed(2);
 
     console.log('Total Profit:', totalProfit);
-    document.getElementById('totalProfit').innerText = 'Total Profit: $' + totalProfit;
+    document.getElementById('totalProfit').innerText = 'Total Profit: RM' + totalProfit;
 }
 </script>
 	<script>
@@ -646,12 +670,12 @@ var myChart = new Chart("myChart", {
 
     if (filterValue.trim() === '') {
         console.warn('No filter value provided for profit. Using default name "profitchart.pdf".');
-        generatePDF(canvas, 'profitchart.pdf');
+        generateProfitPDF(canvas, 'profitchart.pdf');
         return;
     }
     // 生成 PDF
     const reportName = `profitchart_${filterValue}.pdf`;
-    generatePDF(canvas, reportName);
+    generateProfitPDF(canvas, reportName);
 }
 function downloadPDF() {
     const canvas = document.getElementById('myChart');
@@ -662,7 +686,7 @@ function downloadPDF() {
 
     // 检查是否存在过滤器值
     if (filterValue.trim() === '') {
-        console.warn('No filter value provided. Using default name "jobpostchart.pdf".');
+        console.warn('No filter value provided. Using default name "job_post_report.pdf".');
         generatePDF(canvas, 'jobpostchart.pdf');
         return;
     }
@@ -689,6 +713,23 @@ function downloadPDF() {
     // 生成 PDF
     const reportName = `job_post_report_${formattedStartDate} - ${formattedEndDate}.pdf`;
     generatePDF(canvas,reportName);
+}
+function generateProfitPDF(canvas, reportName) {
+    // 创建图像
+    const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
+
+    // 图像添加到PDF
+    let pdf = new jsPDF('landscape');
+    pdf.setFontSize(20);
+    pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+    // pdf.text(15, 15, "We have discovered that");
+
+    // 添加总数信息
+    const totalProfit = document.getElementById('totalProfit').innerText;
+    pdf.text(15, 180, totalProfit);
+
+    // 保存PDF
+    pdf.save(reportName);
 }
 function generatePDF(canvas, reportName) {
     // 创建图像
@@ -749,9 +790,12 @@ var ProfitChart =  new Chart("ProfitChart", {
         align: 'end',
         offset: 4,
         formatter: (value, context) => {
+			if (value === 0) {
+				return '';
+			}
           return 'RM ' + value;
         },
-        display: 'auto',
+        display: 'value',
         color: 'black'
       }
     }
