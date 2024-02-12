@@ -59,7 +59,7 @@
 <body class="login-page">
 <div id="loading">
         <div id="loading-spinner">
-            <img src="images/loading.gif" alt="Loading Spinner">
+            <img src="vendors/images/loading.gif" alt="Loading Spinner">
         </div>
     </div>
 	<div class="login-wrap d-flex align-items-center flex-wrap justify-content-center">

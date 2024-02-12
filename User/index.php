@@ -26,15 +26,6 @@
     
   </head>
   <body id="top">
-
-  <!-- <div id="overlayer"></div>
-  <div class="loader">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div> -->
-    
-
 <div class="site-wrap">
     <div class="site-mobile-menu site-navbar-target">
       <div class="site-mobile-menu-header">
@@ -67,7 +58,6 @@
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
           <a href="../Company/company_login.php"><button type="button" class="btn btn-success" style="margin-left: 600px; color: white; margin-top: -5px; max-width: 150px; white-space: nowrap;">Employer site</button></a>
             <div class="ml-auto">
-              <!-- <a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-add"></span>Post a Job</a> -->
               <?php 
               if (isset($_SESSION['User_ID'])) {
                 ?>

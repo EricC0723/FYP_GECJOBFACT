@@ -44,7 +44,7 @@
 	</script>
 </head>
 <body>
-	<div class="header">
+<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
@@ -52,88 +52,24 @@
 			</div>
 		</div>
 		<div class="header-right">
-			<div class="dashboard-setting user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-						<i class="dw dw-settings2"></i>
-					</a>
-				</div>
-			</div>
-			<div class="user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-						<i class="icon-copy dw dw-notification"></i>
-						<span class="badge notification-active"></span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<div class="notification-list mx-h-350 customscroll">
-							<ul>
-								<li>
-									<a href="#">
-										<img src="vendors/images/img.jpg" alt="">
-										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/photo1.jpg" alt="">
-										<h3>Lea R. Frith</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/photo2.jpg" alt="">
-										<h3>Erik L. Richards</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/photo3.jpg" alt="">
-										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/photo4.jpg" alt="">
-										<h3>Renee I. Hansen</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="vendors/images/img.jpg" alt="">
-										<h3>Vicki M. Coleman</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
 							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name"><?php echo $_SESSION['First_Name'];?></span>
+						<span class="user-name"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
-						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
+						<a class="dropdown-item" href="admin_profile.php"><i class="dw dw-user1" ></i> Profile</a>
 						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
 			</div>
+			<div class="github-link">
+			</div>
 		</div>
 	</div>
-
 	<div class="right-sidebar">
 		<div class="sidebar-title">
 			<h3 class="weight-600 font-16 text-blue">
@@ -227,11 +163,17 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 					</li>
-					<li>
-						<a href="admin.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
-						</a>
-					</li>
+					<?php
+					if ($_SESSION['AdminType'] == 'super admin') {
+					?>
+						<li>
+							<a href="admin.php" class="dropdown-toggle no-arrow">
+								<span class="micon dw dw-calendar1"></span><span class="mtext">Admin</span>
+							</a>
+						</li>
+					<?php
+					}
+					?>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-user"></span><span class="mtext">User</span>
@@ -406,6 +348,10 @@
 						<div class="form-group">
 							<input type="text" placeholder="Enter email" name="email" id="email"class="form-control" value="<?php echo $row['Email']; ?>" disabled/>
 						</div>
+					<h5 style="display: inline-block;">Password</h5>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary" id="requestPasswordBtn"><i class="icon-copy fa fa-send" aria-hidden="true" style="margin-right:10px;"></i>Request a new password</button>
+						</div>
 							<div class="mt-5 text-center">
 								<button class="btn btn-primary" name="updatebtn" id="updatebtn">Save</button>
 							</div>
@@ -462,6 +408,27 @@
 
     $('#profile_picture_label').off('click').on('click', function () {
         $('#profile_picture').click();
+    });
+});
+</script>
+<script>
+	$(document).ready(function() {
+    $("#requestPasswordBtn").click(function() {
+		
+        var adminID = $("#AdminID").val();
+		var email = $("#email").val();
+		console.log(adminID);
+        $.ajax({
+            type: "POST",
+            url: "insert_admin.php",
+            data: { action: "request_password_reset", adminID: adminID, email: email },
+            success: function(response) {
+				swal("Success", "Requested successfully", "success");
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
     });
 });
 </script>

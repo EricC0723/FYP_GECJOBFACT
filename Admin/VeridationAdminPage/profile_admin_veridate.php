@@ -193,7 +193,7 @@ function validateConfirmPassword(input, password) {
             processData: false,
             success: function (response) {
               swal("Success", response, "success").then(function() {
-					    location.replace("admin.php");
+					    location.replace("index.php");
 				});
             },
             error: function (error) {
