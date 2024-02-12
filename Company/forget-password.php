@@ -23,7 +23,8 @@ use PHPMailer\PHPMailer\Exception;
     <header class="postjob_header" style="background:#0d3880;">
         <div class="container">
             <div class="logo">
-                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
 
@@ -78,6 +79,13 @@ if (isset($_GET["login_btn"])) {
         $row = mysqli_fetch_assoc($result);
         $companyID = $row['CompanyID'];
 
+        $sql = "SELECT * FROM companies WHERE CompanyID = $companyID";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $company_contact = $row['ContactPerson'];
+        $company_name = $row['CompanyName'];
+
+
         // After the user is registered, send the verification email
         $mail = new PHPMailer(true);
 
@@ -93,11 +101,45 @@ if (isset($_GET["login_btn"])) {
             $mail->Port = 587;
 
             //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'Mailer'); // Your Gmail address
-            $mail->addAddress($companyEmail, 'Joe User');
+            $mail->setFrom('jobfactsgec112@gmail.com', 'GEC Job Facts'); // Your Gmail address
+            $mail->addAddress($companyEmail, $company_name);
+
+            $mail->Subject = 'Reset Password';
 
             // Send the verification email
-            $mail->Body = 'Please click on the link to reset your password: http://localhost/FYP/Company/reset-password.php?data=' . $companyID;
+            $mail->Body = '
+            <html>
+            <head>
+              <style>
+                .email-content {
+                  font-family: Arial, sans-serif;
+                }
+                .email-content .header {
+                  color: #333;
+                  font-size: 24px;
+                }
+                .email-content .body {
+                  color: #666;
+                  font-size: 16px;
+                }
+                .email-content .footer {
+                  color: #999;
+                  font-size: 12px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="email-content">
+                <div class="header">Dear ' . $company_contact . ',</div>
+                <div class="body">
+                <p>Please click on the link to reset your password: <a href="http://localhost/FYP/Company/reset-password.php?data=' . $companyID . '">Click to verify</a></p>
+                </div>
+                <div style="height:20px"></div>
+                <div class="footer">Best regards,<br> GEC Job Facts.</div>
+              </div>
+            </body>
+            </html>';
+
             $mail->send();
             ?>
             <script>

@@ -32,6 +32,12 @@ if (isset($_POST["register_btn"])) {
         $_SESSION['companyEmail'] = $companyEmail;
         $mail = new PHPMailer(true);
 
+        $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $company_contact = $row['ContactPerson'];
+        $company_name = $row['CompanyName'];
+
         try {
             //Server settings
             $mail->SMTPDebug = 2;
@@ -44,8 +50,8 @@ if (isset($_POST["register_btn"])) {
             $mail->Port = 587;
 
             //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'Mailer'); // Your Gmail address
-            $mail->addAddress($companyEmail, 'Joe User');
+            $mail->setFrom('jobfactsgec112@gmail.com', 'GEC Job Facts'); // Your Gmail address
+            $mail->addAddress($companyEmail, $company_name);
 
             //Content
             $mail->isHTML(true);
@@ -61,8 +67,43 @@ if (isset($_POST["register_btn"])) {
             // Encode the combined string
             $encoded = base64_encode($combined);
 
+            $mail->Subject = 'Email Verification';
+
             // Send the verification email
-            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded);
+            $mail->Body = '
+            <html>
+            <head>
+              <style>
+                .email-content {
+                  font-family: Arial, sans-serif;
+                }
+                .email-content .header {
+                  color: #333;
+                  font-size: 24px;
+                }
+                .email-content .body {
+                  color: #666;
+                  font-size: 16px;
+                }
+                .email-content .footer {
+                  color: #999;
+                  font-size: 12px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="email-content">
+                <div class="header">Dear ' . $company_contact . ',</div>
+                <div class="body">
+                <p>Please click on the link to verify your email: <a href="http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded).'">Click to verify</a></p>
+                </div>
+                <div style="height:20px"></div>
+                <div class="footer">Best regards,<br> GEC Job Facts.</div>
+              </div>
+            </body>
+            </html>';
+
+            
             $mail->send();
             ?>
             <script>

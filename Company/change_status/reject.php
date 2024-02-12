@@ -64,8 +64,59 @@ if (isset($_GET['applicantId'])) {
             //Content
             $mail->isHTML(true);
             $mail->Subject = 'Your application with ' . $CompanyName . ' has been rejected by employer';
-            $mail->Body = 'Dear ' . $ApplicantFullName . ',<br><br> We are sorry to inform you that your application has been rejected by ' . $CompanyName . '.<br><br> Please don\'t get discouraged. <br><br> Best regards,<br> GEC Job Facts.'; // The email body
+            $mail->Body = '
+            <html>
+            <head>
+              <style>
+                .email-content {
+                  font-family: Arial, sans-serif;
+                }
+                .email-content .header {
+                  color: #333;
+                  font-size: 24px;
+                }
+                .email-content .body {
+                  color: #666;
+                  font-size: 16px;
+                }
+                .email-content .footer {
+                  color: #999;
+                  font-size: 12px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="email-content">
+                <div class="header">Dear ' . $ApplicantFullName . ',</div>
+                <div class="body">
+                  <p>We are sorry to inform you that your application below has been rejected by employer</p>
+                  <table>
+                  <thead>
+                  <tr>
+                      <th style="width:200px;text-align:left;">Company</th>
+                      <th style="width:50px"></th>
+                      <th style="width:200px;text-align:left;">Job Title</th>
+                  </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                            <td style="text-align:left;">' . $CompanyName . '</td>
+                            <td></td>
+                            <td style="text-align:left;">' . $JobTitle . '</td>
+                            </tr>
+                    </tbody>
+                    </table>
 
+              
+                  <p>Please don\'t get discouraged</p>
+                </div>
+                <div><a href="http://localhost/FYP/Company/company_login.php">Check it Now</a>
+                </div>
+                <div style="height:20px"></div>
+                <div class="footer">Best regards,<br> GEC Job Facts.</div>
+              </div>
+            </body>
+            </html>';
             $mail->send();
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

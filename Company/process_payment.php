@@ -307,8 +307,39 @@ if ($result) {
 
             //Content
             $mail->isHTML(true);
-            $mail->Subject = 'Here is your PDF report';
-            $mail->Body = 'Please find attached the PDF report.';
+            $mail->Subject = 'Payment Receipt';
+            $mail->Body = '
+<html>
+<head>
+  <style>
+    .email-content {
+      font-family: Arial, sans-serif;
+    }
+    .email-content .header {
+      color: #333;
+      font-size: 24px;
+    }
+    .email-content .body {
+      color: #666;
+      font-size: 16px;
+    }
+    .email-content .footer {
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-content">
+    <div class="header">Dear ' . $ContactPerson . ',</div>
+    <div class="body">
+    <p>Thank you for your purchasing. Please find attached the PDF receipt.</p>
+    </div>
+    <div style="height:20px"></div>
+    <div class="footer">Best regards,<br> GEC Job Facts.</div>
+  </div>
+</body>
+</html>';
 
             $mail->send();
         } catch (Exception $e) {
