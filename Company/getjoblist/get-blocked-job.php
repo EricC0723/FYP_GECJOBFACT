@@ -13,8 +13,8 @@ session_start(); // Start the session at the beginning
         }
 
         $searchTerm = '';
-        if (isset($_GET['closedsearch'])) {
-            $searchTerm = mysqli_real_escape_string($connect, $_GET['closedsearch']);
+        if (isset($_GET['blockedsearch'])) {
+            $searchTerm = mysqli_real_escape_string($connect, $_GET['blockedsearch']);
         }
 
         // Prepare the SQL statement to count the total number of jobs
@@ -103,14 +103,112 @@ session_start(); // Start the session at the beginning
         $searchTerm = mysqli_real_escape_string($connect, $_GET['blockedsearch']);
     }
 
-    // Prepare the SQL statement
-    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    $blockedSortOrder = isset($_GET['blocked_sort_order']) ? $_GET['blocked_sort_order'] : 'normal';
+
+    if ($blockedSortOrder === 'titleasc' || $blockedSortOrder === 'titledesc') {
+        if ($blockedSortOrder === 'titleasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY Job_Post_Title $order LIMIT $start_from, $limit";
+    } else if ($blockedSortOrder === 'dateasc' || $blockedSortOrder === 'datedesc') {
+        if ($blockedSortOrder === 'dateasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate $order LIMIT $start_from, $limit";
+    } else if ($blockedSortOrder === 'canasc' || $blockedSortOrder === 'candesc') {
+        if ($blockedSortOrder === 'canasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY (SELECT COUNT(*) FROM applications WHERE applications.JobID = job_post.Job_Post_ID) $order LIMIT $start_from, $limit";
+    } else {
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Blocked' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    }
 
     // Execute the SQL statement
     $result = mysqli_query($connect, $sql);
 
     // Check if there are any results
     if (mysqli_num_rows($result) > 0) {
+        ?>
+        <script>
+
+            var blockedSortOrder = localStorage.getItem('blockedSortOrder') || 'normal';
+            var searchTerm = '';
+
+            $(document).off('click', '.page-button.blocked').on('click', '.page-button.blocked', function (e) {
+                e.preventDefault();
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(pageNumber, searchTerm, blockedSortOrder);
+            });
+
+            document.querySelector('#blocked_title_asc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'titledesc' || blockedSortOrder === 'datedesc' || blockedSortOrder === 'dateasc' || blockedSortOrder === 'candesc' || blockedSortOrder === 'canasc') ? 'titleasc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#blocked_title_desc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'titleasc' || blockedSortOrder === 'datedesc' || blockedSortOrder === 'dateasc' || blockedSortOrder === 'candesc' || blockedSortOrder === 'canasc') ? 'titledesc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#blocked_date_asc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'datedesc' || blockedSortOrder === 'titledesc' || blockedSortOrder === 'titleasc' || blockedSortOrder === 'candesc' || blockedSortOrder === 'canasc') ? 'dateasc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#blocked_date_desc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'dateasc' || blockedSortOrder === 'titledesc' || blockedSortOrder === 'titleasc' || blockedSortOrder === 'candesc' || blockedSortOrder === 'canasc') ? 'datedesc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#blocked_can_asc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'candesc' || blockedSortOrder === 'titledesc' || blockedSortOrder === 'titleasc' || blockedSortOrder === 'datedesc' || blockedSortOrder === 'dateasc') ? 'canasc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#blocked_can_desc').addEventListener('click', function () {
+                blockedSortOrder = (blockedSortOrder === 'normal' || blockedSortOrder === 'canasc' || blockedSortOrder === 'titledesc' || blockedSortOrder === 'titleasc' || blockedSortOrder === 'datedesc' || blockedSortOrder === 'dateasc') ? 'candesc' : 'normal';
+                searchTerm = $('#blockedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('blockedSortOrder', blockedSortOrder);
+                loadBlockedPage(1, searchTerm, blockedSortOrder); // Load the first page with the new sort order
+            });
+
+            function loadBlockedPage(pageNumber, searchTerm, blockedSortOrder) {
+                $.ajax({
+                    url: 'getjoblist/get-blocked-job.php',
+                    type: 'get',
+                    data: {
+                        page: pageNumber,
+                        blocked_sort_order: blockedSortOrder, // Pass the title sort order as a parameter
+                        blockedsearch: searchTerm // Pass the current search term as a parameter
+                    },
+                    success: function (response) {
+                        // Replace your table content with the response
+                        $('#blocked').html(response);
+                    }
+                });
+            }
+        </script>
+        <?php
+
         echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
@@ -118,18 +216,77 @@ session_start(); // Start the session at the beginning
                     <div class="th_title">Status</div>
                 </th>
                 <th>
-                    <div class="th_title">Job</div>
-                </th>
-                <th style="width:146px;">
-                    <div class="th_title">Candidates</div>
-                </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Job Actions</div>
+                        <div class="th_title">
+                        <div>
+                                Job
+                        </div>
+                        <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="blocked_title_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="blocked_title_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="width:330px;">
+                        <div class="th_title">
+                            <div>
+                                Duration
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="blocked_date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="blocked_date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                    
+                    </th>
+                    <th style="width:140px;">
+                        <div class="th_title">
+                            <div>
+                                Candidates
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="blocked_can_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="blocked_can_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                <th style="width:160px;">
+                    <div class="th_title" style="justify-content:right;">Job Actions</div>
                 </th>
             </tr>
         </thead>';
         // Fetch all the rows
         while ($row = mysqli_fetch_assoc($result)) {
+            $JobID = $row['Job_Post_ID'];
+            $sql2 = "SELECT * FROM payment WHERE JobID = $JobID";
+            $result2 = mysqli_query($connect, $sql2);
+            $row2 = mysqli_fetch_assoc($result2);
+
             echo '
             <tbody><tr style="border-top: 4px solid #f5f6f8;height: 80px">
                             <td>
@@ -138,19 +295,24 @@ session_start(); // Start the session at the beginning
                                 </div>
                             </td>
                             <td>
-                                <div class="td_title">
-                                    <div>
-                                        <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
-                                        <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                        <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
+                                    <div class="td_title">
+                                        <div>
+                                            <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
+                                            <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                            <div class="td_title">
-                            <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
-                            </div>
-                            </td>
+                                </td>
+                                <td>
+                                    <div class="td_title">
+                                    <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row2['Payment_Duration'] ?? '') . ' month(s)</div>
+                                    <div style="font-size:16px;line-height:24px;">' . date('j F Y', strtotime($row['AdStartDate'])) . ' - ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="td_title">
+                                    <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
+                                    </div>
+                                </td>
                             <td>
                             <div class="td_title" style="width:160px;">
                                 <div style="flex-direction:row;display:flex;justify-content:end;">
@@ -265,64 +427,50 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-    $(document).off('click', '.page-button.blocked').on('click', '.page-button.blocked', function (e) {
-        e.preventDefault();
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadBlockedPage(pageNumber);
-    });
 
-    function loadBlockedPage(pageNumber) {
-        $.ajax({
-            url: 'getjoblist/get-blocked-job.php',
-            type: 'get',
-            data: {
-                page: pageNumber
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#blocked').html(response);
-            }
-        });
+
+    // Get the elements
+    var clearblocked = document.getElementById('clearblocked');
+    var blockedInput = document.getElementById('blockedInput');
+
+    // Hide the clear button initially
+    clearblocked.style.display = 'none';
+
+    // Function to show/hide the clear button
+    function toggleblockedClearButton() {
+        if (blockedInput.value.trim() !== '') {
+            clearblocked.style.display = 'flex';
+        } else {
+            clearblocked.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var clearblocked = document.getElementById('clearblocked');
-        var closedInput = document.getElementById('blockedInput');
+    // Call the function initially to set the correct display
+    toggleblockedClearButton();
 
-        // Hide the clear button initially
-        clearblocked.style.display = 'none';
+    // Show/hide the clear button when the input box content changes
+    blockedInput.addEventListener('input', toggleblockedClearButton);
 
-        // Show/hide the clear button when the input box content changes
-        closedInput.addEventListener('input', function () {
-            if (this.value) {
-                clearblocked.style.display = 'inline';
-            } else {
-                clearblocked.style.display = 'none';
-            }
+    // Clear the input box when the clear button is clicked
+    clearblocked.addEventListener('click', function (e) {
+        e.preventDefault();
+        blockedInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        clearblocked.addEventListener('click', function (e) {
-            e.preventDefault();
-            closedInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            closedInput.dispatchEvent(event);
-        });
+        blockedInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {
         $('#blockedForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
 
-            var searchTerm = $('#blockedInput').val();
+            searchTerm = $('#blockedInput').val();
 
             // Pass the search term to a function
-            searchBlocked(searchTerm);
+            loadBlockedPage(1, searchTerm);
         });
     });
 

@@ -93,14 +93,90 @@ session_start(); // Start the session at the beginning
         $searchTerm = mysqli_real_escape_string($connect, $_GET['draftsearch']);
     }
 
-    // Prepare the SQL statement
-    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    $draftSortOrder = isset($_GET['draft_sort_order']) ? $_GET['draft_sort_order'] : 'normal';
+
+    if ($draftSortOrder === 'titleasc' || $draftSortOrder === 'titledesc') {
+        if ($draftSortOrder === 'titleasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY Job_Post_Title $order LIMIT $start_from, $limit";
+    } else if ($draftSortOrder === 'dateasc' || $draftSortOrder === 'datedesc') {
+        if ($draftSortOrder === 'dateasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate $order LIMIT $start_from, $limit";
+    } else {
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Draft' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    }
+
 
     // Execute the SQL statement
     $result = mysqli_query($connect, $sql);
 
     // Check if there are any results
     if (mysqli_num_rows($result) > 0) {
+        ?>
+        <script>
+            var draftSortOrder = localStorage.getItem('draftSortOrder') || 'normal';
+            var searchTerm = '';
+
+            $(document).off('click', '.page-button.draft').on('click', '.page-button.draft', function (e) {
+                e.preventDefault();
+                searchTerm = $('#draftInput').val(); // Update the searchTerm variable
+                var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                localStorage.setItem('draftSortOrder', draftSortOrder);
+                loadDraftPage(pageNumber, searchTerm, draftSortOrder);
+            });
+
+            document.querySelector('#draft_title_asc').addEventListener('click', function () {
+                draftSortOrder = (draftSortOrder === 'normal' || draftSortOrder === 'titledesc' || draftSortOrder === 'datedesc' || draftSortOrder === 'dateasc') ? 'titleasc' : 'normal';
+                searchTerm = $('#draftInput').val(); // Update the searchTerm variable
+                localStorage.setItem('draftSortOrder', draftSortOrder);
+                loadDraftPage(1, searchTerm, draftSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#draft_title_desc').addEventListener('click', function () {
+                draftSortOrder = (draftSortOrder === 'normal' || draftSortOrder === 'titleasc' || draftSortOrder === 'datedesc' || draftSortOrder === 'dateasc') ? 'titledesc' : 'normal';
+                searchTerm = $('#draftInput').val(); // Update the searchTerm variable
+                localStorage.setItem('draftSortOrder', draftSortOrder);
+                loadDraftPage(1, searchTerm, draftSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#draft_date_asc').addEventListener('click', function () {
+                draftSortOrder = (draftSortOrder === 'normal' || draftSortOrder === 'datedesc' || draftSortOrder === 'titledesc' || draftSortOrder === 'titleasc') ? 'dateasc' : 'normal';
+                searchTerm = $('#draftInput').val(); // Update the searchTerm variable
+                localStorage.setItem('draftSortOrder', draftSortOrder);
+                loadDraftPage(1, searchTerm, draftSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#draft_date_desc').addEventListener('click', function () {
+                draftSortOrder = (draftSortOrder === 'normal' || draftSortOrder === 'dateasc' || draftSortOrder === 'titledesc' || draftSortOrder === 'titleasc') ? 'datedesc' : 'normal';
+                searchTerm = $('#draftInput').val(); // Update the searchTerm variable
+                localStorage.setItem('draftSortOrder', draftSortOrder);
+                loadDraftPage(1, searchTerm, draftSortOrder); // Load the first page with the new sort order
+            });
+
+            function loadDraftPage(pageNumber, searchTerm, draftSortOrder) {
+                $.ajax({
+                    url: 'getjoblist/get-draft-job.php',
+                    type: 'get',
+                    data: {
+                        page: pageNumber,
+                        draft_sort_order: draftSortOrder, // Pass the title sort order as a parameter
+                        draftsearch: searchTerm // Pass the current search term as a parameter
+                    },
+                    success: function (response) {
+                        // Replace your table content with the response
+                        $('#draft').html(response);
+                    }
+                });
+            }
+        </script>
+        <?php
         echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
@@ -108,15 +184,52 @@ session_start(); // Start the session at the beginning
                     <div class="th_title">Status</div>
                 </th>
                 <th>
-                    <div class="th_title">Job</div>
+                    <div class="th_title">
+                        <div>
+                            Job
+                        </div>
+                        <div style="width:10px;"></div>
+                        <div style="display:flex;flex-direction:column;justify-content:center">
+                            <div>
+                                <button class="sorting_asc" id="draft_title_asc">
+                                    <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                </button>
+                            </div>
+                            <div>
+                                <button class="sorting_desc" id="draft_title_desc">
+                                    <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="width:250px"></div>
+
+                        <div style="display:flex;flex-direction:column;justify-content:center">
+                            <div>
+                                <button class="sorting_asc" id="draft_date_asc">
+                                    <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                </button>
+                            </div>
+                            <div>
+                                <button class="sorting_desc" id="draft_date_desc">
+                                    <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div style="width:10px;"></div>
+                        <div>
+                            Created date
+                        </div>
+                    </div>
                 </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Draft Actions</div>
+                <th style="width:120px;">
+                    <div class="th_title" style="justify-content:right;">Draft Actions</div>
                 </th>
             </tr>
         </thead>';
         // Fetch all the rows
         while ($row = mysqli_fetch_assoc($result)) {
+
             echo '
                 <tbody>
                 <tr style="border-top: 4px solid #f5f6f8;height: 80px" >
@@ -223,64 +336,47 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-    $(document).off('click', '.page-button.draft').on('click', '.page-button.draft', function (e) {
-        e.preventDefault();
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadDraftPage(pageNumber);
-    });
+    // Get the elements
+    var cleardraft = document.getElementById('cleardraft');
+    var draftInput = document.getElementById('draftInput');
 
-    function loadDraftPage(pageNumber) {
-        $.ajax({
-            url: 'getjoblist/get-draft-job.php',
-            type: 'get',
-            data: {
-                page: pageNumber
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#draft').html(response);
-            }
-        });
+    // Hide the clear button initially
+    cleardraft.style.display = 'none';
+
+    // Function to show/hide the clear button
+    function toggledraftClearButton() {
+        if (draftInput.value.trim() !== '') {
+            cleardraft.style.display = 'flex';
+        } else {
+            cleardraft.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var cleardraft = document.getElementById('cleardraft');
-        var draftInput = document.getElementById('draftInput');
+    // Call the function initially to set the correct display
+    toggledraftClearButton();
 
-        // Hide the clear button initially
-        cleardraft.style.display = 'none';
+    draftInput.addEventListener('input', toggledraftClearButton);
 
-        // Show/hide the clear button when the input box content changes
-        draftInput.addEventListener('input', function () {
-            if (this.value) {
-                cleardraft.style.display = 'inline';
-            } else {
-                cleardraft.style.display = 'none';
-            }
+    // Clear the input box when the clear button is clicked
+    cleardraft.addEventListener('click', function (e) {
+        e.preventDefault();
+        draftInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        cleardraft.addEventListener('click', function (e) {
-            e.preventDefault();
-            draftInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            draftInput.dispatchEvent(event);
-        });
+        draftInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {
         $('#draftForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
 
-            var searchTerm = $('#draftInput').val();
+            searchTerm = $('#draftInput').val();
 
             // Pass the search term to a function
-            searchDraft(searchTerm);
+            loadDraftPage(1, searchTerm);
         });
     });
 

@@ -41,7 +41,7 @@ session_start(); // Start the session at the beginning
                     <input id="applicantInput" type="text" class="input-box" name="applicantsearch"
                         style="padding-left:44px;padding-right:44px;width:512px;"
                         placeholder="Search by name, job title" value="<?php echo htmlspecialchars($searchTerm); ?>">
-                    <button id="clearapplicant" class="clear-button" type="button">
+                    <button id="clearapplicant" class="clear-button" type="button" style="right:85px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                             focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
                             style="width:20px;height:20px;">
@@ -88,43 +88,443 @@ session_start(); // Start the session at the beginning
             $jobPostID = mysqli_real_escape_string($connect, $_GET['jobPostID']);
         }
 
-        $sql = "SELECT job_post.*, applications.*
-        FROM applications
-        INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
-        WHERE job_post.CompanyID = $CompanyID 
-        AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
-        OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
-        AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+        $applicantSortOrder = isset($_GET['applicant_sort_order']) ? $_GET['applicant_sort_order'] : 'normal';
 
-        // If a Job_Post_ID is received, add a condition to the WHERE clause
-        if ($jobPostID != '') {
-            $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+        if ($applicantSortOrder === 'applicantdateasc' || $applicantSortOrder === 'applicantdatedesc') {
+            if ($applicantSortOrder === 'applicantdateasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY applications.ApplyDate $order LIMIT $start_from, $limit";
+        } else if ($applicantSortOrder === 'applicantnameasc' || $applicantSortOrder === 'applicantnamedesc') {
+            if ($applicantSortOrder === 'applicantnameasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY applications.FirstName $order LIMIT $start_from, $limit";
+        } else if ($applicantSortOrder === 'applyjobtitleasc' || $applicantSortOrder === 'applyjobtitledesc') {
+            if ($applicantSortOrder === 'applyjobtitleasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY job_post.Job_Post_Title $order LIMIT $start_from, $limit";
+        } else if ($applicantSortOrder === 'applyjobdateasc' || $applicantSortOrder === 'applyjobdatedesc') {
+            if ($applicantSortOrder === 'applyjobdateasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY job_post.AdStartDate $order LIMIT $start_from, $limit";
+        } else if ($applicantSortOrder === 'applicantstatusasc' || $applicantSortOrder === 'applicantstatusdesc') {
+            if ($applicantSortOrder === 'applicantstatusasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY applications.Status $order LIMIT $start_from, $limit";
+        } else if ($applicantSortOrder === 'applyjobstatusasc' || $applicantSortOrder === 'applyjobstatusdesc') {
+            if ($applicantSortOrder === 'applyjobstatusasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY job_post.job_status $order LIMIT $start_from, $limit";
+        } else {
+            $sql = "SELECT job_post.*, applications.*
+            FROM applications
+            INNER JOIN job_post ON applications.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND (job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            OR CONCAT(applications.FirstName, ' ', applications.LastName) LIKE '%$searchTerm%')
+            AND job_post.job_status IN ('Active', 'Closed', 'Blocked')";
+
+            // If a Job_Post_ID is received, add a condition to the WHERE clause
+            if ($jobPostID != '') {
+                $sql .= " AND job_post.Job_Post_ID = $jobPostID";
+            }
+
+            $sql .= " ORDER BY applications.ApplyDate DESC LIMIT $start_from, $limit";
         }
-
-        $sql .= " ORDER BY applications.ApplyDate DESC LIMIT $start_from, $limit";
 
         $result = mysqli_query($connect, $sql);
 
         // Check if there are any results
         if (mysqli_num_rows($result) > 0) {
+            ?>
+            <script>
+                var jobPostID = "<?php echo $jobPostID; ?>";
+                var applicantSortOrder = localStorage.getItem('applicantSortOrder') || 'normal';
+                var searchTerm = '';
+
+                $(document).off('click', '.page-button.applicants').on('click', '.page-button.applicants', function (e) {
+                    e.preventDefault();
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(pageNumber, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_name_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantnameasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_name_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantnameasc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantnamedesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_date_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantdateasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_date_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantdateasc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantdatedesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_status_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantstatusasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applicant_status_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applicantstatusasc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applicantstatusdesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_title_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applyjobtitleasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_title_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobtitleasc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applyjobtitledesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_date_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobdatedesc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applyjobdateasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_date_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobdateasc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobstatusasc' || applicantSortOrder === 'applyjobstatusdesc') ? 'applyjobdatedesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_status_asc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobstatusdesc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc') ? 'applyjobstatusasc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#applyjob_status_desc').addEventListener('click', function () {
+                    applicantSortOrder = (applicantSortOrder === 'normal' || applicantSortOrder === 'applyjobstatusasc' ||
+                        applicantSortOrder === 'applicantnameasc' || applicantSortOrder === 'applicantnamedesc' ||
+                        applicantSortOrder === 'applicantdateasc' || applicantSortOrder === 'applicantdatedesc' ||
+                        applicantSortOrder === 'applyjobtitleasc' || applicantSortOrder === 'applyjobtitledesc' ||
+                        applicantSortOrder === 'applicantstatusasc' || applicantSortOrder === 'applicantstatusdesc' ||
+                        applicantSortOrder === 'applyjobdateasc' || applicantSortOrder === 'applyjobdatedesc') ? 'applyjobstatusdesc' : 'normal';
+                    searchTerm = $('#applicantInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('applicantSortOrder', applicantSortOrder);
+                    loadApplicantPage(1, searchTerm, applicantSortOrder, jobPostID); // Load the first page with the new sort order
+                });
+
+                function loadApplicantPage(pageNumber, searchTerm, applicantSortOrder, jobPostID) {
+                    $.ajax({
+                        url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
+                        type: 'GET',
+                        data: {
+                            page: pageNumber,
+                            applicantsearch: searchTerm,
+                            applicant_sort_order: applicantSortOrder, // Pass the title sort order as a parameter
+                            jobPostID: jobPostID // Pass the jobPostID to get-applicants.php
+                        },
+                        success: function (data) {
+                            // Update the table with the new data
+                            $('#applicants').html(data);
+                        }
+                    });
+                }
+
+            </script>
+            <?php
+
             // Fetch all the rows
             echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
             <thead>
                 <tr>
                     <th style="width:100px;">
-                        <div class="th_title">Status</div>
+                        <div class="th_title">  
+                            <div>Status</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applicant_status_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applicant_status_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </th>
                     <th style="width:400px;">
-                        <div class="th_title">Applicant Name</div>
+                        <div class="th_title">
+                            <div>Applicant Name</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applicant_name_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applicant_name_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="width:125px"></div>
+
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applicant_date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applicant_date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div>
+                                Applied date
+                            </div>
+                        </div>
                     </th>
                     <th>
-                        <div class="th_title">Job Applied</div>
+                        <div class="th_title">
+                            <div>Job Applied</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applyjob_title_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applyjob_title_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="width:190px"></div>
+
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applyjob_date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applyjob_date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div>
+                                Job Duration
+                            </div>
+
+                        </div>
                     </th>
-                    <th style="width:120px;">
-                        <div class="th_title">Job Status</div>
+                    <th style="width:140px;">
+                        <div class="th_title">
+                            <div>Job Status</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="applyjob_status_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="applyjob_status_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </th>
-                    <th style="width:156px;">
-                        <div class="th_title" style="text-align:right;">Applicant Actions</div>
+                    <th style="width:160px;">
+                        <div class="th_title" style="justify-content:right;">Applicant Actions</div>
                     </th>
                 </tr>
             </thead>';
@@ -205,7 +605,7 @@ session_start(); // Start the session at the beginning
                                     </div>
                                 </td>
                                 <td>
-                                <div class="td_title" style="width:160px;">
+                                <div class="td_title" >
                                     <div style="flex-direction:row;display:flex;justify-content:end;">
                                         <div style="display:flex;justify-content:center;align-items:center;width:44px;">
                                             <button class="listlink" style="background:none;border:none;" onclick="fetchAndOpenNav(this)" data-applicant-id="' . htmlspecialchars($row['ApplicationID']) . '">
@@ -309,29 +709,6 @@ session_start(); // Start the session at the beginning
     </div>
 </div>
 
-<script>
-    $(document).off('click', '.page-button.applicants').on('click', '.page-button.applicants', function (e) {
-        e.preventDefault();
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadApplicantsPage(pageNumber);
-    });
-
-    function loadApplicantsPage(pageNumber) {
-        $.ajax({
-            url: 'getjoblist/get-applicants-job.php',
-            type: 'get',
-            data: {
-                page: pageNumber
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#applicants').html(response);
-            }
-        });
-    }
-
-
-</script>
 
 <script>
     var isSidebarOpen = false; // Add this flag
@@ -369,10 +746,11 @@ session_start(); // Start the session at the beginning
                     // Get the jobPostID from the URL
                     var urlParams = new URLSearchParams(window.location.search);
                     var jobPostID = urlParams.get('jobPostID');
+                    var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
 
                     if (jobPostID) {
                         // If the jobPostID is present, call the getapplicants function with it
-                        countApplicant(jobPostID);
+                        loadApplicantPage(pageNumber, '', 'normal', jobPostID);
                     } else {
                         // If the jobPostID is not present, call the getapplicants function without it
                         getapplicants();
@@ -392,35 +770,37 @@ session_start(); // Start the session at the beginning
         }
     });
 
+    // Get the elements
+    var clearapplicant = document.getElementById('clearapplicant');
+    var applicantInput = document.getElementById('applicantInput');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var clearapplicant = document.getElementById('clearapplicant');
-        var applicantInput = document.getElementById('applicantInput');
+    // Hide the clear button initially
+    clearapplicant.style.display = 'none';
 
-        // Hide the clear button initially
-        clearapplicant.style.display = 'none';
+    // Function to show/hide the clear button
+    function toggleapplicantClearButton() {
+        if (applicantInput.value.trim() !== '') {
+            clearapplicant.style.display = 'flex';
+        } else {
+            clearapplicant.style.display = 'none';
+        }
+    }
 
-        // Show/hide the clear button when the input box content changes
-        applicantInput.addEventListener('input', function () {
-            if (this.value) {
-                clearapplicant.style.display = 'flex';
-            } else {
-                clearapplicant.style.display = 'none';
-            }
+    // Call the function initially to set the correct display
+    toggleapplicantClearButton();
+
+    applicantInput.addEventListener('input', toggleapplicantClearButton);
+
+    // Clear the input box when the clear button is clicked
+    clearapplicant.addEventListener('click', function (e) {
+        e.preventDefault();
+        applicantInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        clearapplicant.addEventListener('click', function (e) {
-            e.preventDefault();
-            applicantInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            applicantInput.dispatchEvent(event);
-        });
+        applicantInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {
@@ -434,8 +814,10 @@ session_start(); // Start the session at the beginning
 
             var searchTerm = $('#applicantInput').val();
 
-            // Pass the search term to a function
-            searchApplicant(searchTerm);
+
+            // If searchTerm is not empty, call loadApplicantPage with jobPostID as the last parameter
+            loadApplicantPage(1, searchTerm, 'normal', jobPostID);
+
         });
     });
 
