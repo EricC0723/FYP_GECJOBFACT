@@ -43,7 +43,7 @@ session_start(); // Start the session at the beginning
         <div class="register_content">
             <div>
                 <div class="employee_link">
-                    <span><a href="" class="employee_sentence">Are you looking for a job?</a></span>
+                    <span><a href="../User/index.php" class="employee_sentence">Are you looking for a job?</a></span>
                 </div>
             </div>
             <form method="GET">
