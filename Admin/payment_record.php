@@ -454,7 +454,7 @@
             url: "view_payment.php?paymentid=" + paymentid,
             success: function (response) {
                 console.log(response);
-				swal("Success", "PDF generated and saved successfully! You can find it in the D drive.", "success");
+				swal("Success", "PDF generated and saved successfully! You can find it in the C drive.", "success");
             }
         });
         });

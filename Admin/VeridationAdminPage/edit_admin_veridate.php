@@ -28,12 +28,6 @@
     // $('#edit_Email').on('input', function () {
     //     validateEmail($(this));
     // });
-    $('#edit_Password').on('input', function () {
-        validatePassword($(this));
-    });
-    $('#c_password').on('input', function () {
-        validateConfirmPassword($(this), $('#password').val());
-    });
     $('#edit_Phone').on('input', function () {
       validatePhoneNumber($(this));
     });
@@ -47,8 +41,6 @@
     validatePostCode($('#edit_PostalCode'));
     // validateEmail($('#edit_Email'));
     validatePhoneNumber($('#edit_Phone'));
-    validatePassword($('#edit_Password'));
-    // validateConfirmPassword($('#c_password'), $('#password').val());
 
     if ($('.error-message').length > 0) {
         hasErrors = true;

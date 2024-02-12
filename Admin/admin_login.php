@@ -2,6 +2,7 @@
 	// $sessionTimeout = 30 * 60;
 	// session_set_cookie_params($sessionTimeout);
 	session_start();
+	
 	?>
 <!DOCTYPE html>
 <html>

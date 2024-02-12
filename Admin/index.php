@@ -184,7 +184,7 @@ $totalPosts = array_sum($yValues);
 						<span class="user-name"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
+						<a class="editAdminBtn dropdown-item" href="#" data-adminid="<?=$_SESSION['Admin_ID'];?>"><i class="dw dw-user1" ></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
 						<a class="dropdown-item" href="logout.php"><i class="dw dw-logout"></i> Log Out</a>
@@ -438,14 +438,6 @@ $totalPosts = array_sum($yValues);
 					</div>
 				</div>
 			</div>
-			<!-- <div class="row">
-				<div class="col-xl-8 mb-30">
-					<div class="card-box height-100-p pd-20">
-						<h2 class="h4 mb-20">Activity</h2>
-						<div id="chart5"></div>
-					</div>
-				</div> -->
-
 			</div>
 			<div class="card-box mb-50" style="height: 800px;">
 			<div style="text-align:center; font-weight: bold; font-size: 20px;">Profit</div>
@@ -492,7 +484,7 @@ $totalPosts = array_sum($yValues);
 			</div>
 		</div>
 	</div>
-	<!-- js -->
+
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
@@ -508,17 +500,6 @@ $totalPosts = array_sum($yValues);
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js" integrity="sha512-t2JWqzirxOmR9MZKu+BMz0TNHe55G5BZ/tfTmXMlxpUY8tsTo3QMD27QGoYKZKFAraIPDhFv56HLdN11ctmiTQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<!-- <script>
-	$(document).ready(function() {
-		$("#job_post").datetimepicker({
-			changeMonth: true,
-			changeYear: true,
-			minDate: new Date(2001, 0, 1),
-			maxDate: new Date(new Date().getFullYear() + 15, 11, 31), // 加 15 年
-			dateFormat: 'yy-mm'
-		});
-	});
-	</script> -->
 	<script>
 	function filterData() {
     var selectedDateRange = $('#job_post').val();
@@ -804,6 +785,71 @@ var ProfitChart =  new Chart("ProfitChart", {
 });
 document.getElementById('totalProfit').innerText = 'Total Profit: RM' + <?php echo $totalProfit; ?>;
 </script>
+<!-- Edit -->
+<script>
+        $(document).on('click', '.editAdminBtn', function () {
+        console.log("view click");
+        var admin_id = $(this).data('adminid');
+        console.log("Admin ID : "+admin_id);
+        $.ajax({
+            type: "GET",
+            url: "view_admin.php?admin_id=" + admin_id,
+            success: function (response) {
+                console.log(response);
+                var res = jQuery.parseJSON(response);
+                if(res.status == 404) {
+                    alert(res.message);
+                }else if(res.status == 200){
+                    var formattedDate = moment(res.data.RegistrationDate).format('DD-MM-YYYY HH:mm:ss');
+					$('#AdminID').prop('value',res.data.AdminID);
+                    $('#edit_FirstName').prop('value',res.data.FirstName);
+                    $('#edit_LastName').prop('value',res.data.LastName);
+					var phoneNumber = res.data.AdminPhone;
+                    $('#edit_Phone').prop('value',phoneNumber);
+                    $('#edit_Email').prop('value',res.data.Email);
+                    $('#edit_Password').prop('value',res.data.Password);
+                    $('#edit_StreetAddress').prop('value',res.data.StreetAddress);
+					var locationSelect = $('#edit_StateAndCity');
+					locationSelect.find('option').each(function() {
+						if ($(this).val() === res.data.StateAndCity) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_StateAndCity').selectpicker('refresh');
+					$('#edit_PostalCode').prop('value',res.data.PostalCode);
+					$('#edit_AdminType').prop('value',res.data.AdminType);
+					$('#edit_DateOfBirth').prop('value',res.data.DateOfBirth);
+                    $('#edit_RegistrationDate').prop('value',formattedDate);
+					var profilePictureUrl = res.data.AdminPicture;
+					$('#profile_picture_preview').attr('src', profilePictureUrl);
 
+					var adminTypeSelect = $('#edit_AdminType');
+					adminTypeSelect.find('option').each(function() {
+						if ($(this).val() === res.data.AdminStatus) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_AdminType').selectpicker('refresh');
+
+					var adminStatusSelect = $('#edit_AdminStatus');
+					adminStatusSelect.find('option').each(function() {
+						if ($(this).val() === res.data.AdminStatus) {
+							$(this).prop('selected', true);
+						} else {
+							$(this).prop('selected', false);
+						}
+					});
+					$('#edit_AdminStatus').selectpicker('refresh');
+
+                    $('#edit-admin-modal').modal('show');
+                }
+            }
+        });
+        });
+    </script>
 </body>
 </html>
