@@ -22,27 +22,21 @@
     $('#postcode').on('input', function () {
       validatePostCode($(this));
     });
-    $('#email').on('input', function () {
-        validateEmail($(this));
-    });
     $('#profile_picture').on('input', function () {
       validatePicture($(this));
     });
     $('#phone').on('input', function () {
       validatePhoneNumber($(this));
     });
-    $('#addbtn').on('click', function (event) {
+    $('#updatebtn').on('click', function (event) {
     var hasErrors = false;
     validateInput($('#Fname'));
     validateInput($('#Lname'));
     validateDateOfBirth($('#date_of_birth'));
     validateAddress($('#address'));
     validatePostCode($('#postcode'));
-    validateEmail($('#email'));
     validatePhoneNumber($('#phone'));
     validatePicture($('#profile_picture'));
-    // validatePassword($('#password'));
-    // validateConfirmPassword($('#c_password'), $('#password').val());
 
     if ($('.error-message').length > 0) {
         hasErrors = true;
@@ -56,21 +50,20 @@
         insertData();
       }
     });
-    function validatePicture(input)
-    {
-        var uploadedFile = $("#profile_picture")[0].files[0];
+    function validatePicture(input) {
+    var uploadedFile = $("#profile_picture")[0].files[0];
 
-            if (!uploadedFile) {
-                // console.log("gg ma");
-                displayError(input, "Please choose a PICTURE.");
-            }
-            else if (!isImage(uploadedFile.name)) {
-              displayError(input, "File must be a Picture.");
-            }
-            else{
-              removeError(input);
-            }
+    if (!uploadedFile) {
+        // No file selected, no need to validate
+        removeError(input);
+    } else {
+        if (!isImage(uploadedFile.name)) {
+            displayError(input, "File must be an image (jpg, jpeg, png, gif, webp).");
+        } else {
+            removeError(input);
+        }
     }
+}
     function validateDateOfBirth(input) {
             var value = input.val();
             var validMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -112,31 +105,6 @@
         removeError(input);
       }
     }
-    // Function to validate general input (first_name, last_name)
-    function validateEmail(input) {
-        var email = input.val(); // Get the entered email value
-
-    // Use a regular expression for email validation
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (email === "") {
-        // If the email is empty, show an error
-        displayError(input, 'Email is required.');
-    } else if (!emailRegex.test(email)) {
-        // If the email does not match the regex pattern, show an error
-        displayError(input, 'Invalid email format.');
-    } else {
-        validateEmailExistence(email).then(function (response) {
-            if (response === 'exists') {
-                displayError(input, 'Email already exists.');
-            } else {
-                removeError(input);
-            }
-        }).catch(function (error) {
-            console.error('Error checking email existence:', error);
-        });
-    }
-    }
     function validatePassword(input) {
     var value = input.val();
     if (value === "") {
@@ -160,25 +128,7 @@ function validateConfirmPassword(input, password) {
         removePasswordError(input);
     }
 }
-      function validateEmailExistence(email) {
-          return new Promise(function (resolve, reject) {
-              $.ajax({
-                  type: "POST",
-                  url: "check_email.php",
-                  data: {
-                      action: "check_email",
-                      email: email
-                  },
-                  success: function (response) {
-                      resolve(response);
-                  },
-                  error: function (error) {
-                      reject(error);
-                  }
-              });
-          });
-      }
-
+    
     function validateInput(input) {
       var value = input.val();
       if(value ==="")
@@ -211,15 +161,20 @@ function validateConfirmPassword(input, password) {
       }
     }
     function insertData() {
-      var formData = new FormData($('#add_admin_form')[0]);
-      var admin_picture = document.getElementById('profile_picture');
-      var picture = admin_picture.files[0];
-      if (!picture) {
-        swal("Oops...", "Profile picture is required.", "error");
-        return;
+      var formData = new FormData();
+      var profilePictureFile = $('#profile_picture')[0].files[0];
+      if (profilePictureFile) {
+          formData.append('profile_picture', profilePictureFile);
       }
-      formData.append('action', "insert_admin");
-      formData.append('picture', picture);
+      formData.append('action', "update_admin");
+      formData.append('AdminID', $('#AdminID').val());
+      formData.append('edit_FirstName', $('#Fname').val());
+      formData.append('edit_LastName', $('#Lname').val());
+      formData.append('edit_Phone', $('#phone').val());
+      formData.append('edit_DateOfBirth', $('#date_of_birth').val());
+      formData.append('edit_StateAndCity', $('#state').val());
+      formData.append('edit_StreetAddress', $('#address').val());
+      formData.append('edit_PostalCode', $('#postcode').val());
         for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
         }
@@ -238,7 +193,7 @@ function validateConfirmPassword(input, password) {
             processData: false,
             success: function (response) {
               swal("Success", response, "success").then(function() {
-					    location.replace("admin.php");
+					    location.replace("index.php");
 				});
             },
             error: function (error) {
@@ -284,6 +239,6 @@ function validateConfirmPassword(input, password) {
 
     // Check if the file extension is in the list of allowed image extensions
     return allowedImageExtensions.includes(fileExtension);
-}
+  }
   });
 </script>

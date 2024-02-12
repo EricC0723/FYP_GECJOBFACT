@@ -98,8 +98,8 @@
         $totalPrice = $row['Payment_Amount'];
         $postDuration = $row['Payment_Duration'];
         $JobTitle = $rowj['Job_Post_Title'];
-        $AdStartDateFormatted = date('d M Y', strtotime($rowj['AdStartDate']));
-        $AdEndDateFormatted = date('d M Y', strtotime($rowj['AdEndDate']));
+        $AdStartDateFormatted = date('d M Y h:i:s A', strtotime($rowj['AdStartDate']));
+        $AdEndDateFormatted = date('d M Y h:i:s A', strtotime($rowj['AdEndDate']));
         $cardNumber = $row['CreditCard_Number'];
 
         $pdf = new FPDF('P', 'mm', 'A4');

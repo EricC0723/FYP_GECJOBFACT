@@ -130,6 +130,65 @@
             }
             }
         }
+        else if($_POST["action"] == "update_admin")
+        {   $AdminID = $_POST['AdminID'];
+             $Fname = $_POST['edit_FirstName'];
+            $Lname = $_POST['edit_LastName'];
+            $phone = $_POST['edit_Phone'];
+            $date_of_birth = $_POST['edit_DateOfBirth'];
+            $address = $_POST['edit_StreetAddress'];
+            $postcode = $_POST['edit_PostalCode'];
+            $state = $_POST['edit_StateAndCity'];
+            if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == UPLOAD_ERR_OK) {
+            // Process the profile picture
+            $profilePictureTmpName = $_FILES['profile_picture']['tmp_name'];
+            $profilePictureName = $_FILES['profile_picture']['name'];
+    
+            // Move the uploaded file to a desired directory
+            $uploadDirectory = '../Admin/adminPicture/';
+            $targetPath = $uploadDirectory . $profilePictureName;
+            $_SESSION['profile'] = $targetPath;
+            move_uploaded_file($profilePictureTmpName, $targetPath);
+            // You can now use $targetPath as the path to the uploaded profile picture
+            $sql = "UPDATE admins 
+            SET FirstName='$Fname',
+                LastName='$Lname',
+                AdminPhone='$phone', 
+                StreetAddress='$address', 
+                StateAndCity='$state', 
+                PostalCode='$postcode', 
+                DateOfBirth='$date_of_birth', 
+                AdminPicture='$targetPath'
+            WHERE AdminID = $AdminID";
+
+            $result = mysqli_query($connect, $sql);
+
+            if ($result) {
+                echo 'Update successfully';
+            } else {
+                echo 'Update failed';
+            }
+            }
+            else{
+                $sql = "UPDATE admins 
+            SET FirstName='$Fname',
+                LastName='$Lname',
+                AdminPhone='$phone', 
+                StreetAddress='$address', 
+                StateAndCity='$state', 
+                PostalCode='$postcode', 
+                DateOfBirth='$date_of_birth'
+            WHERE AdminID = $AdminID";
+
+            $result = mysqli_query($connect, $sql);
+
+            if ($result) {
+                echo 'Update successfully';
+            } else {
+                echo 'Update failed';
+            }
+            }
+        }
         if($_POST["action"] == "request_password_reset")
         {
             $adminID= $_POST['adminID'];
