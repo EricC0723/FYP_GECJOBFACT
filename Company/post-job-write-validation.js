@@ -249,5 +249,4 @@ function validateForm(event) {
 
 // Add event listeners to the submit buttons
 continueButton.addEventListener('click', validateForm);
-saveDraftButton.addEventListener('click', validateForm);
 

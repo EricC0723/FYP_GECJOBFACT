@@ -118,6 +118,151 @@ if (isset($_POST['submitbtn'])) {
     <div
         style="width:100%;height:155px;background:white;box-shadow:rgba(28, 35, 48, 0.1) 0px 2px 4px 0px, rgba(28, 35, 48, 0.1) 0px 2px 2px -2px, rgba(28, 35, 48, 0.2) 0px 4px 4px -4px;">
         <div class="container">
+            <div style="max-width:687px;width:100%;margin:0 auto;padding-bottom:20px">
+                <div style="width:100%;padding:24px 0;">
+                    <div>
+                        <h3 class="landing_sentence1">Create a job ad
+                        </h3>
+                    </div>
+                    <div style="padding-top:20px;">
+                        <div style="padding:0 32px;display:flex;">
+                            <script>
+                                function classifydirect() {
+                                    <?php
+                                    if (isset($_SESSION['job_post_ID'])) {
+                                        $job_post_ID = $_SESSION['job_post_ID'];
+                                    } else {
+                                        $job_post_ID = $_GET['jobPostID'];
+                                    }
+                                    // Print the code if none of the columns are null
+                                    $_SESSION['job_post_ID'] = $job_post_ID;
+
+                                    ?>
+                                    window.location.href = 'view-job-classify.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                }
+                            </script>
+                            <div style="position:relative;cursor:pointer;" onclick="classifydirect()">
+                                <div style="width:24px"><svg width="24px" height="24px" viewBox="0 0 24 24"
+                                        version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="Beta-CAJA--—-EDITS/-HELP/-ERRORS.-LW" stroke="none" stroke-width="1"
+                                            fill="none" fill-rule="evenodd">
+                                            <g id="Beta--guided-VD" transform="translate(-193.000000, -130.000000)">
+                                                <g id="Header-">
+                                                    <g id="Progress-bar-" transform="translate(0.000000, 68.000000)">
+                                                        <g id="Group-2-Copy"
+                                                            transform="translate(176.000000, 62.000000)">
+                                                            <g id="plus">
+                                                                <g id="done" transform="translate(17.000000, 0.000000)">
+                                                                    <g id="Group-3">
+                                                                        <circle id="Oval" fill="#FFFFFF" cx="12" cy="12"
+                                                                            r="10"></circle>
+                                                                        <path
+                                                                            d="M12,0 C5.36374948,0 0,5.36374948 0,12 C0,18.6362505 5.36374948,24 12,24 C18.6362505,24 24,18.6362505 24,12 C24,5.36374948 18.6362505,0 12,0 Z M10.3128439,17.4201576 C10.0914199,17.6415816 9.81490391,17.7517489 9.53839347,17.7517489 C9.26188304,17.7517489 8.9853726,17.6415761 8.76394304,17.4201576 L4.45093322,13.1060418 L6.02682151,11.5301535 L9.51140606,15.0697636 L17.4201576,7.16101203 L18.9960459,8.73690032 L10.3128439,17.4201576 Z"
+                                                                            id="Shape" fill="#2765CF"
+                                                                            fill-rule="nonzero"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="page_title"><span class="landing_sentence2">Classify</span>
+                                </div>
+                            </div>
+                            <div style="flex-grow:1;">
+                                <div class="solid-line" style="border-color: #4964e9 !important;"></div>
+                            </div>
+
+                            <div style="position:relative;cursor:pointer;">
+                                <div style="width:24px"><svg width="24px" height="24px" viewBox="0 0 24 24"
+                                        version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g id="Beta-CAJA--—-EDITS/-HELP/-ERRORS.-LW" stroke="none" stroke-width="1"
+                                            fill="none" fill-rule="evenodd">
+                                            <g id="Beta--Classify-VD" transform="translate(-193.000000, -131.000000)">ß
+                                                <g id="Header-">
+                                                    <g id="Progress-bar-" transform="translate(0.000000, 68.000000)">
+                                                        <g id="Group-2-Copy"
+                                                            transform="translate(176.000000, 62.000000)">
+                                                            <g id="plus" transform="translate(0.000000, 1.000000)">
+                                                                <g id="now" transform="translate(17.000000, 0.000000)">
+                                                                    <g id="Group-7">
+                                                                        <circle id="Oval-Copy-135" stroke="#2765CF"
+                                                                            stroke-width="3" fill="#FFFFFF" cx="12"
+                                                                            cy="12" r="10.5"></circle>
+                                                                        <circle id="Oval-Copy-135" fill="#2765CF"
+                                                                            cx="12" cy="12" r="6"></circle>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg></div>
+                                <div class="page_title"><span class="landing_sentence2"
+                                        style="font-weight:600">Write</span>
+                                </div>
+                            </div>
+                            <div style="flex-grow:1;">
+                                <div class="solid-line"></div>
+                            </div>
+
+                            <script>
+                                function questiondirect() {
+                                    <?php
+                                    if (isset($_SESSION['job_post_ID'])) {
+                                        $job_post_ID = $_SESSION['job_post_ID'];
+                                    } else {
+                                        $job_post_ID = $_GET['jobPostID'];
+                                    }
+                                    // Print the code if none of the columns are null
+                                    $_SESSION['job_post_ID'] = $job_post_ID;
+
+                                    ?>
+                                    window.location.href = 'view-job-question.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                }
+                            </script>
+                            <div style="position:relative;cursor:pointer;" onclick="questiondirect()">
+                                <div style="width:24px"><svg width="24px" height="24px" viewBox="0 0 24 24"
+                                        version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <desc>Created with Sketch.</desc>
+                                        <g id="Beta-CAJA--—-EDITS/-HELP/-ERRORS.-LW" stroke="none" stroke-width="1"
+                                            fill="none" fill-rule="evenodd">
+                                            <g id="Beta--guided-VD" transform="translate(-193.000000, -130.000000)">
+                                                <g id="Header-">
+                                                    <g id="Progress-bar-" transform="translate(0.000000, 68.000000)">
+                                                        <g id="Group-2-Copy"
+                                                            transform="translate(176.000000, 62.000000)">
+                                                            <g id="plus">
+                                                                <g id="done" transform="translate(17.000000, 0.000000)">
+                                                                    <g id="Group-3">
+                                                                        <circle id="Oval" fill="#FFFFFF" cx="12" cy="12"
+                                                                            r="10"></circle>
+                                                                        <path
+                                                                            d="M12,0 C5.36374948,0 0,5.36374948 0,12 C0,18.6362505 5.36374948,24 12,24 C18.6362505,24 24,18.6362505 24,12 C24,5.36374948 18.6362505,0 12,0 Z M10.3128439,17.4201576 C10.0914199,17.6415816 9.81490391,17.7517489 9.53839347,17.7517489 C9.26188304,17.7517489 8.9853726,17.6415761 8.76394304,17.4201576 L4.45093322,13.1060418 L6.02682151,11.5301535 L9.51140606,15.0697636 L17.4201576,7.16101203 L18.9960459,8.73690032 L10.3128439,17.4201576 Z"
+                                                                            id="Shape" fill="#747474"
+                                                                            fill-rule="nonzero"></path>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </svg></div>
+                                <div class="page_title"><span class="landing_sentence2">Question</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="form-container" style="padding-top:32px">

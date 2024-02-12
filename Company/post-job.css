@@ -914,38 +914,38 @@ a.ui-button:active,
     height: 400px;
 }
 
-.th_title{
+.th_title {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
     color: #2e3849;
     padding: 5px 24px;
-    text-align:left;
+    text-align: left;
 }
 
-.td_title{
+.td_title {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     font-family: Roboto, "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif;
     color: #2e3849;
     padding: 12px 24px;
-    text-align:left;
+    text-align: left;
 }
 
-.td_status{
+.td_status {
     background-color: #fef8de;
     padding: 4px 8px;
 }
 
-.td_status_text{
-    color: #723d02!important;
+.td_status_text {
+    color: #723d02 !important;
     font-size: 12px;
     font-weight: 600;
 }
 
-.td_job_link{
+.td_job_link {
     font-size: 16px;
     line-height: 24px;
     font-weight: 700;
@@ -954,7 +954,7 @@ a.ui-button:active,
 
 }
 
-.td_job_link:hover{
+.td_job_link:hover {
     color: #2765cf;
 }
 
@@ -995,7 +995,7 @@ a.ui-button:active,
     background-color: #dde3fc;
 }
 
-.viewalllink{
+.viewalllink {
     text-decoration: none;
     font-size: 16px;
     font-weight: 600;
@@ -1004,62 +1004,62 @@ a.ui-button:active,
     color: #4964e9;
 }
 
-.viewalllink:hover{
+.viewalllink:hover {
     text-decoration: underline;
 }
 
 
-.draft-box{
+.draft-box {
     background-color: #fef8de;
     padding: 4px 8px;
 }
 
-.draft-text{
+.draft-text {
     color: #723d02 !important;
     font-size: 12px;
     font-weight: 600;
 }
 
-.active-box{
+.active-box {
     background-color: #defee0;
     padding: 4px 8px;
 }
 
-.active-text{
+.active-text {
     color: #027236 !important;
     font-size: 12px;
     font-weight: 600;
 }
 
-.blocked-box{
+.blocked-box {
     background-color: #fee0de;
     padding: 4px 8px;
 }
 
-.blocked-text{
+.blocked-text {
     color: #720202 !important;
     font-size: 12px;
     font-weight: 600;
 }
 
-.closed-box{
+.closed-box {
     background-color: #e0e0e0;
     padding: 4px 8px;
 }
 
-.closed-text{
+.closed-text {
     color: #262626 !important;
     font-size: 12px;
     font-weight: 600;
 }
 
-.contactlink:hover{
+.contactlink:hover {
     text-decoration: underline !important;
-    text-underline-offset:3px;
-    text-decoration-thickness:0.08em;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 0.08em;
 }
 
-.applicantCount{
+.applicantCount {
     font-size: 16px;
     color: #2e3849;
     font-weight: 600;
@@ -1069,4 +1069,31 @@ a.ui-button:active,
     background: none;
     cursor: pointer;
     text-decoration: underline;
+}
+
+.dotted-line {
+    border-top: 2px solid !important;
+    height: 24px;
+    margin-top: 12px;
+    width: 100%;
+    border-color: #d3d3d3 !important;
+    border-style: dotted !important;
+    border: 0;
+}
+
+.page_title {
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding-top: 5px;
+    position: absolute;
+}
+
+.solid-line{
+    border-top: 2px solid !important;
+    height: 24px;
+    margin-top: 12px;
+    width: 100%;
+    border-color: #747474 !important;
+    border: 0;
 }
