@@ -300,9 +300,9 @@
     $pdf->SetFont('Arial', 'B', 24); // Set font to Arial, Bold, 12 pt
     $pdf->Cell(0, 10, 'Thank You', 0, 0, 'C'); // Right-aligned text
 
-    $pdf->Output('F', 'C:/Job_Post_' . $job_post_ID . '_Receipt.pdf');
+    $pdf->Output('F', 'C:/xampp/htdocs/final_fyp/FYP/Admin/receipt/Job_Post_' . $job_post_ID . '_Receipt.pdf');
 
-    header('Content-Disposition: inline; filename="../Admin/receipt/Job Post ' . $job_post_ID . '_Receipt.pdf"');
+    header('Content-Disposition: inline; filename="C:/xampp/htdocs/final_fyp/FYP//Admin/receipt/Job Post ' . $job_post_ID . '_Receipt.pdf"');
     
     }
 ?>
