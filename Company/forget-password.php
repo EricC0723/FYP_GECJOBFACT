@@ -103,6 +103,7 @@ if (isset($_GET["login_btn"])) {
             //Recipients
             $mail->setFrom('gecjobfacts888@gmail.com', 'GEC Job Facts'); // Your Gmail address
             $mail->addAddress($companyEmail, $company_name);
+            $mail->isHTML(true);
 
             $mail->Subject = 'Reset Password';
 
@@ -110,33 +111,33 @@ if (isset($_GET["login_btn"])) {
             $mail->Body = '
             <html>
             <head>
-              <style>
+            <style>
                 .email-content {
-                  font-family: Arial, sans-serif;
+                font-family: Arial, sans-serif;
                 }
                 .email-content .header {
-                  color: #333;
-                  font-size: 24px;
+                color: #333;
+                font-size: 24px;
                 }
                 .email-content .body {
-                  color: #666;
-                  font-size: 16px;
+                color: #666;
+                font-size: 16px;
                 }
                 .email-content .footer {
-                  color: #999;
-                  font-size: 12px;
+                color: #999;
+                font-size: 12px;
                 }
-              </style>
+            </style>
             </head>
             <body>
-              <div class="email-content">
+            <div class="email-content">
                 <div class="header">Dear ' . $company_contact . ',</div>
                 <div class="body">
                 <p>Please click on the link to reset your password: <a href="http://localhost/FYP/Company/reset-password.php?data=' . $companyID . '">Click to verify</a></p>
                 </div>
                 <div style="height:20px"></div>
                 <div class="footer">Best regards,<br> GEC Job Facts.</div>
-              </div>
+            </div>
             </body>
             </html>';
 

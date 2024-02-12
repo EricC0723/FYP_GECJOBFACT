@@ -133,12 +133,24 @@ var validationSamepassword = document.getElementById('validation-samepassword');
 // Add an event listener to the confirm password input field
 passwordInput.addEventListener('input', function () {
     var samepasswordMessage = document.getElementById('samepassword-message');
+    var confirmMessage = document.getElementById('confirm-message');
+
     if (this.value === companyOldpassword) {
         // If the confirm password input is not the same as the password input
         samepasswordMessage.textContent = 'This is your current password';
         this.dataset.valid = '0';
         validationSamepassword.classList.remove('hide'); // Show the validation message
-    } else {
+    } else if (this.value !== confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = 'The passwords are not the same';
+        confirmPasswordInput.dataset.valid = '0';
+        validationConfirm.classList.remove('hide'); // Show the validation message
+    } else if (this.value === confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = '';
+        confirmPasswordInput.dataset.valid = '1';
+        validationConfirm.classList.add('hide'); // Show the validation message
+    }else {
         // If the confirm password input is the same as the password input
         samepasswordMessage.textContent = '';
         this.dataset.valid = '1';

@@ -1,4 +1,6 @@
 <?php
+include("C:/xampp/htdocs/FYP/dataconnection.php");
+
 session_start();
 require 'vendor/autoload.php'; // Add this line to include PHPMailer
 
@@ -9,13 +11,13 @@ $companyEmail = $_SESSION['companyEmail']; // Get the email from the session
 $sql = "SELECT * FROM companies WHERE CompanyEmail = '$companyEmail'";
 $result = mysqli_query($connect, $sql);
 $row = mysqli_fetch_assoc($result);
-$company_contact = $row['CompanyContact'];
+$company_contact = $row['ContactPerson'];
 $company_name = $row['CompanyName'];
 
 $mail = new PHPMailer;
 
 //Server settings
-$mail->SMTPDebug = 2;
+$mail->SMTPDebug = 0;
 $mail->isSMTP();
 $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
 $mail->SMTPAuth = true;

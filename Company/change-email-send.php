@@ -80,7 +80,7 @@ if (isset($_SESSION['companyID'])) {
                         <label class="question"
                             style="padding-bottom: 8px;font-weight: 400;color: rgb(90, 104, 129);">If you
                             need additional help, please contact
-                            <a class="employee_sentence" href="company_register.php">customer service</a>
+                            <a class="employee_sentence" href="contactus.php">customer service</a>
                         </label>
                     </div>
                 </div>

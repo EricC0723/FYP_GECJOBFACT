@@ -173,6 +173,22 @@ passwordInput.addEventListener('input', function () {
         // If not all requirements are met
         this.dataset.valid = '0'; // Set the valid data attribute to "0"
     }
+
+
+    var confirmMessage = document.getElementById('confirm-message');
+    if (passwordInput.value.trim() !== confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = 'The passwords are not the same';
+        confirmPasswordInput.dataset.valid = '0';
+        validationConfirm.classList.remove('hide'); // Show the validation message
+    } else if (passwordInput.value.trim() === confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = '';
+        confirmPasswordInput.dataset.valid = '1';
+        validationConfirm.classList.add('hide'); // Show the validation message
+    }
+
+
 });
 
 

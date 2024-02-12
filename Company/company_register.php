@@ -25,9 +25,11 @@ if (isset($_POST["register_btn"])) {
     $token = bin2hex(random_bytes(50));
 
     // Prepare an SQL statement
-    $sql = mysqli_query($connect, "INSERT INTO companies (CompanyEmail, CompanyPassword, ContactPerson, CompanyPhone, CompanyName, CompanySize, RegistrationNo) VALUES ('$companyEmail', '$companyPassword', '$contactPerson', '$companyPhone', '$companyName', '$companySize', '$registrationNo')");
+    $sql = "INSERT INTO companies (CompanyEmail, CompanyPassword, ContactPerson, CompanyPhone, CompanyName, CompanySize, RegistrationNo) VALUES ('$companyEmail', '$companyPassword', '$contactPerson', '$companyPhone', '$companyName', '$companySize', '$registrationNo')";
+    $result = mysqli_query($connect, $sql);
 
-    if ($sql) {
+    if ($result) {
+        $CompanyID = mysqli_insert_id($connect);
         // After the user is registered, send the verification email
         $_SESSION['companyEmail'] = $companyEmail;
         $mail = new PHPMailer(true);
@@ -38,99 +40,33 @@ if (isset($_POST["register_btn"])) {
         $company_contact = $row['ContactPerson'];
         $company_name = $row['CompanyName'];
 
-        try {
-            //Server settings
-            $mail->SMTPDebug = 2;
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
-            $mail->SMTPAuth = true;
-            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
-            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
-            $mail->SMTPSecure = 'tls';
-            $mail->Port = 587;
-
-            //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'GEC Job Facts'); // Your Gmail address
-            $mail->addAddress($companyEmail, $company_name);
-
-            //Content
-            $mail->isHTML(true);
-            $mail->Subject = 'Email Verification';
-
-            // Generate a hash of the user's email and a secret key
-            $secretKey = "your-secret-key";
-            $hash = hash_hmac('sha256', $companyEmail, $secretKey);
-
-            // Combine the hash and the email into a single string
-            $combined = $hash . ':' . $companyEmail;
-
-            // Encode the combined string
-            $encoded = base64_encode($combined);
-
-            $mail->Subject = 'Email Verification';
-
-            // Send the verification email
-            $mail->Body = '
-            <html>
-            <head>
-              <style>
-                .email-content {
-                  font-family: Arial, sans-serif;
-                }
-                .email-content .header {
-                  color: #333;
-                  font-size: 24px;
-                }
-                .email-content .body {
-                  color: #666;
-                  font-size: 16px;
-                }
-                .email-content .footer {
-                  color: #999;
-                  font-size: 12px;
-                }
-              </style>
-            </head>
-            <body>
-              <div class="email-content">
-                <div class="header">Dear ' . $company_contact . ',</div>
-                <div class="body">
-                <p>Please click on the link to verify your email: <a href="http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded).'">Click to verify</a></p>
-                </div>
-                <div style="height:20px"></div>
-                <div class="footer">Best regards,<br> GEC Job Facts.</div>
-              </div>
-            </body>
-            </html>';
-
-            
-            $mail->send();
+        
             ?>
             <script>
                 function sendEmail() {
-                    Swal.fire({
-                        title: "Success",
-                        text: "Company Registered Successfully! Please check your email for verification.",
-                        icon: "success",
-                        showDenyButton: true,
-                        confirmButtonText: "Send again",
-                        denyButtonText: `Ok`,
-                        backdrop: `lightgrey`,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                type: 'GET',
-                                url: 'send-verify-email.php',
-                                success: function (data) {
-                                    console.log(data); // Log the output of the send-verify-email.php script
+                    $.ajax({
+                        type: 'GET',
+                        url: 'send-verify-email.php',
+                        success: function (data) {
+                            console.log(data); // Log the output of the send-verify-email.php script
+                            Swal.fire({
+                                title: "Success",
+                                text: "Company Registered Successfully! Please check your email for verification.",
+                                icon: "success",
+                                showDenyButton: true,
+                                confirmButtonText: "Send again",
+                                denyButtonText: `Ok`,
+                                backdrop: `lightgrey`,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
                                     sendEmail(); // Call the function again if the email was sent successfully
-                                },
-                                error: function () {
-                                    alert('An error occurred while sending the email.');
+                                } else if (result.isDenied) {
+                                    window.location.href = 'company_login.php';
                                 }
                             });
-                        } else if (result.isDenied) {
-                            window.location.href = 'company_login.php';
+                        },
+                        error: function () {
+                            alert('An error occurred while sending the email.');
                         }
                     });
                 }
@@ -138,9 +74,7 @@ if (isset($_POST["register_btn"])) {
                 sendEmail(); // Call the function for the first time
             </script>
             <?php
-        } catch (Exception $e) {
-            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
-        }
+       
     } else {
         ?>
         <script>
@@ -172,7 +106,8 @@ if (isset($_POST["register_btn"])) {
     <header class="postjob_header" style="background:#0d3880;">
         <div class="container">
             <div class="logo">
-                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
 
@@ -187,7 +122,7 @@ if (isset($_POST["register_btn"])) {
 
     </header>
 
-    <div style="padding-top:20px;">
+    <div style="padding-top:20px;padding-bottom:100px">
         <div class="register_content">
             <div>
                 <div class="employee_link">
