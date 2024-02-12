@@ -163,7 +163,7 @@ if (isset($_POST["register_btn"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="company_register.css">
 </head>

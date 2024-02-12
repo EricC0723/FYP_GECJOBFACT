@@ -31,7 +31,7 @@ if (isset($_SESSION['companyID'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Payment</title>
     <link rel="stylesheet" type="text/css" href="company_creditcard.css">
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="payment_page.css">
@@ -42,7 +42,8 @@ if (isset($_SESSION['companyID'])) {
     <header class="postjob_header">
         <div class="container">
             <div class="logo">
-                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_landing.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
                 <nav style="display:flex">
@@ -58,8 +59,14 @@ if (isset($_SESSION['companyID'])) {
                     <div class="dropdown">
                         <div style="display: flex; align-items: center;">
                             <a href="#profile" onclick="toggleDropdown(event)" class="dropdown-title">
-                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true" id="dropdown-icon" style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
-                                    <path d="M20.7 7.3c-.4-.4-1-.4-1.4 0L12 14.6 4.7 7.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l8 8c.2.2.5.3.7.3s.5-.1.7-.3l8-8c.4-.4.4-1 0-1.4z">
+                                <?php echo isset($row['CompanyName']) ? $row['CompanyName'] : 'User Profile'; ?> <svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16"
+                                    class="uatjxz0 bpnsn50 t0qjk721 chw1r94y ygcmz4c _140w0y32" aria-hidden="true"
+                                    id="dropdown-icon"
+                                    style="width:24px;height:24px;padding-left:10px;transform-origin:65% 50%;transition: transform .3s ease;">
+                                    <path
+                                        d="M20.7 7.3c-.4-.4-1-.4-1.4 0L12 14.6 4.7 7.3c-.4-.4-1-.4-1.4 0s-.4 1 0 1.4l8 8c.2.2.5.3.7.3s.5-.1.7-.3l8-8c.4-.4.4-1 0-1.4z">
                                     </path>
                                 </svg>
                             </a>
@@ -77,12 +84,15 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top: 10px;border-bottom: 1px solid #d2d7df;"><span></span></div>
                             <div style="padding-top: 12px;"><a href="company_profile.php" class="dropdown-link">Accounts
                                     details</a></div>
-                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card Payment</a></div>
+                            <div style="padding-top: 12px;"><a href="company_creditcard.php" class="dropdown-link">Card
+                                    Payment</a></div>
 
-                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment History</a>
+                            <div style="padding-top: 12px;"><a href="payment_history.php" class="dropdown-link">Payment
+                                    History</a>
                             </div>
                             <div style="padding-top: 20px;border-bottom: 1px solid #d2d7df;"><span></span></div>
-                            <div style="padding-top: 12px;"><a href="company_contactus.php" class="dropdown-link">Contact us</a>
+                            <div style="padding-top: 12px;"><a href="company_contactus.php"
+                                    class="dropdown-link">Contact us</a>
                             </div>
                             <div style="padding-top: 12px;"><a id="signout-link" href="company_signout.php"
                                     class="dropdown-link">Sign out</a></div>
@@ -118,14 +128,20 @@ if (isset($_SESSION['companyID'])) {
                         be active?</label>
                     <select class="input-box" name="postDuration" id="postDuration" style="height:46px;">
                         <option value="" selected disabled>Select a duration for your job post.</option>
-                        <?php for ($i = 1; $i <= 12; $i++) : ?>
+                        <?php for ($i = 1; $i <= 12; $i++): ?>
                             <option value="<?php echo $i; ?>">
                                 <?php echo $i; ?> month(s)
                             </option>
                         <?php endfor; ?>
                     </select>
-                    <div style="padding-top:4px;" id="validation-postDuration" class="hide"><span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                    <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                    <div style="padding-top:4px;" id="validation-postDuration" class="hide"><span
+                            style="display:flex"><span
+                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
+                                    focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
+                                    style="color:#b91e1e">
+                                    <path
+                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                     </path>
                                     <circle cx="12" cy="17" r="1"></circle>
                                     <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
@@ -133,6 +149,39 @@ if (isset($_SESSION['companyID'])) {
                                 </svg></span><span><span id="postDuration-message" class="validation_sentence">Please
                                     select the duration of your job post</span></span></span></div>
                 </div>
+                <div style="padding-top:10px;display:none" id="totalduration"><span class="landing_sentence2"
+                        style="font-weight: 600;" id="startdate"></span> - <span class="landing_sentence2"
+                        style="font-weight: 600;" id="enddate"></span></div>
+
+                <script>
+                    // Get the current date and time
+                    var now = new Date();
+
+                    // Format the current date and time
+                    var startDateString = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + now.toLocaleTimeString();
+
+                    // Listen for changes in the "postDuration" select element
+                    document.getElementById('postDuration').addEventListener('change', function () {
+                        // Get the number of months selected by the user
+                        var months = parseInt(this.value);
+
+                        // Create a new Date object based on the current date and time
+                        var endDate = new Date(now.getTime());
+
+                        // Add the selected number of months to the end date
+                        endDate.setMonth(endDate.getMonth() + months);
+
+                        // Format the end date
+                        var endDateString = endDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + endDate.toLocaleTimeString();
+
+                        // Display the start and end dates
+                        document.getElementById('startdate').textContent = startDateString;
+                        document.getElementById('enddate').textContent = endDateString;
+
+                        // Show the "totalduration" div
+                        document.getElementById('totalduration').style.display = 'block';
+                    });
+                </script>
             </div>
 
             <div class="form-style" style="margin-top:22px;">
@@ -147,7 +196,8 @@ if (isset($_SESSION['companyID'])) {
                         </div>
                     </div>
                 </div>
-                <div style="padding-top:10px"><span style="position:relative;display:block;"><span style="position:absolute;height:1px;background:#2e3849;width:100%;"></span></span></div>
+                <div style="padding-top:10px"><span style="position:relative;display:block;"><span
+                            style="position:absolute;height:1px;background:#2e3849;width:100%;"></span></span></div>
                 <div style="padding-top:24px">
                     <div style="display:flex;flex-direction:row;justify-content:space-between;">
                         <div><span class="landing_sentence2">Basic ad (one month)</span></div>
@@ -158,7 +208,8 @@ if (isset($_SESSION['companyID'])) {
                     <div style="margin: 0 calc(20px * -1);padding:20px;background:#eaecf1;">
                         <div style="display:flex;flex-direction:row;justify-content:space-between;">
                             <div><span class="landing_sentence2" style="font-weight:600;">Subtotal</span></div>
-                            <div><span class="landing_sentence2" id="subtotal_price" style="font-weight:600;">RM 0.00</span></div>
+                            <div><span class="landing_sentence2" id="subtotal_price" style="font-weight:600;">RM
+                                    0.00</span></div>
                         </div>
                         <div style="display:flex;flex-direction:row;justify-content:space-between;padding-top:20px;">
                             <div><span class="landing_sentence2" style="font-weight:600;">SST (6%)</span></div>
@@ -183,7 +234,8 @@ if (isset($_SESSION['companyID'])) {
                 <div style="padding-top:24px;">
                     <div style="display:flex;flex-direction:row;">
                         <div style="padding-top:2px;">
-                            <input type="radio" id="existcardRadio" checked name="payment_type" value="existcardRadio" onchange="showHideCards()">
+                            <input type="radio" id="existcardRadio" checked name="payment_type" value="existcardRadio"
+                                onchange="showHideCards()">
 
                         </div>
                         <div style="padding-left:10px;width:100%;">
@@ -191,59 +243,86 @@ if (isset($_SESSION['companyID'])) {
                             <div style="padding-top:12px;" id="existcard">
                                 <div style="padding:24px;border:0.5px solid #d2d7df;border-radius:4px">
                                     <div class="form-group" style="padding-top:0px;">
-                                        <label for="cardSelect" class="landing_sentence2" style="padding-bottom:10px;">Select a card:</label>
-                                        <div style="height: 500px; overflow-y: auto;border: 0.5px solid #d2d7df;border-radius: 4px;padding: 10px;">
+                                        <label for="cardSelect" class="landing_sentence2"
+                                            style="padding-bottom:10px;">Select a card:</label>
+                                        <div
+                                            style="height: 500px; overflow-y: auto;border: 0.5px solid #d2d7df;border-radius: 4px;padding: 10px;">
 
                                             <?php
 
                                             if (isset($_SESSION['companyID'])) {
                                                 $sql = "SELECT * FROM credit_card WHERE CompanyID = $CompanyID AND CreditCard_isDeleted = 0";
                                                 $result = mysqli_query($connect, $sql);
-                                                while ($row = mysqli_fetch_assoc($result)) : ?>
-                                                    <div class="card">
-                                                        <input type="radio" name="cardSelect" value="<?php echo $row['CreditCardID']; ?>" id="cardSelect<?php echo $row['CreditCardID']; ?>">
-                                                        <div style="display:flex;flex-direction:column;">
-                                                            <div style="display:flex;flex-direction:row;justify-content:space-between;">
-                                                                <span class="landing_sentence1" style="font-weight:400;">
-                                                                    <?php echo $row['CreditCard_Number']; ?>
-                                                                </span>
-                                                                <?php
-                                                                if ($row['CreditCard_Type'] == 'amex') {
-                                                                    $imgSrc = "/FYP/Company/creditcardimg/amex.png";
-                                                                } elseif ($row['CreditCard_Type'] == 'discover') {
-                                                                    $imgSrc = "/FYP/Company/creditcardimg/discover.png";
-                                                                } elseif ($row['CreditCard_Type'] == 'mastercard') {
-                                                                    $imgSrc = "/FYP/Company/creditcardimg/mastercard.png";
-                                                                } elseif ($row['CreditCard_Type'] == 'troy') {
-                                                                    $imgSrc = "/FYP/Company/creditcardimg/troy.png";
-                                                                } elseif ($row['CreditCard_Type'] == 'visa') {
-                                                                    $imgSrc = "/FYP/Company/creditcardimg/visa.png";
-                                                                }
-                                                                ?>
-                                                                <img src="<?php echo $imgSrc; ?>" alt="Card logo" style="height: 40px;">
-                                                            </div>
-                                                            <div style="display:flex;flex-direction:row;padding-top:10px;justify-content:space-between;">
-                                                                <span class="landing_sentence2">
-                                                                    <?php echo $row['CreditCard_Holder']; ?>
-                                                                </span>
-                                                                <span class="landing_sentence2">
-                                                                    <?php echo ($row['CreditCard_ExpMonth']) . ' / ' . substr(($row['CreditCard_ExpYear']), -2); ?>
-                                                                </span>
+                                                if (mysqli_num_rows($result) > 0) {
+                                                    while ($row = mysqli_fetch_assoc($result)): ?>
+                                                        <div class="card">
+                                                            <input type="radio" name="cardSelect"
+                                                                value="<?php echo $row['CreditCardID']; ?>"
+                                                                id="cardSelect<?php echo $row['CreditCardID']; ?>">
+                                                            <div style="display:flex;flex-direction:column;">
+                                                                <div
+                                                                    style="display:flex;flex-direction:row;justify-content:space-between;">
+                                                                    <span class="landing_sentence1" style="font-weight:400;">
+                                                                        <?php echo $row['CreditCard_Number']; ?>
+                                                                    </span>
+                                                                    <?php
+                                                                    if ($row['CreditCard_Type'] == 'amex') {
+                                                                        $imgSrc = "/FYP/Company/creditcardimg/amex.png";
+                                                                    } elseif ($row['CreditCard_Type'] == 'discover') {
+                                                                        $imgSrc = "/FYP/Company/creditcardimg/discover.png";
+                                                                    } elseif ($row['CreditCard_Type'] == 'mastercard') {
+                                                                        $imgSrc = "/FYP/Company/creditcardimg/mastercard.png";
+                                                                    } elseif ($row['CreditCard_Type'] == 'troy') {
+                                                                        $imgSrc = "/FYP/Company/creditcardimg/troy.png";
+                                                                    } elseif ($row['CreditCard_Type'] == 'visa') {
+                                                                        $imgSrc = "/FYP/Company/creditcardimg/visa.png";
+                                                                    }
+                                                                    ?>
+                                                                    <img src="<?php echo $imgSrc; ?>" alt="Card logo"
+                                                                        style="height: 40px;">
+                                                                </div>
+                                                                <div
+                                                                    style="display:flex;flex-direction:row;padding-top:10px;justify-content:space-between;">
+                                                                    <span class="landing_sentence2">
+                                                                        <?php echo $row['CreditCard_Holder']; ?>
+                                                                    </span>
+                                                                    <span class="landing_sentence2">
+                                                                        <?php echo ($row['CreditCard_ExpMonth']) . ' / ' . substr(($row['CreditCard_ExpYear']), -2); ?>
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                            <?php endwhile;
+                                                    <?php endwhile;
+                                                } else {
+                                                    echo '<div style="width: 100%;
+                                                    height: 100%;
+                                                    display: flex;
+                                                    justify-content: center;
+                                                    align-items: center;
+                                                " id="nocreditcard"><h3 class="landing_sentence1"
+                                                    >No credit card found.
+                                                        </h3>
+                                                    </div>';
+                                                }
+
                                             }
                                             ?>
                                         </div>
-                                        <div style="padding-top:4px;width:299px;" id="validation-cardSelect" class="hide">
-                                            <span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                        <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                        <div style="padding-top:4px;" id="validation-cardSelect" class="hide">
+                                            <span style="display:flex"><span
+                                                    style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                        xml:space="preserve" focusable="false" fill="currentColor"
+                                                        width="16" height="16" aria-hidden="true" style="color:#b91e1e">
+                                                        <path
+                                                            d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                         </path>
                                                         <circle cx="12" cy="17" r="1"></circle>
-                                                        <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                        <path
+                                                            d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                         </path>
-                                                    </svg></span><span><span id="cardSelect-message" class="validation_sentence">Please select a
+                                                    </svg></span><span><span id="cardSelect-message"
+                                                        class="validation_sentence">Please select a
                                                         card</span></span></span>
                                         </div>
                                     </div>
@@ -256,45 +335,64 @@ if (isset($_SESSION['companyID'])) {
                 <div style="padding-top:24px;">
                     <div style="display:flex;flex-direction:row;">
                         <div style="padding-top:2px;">
-                            <input type="radio" id="newcardRadio" name="payment_type" value="newcardRadio" onchange="showHideCards()">
+                            <input type="radio" id="newcardRadio" name="payment_type" value="newcardRadio"
+                                onchange="showHideCards()">
                         </div>
                         <div style="padding-left:10px;width:100%;">
                             <span class="landing_sentence2">Pay by new card</span>
                             <div style="padding-top:12px;" id="newcard" style="display:none;">
                                 <div style="padding:24px;border:0.5px solid #d2d7df;border-radius:4px">
                                     <div class="form-group" style="padding-top:0px;">
-                                        <label for="cardSelect" class="landing_sentence2" style="padding-bottom:10px;">Add new card:</label>
+                                        <label for="cardSelect" class="landing_sentence2"
+                                            style="padding-bottom:10px;">Add new card:</label>
                                         <div id="addcreditcard">
                                             <div class="wrapper" id="app" style="padding:15px;">
                                                 <div class="card-form">
                                                     <div class="card-list">
-                                                        <div class="card-item" v-bind:class="{ '-active' : isCardFlipped }">
+                                                        <div class="card-item"
+                                                            v-bind:class="{ '-active' : isCardFlipped }">
                                                             <div class="card-item__side -front">
-                                                                <div class="card-item__focus" v-bind:class="{'-active' : focusElementStyle }" v-bind:style="focusElementStyle" ref="focusElement">
+                                                                <div class="card-item__focus"
+                                                                    v-bind:class="{'-active' : focusElementStyle }"
+                                                                    v-bind:style="focusElementStyle" ref="focusElement">
                                                                 </div>
                                                                 <div class="card-item__cover">
-                                                                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'" class="card-item__bg">
+                                                                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'"
+                                                                        class="card-item__bg">
                                                                 </div>
 
                                                                 <div class="card-item__wrapper">
                                                                     <div class="card-item__top">
-                                                                        <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png" class="card-item__chip">
+                                                                        <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png"
+                                                                            class="card-item__chip">
                                                                         <div class="card-item__type">
                                                                             <transition name="slide-fade-up">
-                                                                                <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'" v-if="getCardType" v-bind:key="getCardType" alt="" class="card-item__typeImg">
+                                                                                <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'"
+                                                                                    v-if="getCardType"
+                                                                                    v-bind:key="getCardType" alt=""
+                                                                                    class="card-item__typeImg">
                                                                             </transition>
                                                                         </div>
                                                                     </div>
-                                                                    <label for="cardNumber" class="card-item__number" ref="cardNumber" style="box-sizing: border-box;margin-bottom:30px">
+                                                                    <label for="cardNumber" class="card-item__number"
+                                                                        ref="cardNumber"
+                                                                        style="box-sizing: border-box;margin-bottom:30px">
                                                                         <template v-if="getCardType === 'amex'">
-                                                                            <span v-for="(n, $index) in amexCardMask" :key="$index">
+                                                                            <span v-for="(n, $index) in amexCardMask"
+                                                                                :key="$index">
                                                                                 <transition name="slide-fade-up">
-                                                                                    <div class="card-item__numberItem" v-if="$index > 4 && $index < 14 && cardNumber.length > $index && n.trim() !== ''">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        v-if="$index > 4 && $index < 14 && cardNumber.length > $index && n.trim() !== ''">
                                                                                         *</div>
-                                                                                    <div class="card-item__numberItem" :class="{ '-active' : n.trim() === '' }" :key="$index" v-else-if="cardNumber.length > $index">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        :class="{ '-active' : n.trim() === '' }"
+                                                                                        :key="$index"
+                                                                                        v-else-if="cardNumber.length > $index">
                                                                                         {{cardNumber[$index]}}
                                                                                     </div>
-                                                                                    <div class="card-item__numberItem" :class="{ '-active' : n.trim() === '' }" v-else :key="$index + 1">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        :class="{ '-active' : n.trim() === '' }"
+                                                                                        v-else :key="$index + 1">
                                                                                         {{n}}
                                                                                     </div>
                                                                                 </transition>
@@ -302,14 +400,21 @@ if (isset($_SESSION['companyID'])) {
                                                                         </template>
 
                                                                         <template v-else>
-                                                                            <span v-for="(n, $index) in otherCardMask" :key="$index">
+                                                                            <span v-for="(n, $index) in otherCardMask"
+                                                                                :key="$index">
                                                                                 <transition name="slide-fade-up">
-                                                                                    <div class="card-item__numberItem" v-if="$index > 4 && $index < 15 && cardNumber.length > $index && n.trim() !== ''">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        v-if="$index > 4 && $index < 15 && cardNumber.length > $index && n.trim() !== ''">
                                                                                         *</div>
-                                                                                    <div class="card-item__numberItem" :class="{ '-active' : n.trim() === '' }" :key="$index" v-else-if="cardNumber.length > $index">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        :class="{ '-active' : n.trim() === '' }"
+                                                                                        :key="$index"
+                                                                                        v-else-if="cardNumber.length > $index">
                                                                                         {{cardNumber[$index]}}
                                                                                     </div>
-                                                                                    <div class="card-item__numberItem" :class="{ '-active' : n.trim() === '' }" v-else :key="$index + 1">
+                                                                                    <div class="card-item__numberItem"
+                                                                                        :class="{ '-active' : n.trim() === '' }"
+                                                                                        v-else :key="$index + 1">
                                                                                         {{n}}
                                                                                     </div>
                                                                                 </transition>
@@ -317,31 +422,46 @@ if (isset($_SESSION['companyID'])) {
                                                                         </template>
                                                                     </label>
                                                                     <div class="card-item__content">
-                                                                        <label for="cardName" class="card-item__info" ref="cardName" style="box-sizing: border-box;">
+                                                                        <label for="cardName" class="card-item__info"
+                                                                            ref="cardName"
+                                                                            style="box-sizing: border-box;">
                                                                             <div class="card-item__holder">Card
                                                                                 Holder</div>
                                                                             <transition name="slide-fade-up">
-                                                                                <div class="card-item__name" v-if="cardName.length" key="1">
-                                                                                    <transition-group name="slide-fade-right">
-                                                                                        <span class="card-item__nameItem" v-for="(n, $index) in cardName.replace(/\s\s+/g, ' ')" v-if="$index === $index" v-bind:key="$index + 1">{{n}}</span>
+                                                                                <div class="card-item__name"
+                                                                                    v-if="cardName.length" key="1">
+                                                                                    <transition-group
+                                                                                        name="slide-fade-right">
+                                                                                        <span
+                                                                                            class="card-item__nameItem"
+                                                                                            v-for="(n, $index) in cardName.replace(/\s\s+/g, ' ')"
+                                                                                            v-if="$index === $index"
+                                                                                            v-bind:key="$index + 1">{{n}}</span>
                                                                                     </transition-group>
                                                                                 </div>
-                                                                                <div class="card-item__name" v-else key="2">Full Name
+                                                                                <div class="card-item__name" v-else
+                                                                                    key="2">Full Name
                                                                                 </div>
                                                                             </transition>
                                                                         </label>
-                                                                        <div class="card-item__date" ref="cardDate" style="box-sizing: border-box;width:100px;">
-                                                                            <label for="cardMonth" class="card-item__dateTitle">Expires</label>
-                                                                            <label for="cardMonth" class="card-item__dateItem">
+                                                                        <div class="card-item__date" ref="cardDate"
+                                                                            style="box-sizing: border-box;width:100px;">
+                                                                            <label for="cardMonth"
+                                                                                class="card-item__dateTitle">Expires</label>
+                                                                            <label for="cardMonth"
+                                                                                class="card-item__dateItem">
                                                                                 <transition name="slide-fade-up">
-                                                                                    <span v-if="cardMonth" v-bind:key="cardMonth">{{cardMonth}}</span>
+                                                                                    <span v-if="cardMonth"
+                                                                                        v-bind:key="cardMonth">{{cardMonth}}</span>
                                                                                     <span v-else key="2">MM</span>
                                                                                 </transition>
                                                                             </label>
                                                                             /
-                                                                            <label for="cardYear" class="card-item__dateItem">
+                                                                            <label for="cardYear"
+                                                                                class="card-item__dateItem">
                                                                                 <transition name="slide-fade-up">
-                                                                                    <span v-if="cardYear" v-bind:key="cardYear">{{String(cardYear).slice(2,4)}}</span>
+                                                                                    <span v-if="cardYear"
+                                                                                        v-bind:key="cardYear">{{String(cardYear).slice(2,4)}}</span>
                                                                                     <span v-else key="2">YY</span>
                                                                                 </transition>
                                                                             </label>
@@ -351,19 +471,23 @@ if (isset($_SESSION['companyID'])) {
                                                             </div>
                                                             <div class="card-item__side -back">
                                                                 <div class="card-item__cover">
-                                                                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'" class="card-item__bg">
+                                                                    <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + currentCardBackground + '.jpeg'"
+                                                                        class="card-item__bg">
                                                                 </div>
                                                                 <div class="card-item__band"></div>
                                                                 <div class="card-item__cvv">
                                                                     <div class="card-item__cvvTitle">CVV</div>
                                                                     <div class="card-item__cvvBand">
-                                                                        <span v-for="(n, $index) in cardCvv" :key="$index">
+                                                                        <span v-for="(n, $index) in cardCvv"
+                                                                            :key="$index">
                                                                             *
                                                                         </span>
 
                                                                     </div>
                                                                     <div class="card-item__type">
-                                                                        <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'" v-if="getCardType" class="card-item__typeImg">
+                                                                        <img v-bind:src="'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/' + getCardType + '.png'"
+                                                                            v-if="getCardType"
+                                                                            class="card-item__typeImg">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -373,73 +497,140 @@ if (isset($_SESSION['companyID'])) {
                                                         <div class="card-input">
                                                             <label for="cardNumber" class="card-input__label">Card
                                                                 Number</label>
-                                                            <input type="text" id="cardNumberInput" class="card-input__input" v-mask="generateCardNumberMask" v-model="cardNumber" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardNumber" autocomplete="off" style="box-sizing: border-box;" name="cardNumberInput">
-                                                            <div style="padding-top:4px;" id="validation-cardNumber" class="hide"><span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                                            <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                            <input type="text" id="cardNumberInput"
+                                                                class="card-input__input"
+                                                                v-mask="generateCardNumberMask" v-model="cardNumber"
+                                                                v-on:focus="focusInput" v-on:blur="blurInput"
+                                                                data-ref="cardNumber" autocomplete="off"
+                                                                style="box-sizing: border-box;" name="cardNumberInput">
+                                                            <div style="padding-top:4px;" id="validation-cardNumber"
+                                                                class="hide"><span style="display:flex"><span
+                                                                        style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24" xml:space="preserve"
+                                                                            focusable="false" fill="currentColor"
+                                                                            width="16" height="16" aria-hidden="true"
+                                                                            style="color:#b91e1e">
+                                                                            <path
+                                                                                d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                                             </path>
                                                                             <circle cx="12" cy="17" r="1"></circle>
-                                                                            <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                                            <path
+                                                                                d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                                             </path>
-                                                                        </svg></span><span><span id="cardNumber-message" class="validation_sentence">Required
+                                                                        </svg></span><span><span id="cardNumber-message"
+                                                                            class="validation_sentence">Required
                                                                             field</span></span></span>
                                                             </div>
                                                         </div>
                                                         <div class="card-input">
                                                             <label for="cardName" class="card-input__label">Card
                                                                 Holders</label>
-                                                            <input type="text" id="cardNameInput" class="card-input__input" v-model="cardName" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardName" autocomplete="off" style="box-sizing: border-box;" name="cardNameInput">
-                                                            <div style="padding-top:4px;" id="validation-cardName" class="hide"><span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                                            <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                            <input type="text" id="cardNameInput"
+                                                                class="card-input__input" v-model="cardName"
+                                                                v-on:focus="focusInput" v-on:blur="blurInput"
+                                                                data-ref="cardName" autocomplete="off"
+                                                                style="box-sizing: border-box;" name="cardNameInput">
+                                                            <div style="padding-top:4px;" id="validation-cardName"
+                                                                class="hide"><span style="display:flex"><span
+                                                                        style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24" xml:space="preserve"
+                                                                            focusable="false" fill="currentColor"
+                                                                            width="16" height="16" aria-hidden="true"
+                                                                            style="color:#b91e1e">
+                                                                            <path
+                                                                                d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                                             </path>
                                                                             <circle cx="12" cy="17" r="1"></circle>
-                                                                            <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                                            <path
+                                                                                d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                                             </path>
-                                                                        </svg></span><span><span id="cardName-message" class="validation_sentence">Required
+                                                                        </svg></span><span><span id="cardName-message"
+                                                                            class="validation_sentence">Required
                                                                             field</span></span></span>
                                                             </div>
                                                         </div>
                                                         <div class="card-form__row">
                                                             <div class="card-form__col">
                                                                 <div class="card-form__group">
-                                                                    <label for="cardMonth" class="card-input__label">Expiration
+                                                                    <label for="cardMonth"
+                                                                        class="card-input__label">Expiration
                                                                         Date</label>
                                                                     <div>
-                                                                        <select class="card-input__input -select" id="cardMonthInput" name="cardMonthInput" v-model="cardMonth" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardDate" style="width:120px;">
+                                                                        <select class="card-input__input -select"
+                                                                            id="cardMonthInput" name="cardMonthInput"
+                                                                            v-model="cardMonth" v-on:focus="focusInput"
+                                                                            v-on:blur="blurInput" data-ref="cardDate"
+                                                                            style="width:120px;">
                                                                             <option value="" disabled selected>Month
                                                                             </option>
-                                                                            <option v-bind:value="n < 10 ? '0' + n : n" v-for="n in 12" v-bind:disabled="n < minCardMonth" v-bind:key="n">
-                                                                                {{n < 10 ? '0' + n : n}}
-                                                                            </option>
+                                                                            <option v-bind:value="n < 10 ? '0' + n : n"
+                                                                                v-for="n in 12"
+                                                                                v-bind:disabled="n < minCardMonth"
+                                                                                v-bind:key="n">
+                                                                                {{n < 10 ? '0' + n : n}} </option>
                                                                         </select>
-                                                                        <div style="padding-top:4px;" id="validation-cardMonth" class="hide">
-                                                                            <span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                                                        <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                                        <div style="padding-top:4px;"
+                                                                            id="validation-cardMonth" class="hide">
+                                                                            <span style="display:flex"><span
+                                                                                    style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        viewBox="0 0 24 24"
+                                                                                        xml:space="preserve"
+                                                                                        focusable="false"
+                                                                                        fill="currentColor" width="16"
+                                                                                        height="16" aria-hidden="true"
+                                                                                        style="color:#b91e1e">
+                                                                                        <path
+                                                                                            d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                                                         </path>
                                                                                         <circle cx="12" cy="17" r="1">
                                                                                         </circle>
-                                                                                        <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                                                        <path
+                                                                                            d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                                                         </path>
-                                                                                    </svg></span><span><span id="cardMonth-message" class="validation_sentence">Required
+                                                                                    </svg></span><span><span
+                                                                                        id="cardMonth-message"
+                                                                                        class="validation_sentence">Required
                                                                                         field</span></span></span>
                                                                         </div>
                                                                     </div>
                                                                     <div style="width:120px;">
-                                                                        <select class="card-input__input -select" id="cardYearInput" name="cardYearInput" v-model="cardYear" v-on:focus="focusInput" v-on:blur="blurInput" data-ref="cardDate">
+                                                                        <select class="card-input__input -select"
+                                                                            id="cardYearInput" name="cardYearInput"
+                                                                            v-model="cardYear" v-on:focus="focusInput"
+                                                                            v-on:blur="blurInput" data-ref="cardDate">
                                                                             <option value="" disabled selected>Year
                                                                             </option>
-                                                                            <option v-bind:value="$index + minCardYear" v-for="(n, $index) in 12" v-bind:key="n">
+                                                                            <option v-bind:value="$index + minCardYear"
+                                                                                v-for="(n, $index) in 12"
+                                                                                v-bind:key="n">
                                                                                 {{$index + minCardYear}}
                                                                             </option>
                                                                         </select>
-                                                                        <div style="padding-top:4px;" id="validation-cardYear" class="hide">
-                                                                            <span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                                                        <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                                        <div style="padding-top:4px;"
+                                                                            id="validation-cardYear" class="hide">
+                                                                            <span style="display:flex"><span
+                                                                                    style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        viewBox="0 0 24 24"
+                                                                                        xml:space="preserve"
+                                                                                        focusable="false"
+                                                                                        fill="currentColor" width="16"
+                                                                                        height="16" aria-hidden="true"
+                                                                                        style="color:#b91e1e">
+                                                                                        <path
+                                                                                            d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                                                         </path>
                                                                                         <circle cx="12" cy="17" r="1">
                                                                                         </circle>
-                                                                                        <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                                                        <path
+                                                                                            d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                                                         </path>
-                                                                                    </svg></span><span><span id="cardYear-message" class="validation_sentence">Required
+                                                                                    </svg></span><span><span
+                                                                                        id="cardYear-message"
+                                                                                        class="validation_sentence">Required
                                                                                         field</span></span></span>
                                                                         </div>
                                                                     </div>
@@ -447,23 +638,43 @@ if (isset($_SESSION['companyID'])) {
                                                             </div>
                                                             <div class="card-form__col -cvv">
                                                                 <div class="card-input">
-                                                                    <label for="cardCvv" class="card-input__label">CVV</label>
-                                                                    <input type="text" class="card-input__input" id="cardCvvInput" v-mask="'###'" maxlength="3" v-model="cardCvv" v-on:focus="flipCard(true)" v-on:blur="flipCard(false)" autocomplete="off" style="box-sizing: border-box;" name="cardCvvInput">
-                                                                    <div style="padding-top:4px;" id="validation-cardCvv" class="hide">
-                                                                        <span style="display:flex"><span style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve" focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true" style="color:#b91e1e">
-                                                                                    <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
+                                                                    <label for="cardCvv"
+                                                                        class="card-input__label">CVV</label>
+                                                                    <input type="text" class="card-input__input"
+                                                                        id="cardCvvInput" v-mask="'###'" maxlength="3"
+                                                                        v-model="cardCvv" v-on:focus="flipCard(true)"
+                                                                        v-on:blur="flipCard(false)" autocomplete="off"
+                                                                        style="box-sizing: border-box;"
+                                                                        name="cardCvvInput">
+                                                                    <div style="padding-top:4px;"
+                                                                        id="validation-cardCvv" class="hide">
+                                                                        <span style="display:flex"><span
+                                                                                style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    xml:space="preserve"
+                                                                                    focusable="false"
+                                                                                    fill="currentColor" width="16"
+                                                                                    height="16" aria-hidden="true"
+                                                                                    style="color:#b91e1e">
+                                                                                    <path
+                                                                                        d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z">
                                                                                     </path>
                                                                                     <circle cx="12" cy="17" r="1">
                                                                                     </circle>
-                                                                                    <path d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
+                                                                                    <path
+                                                                                        d="M12 14c.6 0 1-.4 1-1V8c0-.6-.4-1-1-1s-1 .4-1 1v5c0 .6.4 1 1 1z">
                                                                                     </path>
-                                                                                </svg></span><span><span id="cardCvv-message" class="validation_sentence">Required
+                                                                                </svg></span><span><span
+                                                                                    id="cardCvv-message"
+                                                                                    class="validation_sentence">Required
                                                                                     field</span></span></span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" id="cardType" name="cardTypeInput" v-model="cardType">
+                                                        <input type="hidden" id="cardType" name="cardTypeInput"
+                                                            v-model="cardType">
                                                     </div>
                                                 </div>
                                             </div>
@@ -512,8 +723,8 @@ if (isset($_SESSION['companyID'])) {
                 }
             })
         });
-        
-        window.onload = function() {
+
+        window.onload = function () {
             showHideCards();
         };
 
@@ -530,6 +741,13 @@ if (isset($_SESSION['companyID'])) {
                 var cardSelectRadios = document.getElementsByName('cardSelect');
                 var validationcardSelect = document.getElementById('validation-cardSelect');
                 var cardSelectMessage = document.getElementById('cardSelect-message');
+                var nocreditcard = document.getElementById('nocreditcard');
+
+                if (nocreditcard) {
+                    cardSelectMessage.innerHTML = "No credit card found. Please add a new card.";
+                    validationcardSelect.classList.remove('hide');
+                    validationcardSelect.dataset.valid = '0';
+                }
 
                 // Function to check if any radio button is selected
                 function isAnyRadioChecked() {
@@ -544,7 +762,7 @@ if (isset($_SESSION['companyID'])) {
                 // Add an event listener to each radio button
                 for (var i = 0; i < cardSelectRadios.length; i++) {
                     if (cardSelectRadios[i]) {
-                        cardSelectRadios[i].addEventListener('change', function() {
+                        cardSelectRadios[i].addEventListener('change', function () {
                             if (isAnyRadioChecked()) {
                                 // If a radio button is selected
                                 cardSelectMessage.textContent = '';
@@ -587,7 +805,7 @@ if (isset($_SESSION['companyID'])) {
                 var validationcardNumber = document.getElementById('validation-cardNumber');
 
                 // Add an event listener to the input field
-                cardNumberInput.addEventListener('input', function() {
+                cardNumberInput.addEventListener('input', function () {
                     var cardNumberMessage = document.getElementById('cardNumber-message');
                     var cardType = document.getElementById('cardType').value; // Fetch the cardType
                     var companyId = "<?php echo $_SESSION['companyID']; ?>";
@@ -618,7 +836,7 @@ if (isset($_SESSION['companyID'])) {
                                 cardNumber: this.value.trim(),
                                 companyId: companyId
                             },
-                            success: function(response) {
+                            success: function (response) {
                                 if (response == 1) {
                                     cardNumberMessage.textContent = 'Card number already exists for this company';
                                     cardNumberInput.dataset.valid = '0';
@@ -638,7 +856,7 @@ if (isset($_SESSION['companyID'])) {
                 var validationcardName = document.getElementById('validation-cardName');
 
                 // Add an event listener to the input field
-                cardNameInput.addEventListener('input', function() {
+                cardNameInput.addEventListener('input', function () {
                     var cardNameMessage = document.getElementById('cardName-message');
                     if (this.value.trim() === '') {
                         // If the input field is empty
@@ -658,7 +876,7 @@ if (isset($_SESSION['companyID'])) {
                 var validationcardMonth = document.getElementById('validation-cardMonth');
 
                 // Add an event listener to the select field
-                cardMonthSelect.addEventListener('change', function() {
+                cardMonthSelect.addEventListener('change', function () {
                     var value = this.value;
                     var cardMonthMessage = document.getElementById('cardMonth-message');
                     // Check if the select field has a valid value
@@ -679,7 +897,7 @@ if (isset($_SESSION['companyID'])) {
                 var validationcardYear = document.getElementById('validation-cardYear');
 
                 // Add an event listener to the select field
-                cardYearSelect.addEventListener('change', function() {
+                cardYearSelect.addEventListener('change', function () {
                     var value = this.value;
                     var cardYearMessage = document.getElementById('cardYear-message');
                     // Check if the select field has a valid value
@@ -700,7 +918,7 @@ if (isset($_SESSION['companyID'])) {
                 var validationcardCvv = document.getElementById('validation-cardCvv');
 
                 // Add an event listener to the input field
-                cardCvvInput.addEventListener('input', function() {
+                cardCvvInput.addEventListener('input', function () {
                     var cardCvvMessage = document.getElementById('cardCvv-message');
                     if (this.value.trim() === '') {
                         // If the input field is empty
@@ -764,7 +982,7 @@ if (isset($_SESSION['companyID'])) {
             }
 
             // Add an event listener to the existcardRadio element
-            existcardRadio.addEventListener('change', function() {
+            existcardRadio.addEventListener('change', function () {
                 if (existcardRadio.checked) {
                     // Add the event listener for the existing
                     continueButton.removeEventListener('click', validateFormNewCard);
@@ -777,7 +995,7 @@ if (isset($_SESSION['companyID'])) {
             });
 
             // Add an event listener to the newCardRadio element
-            newCardRadio.addEventListener('change', function() {
+            newCardRadio.addEventListener('change', function () {
                 if (newCardRadio.checked) {
                     // Remove the event listener for the existing card
                     continueButton.removeEventListener('click', validateFormExistCard);
@@ -795,10 +1013,10 @@ if (isset($_SESSION['companyID'])) {
         var cards = document.querySelectorAll('.card');
 
         // Add a click event listener to each card
-        cards.forEach(function(card) {
-            card.addEventListener('click', function() {
+        cards.forEach(function (card) {
+            card.addEventListener('click', function () {
                 // Remove the selected class from all cards
-                cards.forEach(function(c) {
+                cards.forEach(function (c) {
                     c.classList.remove('selected');
                 });
 
@@ -823,7 +1041,7 @@ if (isset($_SESSION['companyID'])) {
         var sstElement = document.getElementById('sst_price');
 
         // Listen for changes on the select element
-        selectElement.addEventListener('change', function() {
+        selectElement.addEventListener('change', function () {
             // Get the selected month
             var selectedMonth = this.value;
 
@@ -851,7 +1069,7 @@ if (isset($_SESSION['companyID'])) {
         var postDurationMessage = document.getElementById('postDuration-message');
 
         // Add an event listener to the select field
-        selectElement.addEventListener('change', function() {
+        selectElement.addEventListener('change', function () {
             var value = this.value;
 
             // Check if the select field has a valid value
@@ -892,7 +1110,7 @@ if (isset($_SESSION['companyID'])) {
                 invalidInputs[0].input.focus();
 
                 // Show validation messages for all invalid inputs
-                invalidInputs.forEach(function(invalidInput) {
+                invalidInputs.forEach(function (invalidInput) {
                     invalidInput.validation.classList.remove('hide');
                 });
             }
@@ -902,7 +1120,7 @@ if (isset($_SESSION['companyID'])) {
         // Add event listeners to the submit buttons
         continueButton.addEventListener('click', validateFormGeneral);
 
-        document.getElementById('paymentForm').addEventListener('submit', function(event) {
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from being submitted immediately
 
             Swal.fire({
@@ -926,13 +1144,13 @@ if (isset($_SESSION['companyID'])) {
                         data: formData,
                         processData: false, // Necessary for FormData
                         contentType: false, // Necessary for FormData
-                        success: function(response) {
+                        success: function (response) {
                             if (response == 'success') {
                                 Swal.fire({
                                     title: "Success",
                                     text: "Payment received! Thank you for your purchase.",
                                     icon: "success",
-                                }).then(function() {
+                                }).then(function () {
                                     window.location.href = "company_landing.php";
                                 });
                             } else {
@@ -960,61 +1178,61 @@ if (isset($_SESSION['companyID'])) {
 }
 
 if (!isset($_SESSION['job_post_ID'])) {
-?>
+    ?>
     <script>
         Swal.fire({
             title: "Error",
             text: "Invalid Action.",
             icon: "error",
             backdrop: `lightgrey`,
-        }).then(function() {
+        }).then(function () {
             window.location.href = "company_landing.php";
         });
     </script>
-<?php
+    <?php
     exit;
 }
 
 if (!isset($_SESSION['companyID'])) {
-?>
+    ?>
     <script>
         Swal.fire({
             title: "Error",
             text: "You haven\'t logged in",
             icon: "error",
             backdrop: `lightgrey`,
-        }).then(function() {
+        }).then(function () {
             window.location.href = "company_login.php";
         });
     </script>
-<?php
+    <?php
     exit;
 } else if ($row['CompanyStatus'] == 'Verify') {
     // Show swal box
-?>
-    <script>
-        Swal.fire({
-            title: 'Error',
-            text: 'Please verify your email first.',
-            icon: 'error',
-        }).then(function() {
-            window.location = "company_signout.php";
-        });
-    </script>
-<?php
+    ?>
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: 'Please verify your email first.',
+                icon: 'error',
+            }).then(function () {
+                window.location = "company_signout.php";
+            });
+        </script>
+    <?php
 } else if ($row['CompanyStatus'] == 'Block') {
     // Show swal box
-?>
-    <script>
-        Swal.fire({
-            title: 'Error',
-            text: 'Your account has been blocked.',
-            icon: 'error',
-        }).then(function() {
-            window.location = "company_signout.php";
-        });
-    </script>
-<?php
+    ?>
+            <script>
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Your account has been blocked.',
+                    icon: 'error',
+                }).then(function () {
+                    window.location = "company_signout.php";
+                });
+            </script>
+    <?php
 }
 ?>
 

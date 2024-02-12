@@ -110,7 +110,7 @@ if (isset($_POST['submitbtn'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Write</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
@@ -839,7 +839,7 @@ if (isset($_SESSION['companyID'])) {
     $row = mysqli_fetch_assoc($result);
 }
 
-if (!isset($_SESSION['job_post_ID']) || !isset($_GET['jobPostID'])) {
+if (!isset($_SESSION['job_post_ID'])) {
     ?>
     <script>
         Swal.fire({

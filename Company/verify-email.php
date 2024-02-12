@@ -11,7 +11,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Email Verification</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="company_register.css">
 </head>

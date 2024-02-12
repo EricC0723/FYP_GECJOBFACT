@@ -14,7 +14,7 @@ use PHPMailer\PHPMailer\Exception;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Forget Password</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="company_register.css">
 </head>
@@ -95,13 +95,13 @@ if (isset($_GET["login_btn"])) {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
             $mail->SMTPAuth = true;
-            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
-            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
+            $mail->Username = 'gecjobfacts888@gmail.com'; // Your Gmail address
+            $mail->Password = 'atteeyliyxloitmo'; // Your Gmail password
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
             //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'GEC Job Facts'); // Your Gmail address
+            $mail->setFrom('gecjobfacts888@gmail.com', 'GEC Job Facts'); // Your Gmail address
             $mail->addAddress($companyEmail, $company_name);
 
             $mail->Subject = 'Reset Password';

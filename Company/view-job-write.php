@@ -44,7 +44,7 @@ if (isset($_POST['submitbtn'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Write</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
 </head>
@@ -121,7 +121,7 @@ if (isset($_POST['submitbtn'])) {
             <div style="max-width:687px;width:100%;margin:0 auto;padding-bottom:20px">
                 <div style="width:100%;padding:24px 0;">
                     <div>
-                        <h3 class="landing_sentence1">Create a job ad
+                        <h3 class="landing_sentence1">View job post
                         </h3>
                     </div>
                     <div style="padding-top:20px;">
