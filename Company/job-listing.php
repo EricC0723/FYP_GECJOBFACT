@@ -478,64 +478,6 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
-        
-
-        function searchClosed(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-closed-job.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    closedsearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#closed').html(data);
-                }
-            });
-        }
-
-        function searchDraft(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-draft-job.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    draftsearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#draft').html(data);
-                }
-            });
-        }
-
-        function searchBlocked(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-blocked-job.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    blockedsearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#blocked').html(data);
-                }
-            });
-        }
-
-        function searchApplicant(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    applicantsearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#applicants').html(data);
-                }
-            });
-        }
-
         function countApplicant(jobPostID) {
             $.ajax({
                 url: 'getjoblist/get-applicants.php', // The PHP file that executes the search
@@ -618,7 +560,7 @@ if (isset($_SESSION['companyID'])) {
             // Change the URL
             window.history.pushState(null, null, url + '#applicants');
 
-            searchApplicant('');
+            loadApplicantPage(1, '', 'normal', '');
 
         });
 

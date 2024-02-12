@@ -120,9 +120,9 @@ session_start(); // Start the session at the beginning
             $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate $order LIMIT $start_from, $limit";
         } else if ($activeSortOrder === 'canasc' || $activeSortOrder === 'candesc') {
             if ($activeSortOrder === 'canasc') {
-                $order = 'DESC';
-            } else {
                 $order = 'ASC';
+            } else {
+                $order = 'DESC';
             }
             $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Active' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY (SELECT COUNT(*) FROM applications WHERE applications.JobID = job_post.Job_Post_ID) $order LIMIT $start_from, $limit";
         } else {
@@ -134,6 +134,80 @@ session_start(); // Start the session at the beginning
 
         // Check if there are any results
         if (mysqli_num_rows($result) > 0) {
+            ?>
+            <script>
+
+                var activeSortOrder = localStorage.getItem('activeSortOrder') || 'normal';
+                var searchTerm = '';
+
+                $(document).off('click', '.page-button.active').on('click', '.page-button.active', function (e) {
+                    e.preventDefault();
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(pageNumber, searchTerm, activeSortOrder);
+                });
+
+                document.querySelector('#active_title_asc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titledesc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titleasc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#active_title_desc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titledesc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#active_date_asc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'datedesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'dateasc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#active_date_desc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'dateasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'datedesc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#active_can_asc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'candesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'canasc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#active_can_desc').addEventListener('click', function () {
+                    activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'canasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'candesc' : 'normal';
+                    searchTerm = $('#activeInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('activeSortOrder', activeSortOrder);
+                    loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
+                });
+
+
+                function loadActivePage(pageNumber, searchTerm, activeSortOrder) {
+                    $.ajax({
+                        url: 'getjoblist/get-active-job.php',
+                        type: 'get',
+                        data: {
+                            page: pageNumber,
+                            active_sort_order: activeSortOrder, // Pass the title sort order as a parameter
+                            activesearch: searchTerm // Pass the current search term as a parameter
+                        },
+                        success: function (response) {
+                            // Replace your table content with the response
+                            $('#active').html(response);
+                        }
+                    });
+                }
+            </script>
+            <?php
             // Fetch all the rows
             echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
             <thead>
@@ -151,12 +225,12 @@ session_start(); // Start the session at the beginning
                         <div style="width:10px;"></div>
                             <div style="display:flex;flex-direction:column;justify-content:center">
                                 <div>
-                                    <button class="sorting_asc" id="title_asc">
+                                    <button class="sorting_asc" id="active_title_asc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
                                     </button>
                                 </div>
                                 <div>
-                                    <button class="sorting_desc" id="title_desc">
+                                    <button class="sorting_desc" id="active_title_desc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                                     </button>
                                 </div>
@@ -171,12 +245,12 @@ session_start(); // Start the session at the beginning
                             <div style="width:10px;"></div>
                             <div style="display:flex;flex-direction:column;justify-content:center">
                                 <div>
-                                    <button class="sorting_asc" id="date_asc">
+                                    <button class="sorting_asc" id="active_date_asc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
                                     </button>
                                 </div>
                                 <div>
-                                    <button class="sorting_desc" id="date_desc">
+                                    <button class="sorting_desc" id="active_date_desc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                                     </button>
                                 </div>
@@ -191,12 +265,12 @@ session_start(); // Start the session at the beginning
                             <div style="width:10px;"></div>
                             <div style="display:flex;flex-direction:column;justify-content:center">
                                 <div>
-                                    <button class="sorting_asc" id="can_asc">
+                                    <button class="sorting_asc" id="active_can_asc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
                                     </button>
                                 </div>
                                 <div>
-                                    <button class="sorting_desc" id="can_desc">
+                                    <button class="sorting_desc" id="active_can_desc">
                                         <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
                                     </button>
                                 </div>
@@ -360,103 +434,39 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-    var activeSortOrder = localStorage.getItem('activeSortOrder') || 'normal';
-    var searchTerm = '';
 
-    $(document).off('click', '.page-button.active').on('click', '.page-button.active', function (e) {
-        e.preventDefault();
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(pageNumber, searchTerm, activeSortOrder);
-    });
 
-    document.querySelector('#title_asc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titledesc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titleasc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
+    // Get the elements
+    var clearactive = document.getElementById('clearactive');
+    var activeInput = document.getElementById('activeInput');
 
-    document.querySelector('#title_desc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'titledesc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
+    // Hide the clear button initially
+    clearactive.style.display = 'none';
 
-    document.querySelector('#date_asc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'datedesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'dateasc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
-
-    document.querySelector('#date_desc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'dateasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'candesc' || activeSortOrder === 'canasc') ? 'datedesc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
-
-    document.querySelector('#can_asc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'candesc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'canasc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
-
-    document.querySelector('#can_desc').addEventListener('click', function () {
-        activeSortOrder = (activeSortOrder === 'normal' || activeSortOrder === 'canasc' || activeSortOrder === 'titledesc' || activeSortOrder === 'titleasc' || activeSortOrder === 'datedesc' || activeSortOrder === 'dateasc') ? 'candesc' : 'normal';
-        searchTerm = $('#activeInput').val(); // Update the searchTerm variable
-        localStorage.setItem('activeSortOrder', activeSortOrder);
-        loadActivePage(1, searchTerm, activeSortOrder); // Load the first page with the new sort order
-    });
-
-    function loadActivePage(pageNumber, searchTerm, activeSortOrder) {
-        $.ajax({
-            url: 'getjoblist/get-active-job.php',
-            type: 'get',
-            data: {
-                page: pageNumber,
-                active_sort_order: activeSortOrder, // Pass the title sort order as a parameter
-                activesearch: searchTerm // Pass the current search term as a parameter
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#active').html(response);
-            }
-        });
+    // Function to show/hide the clear button
+    function toggleactiveClearButton() {
+        if (activeInput.value.trim() !== '') {
+            clearactive.style.display = 'flex';
+        } else {
+            clearactive.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var clearactive = document.getElementById('clearactive');
-        var activeInput = document.getElementById('activeInput');
+    // Call the function initially to set the correct display
+    toggleactiveClearButton();
 
-        // Hide the clear button initially
-        clearactive.style.display = 'none';
+    activeInput.addEventListener('input', toggleactiveClearButton);
 
-        // Show/hide the clear button when the input box content changes
-        activeInput.addEventListener('input', function () {
-            if (this.value) {
-                clearactive.style.display = 'flex';
-            } else {
-                clearactive.style.display = 'none';
-            }
+    // Clear the input box when the clear button is clicked
+    clearactive.addEventListener('click', function (e) {
+        e.preventDefault();
+        activeInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        clearactive.addEventListener('click', function (e) {
-            e.preventDefault();
-            activeInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            activeInput.dispatchEvent(event);
-        });
+        activeInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {

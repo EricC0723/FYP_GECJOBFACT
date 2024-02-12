@@ -103,14 +103,115 @@ session_start(); // Start the session at the beginning
         $searchTerm = mysqli_real_escape_string($connect, $_GET['closedsearch']);
     }
 
-    // Prepare the SQL statement
-    $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    $closedSortOrder = isset($_GET['closed_sort_order']) ? $_GET['closed_sort_order'] : 'normal';
 
+    if ($closedSortOrder === 'titleasc' || $closedSortOrder === 'titledesc') {
+        if ($closedSortOrder === 'titleasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY Job_Post_Title $order LIMIT $start_from, $limit";
+    } else if ($closedSortOrder === 'dateasc' || $closedSortOrder === 'datedesc') {
+        if ($closedSortOrder === 'dateasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate $order LIMIT $start_from, $limit";
+    } else if ($closedSortOrder === 'canasc' || $closedSortOrder === 'candesc') {
+        if ($closedSortOrder === 'canasc') {
+            $order = 'ASC';
+        } else {
+            $order = 'DESC';
+        }
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY (SELECT COUNT(*) FROM applications WHERE applications.JobID = job_post.Job_Post_ID) $order LIMIT $start_from, $limit";
+    } else {
+        $sql = "SELECT * FROM job_post WHERE CompanyID = $CompanyID AND job_status = 'Closed' AND Job_Post_Title LIKE '%$searchTerm%' AND Job_isDeleted = '0' ORDER BY AdStartDate DESC LIMIT $start_from, $limit";
+    }
+
+    // Prepare the SQL statement
+    
     // Execute the SQL statement
     $result = mysqli_query($connect, $sql);
 
     // Check if there are any results
     if (mysqli_num_rows($result) > 0) {
+        ?>
+        <script>
+            var closedSortOrder = localStorage.getItem('closedSortOrder') || 'normal';
+            var searchTerm = '';
+
+            $(document).off('click', '.page-button.closed').on('click', '.page-button.closed', function (e) {
+                e.preventDefault();
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(pageNumber, searchTerm, closedSortOrder);
+            });
+
+
+            document.querySelector('#closed_title_asc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'titledesc' || closedSortOrder === 'datedesc' || closedSortOrder === 'dateasc' || closedSortOrder === 'candesc' || closedSortOrder === 'canasc') ? 'titleasc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#closed_title_desc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'titleasc' || closedSortOrder === 'datedesc' || closedSortOrder === 'dateasc' || closedSortOrder === 'candesc' || closedSortOrder === 'canasc') ? 'titledesc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#closed_date_asc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'datedesc' || closedSortOrder === 'titledesc' || closedSortOrder === 'titleasc' || closedSortOrder === 'candesc' || closedSortOrder === 'canasc') ? 'dateasc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#closed_date_desc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'dateasc' || closedSortOrder === 'titledesc' || closedSortOrder === 'titleasc' || closedSortOrder === 'candesc' || closedSortOrder === 'canasc') ? 'datedesc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#closed_can_asc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'candesc' || closedSortOrder === 'titledesc' || closedSortOrder === 'titleasc' || closedSortOrder === 'datedesc' || closedSortOrder === 'dateasc') ? 'canasc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+            document.querySelector('#closed_can_desc').addEventListener('click', function () {
+                closedSortOrder = (closedSortOrder === 'normal' || closedSortOrder === 'canasc' || closedSortOrder === 'titledesc' || closedSortOrder === 'titleasc' || closedSortOrder === 'datedesc' || closedSortOrder === 'dateasc') ? 'candesc' : 'normal';
+                searchTerm = $('#closedInput').val(); // Update the searchTerm variable
+                localStorage.setItem('closedSortOrder', closedSortOrder);
+                loadClosedPage(1, searchTerm, closedSortOrder); // Load the first page with the new sort order
+            });
+
+
+
+            function loadClosedPage(pageNumber, searchTerm, closedSortOrder) {
+                $.ajax({
+                    url: 'getjoblist/get-closed-job.php',
+                    type: 'get',
+                    data: {
+                        page: pageNumber,
+                        closed_sort_order: closedSortOrder, // Pass the title sort order as a parameter
+                        closedsearch: searchTerm // Pass the current search term as a parameter
+                    },
+                    success: function (response) {
+                        // Replace your table content with the response
+                        $('#closed').html(response);
+                    }
+                });
+            }
+        </script>
+        <?php
         echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
         <thead>
             <tr>
@@ -118,18 +219,77 @@ session_start(); // Start the session at the beginning
                     <div class="th_title">Status</div>
                 </th>
                 <th>
-                    <div class="th_title">Job</div>
-                </th>
-                <th style="width:146px;">
-                    <div class="th_title">Candidates</div>
-                </th>
-                <th style="width:156px;">
-                    <div class="th_title" style="text-align:right;">Job Actions</div>
+                        <div class="th_title">
+                        <div>
+                                Job
+                        </div>
+                        <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="closed_title_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="closed_title_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                    <th style="width:330px;">
+                        <div class="th_title">
+                            <div>
+                                Duration
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="closed_date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="closed_date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                    
+                    </th>
+                    <th style="width:140px;">
+                        <div class="th_title">
+                            <div>
+                                Candidates
+                            </div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="closed_can_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="closed_can_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                <th style="width:180px;">
+                    <div class="th_title" style="justify-content:right;">Job Actions</div>
                 </th>
             </tr>
         </thead>';
         // Fetch all the rows
         while ($row = mysqli_fetch_assoc($result)) {
+            $JobID = $row['Job_Post_ID'];
+            $sql2 = "SELECT * FROM payment WHERE JobID = $JobID";
+            $result2 = mysqli_query($connect, $sql2);
+            $row2 = mysqli_fetch_assoc($result2);
+
             echo '
                 <tbody>
                     <tr style="border-top: 4px solid #f5f6f8;height: 80px">
@@ -143,18 +303,22 @@ session_start(); // Start the session at the beginning
                                         <div>
                                             <div><a href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="td_job_link">' . htmlspecialchars($row['Job_Post_Title']) . '</a></div>
                                             <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row['Job_Post_Location']) . '</div>
-                                            <div style="font-size:16px;line-height:24px;">Start from ' . date('j F Y', strtotime($row['AdStartDate'])) . ' until ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
-                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="td_title">          
-                                        <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
-                                    </div>                           
-                                </td>
+                                    <div class="td_title">
+                                    <div style="font-size:16px;line-height:24px;">' . htmlspecialchars($row2['Payment_Duration'] ?? '') . ' month(s)</div>
+                                    <div style="font-size:16px;line-height:24px;">' . date('j F Y', strtotime($row['AdStartDate'])) . ' - ' . date('j F Y', strtotime($row['AdEndDate'])) . '</div>
+                                    </div>
                                 </td>
                                 <td>
-                                <div class="td_title" style="width:160px;">
+                                    <div class="td_title">
+                                    <button class="applicantCount" data-jobpostid="' . htmlspecialchars($row['Job_Post_ID']) . '">' . getApplicantCount($row['Job_Post_ID']) . '</button>
+                                    </div>
+                                </td>
+                                <td>
+                                <div class="td_title" >
                                     <div style="flex-direction:row;display:flex;justify-content:end;">
                                         <div style="display:flex;justify-content:center;align-items:center;width:44px;">
                                             <a class="listlink" href="view-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" style="display:flex;align-items:center;">
@@ -171,9 +335,6 @@ session_start(); // Start the session at the beginning
                                             <title>Delete</title><path d="M10 17c.6 0 1-.4 1-1v-6c0-.6-.4-1-1-1s-1 .4-1 1v6c0 .6.4 1 1 1zm4 0c.6 0 1-.4 1-1v-6c0-.6-.4-1-1-1s-1 .4-1 1v6c0 .6.4 1 1 1z"></path><path d="M20 4h-4V3c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v1H4c-.6 0-1 .4-1 1s.4 1 1 1v13c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V6c.6 0 1-.4 1-1s-.4-1-1-1zM10 3h4v1h-4V3zm8 16c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V6h12v13z"></path></svg>
                                             </button>
                                         </div>
-                                    </div>
-                                    <div class="continuedraft_button" style="display:none">
-                                        <a href="post-job-classify.php?jobPostID=' . htmlspecialchars($row['Job_Post_ID']) . '" class="continue_job_link">Continue draft</a>
                                     </div>
                                 </div>
                                 </td>
@@ -276,64 +437,49 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-    $(document).off('click', '.page-button.closed').on('click', '.page-button.closed', function (e) {
-        e.preventDefault();
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadClosedPage(pageNumber);
-    });
 
-    function loadClosedPage(pageNumber) {
-        $.ajax({
-            url: 'getjoblist/get-closed-job.php',
-            type: 'get',
-            data: {
-                page: pageNumber
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#closed').html(response);
-            }
-        });
+    // Get the elements
+    var clearclosed = document.getElementById('clearclosed');
+    var closedInput = document.getElementById('closedInput');
+
+    // Hide the clear button initially
+    clearclosed.style.display = 'none';
+
+    // Function to show/hide the clear button
+    function toggleclosedClearButton() {
+        if (closedInput.value.trim() !== '') {
+            clearclosed.style.display = 'flex';
+        } else {
+            clearclosed.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var clearclosed = document.getElementById('clearclosed');
-        var closedInput = document.getElementById('closedInput');
+    // Call the function initially to set the correct display
+    toggleclosedClearButton();
 
-        // Hide the clear button initially
-        clearclosed.style.display = 'none';
+    closedInput.addEventListener('input', toggleclosedClearButton);
 
-        // Show/hide the clear button when the input box content changes
-        closedInput.addEventListener('input', function () {
-            if (this.value) {
-                clearclosed.style.display = 'inline';
-            } else {
-                clearclosed.style.display = 'none';
-            }
+
+    // Clear the input box when the clear button is clicked
+    clearclosed.addEventListener('click', function (e) {
+        e.preventDefault();
+        closedInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        clearclosed.addEventListener('click', function (e) {
-            e.preventDefault();
-            closedInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            closedInput.dispatchEvent(event);
-        });
+        closedInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {
         $('#closedForm').on('submit', function (e) {
             e.preventDefault(); // Prevent the form from being submitted normally
 
-            var searchTerm = $('#closedInput').val();
+            searchTerm = $('#closedInput').val();
 
             // Pass the search term to a function
-            searchClosed(searchTerm);
+            loadClosedPage(1, searchTerm);
         });
     });
 

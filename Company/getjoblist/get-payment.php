@@ -36,7 +36,7 @@ session_start(); // Start the session at the beginning
                     <input id="paymentInput" type="text" class="input-box" name="paymentsearch"
                         style="padding-left:44px;padding-right:44px;width:512px;"
                         placeholder="Search by name, job title" value="<?php echo htmlspecialchars($searchTerm); ?>">
-                    <button id="clearpayment" class="clear-button" type="button">
+                    <button id="clearpayment" class="clear-button" type="button" style="right:85px">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
                             focusable="false" fill="currentColor" width="16" height="16" aria-hidden="true"
                             style="width:20px;height:20px;">
@@ -83,32 +83,255 @@ session_start(); // Start the session at the beginning
             $jobPostID = mysqli_real_escape_string($connect, $_GET['jobPostID']);
         }
 
-        $sql = "SELECT payment.*, job_post.*
-        FROM payment
-        INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
-        WHERE job_post.CompanyID = $CompanyID 
-        AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
-        ORDER BY payment.Payment_Date DESC LIMIT $start_from, $limit";
+        $paymentSortOrder = isset($_GET['payment_sort_order']) ? $_GET['payment_sort_order'] : 'normal';
+
+        if ($paymentSortOrder === 'paymentjobtitleasc' || $paymentSortOrder === 'paymentjobtitledesc') {
+            if ($paymentSortOrder === 'paymentjobtitleasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT payment.*, job_post.*   
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            ORDER BY job_post.Job_Post_Title $order LIMIT $start_from, $limit";
+        } else if ($paymentSortOrder === 'paymentjobdateasc' || $paymentSortOrder === 'paymentjobdatedesc') {
+            if ($paymentSortOrder === 'paymentjobdateasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT payment.*, job_post.*   
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            ORDER BY job_post.AdStartDate $order LIMIT $start_from, $limit";
+        } else if ($paymentSortOrder === 'paymentdateasc' || $paymentSortOrder === 'paymentdatedesc') {
+            if ($paymentSortOrder === 'paymentdateasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT payment.*, job_post.*   
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            ORDER BY payment.Payment_Date $order LIMIT $start_from, $limit";
+        } else if ($paymentSortOrder === 'paymentamountasc' || $paymentSortOrder === 'paymentamountdesc') {
+            if ($paymentSortOrder === 'paymentamountasc') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+            $sql = "SELECT payment.*, job_post.*   
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            ORDER BY payment.Payment_Amount $order LIMIT $start_from, $limit";
+        } else{
+            $sql = "SELECT payment.*, job_post.*   
+            FROM payment
+            INNER JOIN job_post ON payment.JobID = job_post.Job_Post_ID 
+            WHERE job_post.CompanyID = $CompanyID 
+            AND job_post.Job_Post_Title LIKE '%$searchTerm%' 
+            ORDER BY payment.Payment_Date DESC LIMIT $start_from, $limit";
+        }
 
         $result = mysqli_query($connect, $sql);
 
         // Check if there are any results
         if (mysqli_num_rows($result) > 0) {
+            ?>
+            <script>
+                var paymentSortOrder = localStorage.getItem('paymentSortOrder') || 'normal';
+                var searchTerm = '';
+
+                $(document).off('click', '.page-button.payment').on('click', '.page-button.payment', function (e) {
+                    e.preventDefault();
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(pageNumber, searchTerm, paymentSortOrder);
+                });
+
+                document.querySelector('#payment_jobtitle_asc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentjobtitleasc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_jobtitle_desc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentjobtitleasc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentjobtitledesc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_jobdate_asc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentjobdateasc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_jobdate_desc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentjobdateasc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentjobdatedesc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_date_asc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentdatedesc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentdateasc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_date_desc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentdateasc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentamountasc' || paymentSortOrder === 'paymentamountdesc') ? 'paymentdatedesc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_amount_asc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentamountdesc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc') ? 'paymentamountasc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                document.querySelector('#payment_amount_desc').addEventListener('click', function () {
+                    paymentSortOrder = (paymentSortOrder === 'normal' || paymentSortOrder === 'paymentamountasc' ||
+                        paymentSortOrder === 'paymentjobtitleasc' || paymentSortOrder === 'paymentjobtitledesc' ||
+                        paymentSortOrder === 'paymentjobdateasc' || paymentSortOrder === 'paymentjobdatedesc' ||
+                        paymentSortOrder === 'paymentdateasc' || paymentSortOrder === 'paymentdatedesc') ? 'paymentamountdesc' : 'normal';
+                    searchTerm = $('#paymentInput').val(); // Update the searchTerm variable
+                    localStorage.setItem('paymentSortOrder', paymentSortOrder);
+                    loadPaymentPage(1, searchTerm, paymentSortOrder); // Load the first page with the new sort order
+                });
+
+                function loadPaymentPage(pageNumber, searchTerm, paymentSortOrder) {
+                    $.ajax({
+                        url: 'getjoblist/get-payment.php', // The PHP file that executes the search
+                        type: 'GET',
+                        data: {
+                            page: pageNumber,
+                            payment_sort_order: paymentSortOrder,
+                            paymentsearch: searchTerm
+                        },
+                        success: function (data) {
+                            // Update the table with the new data
+                            $('#payment').html(data);
+                        }
+                    });
+                }
+            </script>
+
+            <?php
             // Fetch all the rows
             echo '<table style="background-color: #fff;border-collapse: collapse;width: 100%;">
             <thead>
                 <tr>
                     <th style="width:395px;">
-                        <div class="th_title">Payment</div>
+                        <div class="th_title">
+                            <div>Payment Job Post</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="payment_jobtitle_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="payment_jobtitle_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="width:130px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="payment_jobdate_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="payment_jobdate_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>  
+                            <div style="width:10px;"></div>
+                            <div>Job Post Duration</div>
+                        </div>
                     </th>
                     <th style="width:265px;">
-                        <div class="th_title">Payment Details</div>
+                        <div class="th_title">
+                            <div>Payment Details</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="payment_date_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="payment_date_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </th>
                     <th style="width:161px;">
-                        <div class="th_title">Payment Amount</div>
+                        <div class="th_title">
+                            <div>Payment Amount</div>
+                            <div style="width:10px;"></div>
+                            <div style="display:flex;flex-direction:column;justify-content:center">
+                                <div>
+                                    <button class="sorting_asc" id="payment_amount_asc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>                                    
+                                    </button>
+                                </div>
+                                <div>
+                                    <button class="sorting_desc" id="payment_amount_desc">
+                                        <svg style="width:10px;" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </th>
-                    <th style="width:154px;">
-                        <div class="th_title" style="text-align:right;">Payment Actions</div>
+                    <th style="width:100px;">
+                        <div class="th_title" style="justify-content:right;">Payment Actions</div>
                     </th>
                 </tr>
             </thead>';
@@ -151,7 +374,7 @@ session_start(); // Start the session at the beginning
                                 </td>
                                
                                 <td>
-                                <div class="td_title" style="width:154px;">
+                                <div class="td_title">
                                     <div style="flex-direction:row;display:flex;justify-content:end;">
                                         <div style="display:flex;justify-content:center;align-items:center;width:44px;">
                                             <a href="' . htmlspecialchars($row['Payment_Receipt']) . ' " target="_blank">
@@ -252,54 +475,38 @@ session_start(); // Start the session at the beginning
 </div>
 
 <script>
-    $(document).off('click', '.page-button.payment').on('click', '.page-button.payment', function (e) {
-        e.preventDefault();
-        var pageNumber = $(this).data('page-number'); // Get the page number from the data attribute
-        loadPaymentPage(pageNumber);
-    });
 
-    function loadPaymentPage(pageNumber) {
-        $.ajax({
-            url: 'getjoblist/get-payment.php',
-            type: 'get',
-            data: {
-                page: pageNumber
-            },
-            success: function (response) {
-                // Replace your table content with the response
-                $('#payment').html(response);
-            }
-        });
+    // Get the elements
+    var clearpayment = document.getElementById('clearpayment');
+    var paymentInput = document.getElementById('paymentInput');
+
+    // Hide the clear button initially
+    clearpayment.style.display = 'none';
+
+    // Function to show/hide the clear button
+    function togglepaymentClearButton() {
+        if (paymentInput.value.trim() !== '') {
+            clearpayment.style.display = 'flex';
+        } else {
+            clearpayment.style.display = 'none';
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the elements
-        var clearpayment = document.getElementById('clearpayment');
-        var paymentInput = document.getElementById('paymentInput');
+    // Call the function initially to set the correct display
+    togglepaymentClearButton();
 
-        // Hide the clear button initially
-        clearpayment.style.display = 'none';
+    paymentInput.addEventListener('input', togglepaymentClearButton);
 
-        // Show/hide the clear button when the input box content changes
-        paymentInput.addEventListener('input', function () {
-            if (this.value) {
-                clearpayment.style.display = 'flex';
-            } else {
-                clearpayment.style.display = 'none';
-            }
+    // Clear the input box when the clear button is clicked
+    clearpayment.addEventListener('click', function (e) {
+        e.preventDefault();
+        paymentInput.value = '';
+        // Manually trigger the input event
+        var event = new Event('input', {
+            bubbles: true,
+            cancelable: true,
         });
-
-        // Clear the input box when the clear button is clicked
-        clearpayment.addEventListener('click', function (e) {
-            e.preventDefault();
-            paymentInput.value = '';
-            // Manually trigger the input event
-            var event = new Event('input', {
-                bubbles: true,
-                cancelable: true,
-            });
-            paymentInput.dispatchEvent(event);
-        });
+        paymentInput.dispatchEvent(event);
     });
 
     $(document).ready(function () {
@@ -314,7 +521,7 @@ session_start(); // Start the session at the beginning
             var searchTerm = $('#paymentInput').val();
 
             // Pass the search term to a function
-            searchPayment(searchTerm);
+            loadPaymentPage(1, searchTerm);
         });
     });
 

@@ -122,19 +122,7 @@ if (isset($_SESSION['companyID'])) {
             });
         }
 
-        function searchPayment(searchTerm) {
-            $.ajax({
-                url: 'getjoblist/get-payment.php', // The PHP file that executes the search
-                type: 'GET',
-                data: {
-                    paymentsearch: searchTerm
-                },
-                success: function (data) {
-                    // Update the table with the new data
-                    $('#payment').html(data);
-                }
-            });
-        }
+        
     </script>
 </body>
 
