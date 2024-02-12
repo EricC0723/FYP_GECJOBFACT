@@ -332,7 +332,7 @@ if (isset($_GET['job_id'])) {
 					</li>
 					<li>
 						<a href="joblist.php" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-edit1"></span><span class="mtext">Job</span>
+							<span class="micon dw dw-edit1"></span><span class="mtext">Job post</span>
 						</a>
 					</li>
 					<li class="dropdown">
@@ -652,7 +652,7 @@ if (isset($_GET['job_id'])) {
 														<td><?php echo $row["Location"];?></td>
 													</tr>
 													<tr>
-														<td>Applyed date</td>
+														<td>Applied date</td>
 														<td>:</td>	
 														<td><?php echo date('d-m-y : H:i', strtotime($row["ApplyDate"])); ?></td>
 													</tr>

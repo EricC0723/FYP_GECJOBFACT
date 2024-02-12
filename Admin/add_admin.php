@@ -505,7 +505,7 @@
 							<div class="">
 								<a class="btn btn-primary" href="admin.php">
 									Back to Admin
-								</a>
+								</a>2
 							</div>
 						</div>
 					</div>
@@ -597,7 +597,6 @@
 					<h5 style="display: inline-block;">Admin type</h5>
 					<select class="selectpicker form-group" data-size="5" data-width="100%" name="type" id="type"style="max-height:100px;">
                      <option value="normal admin">Normal admin</option>
-					 <option value="super admin">Super admin</option>
                   </select>
 				  
 				  

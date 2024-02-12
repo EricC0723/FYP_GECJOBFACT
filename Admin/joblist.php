@@ -622,10 +622,10 @@ function confirmation()
                     <h5 style="display: inline-block;">Job Post Title</h5>
                     <div class="form-group">
 						<input type="hidden" class="form-control" id="edit_Job_Post_ID" style="margin-top:10px;border-color:#787785;">
-						<input type="text" class="form-control" id="edit_Job_Post_Title" style="margin-top:10px;border-color:#787785;" disabled>
+						<input type="text" class="form-control" id="edit_Job_Post_Title" style="margin-top:10px;border-color:#787785;">
                     </div>
 
-                    <h5 style="display: inline-block;">Job Post Position</h5>
+                    <!-- <h5 style="display: inline-block;">Job Post Position</h5>
                     <div class="form-group">
 						<input type="text" class="form-control" id="edit_Job_Post_Position" style="margin-top:10px;border-color:#787785;" disabled>
                     </div>
@@ -650,7 +650,7 @@ function confirmation()
 					<h5 style="display: inline-block;">Job Location</h5>
 					<div class="form-group">
 						<input type="text" class="form-control" id="edit_Job_Post_Location" style="margin-top:10px;border-color:#787785;" disabled>
-					</div>
+					</div> -->
 					
 					<h5 style="display: inline-block;">Job Status</h5>
                     <select class="selectpicker form-control" name="edit_job_status" id="edit_job_status" style="width: 100%; height: 38px;">
@@ -658,12 +658,12 @@ function confirmation()
 							<option value="Blocked" >Blocked</option>
 							<option value="Closed" >Closed</option>
 					</select>
-				<div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
+				<!-- <div class="group-container"style="text-align:center;color:grey;margin-top:50px;">
 					<hr>
 					<h6 class="group-title"style="color:grey;" >Salary and deadline information</h6>
 					<hr>
 				</div>
-                    <!-- Add other job-related fields here -->
+
 					<div class="row" style="position:center;">
                       <div class="col-md-6 col-sm-12">
 					  <h5 style="display: inline-block;">Ad Start Date</h5>
@@ -691,7 +691,7 @@ function confirmation()
 					<input type="text" class="form-control" id="edit_Job_Post_MaxSalary" style="margin-top:10px;border-color:#787785;" disabled>
 					</div>
                       </div>
-                    </div>
+                    </div> -->
                         <div class="modal-footer">
 							<a class="updatejobBtn btn btn-primary" href="#" data-jobid="<?=$row['Job_Post_ID'];?>"> Save changes</a>
                         </div>
@@ -795,40 +795,34 @@ function confirmation()
                 if(res.status == 404) {
                     alert(res.message);
                 }else if(res.status == 200){
-                    var startDate = moment(res.data.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
-					var endDate = moment(res.data.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
-					$('#edit_CompanyID ').prop('value',res.data.CompanyID );
+					$('#edit_Job_Post_Title').prop('value',res.data.job.Job_Post_Title);
+                    // var startDate = moment(res.data.job.AdStartDate).format('DD-MM-YYYY HH:mm:ss');
+					// var endDate = moment(res.data.job.AdEndDate).format('DD-MM-YYYY HH:mm:ss');
+					// $('#edit_CompanyID ').prop('value',res.data.job.CompanyID );
 					$('#edit_Job_Post_ID ').prop('value',job_id);
-                    $('#edit_Job_Post_Title').prop('value',res.data.Job_Post_Title);
-                    $('#edit_Job_Post_Position').prop('value',res.data.Job_Post_Position);
-					$('#edit_Job_Post_Exp').prop('value',res.data.Job_Post_Exp);
-					$('#edit_Job_Post_MinSalary').prop('value',res.data.Job_Post_MinSalary);
-					$('#edit_Job_Post_MaxSalary').prop('value',res.data.Job_Post_MaxSalary);
-					$('#edit_Job_Post_Description').prop('value',res.data.Job_Post_Description);
-					$('#edit_AdStartDate').prop('value',startDate);
-					$('#edit_AdEndDate').prop('value',endDate);
-					$('#edit_Job_Post_Type').prop('value',res.data.Job_Post_Type);
-					// $('#edit_job_status')prop('value',res.data.job_status);
-					$('#edit_Job_Post_Location').prop('value',res.data.Job_Post_Location);
-					$('#edit_Job_Post_Responsibilities').prop('value',res.data.Job_Post_Responsibilities);
-					$('#edit_Job_Post_Benefits').prop('value',res.data.Job_Post_Benefits);
-					$('#edit_Main_Category_Name').prop('value',res.data.Main_Category_Name);
-					$('#edit_Sub_Category_Name').prop('value',res.data.Sub_Category_Name);
+                    
+                    // $('#edit_Job_Post_Position').prop('value',res.data.job.Job_Post_Position);
+					// $('#edit_Job_Post_Exp').prop('value',res.data.job.Job_Post_Exp);
+					// $('#edit_Job_Post_MinSalary').prop('value',res.data.job.Job_Post_MinSalary);
+					// $('#edit_Job_Post_MaxSalary').prop('value',res.data.job.Job_Post_MaxSalary);
+					// $('#edit_Job_Post_Description').prop('value',res.data.job.Job_Post_Description);
+					// $('#edit_AdStartDate').prop('value',startDate);
+					// $('#edit_AdEndDate').prop('value',endDate);
+					// $('#edit_Job_Post_Type').prop('value',res.data.job.Job_Post_Type);
+					// $('#edit_Job_Post_Location').prop('value',res.data.job.Job_Post_Location);
+					// $('#edit_Job_Post_Responsibilities').prop('value',res.data.job.Job_Post_Responsibilities);
+					// $('#edit_Job_Post_Benefits').prop('value',res.data.Job_Post_Benefits);
+					// $('#edit_Main_Category_Name').prop('value',res.data.Main_Category_Name);
+					// $('#edit_Sub_Category_Name').prop('value',res.data.Sub_Category_Name);
 
 					var jobStatusSelect = $('#edit_job_status');
-					jobStatusSelect.find('option').each(function() {
-						if ($(this).val() === res.data.job_status) {
-							$(this).prop('selected', true);
-						} else {
-							$(this).prop('selected', false);
-						}
-					});
-					$('#edit_job_status').selectpicker('refresh');
+					jobStatusSelect.val(res.data.job.job_status);
+					jobStatusSelect.selectpicker('refresh');
 
-					var jobLogoUrl = res.data.Job_Logo_Url;
-					var jobCoverUrl = res.data.Job_Cover_Url;
-					$('#edit_Job_Cover_Url').attr('src', jobCoverUrl);
-					$('#edit_Job_Logo_Url').attr('src', jobLogoUrl);
+					// var jobLogoUrl = res.data.Job_Logo_Url;
+					// var jobCoverUrl = res.data.Job_Cover_Url;
+					// $('#edit_Job_Cover_Url').attr('src', jobCoverUrl);
+					// $('#edit_Job_Logo_Url').attr('src', jobLogoUrl);
 
                     $('#edit-job-modal').modal('show');
                 }
@@ -846,6 +840,7 @@ function confirmation()
             action: "updatejob",
 			job_id: $("#edit_Job_Post_ID").val(),
             status: $("#edit_job_status").val(),
+			title: $("#edit_Job_Post_Title").val(),
         };
 		console.log(data);
 		swal({
@@ -862,9 +857,16 @@ function confirmation()
 			data: data,
             success: function (response) {
                 console.log(response);
-				swal("Success", response, "success").then(function() {
+				if(response==="Failed")
+				{
+					swal("Oops...", "Job title cannot be empty!", "error");
+				}
+				else{
+					swal("Success", response, "success").then(function() {
 					location.replace("joblist.php");
 				});
+				}
+				
             }
         });
 	}

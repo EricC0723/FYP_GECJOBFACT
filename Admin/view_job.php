@@ -4,10 +4,15 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($_POST["action"] == "updatejob")
         {   $job_id = $_POST['job_id'];
+            $title = $_POST['title'];
             $status = $_POST['status'];
-            
+
+            if (empty($title)) {
+                echo 'Failed';
+                exit;
+            }
             $sql = "UPDATE job_post
-                SET job_status = '$status'
+                SET job_status = '$status',Job_Post_Title = '$title'
                 WHERE Job_Post_ID = '$job_id'";
             $result = mysqli_query($connect, $sql);
 
