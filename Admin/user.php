@@ -1,6 +1,9 @@
 <?php
   session_start();
   include("C:/xampp/htdocs/FYP/dataconnection.php");
+  require 'VeridationAdminPage/edit_admin_veridate.php';
+  $admin_query = "SELECT * FROM job_location";
+  $admin_location = mysqli_query($connect,$admin_query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -763,9 +766,9 @@
 							<h5 style="display: inline-block;">State and City</h5>
                     			<select class="selectpicker form-control" data-size="5" data-width="100%" name="edit_StateAndCity" id="edit_StateAndCity"style="max-height:100px;">
 									<?php
-									if(mysqli_num_rows($location_result) > 0)
+									if(mysqli_num_rows($admin_location) > 0)
 									{
-									while($location_row = mysqli_fetch_assoc($location_result))
+									while($location_row = mysqli_fetch_assoc($admin_location))
 									{
 									?>
 									<option value="<?php echo $location_row["Job_Location_Name"];?>"><?php echo $location_row["Job_Location_Name"]; ?></option>
@@ -784,7 +787,7 @@
 								</div>
 							<h5 style="display: inline-block;">Registration Date</h5>
 								<div class="form-group">
-									<input type="text" class="form-control" id="edit_RegistrationDate" style="margin-top:10px;border-color:#787785;"disabled>
+									<input type="text" class="form-control" id="edit_admin_RegistrationDate" style="margin-top:10px;border-color:#787785;"disabled>
 								</div>
 						<div class="group-container">
 							<hr>
@@ -925,7 +928,7 @@
 							$(this).prop('selected', false);
 						}
 					});
-                    $('#edit_RegistrationDate').prop('value', formattedDate);
+                    $('#edit_admin_RegistrationDate').prop('value', formattedDate);
 
                     $('#edit-user-modal').modal('show');
                 }
