@@ -442,13 +442,13 @@
 					var day = adStartDate.getDate();
 					var month = adStartDate.toLocaleString('en-us', { month: 'short' });
 					var year = adStartDate.getFullYear();
-					var $formattedAdStartDate = day + ' ' + month + ' ' + year;
+					var $formattedAdStartDate =day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
 					var adEndDate = new Date(res.data.job.AdEndDate);
 					var day = adEndDate.getDate();
 					var month = adEndDate.toLocaleString('en-us', { month: 'short' });
 					var year = adEndDate.getFullYear();
-					var $formattedAdEndDate = day + ' ' + month + ' ' + year;
+					var $formattedAdEndDate = day + ' ' + month + ' ' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
                     modalContent += '<div class="invoice-box">';
                     modalContent += '<div class="invoice-header">';
