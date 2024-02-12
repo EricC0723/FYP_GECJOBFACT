@@ -46,14 +46,3 @@ function boldOption2(element) {
 }
 
 
-$(document).ready(function() {
-    $('#dropdown1, #dropdown2').change(function() {
-        if ($(this).val() == "") {
-            $(this).css('color', 'grey');
-        } else {
-            $(this).css('color', 'black');
-        }
-    }).css('color', 'grey');
-});
-
-

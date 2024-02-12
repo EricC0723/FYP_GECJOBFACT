@@ -25,7 +25,7 @@ if (isset($_SESSION['companyID'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Change Email</title>
     <link rel="stylesheet" type="text/css" href="post-job.css">
     <link rel="stylesheet" type="text/css" href="company_register.css">
 </head>
@@ -156,20 +156,26 @@ if (isset($_GET["login_btn"])) {
         // After the user is registered, send the verification email
         $mail = new PHPMailer(true);
 
+        $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+        $result = mysqli_query($connect, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $company_contact = $row['ContactPerson'];
+        $company_name = $row['CompanyName'];
+
         try {
             //Server settings
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com'; // Changed to Gmail's SMTP server
             $mail->SMTPAuth = true;
-            $mail->Username = 'jobfactsgec112@gmail.com'; // Your Gmail address
-            $mail->Password = 'wqfrqwmpezbnrjfr'; // Your Gmail password
+            $mail->Username = 'gecjobfacts888@gmail.com'; // Your Gmail address
+            $mail->Password = 'atteeyliyxloitmo'; // Your Gmail password
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
             //Recipients
-            $mail->setFrom('jobfactsgec112@gmail.com', 'Mailer'); // Your Gmail address
-            $mail->addAddress($companyEmail, 'Joe User');
+            $mail->setFrom('gecjobfacts888@gmail.com', 'GEC Job Facts'); // Your Gmail address
+            $mail->addAddress($companyEmail, $company_name);
 
             // Generate a hash of the user's email and a secret key
             $secretKey = "your-secret-key";
@@ -181,8 +187,41 @@ if (isset($_GET["login_btn"])) {
             // Encode the combined string
             $encoded = base64_encode($combined);
 
+            $mail->Subject = 'Change Email Verification';
+
             // Send the verification email
-            $mail->Body = 'Please click on the link to verify your email: http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded);
+            $mail->Body = '
+            <html>
+            <head>
+              <style>
+                .email-content {
+                  font-family: Arial, sans-serif;
+                }
+                .email-content .header {
+                  color: #333;
+                  font-size: 24px;
+                }
+                .email-content .body {
+                  color: #666;
+                  font-size: 16px;
+                }
+                .email-content .footer {
+                  color: #999;
+                  font-size: 12px;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="email-content">
+                <div class="header">Dear ' . $company_contact . ',</div>
+                <div class="body">
+                <p>Please click on the link to verify your email: <a href="http://localhost/FYP/Company/verify-email.php?data=' . urlencode($encoded).'">Click to verify</a></p>
+                </div>
+                <div style="height:20px"></div>
+                <div class="footer">Best regards,<br> GEC Job Facts.</div>
+              </div>
+            </body>
+            </html>';
             $mail->send();
             ?>
             <script>
