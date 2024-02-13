@@ -51,6 +51,7 @@ if (isset($_SESSION['companyID'])) {
                 }
                 $counter = 0;
 
+                
                 while ($row = mysqli_fetch_assoc($result)) {
                     if ($counter % 2 == 0) {
                         echo "<tr>";
