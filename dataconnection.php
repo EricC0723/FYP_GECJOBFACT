@@ -1,5 +1,5 @@
 <?php 
-    $connect = mysqli_connect("localhost","root","","fyp2");
+    $connect = mysqli_connect("localhost","root","","final");
     // if($connect){
     //      echo"Succesfully connect";
     // }

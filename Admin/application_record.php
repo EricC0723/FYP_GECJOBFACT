@@ -12,7 +12,7 @@ if (isset($_GET['user_id'])) {
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>GEC JOB FACTS</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="vendors/images/apple-touch-icon.png">
@@ -446,7 +446,7 @@ if (isset($_GET['user_id'])) {
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.php">Home</a></li>
-									<li class="breadcrumb-item"><a href="index.php">User</a></li>
+									<li class="breadcrumb-item"><a href="user.php">User</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Application record</li>
 								</ol>
 							</nav>
