@@ -46,7 +46,7 @@ if (isset($_POST['submitbtn'])) {
     // Insert the newly selected questions
     if (!empty($_POST['questions'])) {
         foreach ($_POST['questions'] as $questionID) {
-            $insert_sql = "INSERT INTO job_post_questions (QuestionID, JobID, CompanyID) VALUES ('$questionID', '$job_post_ID', '$CompanyID')";
+            $insert_sql = "INSERT INTO job_post_questions (QuestionID, JobID) VALUES ('$questionID', '$job_post_ID')";
             $insert_result = mysqli_query($connect, $insert_sql);
             if (!$insert_result) {
                 echo "<script type='text/javascript'>alert('Failed to update questions!');</script>";
