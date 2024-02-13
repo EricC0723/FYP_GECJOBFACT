@@ -77,7 +77,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
                                 <div class="form-group" style="padding-top:20px;"><label for="contactSubject"
                                         class="question" style="padding-bottom: 8px;">Subject</label>
                                     <input type="text" id="contactSubject" name="contactSubject" class="input-box"
-                                        placeholder="Enter the job title">
+                                        placeholder="Enter the subject">
                                     <div style="padding-top:4px;" id="validation-contactSubject" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg

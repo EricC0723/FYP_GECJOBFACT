@@ -28,8 +28,8 @@ if (isset($_GET['jobPostID'])) {
         $resultq = mysqli_query($connect, $sqlq);
         if (mysqli_num_rows($resultq) > 0) {
             while ($rowq = mysqli_fetch_assoc($resultq)) {
-                $sql2 = "INSERT INTO job_post_questions (JobID, CompanyID, QuestionID)
-                VALUES ('$jobid', '" . mysqli_real_escape_string($connect, $rowq['CompanyID']) . "', '" . mysqli_real_escape_string($connect, $rowq['QuestionID']) . "')";
+                $sql2 = "INSERT INTO job_post_questions (JobID, QuestionID)
+                VALUES ('$jobid', '" . mysqli_real_escape_string($connect, $rowq['QuestionID']) . "')";
                 $result2 = mysqli_query($connect, $sql2);
             }
         }

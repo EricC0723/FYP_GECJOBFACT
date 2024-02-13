@@ -492,8 +492,8 @@ if (isset($_POST["register_btn"])) {
                             <div class="form-group">
                                 <input id="checkbox1" class="form_checkbox" type="checkbox">
                                 <label for="checkbox1" class="register_pp"
-                                    style="padding-left: 30px;user-select: none;">By
-                                    registering, you agree to the Privacy Policy and consent to receive marketing
+                                    style="padding-left: 30px;user-select: none;cursor:pointer;">By
+                                    registering, you agree to the <a href="private_policy.php" style="color:black;cursor:pointer;">Privacy Policy</a> and consent to receive marketing
                                     messages from us. You can opt out at any time via the unsubscribe links or as
                                     detailed in the Privacy Policy.</label>
                                 <div style="padding-top:4px;" id="validation-terms" class="hide"><span

@@ -173,7 +173,7 @@ if (isset($_SESSION['companyID'])) {
                         data: { id: id },
                         success: function (response) {
                             if (response == 'success') {
-                                Swal.fire("Closed!", "Payment card has been deleted.", "success");
+                                Swal.fire("Success", "Payment card has been deleted.", "success");
                                 $.ajax({
                                     url: 'creditcard/creditcardlist.php',
                                     type: 'GET',
