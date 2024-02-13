@@ -92,7 +92,7 @@ if (isset($_GET['applicant_id'])) {
                   <div class="email-content">
                     <div class="header">Dear ' . $ApplicantFullName . ',</div>
                     <div class="body">
-                      <p>Good News! Your application below has been viewed by employer</p>
+                      <p>Good News! Your application below has been viewed by employer.</p>
                       <table>
                       <thead>
                       <tr>

@@ -89,7 +89,7 @@ if (isset($_GET['applicantId'])) {
               <div class="email-content">
                 <div class="header">Dear ' . $ApplicantFullName . ',</div>
                 <div class="body">
-                  <p>We are sorry to inform you that your application below has been rejected by employer</p>
+                  <p>We are sorry to inform you that your application below has been rejected by employer.</p>
                   <table>
                   <thead>
                   <tr>
