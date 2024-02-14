@@ -55,7 +55,18 @@ if (isset($_POST['submitbtn'])) {
         }
     }
 
-    echo "<script type='text/javascript'>window.location.href = 'payment_page.php';</script>";
+    if ($_POST['isCSubmit'] === '1') {
+        // Redirect to 'post-job-classify.php' if the form was submitted via JavaScript
+        echo "<script type='text/javascript'>window.location.href = 'post-job-classify.php?jobPostID=" . $job_post_ID . "';</script>";
+    } else if ($_POST['isWSubmit'] === '1') {
+        // Redirect to 'post-job-write.php' if the form was submitted via JavaScript
+        echo "<script type='text/javascript'>window.location.href = 'post-job-write.php?jobPostID=" . $job_post_ID . "';</script>";
+    } else {
+        // Normal redirect
+        echo "<script type='text/javascript'>window.location.href = 'payment_page.php';</script>";
+    }
+    exit;
+
 }
 
 ?>
@@ -159,7 +170,9 @@ if (isset($_POST['submitbtn'])) {
                                     $_SESSION['job_post_ID'] = $job_post_ID;
 
                                     ?>
-                                    window.location.href = 'post-job-classify.php?jobPostID=<?php echo $job_post_ID; ?>';
+
+                                    document.getElementById('isCSubmit').value = '1';
+                                    document.getElementById('submitbtn').click();
                                 }
                             </script>
                             <div style="position:relative;cursor:pointer;" onclick="classifydirect()">
@@ -209,7 +222,8 @@ if (isset($_POST['submitbtn'])) {
                                     $_SESSION['job_post_ID'] = $job_post_ID;
 
                                     ?>
-                                    window.location.href = 'post-job-write.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                    document.getElementById('isWSubmit').value = '1';
+                                    document.getElementById('submitbtn').click();
                                 }
                             </script>
                             <div style="position:relative;cursor:pointer;" onclick="writedirect()">
@@ -377,7 +391,9 @@ if (isset($_POST['submitbtn'])) {
             </div>
 
             <div class="form-group" style="display: block;">
-                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
+                <input type="submit" value="Continue" class="cont-button" name="submitbtn" id="submitbtn">
+                <input type="hidden" id="isCSubmit" name="isCSubmit" value="0">
+                <input type="hidden" id="isWSubmit" name="isWSubmit" value="0">
                 <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>

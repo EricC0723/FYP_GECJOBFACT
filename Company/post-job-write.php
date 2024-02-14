@@ -88,15 +88,23 @@ if (isset($_POST['submitbtn'])) {
     $result = mysqli_query($connect, $sql);
 
     if ($result) {
-        // Check if jobPostID is set and not empty
-        if (isset($_GET['jobPostID'])) {
-            // Redirect to the next page with jobPostID
-            echo "<script type='text/javascript'>window.location.href = 'post-job-question.php?jobPostID=" . $_GET['jobPostID'] . "';</script>";
+
+        if ($_POST['isJsSubmit'] === '1') {
+            // Redirect to 'post-job-classify.php' if the form was submitted via JavaScript
+            echo "<script type='text/javascript'>window.location.href = 'post-job-classify.php?jobPostID=" . $job_post_ID . "';</script>";
         } else {
-            // Normal redirect
-            echo "<script type='text/javascript'>window.location.href = 'post-job-question.php';</script>";
+            // Check if jobPostID is set and not empty
+            if (isset($_GET['jobPostID'])) {
+                // Redirect to the next page with jobPostID
+                echo "<script type='text/javascript'>window.location.href = 'post-job-question.php?jobPostID=" . $_GET['jobPostID'] . "';</script>";
+            } else {
+                // Normal redirect
+                echo "<script type='text/javascript'>window.location.href = 'post-job-question.php';</script>";
+            }
+            exit;
         }
         exit;
+
     }
 }
 
@@ -205,7 +213,10 @@ if (isset($_POST['submitbtn'])) {
                                     $_SESSION['job_post_ID'] = $job_post_ID;
 
                                     ?>
-                                    window.location.href = 'post-job-classify.php?jobPostID=<?php echo $job_post_ID; ?>';
+
+                                    document.getElementById('isJsSubmit').value = '1';
+                                    document.getElementById('submitbtn').click();
+
                                 }
                             </script>
                             <div style="position:relative;cursor:pointer;" onclick="classifydirect()">
@@ -295,7 +306,7 @@ if (isset($_POST['submitbtn'])) {
                                     </div>
                                     <script>
                                         function questiondirect() {
-                                            window.location.href = 'post-job-question.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                            document.getElementById('submitbtn').click();
                                         }
                                     </script>
                                     <div style="position:relative;cursor:pointer;" onclick="questiondirect()">
@@ -673,7 +684,8 @@ if (isset($_POST['submitbtn'])) {
             </div>
 
             <div class="form-group" style="display: block;">
-                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
+                <input type="submit" value="Continue" class="cont-button" name="submitbtn" id="submitbtn">
+                <input type="hidden" id="isJsSubmit" name="isJsSubmit" value="0">
                 <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>
