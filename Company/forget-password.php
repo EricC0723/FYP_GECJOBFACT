@@ -136,7 +136,7 @@ if (isset($_GET["login_btn"])) {
             <div class="email-content">
                 <div class="header">Dear ' . $company_contact . ',</div>
                 <div class="body">
-                <p>Please click on the link to reset your password: <a href="http://localhost/FYP/Company/reset-password.php?data=' . $companyID . '">Click to verify</a></p>
+                <p>Please click on the link to reset your password: <a href="http://localhost/FYP/Company/reset-password.php?data=' . $companyID . '">Click to reset</a></p>
                 </div>
                 <div style="height:20px"></div>
                 <div class="footer">Best regards,<br> GEC Job Facts.</div>
