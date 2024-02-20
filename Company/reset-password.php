@@ -211,7 +211,7 @@ session_start();
                             </div>
                             <div class="form-group">
                                 <div>
-                                    <input class="register_login_btn" type="submit" value="Register employer account"
+                                    <input class="register_login_btn" type="submit" value="Reset password"
                                         name="login_btn">
                                 </div>
                             </div>

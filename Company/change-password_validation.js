@@ -133,6 +133,8 @@ var validationSamepassword = document.getElementById('validation-samepassword');
 // Add an event listener to the confirm password input field
 passwordInput.addEventListener('input', function () {
     var samepasswordMessage = document.getElementById('samepassword-message');
+    var confirmMessage = document.getElementById('confirm-message');
+
     if (this.value === companyOldpassword) {
         // If the confirm password input is not the same as the password input
         samepasswordMessage.textContent = 'This is your current password';
@@ -143,6 +145,18 @@ passwordInput.addEventListener('input', function () {
         samepasswordMessage.textContent = '';
         this.dataset.valid = '1';
         validationSamepassword.classList.add('hide'); // Hide the validation message
+    }
+
+    if (this.value !== confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = 'The passwords are not the same';
+        confirmPasswordInput.dataset.valid = '0';
+        validationConfirm.classList.remove('hide'); // Show the validation message
+    } else if (this.value === confirmPasswordInput.value.trim()) {
+        // If the confirm password input is not the same as the password input
+        confirmMessage.textContent = '';
+        confirmPasswordInput.dataset.valid = '1';
+        validationConfirm.classList.add('hide'); // Show the validation message
     }
 });
 
@@ -207,7 +221,7 @@ submitButton.addEventListener('click', function (event) {
     if (confirmPasswordInput.dataset.valid !== '1') {
         invalidInputs.push({ input: confirmPasswordInput, validation: validationConfirm });
     }
-    
+
     if (invalidInputs.length > 0) {
         // If there are invalid inputs, prevent the form submission
         event.preventDefault();

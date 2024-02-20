@@ -210,7 +210,6 @@ window.addEventListener('load', function () {
 
 // Get the submit buttons
 var continueButton = document.querySelector('.cont-button');
-var saveDraftButton = document.querySelector('.save-button');
 
 // Function to validate the form
 function validateForm(event) {

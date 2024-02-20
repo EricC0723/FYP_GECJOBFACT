@@ -194,7 +194,7 @@
             $adminID= $_POST['adminID'];
             $email= $_POST['email'];
 
-                $resetLink = 'http://localhost/final_fyp/FYP/Admin/update_password.php?admin_id=' . $adminID;
+                $resetLink = 'http://localhost/FYP/Admin/update_password.php?admin_id=' . $adminID;
                 echo 'Inserted successfully';
                 require "phpmailer/PHPMailerAutoload.php";
                 $mail = new PHPMailer;

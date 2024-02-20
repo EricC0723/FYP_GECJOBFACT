@@ -8,7 +8,7 @@ $CompanyID = null;
 if (isset($_SESSION['companyID'])) {
     $CompanyID = $_SESSION['companyID'];
     // Prepare the SQL statement to count the total number of jobs
-    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID";
+    $sqlc = "SELECT COUNT(*) as total FROM job_post WHERE CompanyID = $CompanyID AND Job_isDeleted = '0'";
     $resultc = mysqli_query($connect, $sqlc);
     $rowc = mysqli_fetch_assoc($resultc);
     $totalJobs = $rowc['total'];

@@ -90,7 +90,7 @@ if (isset($_GET['applicantId'])) {
               <div class="email-content">
                 <div class="header">Dear ' . $ApplicantFullName . ',</div>
                 <div class="body">
-                  <p>Congratulations! We are pleased to inform you that your application below has been accepted by employer</p>
+                  <p>Congratulations! We are pleased to inform you that your application below has been accepted by employer.</p>
                   <table>
                   <thead>
                   <tr>

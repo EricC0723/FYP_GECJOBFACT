@@ -78,7 +78,7 @@ if (isset($_SESSION['companyID'])) {
         <div class="form-group">
             <label class="question" style="padding-bottom: 8px;">Company Size</label>
             <select class="register_input" name="companySize" id="businesssize" style="height:46px;">
-                <option value="" selected disabled>Select company size</option>
+                <option value="" disabled>Select company size</option>
                 <?php
                 $companysizevalue = ["1 - 50", "51 - 200", "201 - 500", "501 - 1000", "1001 - 2000", "2001 - 5000", "5000+"];
                 $companysizetext = ["1 - 50 Employees", "51 - 200 Employees", "201 - 500 Employees", "501 - 1000 Employees", "1001 - 2000 Employees", "2001 - 5000 Employees", "More than 5000 Employees"];
@@ -91,6 +91,7 @@ if (isset($_SESSION['companyID'])) {
                 }
                 ?>
             </select>
+            <input type="hidden" name="size" id="size" value="<?php $row['CompanySize'] ?>">
             <div style="padding-top:4px;" id="validation-businesssize" class="hide"><span style="display:flex"><span
                         style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xml:space="preserve"
@@ -129,52 +130,7 @@ if (isset($_SESSION['companyID'])) {
 
     var submitcompany = document.getElementById('savecompany');
 
-    // Get the select field and the validation message elements
-    var companySizeSelect = document.getElementById('businesssize');
-    var validationCompanySize = document.getElementById('validation-businesssize');
-    var companySizeMessage = document.getElementById('size-message');
 
-    function validateSizeInput() {
-        var value = this.value;
-
-        // Check if the select field has a valid value
-        if (value === '') {
-            companySizeMessage.textContent = 'Required field';
-            this.dataset.valid = '0';
-            validationCompanySize.classList.remove('hide'); // Show the validation message
-        } else {
-            // If the select field has a valid value
-            companySizeMessage.textContent = '';
-            this.dataset.valid = '1';
-            validationCompanySize.classList.add('hide'); // Hide the validation message
-        }
-    }
-
-    // Add an event listener to the select field
-    companySizeSelect.addEventListener('change', validateSizeInput);
-
-    // Modify the event listener for the submit button
-    submitcompany.addEventListener('click', function (event) {
-        var invalidInputs = [];
-
-        if (companySizeSelect.dataset.valid !== '1') {
-            invalidInputs.push({ input: companySizeSelect, validation: validationCompanySize });
-        }
-
-        if (invalidInputs.length > 0) {
-            // If there are invalid inputs, prevent the form submission
-            event.preventDefault();
-
-            // Focus on the first invalid input
-            invalidInputs[0].input.focus();
-
-            // Show validation messages for all invalid inputs
-            invalidInputs.forEach(function (invalidInput) {
-                invalidInput.validation.classList.remove('hide');
-            });
-        }
-        // If all inputs are valid, the form will submit normally
-    });
 </script>
 
 <script>

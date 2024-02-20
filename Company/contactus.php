@@ -45,12 +45,12 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
                         </div>
                         <div style="padding-top:10px;"><span class="landing_sentence2">Send us a message using the form
                                 below and we'll get back to you as soon as possible.</span></div>
-                        <div style="padding-top:10px;"><a class="landing_sentence2 contactlink" href="#"
+                        <div style="padding-top:10px;"><a class="landing_sentence2 contactlink" href="../User/contact.php"
                                 style="color:#4964e9;font-weight:600;text-decoration:none;">Job seekers contact us
                                 here</a></div>
                     </div>
                     <div style="padding-top:24px;">
-                        <form method="post">
+                        <form method="post" class="form">
                             <div>
                                 <div style="padding-top:20px;" class="form-group">
                                     <label class="question" style="padding-bottom: 8px;">Email
@@ -77,7 +77,7 @@ include("C:/xampp/htdocs/FYP/dataconnection.php");
                                 <div class="form-group" style="padding-top:20px;"><label for="contactSubject"
                                         class="question" style="padding-bottom: 8px;">Subject</label>
                                     <input type="text" id="contactSubject" name="contactSubject" class="input-box"
-                                        placeholder="Enter the job title">
+                                        placeholder="Enter the subject">
                                     <div style="padding-top:4px;" id="validation-contactSubject" class="hide"><span
                                             style="display:flex"><span
                                                 style="padding-right: 5px;width: 20px;height: 20px;justify-content: center;display: flex;align-items: center;"><svg

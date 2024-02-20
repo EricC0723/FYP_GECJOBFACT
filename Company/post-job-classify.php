@@ -46,11 +46,20 @@ if (isset($_POST["submitbtn"])) {
         $sql = "UPDATE job_post SET Job_Post_Title = '$jobTitle', Job_Location_ID = '$jobLocationID', Job_Post_Location = '$jobLocation', Main_Category_ID = '$jobSpecialisationID', Main_Category_Name = '$jobSpecialisation', Sub_Category_ID = '$jobRoleID', Sub_Category_Name = '$jobRole', Job_Post_Type = '$jobType', Job_Post_Position = '$jobPosition', Job_Post_Exp = '$jobRequiredyears', Job_Post_MinSalary = '$jobSalaryMin', Job_Post_MaxSalary = '$jobSalaryMax', CompanyID = '$CompanyID' WHERE Job_Post_ID = '$postid'";
         $result = mysqli_query($connect, $sql);
         if ($result) {
+
             // Store the job_post_ID in the session
             $_SESSION['job_post_ID'] = $postid;
-            // Redirect to the next page
-            echo "<script type='text/javascript'>window.location.href = 'post-job-write.php?jobPostID=$postid';</script>";
+
+            if ($_POST['isQSubmit'] === '1') {
+                // Redirect to 'post-job-classify.php' if the form was submitted via JavaScript
+                echo "<script type='text/javascript'>window.location.href = 'post-job-question.php?jobPostID=" . $job_post_ID . "';</script>";
+            } else {
+                // Normal redirect
+                echo "<script type='text/javascript'>window.location.href = 'post-job-write.php?jobPostID=$postid';</script>";
+            }
             exit;
+            // Redirect to the next page
+
         }
     } else {
         // Insert a new job post
@@ -211,7 +220,7 @@ if (isset($_POST["submitbtn"])) {
                                     </div>
                                     <script>
                                         function writedirect() {
-                                            window.location.href = 'post-job-write.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                            document.getElementById('submitbtn').click();
                                         }
                                     </script>
                                     <div style="position:relative;cursor:pointer;" onclick="writedirect()">
@@ -337,7 +346,8 @@ if (isset($_POST["submitbtn"])) {
                                     </div>
                                     <script>
                                         function questiondirect() {
-                                            window.location.href = 'post-job-question.php?jobPostID=<?php echo $job_post_ID; ?>';
+                                            document.getElementById('isQSubmit').value = '1';
+                                            document.getElementById('submitbtn').click();
                                         }
                                     </script>
                                     <div style="position:relative;cursor:pointer;" onclick="questiondirect()">
@@ -460,7 +470,7 @@ if (isset($_POST["submitbtn"])) {
         }
         ?>
 
-        <form method="POST">
+        <form method="POST" id="classify">
             <div class="header-title">
                 <span
                     style="color: rgb(46, 56, 73);font-size: 36px;font-style: normal;font-weight: 600;line-height: 36px;font-family: Roboto, 'Helvetica Neue', 'HelveticaNeue', Helvetica, Arial, sans-serif;">Classify
@@ -769,8 +779,9 @@ if (isset($_POST["submitbtn"])) {
 
             </div>
             <div class="form-group" style="display: block;">
+                <input type="hidden" id="isQSubmit" name="isQSubmit" value="0">
 
-                <input type="submit" value="Continue" class="cont-button" name="submitbtn">
+                <input type="submit" value="Continue" class="cont-button" name="submitbtn" id="submitbtn">
                 <!-- <input type="submit" value="Save draft" class="save-button" style="margin-left:4px"> -->
             </div>
         </form>

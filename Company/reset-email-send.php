@@ -7,7 +7,7 @@ $companyEmail = isset($_GET['companyEmail']) ? $_GET['companyEmail'] : '';
 
 <div>
     <div class="employee_link">
-        <span><a href="" class="employee_sentence">Are you looking for a job?</a></span>
+        <span><a href="../User/index.php" class="employee_sentence">Are you looking for a job?</a></span>
     </div>
 </div>
 <form method="GET">
@@ -99,6 +99,11 @@ $companyEmail = isset($_GET['companyEmail']) ? $_GET['companyEmail'] : '';
             emailMessage.textContent = 'Required field';
             this.dataset.valid = '0';
             validationEmail.classList.remove('hide'); // Show the validation message
+        } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.value)) {
+            // If the input is not a valid email address
+            emailMessage.textContent = 'Invalid email address, use format example@domain.com';
+            this.dataset.valid = '0';
+            validationEmail.classList.remove('hide'); // Show the validation message
         } else {
             emailMessage.textContent = '';
             this.dataset.valid = '1';
@@ -129,4 +134,3 @@ $companyEmail = isset($_GET['companyEmail']) ? $_GET['companyEmail'] : '';
         // If all inputs are valid, the form will submit normally
     });
 </script>
-

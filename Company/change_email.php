@@ -186,6 +186,8 @@ if (isset($_GET["login_btn"])) {
 
             // Encode the combined string
             $encoded = base64_encode($combined);
+            $mail->isHTML(true);
+
 
             $mail->Subject = 'Change Email Verification';
 
@@ -242,7 +244,7 @@ if (isset($_GET["login_btn"])) {
                         success: function (data) {
                             // This function will be called when the AJAX request is successful
                             // Replace the content of the div with the new HTML
-                            $('#forget_password').html(data);
+                            window.location.href = 'company_signout.php';
                         },
                         error: function () {
                             // This function will be called if the AJAX request fails

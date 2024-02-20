@@ -74,15 +74,12 @@ contactMessageInput.addEventListener('input', function () {
 });
 
 // Get the submit buttons
-var continueButton = document.querySelector('.create_btn');
+var form = document.querySelector('form');
 
 // Function to validate the form
 function validateForm(event) {
     var invalidInputs = [];
-
-    if (contactNameInput.dataset.valid !== '1') {
-        invalidInputs.push({ input: contactNameInput, validation: validationcontactName });
-    }
+    
     if (contactEmailInput.dataset.valid !== '1') {
         invalidInputs.push({ input: contactEmailInput, validation: validationcontactEmail });
     }
@@ -109,4 +106,4 @@ function validateForm(event) {
 }
 
 // Add event listeners to the submit buttons
-continueButton.addEventListener('click', validateForm);
+form.addEventListener('submit', validateForm);

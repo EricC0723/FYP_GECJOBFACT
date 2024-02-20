@@ -24,7 +24,8 @@ session_start(); // Start the session at the beginning
     <header class="postjob_header" style="background:#0d3880;">
         <div class="container">
             <div class="logo">
-                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png" alt="Logo"></a>
+                <a href="company_login.php" class="postjob_link"><img style="width:150px;" src="logo.png"
+                        alt="Logo"></a>
             </div>
             <div class="logo-nav">
 
@@ -43,7 +44,7 @@ session_start(); // Start the session at the beginning
         <div class="register_content">
             <div>
                 <div class="employee_link">
-                    <span><a href="" class="employee_sentence">Are you looking for a job?</a></span>
+                    <span><a href="../User/index.php" class="employee_sentence">Are you looking for a job?</a></span>
                 </div>
             </div>
             <form method="GET">
@@ -179,6 +180,11 @@ session_start(); // Start the session at the beginning
             if (this.value.trim() === '') {
                 // If the input field is empty
                 emailMessage.textContent = 'Required field';
+                this.dataset.valid = '0';
+                validationEmail.classList.remove('hide'); // Show the validation message
+            } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(this.value)) {
+                // If the input is not a valid email address
+                emailMessage.textContent = 'Invalid email address, use format example@domain.com';
                 this.dataset.valid = '0';
                 validationEmail.classList.remove('hide'); // Show the validation message
             } else {

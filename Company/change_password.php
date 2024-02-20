@@ -417,6 +417,30 @@ if (isset($_SESSION['companyID'])) {
 
 </html>
 
+<?php
+if (isset($_SESSION['companyID'])) {
+    $CompanyID = $_SESSION['companyID'];
+    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
+    $result = mysqli_query($connect, $sql);
+    $row = mysqli_fetch_assoc($result);
+}
+
+if (!isset($_SESSION['companyID'])) {
+    ?>
+    <script>
+        Swal.fire({
+            title: "Error",
+            text: "You haven\'t logged in",
+            icon: "error",
+            backdrop: `lightgrey`,
+        }).then(function () {
+            window.location.href = "company_login.php";
+        });
+    </script>
+    <?php
+    exit;
+}
+?>
 
 <?php
 if (isset($_GET["login_btn"])) {
@@ -455,30 +479,6 @@ if (isset($_GET["login_btn"])) {
 }
 ?>
 
-<?php
-if (isset($_SESSION['companyID'])) {
-    $CompanyID = $_SESSION['companyID'];
-    $sql = "SELECT * FROM companies WHERE CompanyID = $CompanyID";
-    $result = mysqli_query($connect, $sql);
-    $row = mysqli_fetch_assoc($result);
-}
-
-if (!isset($_SESSION['companyID'])) {
-    ?>
-    <script>
-        Swal.fire({
-            title: "Error",
-            text: "You haven\'t logged in",
-            icon: "error",
-            backdrop: `lightgrey`,
-        }).then(function () {
-            window.location.href = "company_login.php";
-        });
-    </script>
-    <?php
-    exit;
-}
-?>
 
 <?php
 mysqli_free_result($result);
