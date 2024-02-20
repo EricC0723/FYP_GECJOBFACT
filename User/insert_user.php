@@ -7,7 +7,7 @@
             $Fname= $_POST['FirstName'];
             $Lname= $_POST['LastName'];
             $email= $_POST['email'];
-            $password= $_POST['password'];
+            $password = trim($_POST['password']);
             $phone= $_POST['phone'];
             $location= $_POST['location'];
             $bcrypt_password = password_hash($password, PASSWORD_BCRYPT);

@@ -437,7 +437,7 @@
 									<th>Name</th>
 									<th>Email</th>
 									<th>Phone number</th>
-									<th>Registritration Date</th>
+									<th>Registration Date</th>
 									<th>User Status</th>
 									<th class="datatable-nosort">Action</th>
 								</tr>

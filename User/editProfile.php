@@ -191,6 +191,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("File name: " . $_FILES['file_resume']['name']);
                 $file_name = $_FILES['file_resume']['name'];
                 $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);  // 获取文件扩展名
+                $file_mime_type = mime_content_type($_FILES['file_resume']['tmp_name']);
+                if ($file_mime_type != 'application/pdf') {
+                    echo 'invalid_format';
+                    exit();
+                }
                 // 修改文件名，添加用户 ID
                 $new_file_name = pathinfo($file_name, PATHINFO_FILENAME) . '_' . $user_id . '.' . $file_extension;
             

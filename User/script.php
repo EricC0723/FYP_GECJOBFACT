@@ -6,6 +6,10 @@
     // Reset the form by setting its 'reset' method
     document.getElementById('model-career').reset();
 }
+function isPDF(fileName) {
+    var extension = fileName.split('.').pop().toLowerCase();
+    return extension === 'pdf';
+  }
   function submitData(action){
     event.preventDefault();
     $(document).ready(function(){
@@ -132,6 +136,8 @@
         var data = new FormData();
         var fileInput = document.getElementById('file_resume');
         var file = fileInput.files[0];
+        var uploadedFile = $("#file_resume")[0].files[0];
+        var max = 2 * 1024 * 1024;
 
         data.append('action', action);
         data.append('file_resume', file);
@@ -151,9 +157,9 @@
           {
             swal("Oops...", "File size exceeds the limit of 2MB", "error");
           }
-          else if(response === "empty")
+          else if(response === "empty" || response === "invalid_format")
           {
-            swal("Oops...", "File is empty", "error");
+            swal("Oops...", "Please ensure that information is entered accurately.", "error");
           }
           else{
             console.log("Ajax request successful!");

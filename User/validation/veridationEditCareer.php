@@ -15,7 +15,7 @@
 
     // Input event listener for start_date input
     $('#edit_start_date').on('input', function () {
-      validateEditDateRange($(this));
+      validateStartDateRange($(this));
     });
 
     // Input event listener for end_date input
@@ -27,15 +27,15 @@
     });
     $('#edit_customCheck1').on('change', function () {
         updateEditEndDateRequirement();
-        validateEditDateRange($('#edit_start_date'));
+        // validateEditDateRange($('#edit_start_date'));
         validateEditDateRange($('#edit_end_date'));
     });
     $('#edit_career_submitbtn').on('click', function (event) {
     validateEditTitleCompanyInput($('#edit_job_title'));
     validateEditTitleCompanyInput($('#edit_company_name'));
-    validateEditDateRange($('#edit_start_date'));
     validateEditStillInRole_EndDate($('#edit_end_date'));
     validateEditDateRange($('#edit_end_date'));
+    validateStartDateRange($('#edit_start_date'));
   });
 
   function validateEditStillInRole_EndDate(input) {
@@ -88,6 +88,22 @@
         checkErrors();
       }
     }
+    function validateStartDateRange(input) {
+    var value = input.val();
+
+    console.log("validateDateRange called with input:", input);
+    
+    if (value === "") {
+        displayEditError(input, 'Required field');
+        hasCareerErrors = true;
+        checkErrors();
+      }
+      else {
+        removeError(input);
+        hasCareerErrors = false;
+        checkErrors();
+    }
+}
     function validateEditDateRange(input) {
     var startDate = new Date($('#edit_start_date').val());
     var endDate = new Date($('#edit_end_date').val());

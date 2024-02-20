@@ -14,7 +14,7 @@
 
     // Input event listener for start_date input
     $('#start_date').on('input', function () {
-      validateDateRange($(this));
+      validateStartDateRange($(this));
     });
 
     // Input event listener for end_date input
@@ -27,16 +27,15 @@
     // Input event listener for checkbox
     $('#customCheck1').on('change', function () {
         updateEndDateRequirement();
-        validateDateRange($('#start_date'));
+        // validateStartDateRange($('#start_date'));
         validateDateRange($('#end_date'));
     });
     $('#career_submitbtn').on('click', function (event) {
       validateTitleCompanyInput($('#job_title'));
     validateTitleCompanyInput($('#company_name'));
-    validateDateRange($('#start_date'));
     validateStillInRole_EndDate($('#end_date'));
     validateDateRange($('#end_date'));
-    
+    validateStartDateRange($('#start_date'));
   });
   function validateStillInRole_EndDate(input) {
     var startDate = new Date($('#start_date').val());
@@ -89,7 +88,22 @@
         checkErrors();
       }
     }
+    function validateStartDateRange(input) {
+    var value = input.val();
 
+    console.log("validateDateRange called with input:", input);
+    
+    if (value === "") {
+        displayError(input, 'Required field');
+        hasCareerErrors = true;
+        checkErrors();
+      }
+      else {
+        removeError(input);
+        hasCareerErrors = false;
+        checkErrors();
+    }
+}
     function validateDateRange(input) {
     var startDate = new Date($('#start_date').val());
     var endDate = new Date($('#end_date').val());
@@ -97,7 +111,7 @@
     var value = input.val();
 
     console.log("validateDateRange called with input:", input);
-
+    
     if (!isStillInRole && value === "" && isNaN(endDate)) {
         displayError(input, 'Either end date or "Still in role" must be provided');
         hasCareerErrors = true;

@@ -215,6 +215,10 @@
             INNER JOIN companies ON job_post.CompanyID = companies.CompanyID WHERE Job_Post_ID = $job_post_id";
             $job_result = mysqli_query($connect,$job_query);
             $job_row = mysqli_fetch_assoc($job_result);
+
+            $apply_job_query = "SELECT * FROM applications WHERE UserID='$user_id' AND JobID='$job_post_id'";
+            $apply_job_result = mysqli_query($connect,$apply_job_query);
+            $apply_job_count = mysqli_num_rows($apply_job_result);
        ?>
         <div class="row">
         <!-- Profile -->
@@ -245,11 +249,20 @@
                   <?php
                 }
                 else{
+                  if($apply_job_count > 0)
+                    {
+                      ?>
+                        <!-- <span class="text-grey" style="margin-top:30px;"><strong>Already requested</strong></span> -->
+                        <span class="btn btn-block btn-primary btn-md" style="margin-top:5px;"><i class="icon-copy fi-check" style="width:150px;"></i>Requested</span>
+                      <?php
+                    }
+                    else{
                 ?>
                 <div class="col-6">
                 <a href="apply_job.php?jobid=<?php echo $job_post_id; ?>" class="btn btn-block btn-primary btn-md" style="width:150px;">Quick apply</a>
               </div>
               <?php
+              }
               }
               ?>
                 </blockquote>

@@ -319,11 +319,11 @@
 						</div>
 					<h5 style="display: inline-block;">Street Address</h5>
 						<div class="form-group">
-						<input type="text" placeholder="Enter address"  name="address" id="address"class="form-control" value="<?php echo $row['PostalCode']; ?>"/>
+						<input type="text" placeholder="Enter address"  name="address" id="address"class="form-control" value="<?php echo $row['StreetAddress']; ?>"/>
 						</div>
 					<h5 style="display: inline-block;">Postcode</h5>
 						<div class="form-group">
-							<input type="text" placeholder="Enter postcode"  name="postcode" id="postcode"class="form-control" value="<?php echo $row['DateOfBirth']; ?>"/>
+							<input type="text" placeholder="Enter postcode"  name="postcode" id="postcode"class="form-control" value="<?php echo $row['PostalCode']; ?>"/>
 						</div>
                         <h5 style="display: inline-block;">State and City</h5>
                         <select class="selectpicker form-group" data-size="5" data-width="100%" name="state" id="state" style="max-height:100px;">

@@ -8,6 +8,7 @@
   require 'validation/veridationEditCareer.php';
   require 'validation/veridationEducation.php';
   require 'validation/veridationEditEducation.php';
+  require 'validation/veridationResume.php';
 ?>
 <!doctype html>
 <html lang="en">

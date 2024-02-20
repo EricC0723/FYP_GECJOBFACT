@@ -444,8 +444,19 @@ $totalPosts = array_sum($yValues);
     var startDate = dateRange[0];
     var endDate = dateRange[1];
 
-    var startTimestamp = new Date(startDate).toISOString();
-    var endTimestamp = new Date(endDate).toISOString();
+    var startTimestamp = new Date(startDate);
+var endTimestamp = new Date(endDate);
+
+// 获取时区偏移（以分钟为单位）
+var timezoneOffset = startTimestamp.getTimezoneOffset();
+
+// 手动调整时区偏移
+startTimestamp.setMinutes(startTimestamp.getMinutes() - timezoneOffset);
+endTimestamp.setMinutes(endTimestamp.getMinutes() - timezoneOffset);
+
+// 转换为 ISO 字符串
+startTimestamp = startTimestamp.toISOString();
+endTimestamp = endTimestamp.toISOString();
     console.log(startTimestamp);
     console.log(endTimestamp);
 
