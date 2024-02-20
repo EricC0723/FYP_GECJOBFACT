@@ -89,9 +89,7 @@
 							<div class="row pb-30">
 								<div class="col-6">
 								</div>
-								<div class="col-6">
-									<div class="forgot-password"><a href="forgetPassword.php">Forgot Password</a></div>
-								</div>
+
 							</div>
 							<div class="row">
 								<div class="col-sm-12">
