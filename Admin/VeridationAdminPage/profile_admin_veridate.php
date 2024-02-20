@@ -130,17 +130,15 @@ function validateConfirmPassword(input, password) {
 }
     
     function validateInput(input) {
-      var value = input.val();
-      if(value ==="")
-      {
-        displayError(input, 'Required field');
-      }
-      else if (!/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
-        displayError(input, 'Only alphabetic characters are allowed.');
-      } else {
-        removeError(input);
-      }
-    }
+  var value = input.val();
+  if (value === "") {
+    displayError(input, 'Required field');
+  } else if (!/^[a-zA-Z]+$/.test(value.replace(/\s/g, ''))) {
+    displayError(input, 'Only alphabetic characters are allowed.');
+  } else {
+    removeError(input);
+  }
+}
 
     // Function to validate phone number input
     function validatePhoneNumber(input) {
@@ -205,18 +203,18 @@ function validateConfirmPassword(input, password) {
     }
     // Function to display error message
     function displayError(input, message) {
-      // Remove existing error message
-      removeError(input);
-      
-      // Add new error message
-      var errorMessageDiv = $('<div class="error-message" style="color: red;position:absolute;font-size: 12px;"></div>').text(message);
-      input.closest('.form-group').append(errorMessageDiv);
-    }
+  // Remove existing error message
+  removeError(input);
+  
+  // Add new error message
+  var errorMessageDiv = $('<div class="error-message" style="color: red;position:absolute;font-size: 12px;"></div>').text(message);
+  input.closest('.form-group').append(errorMessageDiv);
+}
 
-    // Function to remove error message
-    function removeError(input) {
-      input.next('.error-message').remove();
-    }
+// Function to remove error message
+function removeError(input) {
+  input.closest('.form-group').find('.error-message').remove();
+}
     function displayPasswordError(input, message) {
       // Remove existing error message
       removePasswordError(input);

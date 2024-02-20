@@ -148,6 +148,8 @@
             $uploadDirectory = '../Admin/adminPicture/';
             $targetPath = $uploadDirectory . $profilePictureName;
             $_SESSION['profile'] = $targetPath;
+            $_SESSION['First_Name'] = $Fname;
+            $_SESSION['Last_Name'] = $Lname;
             move_uploaded_file($profilePictureTmpName, $targetPath);
             // You can now use $targetPath as the path to the uploaded profile picture
             $sql = "UPDATE admins 
