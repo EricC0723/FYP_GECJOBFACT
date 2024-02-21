@@ -1,12 +1,17 @@
 <?php
 	session_start();
 	include("C:/xampp/htdocs/FYP/dataconnection.php");
+
+	if (isset($_SESSION['Admin_ID'])) {
+		$adminid = $_SESSION['Admin_ID'];
+		$admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
+		$admin_row = mysqli_fetch_assoc($admin_sql);
+	} else {
+		header("Location: admin_login.php");
+		exit();
+	}
+
 	require 'VeridationAdminPage/add_admin_veridate.php';
-
-	$adminid = $_SESSION['Admin_ID'];
-$admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
-$admin_row = mysqli_fetch_assoc($admin_sql);
-
 ?>
 <!DOCTYPE html>
 <html>

@@ -31,7 +31,7 @@
 
             if ($result) {
                 $lastInsertID = mysqli_insert_id($connect);
-                $resetLink = 'http://localhost/final_fyp/FYP/Admin/update_password.php?admin_id=' . $lastInsertID;
+                $resetLink = 'http://localhost/FYP/Admin/update_password.php?admin_id=' . $lastInsertID;
 
                 echo 'Inserted successfully';
                 require "phpmailer/PHPMailerAutoload.php";

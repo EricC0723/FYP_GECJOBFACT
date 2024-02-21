@@ -302,7 +302,7 @@
 
     $pdf->Output('F', 'C:/xampp/htdocs/FYP/Admin/receipt/Job_Post_' . $job_post_ID . '_Receipt.pdf');
 
-    header('Content-Disposition: inline; filename="C:/xampp/htdocs/final_fyp/FYP//Admin/receipt/Job Post ' . $job_post_ID . '_Receipt.pdf"');
+    header('Content-Disposition: inline; filename="C:/xampp/htdocs/FYP//Admin/receipt/Job Post ' . $job_post_ID . '_Receipt.pdf"');
     
     }
 ?>

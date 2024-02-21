@@ -1,13 +1,23 @@
 <?php
-  session_start();
-  include("C:/xampp/htdocs/FYP/dataconnection.php");
-  require 'VeridationAdminPage/edit_admin_veridate.php';
-  $admin_query = "SELECT * FROM job_location";
-  $admin_location = mysqli_query($connect,$admin_query);
+session_start();
+include("C:/xampp/htdocs/FYP/dataconnection.php");
 
-  $adminid = $_SESSION['Admin_ID'];
-  $admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
-  $admin_row = mysqli_fetch_assoc($admin_sql);
+// Check if Admin_ID is set in the session
+if (isset($_SESSION['Admin_ID'])) {
+    $adminid = $_SESSION['Admin_ID'];
+    $admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
+    $admin_row = mysqli_fetch_assoc($admin_sql);
+} else {
+    // Redirect to login page if Admin_ID is not set
+    header("Location: admin_login.php");
+    exit();
+}
+
+// Include the verification file after checking session
+require 'VeridationAdminPage/edit_admin_veridate.php';
+
+$admin_query = "SELECT * FROM job_location";
+$admin_location = mysqli_query($connect, $admin_query);
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,25 +54,6 @@
 	</script>
 </head>
 <body>
-<?php
-		if (!isset($_SESSION['Admin_ID'])) {
-			header("Location: admin_login.php");
-			exit();
-		}
-	?>
-	<!-- <div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="vendors/images/logo.png" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>70%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div> -->
-
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>

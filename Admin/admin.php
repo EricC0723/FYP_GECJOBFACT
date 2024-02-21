@@ -1,16 +1,26 @@
 <?php	
 session_start();
-require 'VeridationAdminPage/edit_admin_veridate.php';
 include("C:/xampp/htdocs/FYP/dataconnection.php");
 
-$adminid = $_SESSION['Admin_ID'];
-$admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
-$admin_row = mysqli_fetch_assoc($admin_sql);
+// Check if Admin_ID is set in the session
+if(isset($_SESSION['Admin_ID'])){
+    $adminid = $_SESSION['Admin_ID'];
+    $admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
+    $admin_row = mysqli_fetch_assoc($admin_sql);
+} else {
+    // Redirect to login page if Admin_ID is not set
+    header("Location: admin_login.php");
+    exit();
+}
 
-$query = "SELECT * FROM  admins WHERE AdminType='normal admin'";
-$result = mysqli_query($connect,$query);
+// Include the verification file after checking session
+require 'VeridationAdminPage/edit_admin_veridate.php';
+
+$query = "SELECT * FROM admins WHERE AdminType='normal admin'";
+$result = mysqli_query($connect, $query);
+
 $location_query = "SELECT * FROM job_location";
-$location_result = mysqli_query($connect,$location_query);
+$location_result = mysqli_query($connect, $location_query);
 ?>
 <!DOCTYPE html>
 <html>

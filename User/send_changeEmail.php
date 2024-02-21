@@ -21,7 +21,7 @@ $_SESSION["new_email"] = $email;
         $mail->isHTML(true);
         $mail->Subject="Email Change Request";
         $mail->Body="<p>Dear user, </p><br><h3>You have requested to change your email on GEC JobFacts.</h3>
-        <a href='http://localhost/final_fyp/FYP/User/update_email.php'>Click here to change your email</a>
+        <a href='http://localhost/FYP/User/update_email.php'>Click here to change your email</a>
         <br>
         <p>If you did not make this request, please ignore this email.</p>
         <br>
