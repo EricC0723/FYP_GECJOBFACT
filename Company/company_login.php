@@ -80,7 +80,7 @@ session_start(); // Start the session at the beginning
 
                             <div class="form-group">
                                 <div style="display:flex;flex-direction:row;align-items:baseline;">
-                                    <label class="question" style="padding-bottom: 8px;width:370px;">Password</label>
+                                    <label class="question" style="padding-bottom: 8px;width:367px;">Password</label>
                                     <a class="employee_sentence" href="forget-password.php" style="height:27px;">Forget
                                         password?</a>
                                 </div>
