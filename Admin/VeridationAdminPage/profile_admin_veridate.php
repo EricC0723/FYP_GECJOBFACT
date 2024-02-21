@@ -94,17 +94,15 @@
       }
     }
     function validatePostCode(input) {
-      var value = input.val();
-      if(value ==="")
-      {
-        displayError(input, 'Required field');
-      }
-      else if (/^[a-zA-Z]+$/.test(value.replace(/\s/g, '')))  {
-        displayError(input, 'Only number are allowed.');
-      } else {
-        removeError(input);
-      }
-    }
+  var value = input.val();
+  if (value === "") {
+    displayError(input, 'Required field');
+  } else if (!/^\d+$/.test(value)) {
+    displayError(input, 'Only numbers are allowed.');
+  } else {
+    removeError(input);
+  }
+}
     function validatePassword(input) {
     var value = input.val();
     if (value === "") {
