@@ -16,6 +16,10 @@ if (isset($_GET['job_id'])) {
     $job_query = "SELECT * FROM job_post WHERE Job_Post_ID = $job_id";
     $job_result = mysqli_query($connect, $job_query);
     $job_row = mysqli_fetch_assoc($job_result);
+
+	$adminid = $_SESSION['Admin_ID'];
+	$admin_sql = mysqli_query($connect, "SELECT * FROM admins WHERE AdminID = '$adminid'");
+	$admin_row = mysqli_fetch_assoc($admin_sql);
 }
 ?>
 <!DOCTYPE html>
@@ -77,6 +81,12 @@ if (isset($_GET['job_id'])) {
 	</script>
 </head>
 <body>
+<?php
+		if (!isset($_SESSION['Admin_ID'])) {
+			header("Location: admin_login.php");
+			exit();
+		}
+	?>
 <div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
@@ -89,9 +99,9 @@ if (isset($_GET['job_id'])) {
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
+							<img src="<?php echo $admin_row['AdminPicture'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></span>
+						<span class="user-name"><?php echo $admin_row['FirstName'];?> <?php echo $admin_row['LastName'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="admin_profile.php"><i class="dw dw-user1" ></i> Profile</a>

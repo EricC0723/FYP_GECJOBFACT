@@ -2,7 +2,11 @@
 session_start();
 
 // 清除会话
-session_unset();
+unset($_SESSION['Admin_ID']);
+unset($_SESSION['First_Name']);  
+unset($_SESSION['Last_Name']);  
+unset($_SESSION['profile']);  
+unset($_SESSION['AdminType']);  
 session_destroy();
 
 // 发送禁止缓存的 HTTP 头

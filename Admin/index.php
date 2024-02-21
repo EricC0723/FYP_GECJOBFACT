@@ -241,7 +241,7 @@ $totalPosts = array_sum($yValues);
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></div>
+							Welcome back <div class="weight-600 font-30 text-blue"><?php echo $admin_row['FirstName'];?> <?php echo $admin_row['LastName'];?></div>
 						</h4>
 						<p class="font-18 max-width-600">As you step into the admin page, the world is at your fingertips. Welcome back, <?php echo $_SESSION['First_Name'];?>!
 </p>
@@ -312,7 +312,7 @@ $totalPosts = array_sum($yValues);
 						<div class="form-group">
 							<div class="input-group">
 							<input class="form-control" placeholder="Select Month" type="month" min="2023-12"max="<?php echo date('Y-m'); ?>" id="profit">
-								<div class="input-group-append">	
+								<div class="input-group-append">
 									<button type="button" class="btn btn-primary" onclick="filterProfit()">Filter</button>
 								</div>
 							</div>

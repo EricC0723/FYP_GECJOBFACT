@@ -2,7 +2,7 @@
 	session_start();
 	include("C:/xampp/htdocs/FYP/dataconnection.php");
 	require 'VeridationAdminPage/profile_admin_veridate.php';
-
+	
     $admin_id = $_SESSION['Admin_ID'];
 
 	$admin_query = "SELECT * FROM admins WHERE AdminID = '$admin_id'";
@@ -43,6 +43,12 @@
 		gtag('config', 'UA-119386393-1');
 	</script>
 </head>
+<?php
+		if (!isset($_SESSION['Admin_ID'])) {
+			header("Location: admin_login.php");
+			exit();
+		}
+	?>
 <body>
 <div class="header">
 		<div class="header-left">
@@ -58,7 +64,7 @@
 						<span class="user-icon">
 							<img src="<?php echo $_SESSION['profile'];?>" alt="" style="height:60px;width:60px;margin-top:-10px;">
 						</span>
-						<span class="user-name"><?php echo $_SESSION['First_Name'];?> <?php echo $_SESSION['Last_Name'];?></span>
+						<span class="user-name"><?php echo $row['FirstName'];?> <?php echo $row['LastName'];?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="admin_profile.php"><i class="dw dw-user1" ></i> Profile</a>
