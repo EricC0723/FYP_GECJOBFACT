@@ -14,7 +14,7 @@ if (isset($_SESSION['companyID'])) {
 ?>
 
 <div id="creditcardlist">
-    <div style="width: 110px;position: relative;top: 25px;left: 25px;"><button id="add-creditcard-button1"
+    <div style="width: 120px;position: relative;top: 25px;left: 25px;"><button id="add-creditcard-button1"
             class="employee_sentence"
             style="height: 28px;display: flex;align-items: center;border:none;background:none;cursor:pointer">Add
             new card</button>

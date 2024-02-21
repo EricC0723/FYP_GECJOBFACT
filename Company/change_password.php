@@ -101,7 +101,7 @@ if (isset($_SESSION['companyID'])) {
                             </div>
                             <div class="form-group">
                                 <div style="display:flex;flex-direction:row;align-items:baseline;">
-                                    <label class="question" style="padding-bottom: 8px;width:370px;">Old
+                                    <label class="question" style="padding-bottom: 8px;width:367px;">Old
                                         password</label>
                                     <a class="employee_sentence" href="forget-password.php" style="height:27px;">Forget
                                         password?</a>

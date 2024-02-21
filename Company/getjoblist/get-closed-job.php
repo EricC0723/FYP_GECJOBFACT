@@ -59,7 +59,7 @@ session_start(); // Start the session at the beginning
                 <input type="submit" value="Search" style="display: none;">
             </form>
         </div>
-        <div style="align-items:center;display:flex;width:147px;">
+        <div style="align-items:center;display:flex;width:160px;">
             <a href="post-job-classify.php" class="create_btn">Create a job ad</a>
         </div>
     </div>

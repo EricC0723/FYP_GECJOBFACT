@@ -122,7 +122,7 @@ if (isset($_SESSION['companyID'])) {
                                         your next hire. Get started by creating your first
                                         job ad.</span></div>
                             </div>
-                            <div style="align-items:center;display:flex;width:147px;">
+                            <div style="align-items:center;display:flex;width:160px;">
                                 <a href="post-job-classify.php" class="create_btn">Create a job ad</a>
                             </div>
                             <?php
@@ -157,7 +157,7 @@ if (isset($_SESSION['companyID'])) {
                             <?php
 
 
-                            echo '<div style="align-items:center;display:flex;width:150px;">';
+                            echo '<div style="align-items:center;display:flex;width:160px;">';
                             switch ($jobStatus) {
                                 case 'Draft':
                                     echo '<a href="post-job-classify.php?jobPostID=' . htmlspecialchars($recentJob['Job_Post_ID']) . '" class="create_btn">Continue draft</a>';
@@ -177,7 +177,7 @@ if (isset($_SESSION['companyID'])) {
 
                             ?>
 
-                            <div style="align-items:center;display:flex;width:150px;">
+                            <div style="align-items:center;display:flex;width:160px;padding-left:5px;">
                                 <a href="post-job-classify.php" class="continue_job_link">Create a job ad</a>
                             </div>
                             <?php
