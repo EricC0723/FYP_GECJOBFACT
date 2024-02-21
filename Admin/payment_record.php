@@ -394,7 +394,7 @@ $admin_row = mysqli_fetch_assoc($admin_sql);
             url: "view_payment.php?paymentid=" + paymentid,
             success: function (response) {
                 console.log(response);
-				swal("Success", "PDF generated and saved successfully! You can find it in the C drive.", "success");
+				swal("Success", "PDF generated and saved successfully", "success");
             }
         });
         });
