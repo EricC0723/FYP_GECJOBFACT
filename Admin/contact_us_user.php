@@ -578,7 +578,7 @@
 							<div class="form-group">
 								<textarea id="edit_Message" class="form-control" rows="3" disabled></textarea>
 							</div>
-							<h5 style="display: inline-block;">Response to company</h5>
+							<h5 style="display: inline-block;">Response to user</h5>
 							<div class="form-group">
 								<textarea id="edit_Response" class="form-control" rows="3"></textarea>
 							</div>
