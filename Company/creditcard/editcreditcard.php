@@ -407,6 +407,11 @@ $row = mysqli_fetch_assoc($result);
             cardNameMessage.textContent = 'Please enter the card holder';
             this.dataset.valid = '0';
             validationcardName.classList.remove('hide'); // Show the validation message
+        } else if (!/^[a-z]*$/i.test(this.value)) {
+            // If the input field contains characters other than a-z
+            cardNameMessage.textContent = 'Only a-z characters are allowed';
+            this.dataset.valid = '0';
+            validationcardName.classList.remove('hide'); // Show the validation message
         } else {
             // If the input field is not empty and contains 16 characters
             cardNameMessage.textContent = '';
