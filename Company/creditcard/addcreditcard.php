@@ -371,9 +371,9 @@ if (isset($_SESSION['companyID'])) {
             cardNameMessage.textContent = 'Please enter the card holder';
             this.dataset.valid = '0';
             validationcardName.classList.remove('hide'); // Show the validation message
-        } else if (!/^[a-z]*$/i.test(this.value)) {
-            // If the input field contains characters other than a-z
-            cardNameMessage.textContent = 'Only a-z characters are allowed';
+        } else if (!/^[a-z\s]*$/i.test(this.value)) {
+            // If the input field contains characters other than a-z and space
+            cardNameMessage.textContent = 'Only a-z characters and spaces are allowed';
             this.dataset.valid = '0';
             validationcardName.classList.remove('hide'); // Show the validation message
         } else {
