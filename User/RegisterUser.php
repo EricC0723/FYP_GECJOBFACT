@@ -135,7 +135,7 @@ $location_result = mysqli_query($connect,$location_query);
 								<input type="checkbox" name="agree-term" id="agree-term"
 									class="agree-term" /> <label for="agree-term"
 									class="label-agree-term"><span><span></span></span>I
-									agree all statements in <a href="term_of_service.php" class="term-service">Terms
+									agree all statements in <a href="term_of_service.php" class="term-service" target="_blank">Terms
 										of service</a></label>
 							</div>
 							<div class="form-group form-button" style="color:green;">
